@@ -1,0 +1,107 @@
+@font-face {
+  font-family: "IconFont";
+  src: url("/fonts/icon-font/IconFont.eot?194a5af7307fa1ff993922024cafb7f1#iefix") format("embedded-opentype"),
+url("/fonts/icon-font/IconFont.woff2?194a5af7307fa1ff993922024cafb7f1") format("woff2"),
+url("/fonts/icon-font/IconFont.woff?194a5af7307fa1ff993922024cafb7f1") format("woff"),
+url("/fonts/icon-font/IconFont.ttf?194a5af7307fa1ff993922024cafb7f1") format("truetype"),
+url("/fonts/icon-font/IconFont.svg?194a5af7307fa1ff993922024cafb7f1#IconFont") format("svg");
+}
+
+.icon {
+  display: inline-block;
+  font-family: "IconFont", sans-serif;
+  font-weight: 400;
+  font-size: inherit;
+  text-rendering: auto;
+  text-transform: none;
+  font-style: normal;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-user-plus:before {
+  content: "\f101";
+}
+
+.icon-star:before {
+  content: "\f102";
+}
+
+.icon-star-o:before {
+  content: "\f103";
+}
+
+.icon-spinner:before {
+  content: "\f104";
+}
+
+.icon-settings:before {
+  content: "\f105";
+}
+
+.icon-search:before {
+  content: "\f106";
+}
+
+.icon-info:before {
+  content: "\f107";
+}
+
+.icon-dropdown:before {
+  content: "\f108";
+}
+
+.icon-context-menu:before {
+  content: "\f109";
+}
+
+.icon-close:before {
+  content: "\f10a";
+}
+
+.icon-check:before {
+  content: "\f10b";
+}
+
+.icon-arrow-up:before {
+  content: "\f10c";
+}
+
+.icon-arrow-right:before {
+  content: "\f10d";
+}
+
+.icon-arrow-left:before {
+  content: "\f10e";
+}
+
+.icon-arrow-down:before {
+  content: "\f10f";
+}
+
+.icon-spinner {
+animation: 2s spin-rotate linear infinite;
+}
+
+@keyframes spin-rotate {
+
+from {
+transform: rotate(0deg);
+}
+
+to {
+transform: rotate(360deg);
+}
+}
+
+@-webkit-keyframes spin-rotate {
+
+from {
+transform: rotate(0deg);
+}
+
+to {
+transform: rotate(360deg);
+}
+}

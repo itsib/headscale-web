@@ -1,11 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="background-color: rgb(31 30 30); color: white; min-height: 100vh; min-width: 100vw; display: block;">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="initial-scale=1.0, width=device-width, maximum-scale=1">
     <title>Vite + React + TS</title>
     <link rel="icon" href="/favicon.png" type="image/png">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <script>
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

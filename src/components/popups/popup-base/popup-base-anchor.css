@@ -1,0 +1,30 @@
+.popup-base-anchor-content {
+  left: -9999px;
+  top: -9999px;
+  transition: opacity .2s ease-out, transform .15s ease-out;
+  position: fixed;
+  z-index: 9900;
+  opacity: 0;
+
+  &.popup-placement-top {
+    transform: translate(0%, 6px);
+  }
+
+  &.popup-placement-bottom {
+    transform: translate(0%, -6px);
+  }
+
+  &.popup-placement-left {
+    transform: translate(6px, 0%);
+  }
+
+  &.popup-placement-right {
+    transform: translate(-6px, 0%);
+  }
+
+  &.show {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+}
+

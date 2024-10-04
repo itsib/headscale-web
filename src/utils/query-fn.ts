@@ -1,33 +1,28 @@
-import { QueryKey, QueryFunctionContext } from '@tanstack/react-query';
-import { HttpError, UnauthorizedError, ValidationError } from './errors';
+import { QueryFunctionContext, QueryKey } from '@tanstack/react-query';
+import { HttpError, UnauthorizedError } from './errors';
 import { QueryError } from '../types';
 
 export async function fetchFn<T = unknown>(url: string, init: RequestInit & { accessToken?: string } = {}): Promise<T> {
-  const accessToken = init.accessToken || sessionStorage.getItem('accessToken');
+  const accessToken = init.accessToken || localStorage.getItem('headscale.token');
+  const base = localStorage.getItem('headscale.url');
   Reflect.deleteProperty(init, 'accessToken');
 
-  const res = await fetch(url, {
+  const res = await fetch(`${base}${url}`, {
     headers: {
       'Content-Type': 'application/json',
       ...(accessToken ? { Authorization: 'Bearer ' + accessToken } : {}),
       ...(init.headers || {}),
     },
-    mode: 'same-origin',
     ...init,
   });
 
   if (!res.ok) {
     if (res.status === 401) {
       throw new UnauthorizedError();
-    } else if (res.status === 400) {
+    } else {
       const error = (await res.json()) as QueryError;
-      if (Array.isArray(error.errors)) {
-        throw new ValidationError(error.errors, error.message);
-      }
-
-      throw new HttpError(error.message || res.statusText, res.status);
+      throw new HttpError(res.statusText, res.status, error.message || res.statusText);
     }
-    throw new HttpError(res.statusText, res.status);
   }
 
   return (await res.json()) as Promise<T>;

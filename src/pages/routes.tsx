@@ -2,8 +2,10 @@ import { FC } from 'react';
 import { createBrowserRouter as createRouter, isRouteErrorResponse, Navigate, useRouteError } from 'react-router-dom';
 import { Error500Page } from './error-500/error-500-page';
 import { Error404Page } from './error-404/error-404.page';
-import { HomePage } from './home/home';
+import { MachinesPage } from './machines/machines.tsx';
 import { LayoutPage } from './layout.tsx';
+import { HomePage } from './home/home.tsx';
+import { UsersPage } from './users/users.tsx';
 
 const ErrorBoundary: FC = () => {
   const error = useRouteError();
@@ -26,6 +28,14 @@ export const ROUTES = createRouter(
         {
           index: true,
           Component: HomePage,
+        },
+        {
+          path: 'machines',
+          Component: MachinesPage,
+        },
+        {
+          path: 'users',
+          Component: UsersPage,
         },
       ],
     },

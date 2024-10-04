@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Icon Font</title>
+
+  <style>
+    html {
+      --border-radius: 8px;
+      --preview-bg: rgba(2, 6, 23, 0.7);
+      --label-bg: #0c4a6e;
+
+      color: #e2e8f0;
+      background: #0f172a;
+    }
+
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 10px 20px;
+      text-align: center;
+    }
+
+    .preview {
+      width: 110px;
+      display: inline-block;
+      margin: 10px;
+      border: none;
+      background-color: transparent;
+      color: inherit;
+      outline: none;
+      padding: 0;
+      border-radius: var(--border-radius);
+      position: relative;
+    }
+
+    .preview .inner {
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+      background: var(--preview-bg);
+      border-radius: var(--border-radius) var(--border-radius) 0 0;
+    }
+
+    .preview .inner {{ baseTag }} {
+      line-height: 100px;
+      font-size: 36px;
+    }
+
+    .label {
+      display: inline-block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 5px;
+      font-size: 11px;
+      font-family: Monaco, monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background: var(--label-bg);
+      border-radius: 0 0 var(--border-radius) var(--border-radius);
+    }
+
+    [aria-label] {
+      cursor: pointer;
+      position: relative;
+    }
+
+    [aria-label]::after {
+      width: 120px;
+      background-color: rgba(28, 28, 30, 0.9);
+      border-radius: 5px;
+      border: .5px solid rgba(28, 28, 30, 1);
+      margin-bottom: 16px;
+      box-shadow: 0 0 .1875rem rgba(0, 0, 0, .3);
+      color: #f0f0f0;
+      content: attr(aria-label);
+      font-size: 12px;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-style: normal;
+      font-weight: 500;
+      padding: 10px;
+      text-indent: 0;
+      text-shadow: none;
+      white-space: nowrap;
+      z-index: 50;
+    }
+
+    [aria-label]::before {
+      content: "";
+      z-index: 49;
+      border: 8px solid transparent;
+      border-top-color: rgba(28, 28, 30, 1);
+      height: 0;
+      width: 0;
+      display: block;
+    }
+
+    [aria-label]::after,
+    [aria-label]::before {
+      bottom: 100%;
+      box-sizing: border-box;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      transition: all .2s ease-in-out 0s;
+      transition-delay: 0s;
+      left: 50%;
+      transform: translate(-50%, 10px);
+      transform-origin: top;
+    }
+
+    [aria-label]:hover::after,
+    [aria-label]:hover::before {
+      opacity: 1;
+      transform: translate(-50%, 4px);
+    }
+  </style>
+
+  <link rel="stylesheet" type="text/css" href="icons.css"/>
+</head>
+<body>
+
+<h1>{{ name }}</h1>
+
+{{# each assets }}
+
+  <button class="preview" data-text="{{ ../prefix }} {{ ../prefix }}-{{ @key }}" aria-label="Copy to clipboard">
+        <span class="inner">
+        <{{ ../tag }} class="{{ ../prefix }} {{ ../prefix }}-{{ @key }}"></{{ ../tag }}>
+    </span>
+    <br>
+    <span class="label">{{ ../prefix }}-{{ @key }}</span>
+  </button>
+
+{{/ each }}
+
+
+<script type="application/javascript">
+  (() => {
+    const getHandler = (button) => {
+      return () => {
+        navigator.clipboard.writeText(button.dataset.text).then(() => {
+          const label = button.getAttribute('aria-label');
+          button.setAttribute('aria-label', 'Copied ✔');
+
+          let timeout;
+          const back = () => {
+            clearTimeout(timeout);
+            button.removeEventListener('mouseout', back);
+            setTimeout(() => button.setAttribute('aria-label', label), 200);
+          };
+
+          timeout = setTimeout(() => button.setAttribute('aria-label', label), 5000);
+          button.addEventListener('mouseout', back);
+        });
+      };
+    };
+
+    const buttons = document.getElementsByClassName('preview');
+    for (const button of buttons) {
+      button.addEventListener('click', getHandler(button));
+    }
+  })();
+</script>
+</body>
+</html>

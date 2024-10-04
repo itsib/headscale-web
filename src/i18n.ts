@@ -13,7 +13,7 @@ i18n
     preload: ['en'],
     ns: ['common'],
     defaultNS: 'common',
-    cleanCode: true,
+    // cleanCode: true,
     interpolation: {
       escapeValue: false,
     },

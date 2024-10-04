@@ -7,6 +7,7 @@ import { ROUTES } from './pages/routes';
 import { IndexedDbUtils } from './utils/indexed-db';
 import { defaultQueryFn } from './utils/query-fn';
 import './i18n';
+import 'react-just-ui/theme/minimal.css';
 import './index.css'
 
 const IDB_KEY = 'MemeBotApp';
@@ -27,6 +28,8 @@ const QUERY_CLIENT = new QueryClient({
     queries: {
       networkMode: 'online', // 'offlineFirst',
       gcTime: 86400_000, // 24 hours ms
+      retry: 3,
+      retryDelay: 3000,
       meta: {
         accessToken: null,
       },
