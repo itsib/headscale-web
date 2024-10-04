@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/brace-style */
-import React, { FC, PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react';
+import { FC, PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { PopupPlacement } from './_common';
 import './popup-base-wrap.css';

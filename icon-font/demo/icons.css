@@ -1,10 +1,10 @@
 @font-face {
     font-family: "IconFont";
-    src: url("/fonts/icon-font/IconFont.eot?194a5af7307fa1ff993922024cafb7f1#iefix") format("embedded-opentype"),
-url("/fonts/icon-font/IconFont.woff2?194a5af7307fa1ff993922024cafb7f1") format("woff2"),
-url("/fonts/icon-font/IconFont.woff?194a5af7307fa1ff993922024cafb7f1") format("woff"),
-url("/fonts/icon-font/IconFont.ttf?194a5af7307fa1ff993922024cafb7f1") format("truetype"),
-url("/fonts/icon-font/IconFont.svg?194a5af7307fa1ff993922024cafb7f1#IconFont") format("svg");
+    src: url("/fonts/icon-font/IconFont.eot?7f1beeea0f60d99fd5726d0f986a9ef8#iefix") format("embedded-opentype"),
+url("/fonts/icon-font/IconFont.woff2?7f1beeea0f60d99fd5726d0f986a9ef8") format("woff2"),
+url("/fonts/icon-font/IconFont.woff?7f1beeea0f60d99fd5726d0f986a9ef8") format("woff"),
+url("/fonts/icon-font/IconFont.ttf?7f1beeea0f60d99fd5726d0f986a9ef8") format("truetype"),
+url("/fonts/icon-font/IconFont.svg?7f1beeea0f60d99fd5726d0f986a9ef8#IconFont") format("svg");
 }
 
 .icon {
@@ -20,50 +20,65 @@ url("/fonts/icon-font/IconFont.svg?194a5af7307fa1ff993922024cafb7f1#IconFont") f
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-user-plus:before {
+.icon-users:before {
   content: "\f101";
 }
-.icon-star:before {
+.icon-user-plus:before {
   content: "\f102";
 }
-.icon-star-o:before {
+.icon-tag-add:before {
   content: "\f103";
 }
-.icon-spinner:before {
+.icon-star:before {
   content: "\f104";
 }
-.icon-settings:before {
+.icon-star-o:before {
   content: "\f105";
 }
-.icon-search:before {
+.icon-spinner:before {
   content: "\f106";
 }
-.icon-info:before {
+.icon-settings:before {
   content: "\f107";
 }
-.icon-dropdown:before {
+.icon-search:before {
   content: "\f108";
 }
-.icon-context-menu:before {
+.icon-machines:before {
   content: "\f109";
 }
-.icon-close:before {
+.icon-info:before {
   content: "\f10a";
 }
-.icon-check:before {
+.icon-dropdown:before {
   content: "\f10b";
 }
-.icon-arrow-up:before {
+.icon-devices:before {
   content: "\f10c";
 }
-.icon-arrow-right:before {
+.icon-copy:before {
   content: "\f10d";
 }
-.icon-arrow-left:before {
+.icon-context-menu:before {
   content: "\f10e";
 }
-.icon-arrow-down:before {
+.icon-close:before {
   content: "\f10f";
+}
+.icon-check:before {
+  content: "\f110";
+}
+.icon-arrow-up:before {
+  content: "\f111";
+}
+.icon-arrow-right:before {
+  content: "\f112";
+}
+.icon-arrow-left:before {
+  content: "\f113";
+}
+.icon-arrow-down:before {
+  content: "\f114";
 }
 
 .icon-spinner {

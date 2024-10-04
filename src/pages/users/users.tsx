@@ -1,4 +1,4 @@
-import { FC, memo, useRef, useState } from 'react';
+import { FC, memo, useEffect, useRef, useState } from 'react';
 import { useUsers } from '../../hooks/use-users.ts';
 import { Trans, useTranslation } from 'react-i18next';
 import { User } from '../../types';
@@ -6,9 +6,10 @@ import { Avatar } from 'react-just-ui';
 import { FormattedDate } from '../../components/formatters/formatted-date.tsx';
 import { ContextMenu } from '../../components/popups/context-menu.tsx';
 import { PopupPlacement } from '../../components/popups/popup-base/_common.ts';
-import { ModalDeleteUser } from '../../components/modals/modal-delete-user/modal-delete-user.tsx';
-import { ModalCreateUser } from '../../components/modals/modal-create-user/modal-create-user.tsx';
-import { ModalRenameUser } from '../../components/modals/modal-rename-user/modal-rename-user.tsx';
+import { ModalUserDelete } from '../../components/modals/modal-user-delete/modal-user-delete.tsx';
+import { ModalUserCreate } from '../../components/modals/modal-user-create/modal-user-create.tsx';
+import { ModalUserRename } from '../../components/modals/modal-user-rename/modal-user-rename.tsx';
+import { getAvatarUrl } from '../../utils/get-avatar-url.ts';
 
 export const UsersPage: FC = () => {
   const { t } = useTranslation();
@@ -16,6 +17,13 @@ export const UsersPage: FC = () => {
 
   const [opened, setOpened] = useState<'delete' | 'create' | 'rename' | null>(null);
   const [selected, setSelected] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (selected && !opened) {
+      setSelected(null);
+    }
+
+  }, [opened, selected]);
 
   return (
     <div className="container pt-6">
@@ -57,32 +65,22 @@ export const UsersPage: FC = () => {
         </tbody>
       </table>
 
-      <ModalCreateUser
+      <ModalUserCreate
         isOpen={opened === 'create'}
         onDismiss={() => setOpened(null)}
-        onSuccess={() => {
-          setOpened(null);
-          refetch();
-        }}
+        onSuccess={() => refetch()}
       />
-      <ModalRenameUser
+      <ModalUserRename
         user={selected}
         isOpen={opened === 'rename'}
         onDismiss={() => setOpened(null)}
-        onSuccess={() => {
-          setOpened(null);
-          refetch();
-        }}
+        onSuccess={() => refetch()}
       />
-      <ModalDeleteUser
+      <ModalUserDelete
         user={selected}
         isOpen={opened === 'delete'}
         onDismiss={() => setOpened(null)}
-        onSuccess={() => {
-          setOpened(null);
-          setSelected(null);
-          refetch();
-        }}
+        onSuccess={() => refetch()}
       />
     </div>
   );
@@ -100,7 +98,7 @@ const UserItem = memo(function UserItem({ id, name, createdAt, onDelete, onRenam
     <tr className="h-[60px] border-b border-b-primary">
       <td>
         <div className="flex items-center">
-          <Avatar src={`/images/avatar-${Number(id) % 10}.svg`} alt={name} size={30} />
+          <Avatar src={getAvatarUrl(id)} alt={name} size={30} />
 
           <div className="font-bold text-lg ml-4">{name}</div>
         </div>

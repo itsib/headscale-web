@@ -1,7 +1,77 @@
-import { defineConfig } from 'vite'
+import { defineConfig, UserConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc'
+import { resolve } from 'node:path';
+import compression from 'vite-plugin-compression2';
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
+/**
+ * Vite
+ * @see https://vitejs.dev/config/
+ */
+export default defineConfig(async ({ mode }): Promise<UserConfig> => {
+  return {
+    clearScreen: false,
+    logLevel: 'info',
+    appType: 'spa',
+    publicDir: 'public',
+    define: {
+      'import.meta.env.NODE_ENV': JSON.stringify(mode),
+    },
+    resolve: {
+      alias: {
+        '@/': `${resolve(__dirname, 'src')}/`,
+        $fonts: `${resolve(__dirname, 'public/fonts')}/`,
+      }
+    },
+    plugins: [
+      react(),
+      compression({
+        include: [/\.(js)$/, /\.(css)$/],
+        deleteOriginalAssets: false,
+        algorithm: 'gzip',
+      }),
+    ],
+    esbuild: { legalComments: 'none' },
+    build: {
+      target: 'esnext',
+      minify: 'esbuild',
+      copyPublicDir: true,
+      emptyOutDir: true,
+      cssCodeSplit: true,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            '@react': [
+              'react',
+              'react-dom',
+              'react-router-dom',
+              'react-hook-form',
+              '@tanstack/query-core',
+              '@tanstack/react-query',
+              '@tanstack/react-query-persist-client',
+            ],
+            '@react-just-ui': [
+              'react-just-ui',
+            ],
+            '@react-spring': [
+              '@react-spring/web',
+            ],
+            '@lottie-web': [
+              'lottie-web/build/player/lottie_light'
+            ],
+            '@i18n': [
+              'i18next',
+              'react-i18next',
+              'i18next-http-backend',
+              'i18next-browser-languagedetector',
+            ],
+          },
+        },
+      },
+      chunkSizeWarningLimit: 1500,
+      assetsInlineLimit: 0,
+    },
+    optimizeDeps: {
+      include: ['react-dom'],
+    },
+  } as UserConfig;
 })

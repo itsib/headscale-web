@@ -1,8 +1,0 @@
-.popup-base {
-  @apply text-center shadow-popup overflow-hidden;
-  @apply bg-popup border-popup rounded-popup border-thin border-opacity-popup;
-}
-
-.popup {
-  user-select: none;
-}

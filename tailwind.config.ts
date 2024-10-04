@@ -17,6 +17,7 @@ export default {
       ...theme('colors'),
       accent: 'rgb(var(--accent) / <alpha-value>)',
       primary: 'rgb(var(--border-primary) / <alpha-value>)',
+      secondary: 'rgb(var(--border-secondary) / <alpha-value>)',
     }),
     textColor: ({ theme }) => ({
       ...theme('colors'),

@@ -46,10 +46,18 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({ isOpen, onDismiss, children 
       setShowUp(!!(event.target as HTMLDivElement).scrollTop);
     };
 
+    const keypressHandler = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onDismiss();
+      }
+    }
+
+    window.addEventListener('keydown', keypressHandler);
     overlay.addEventListener('scroll', scrollHandler);
 
     return () => {
       overlay.removeEventListener('scroll', scrollHandler);
+      window.removeEventListener('keydown', keypressHandler);
     };
   }, [overlay, isOpen]);
 
