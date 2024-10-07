@@ -13,7 +13,6 @@ export function useUsers(): QueryResult<User[]> & { refetch: () => void } {
 
   const refetch = useCallback(async () => {
     await _refetch({ cancelRefetch: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { data, isLoading, error, refetch };

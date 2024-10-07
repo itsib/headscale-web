@@ -1,7 +1,8 @@
 import { FC, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Header } from '../components/header/header.tsx';
-
+// overflow-y: auto;
+//   max-height: calc(100vh - 60px);
 export const LayoutPage: FC = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -14,13 +15,15 @@ export const LayoutPage: FC = () => {
     } else if (pathname === '/' && token && url) {
       navigate('/machines', { replace: true });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   return (
     <>
       <Header />
-      <Outlet />
+
+      <div className="max-h-[calc(100vh-60px)] overflow-y-auto pb-8">
+        <Outlet />
+      </div>
     </>
   );
 }

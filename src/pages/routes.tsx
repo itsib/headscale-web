@@ -37,6 +37,14 @@ export const ROUTES = createRouter(
           path: 'users',
           Component: UsersPage,
         },
+        {
+          path: 'acl/*',
+          async lazy() {
+            const { Routes } = await import('./acl/routes');
+            return { Component: Routes };
+          },
+          errorElement: <ErrorBoundary />,
+        },
       ],
     },
     {

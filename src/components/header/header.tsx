@@ -1,8 +1,9 @@
 import { FC } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 export const Header: FC = () => {
+  const { t } = useTranslation();
   return (
     <header className="bg-secondary dark:border-gray-800 border-b-primary">
       <div className="container flex items-center justify-between h-[60px]">
@@ -34,10 +35,20 @@ export const Header: FC = () => {
             <i className="icon icon-users mr-1.5" />
             <Trans i18nKey="users"/>
           </NavLink>
+          <NavLink
+            to="/acl"
+            className={({ isActive }) => `flex items-center px-2 font-bold transition ${isActive ? 'text-accent' : ''}`}
+          >
+            <i className="icon icon-lock mr-1.5" />
+            <Trans i18nKey="access_controls"/>
+          </NavLink>
         </nav>
 
         <div className="">
 
+          <button className="text-xl text-secondary text-opacity-70 hover:text-primary transition" aria-label={t('logout_tooltip')} data-position="bottom">
+            <i className="icon icon-logout" />
+          </button>
         </div>
       </div>
     </header>

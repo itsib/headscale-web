@@ -50,5 +50,12 @@
   "created_at": "Created at",
   "given_name": "Given Name",
   "ip_address": "IP Address",
-  "tag_name": "Tag Name"
+  "tag_name": "Tag Name",
+  "logout_tooltip": "Remove the access token from the local storage",
+  "devices": "Devices",
+  "access_controls": "Access Controls",
+  "access_controls_subtitle": "Define a policy for which devices and users are allowed to connect in your network.",
+  "edit_file": "Edit File",
+  "preview": "Preview",
+  "discard_changes": "Discard Changes"
 }

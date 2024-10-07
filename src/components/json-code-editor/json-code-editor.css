@@ -1,0 +1,48 @@
+.json-code-editor {
+
+  .cm-editor {
+
+    .cm-scroller {
+      font-family: JetBrainsMono, monospace;
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 22px;
+      color: rgb(var(--text-secondary));
+
+      .cm-gutters {
+        line-height: 22px;
+        background-color: transparent;
+        border-right-color: transparent;
+      }
+
+      .cm-content {
+        min-height: 300px;
+        font-size: inherit;
+
+        .cm-line {
+
+          .cm-trailingSpace {
+            background-color: var(--code-trailing-space);
+          }
+        }
+      }
+
+      .cm-layer {
+
+        &.cm-cursorLayer {
+
+          .cm-cursor {
+            border-left: 1px solid rgb(var(--text-primary));
+          }
+        }
+
+        &.cm-selectionLayer {
+
+          .cm-selectionBackground {
+            background-color: var(--code-selection);
+          }
+        }
+      }
+    }
+  }
+}

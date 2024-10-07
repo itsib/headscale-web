@@ -18,3 +18,8 @@ export class UnauthorizedError extends HttpError {
     super('UNAUTHORIZED', 401, message);
   }
 }
+
+export function formatError(error: Error): string {
+  const message = error.message || '';
+  return `${message.charAt(0).toUpperCase()}${message.substring(1)}`;
+}

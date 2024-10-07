@@ -1,0 +1,56 @@
+.acl-page {
+
+  .tabs-links {
+    bottom: -1px;
+    display: flex;
+    align-items: stretch;
+    justify-content: start;
+    position: relative;
+
+    .tab-link {
+      height: 37px;
+      padding: .5rem 1.35rem .3rem;
+      font-size: 14px;
+      color: rgb(var(--text-secondary));
+      border: 1px solid rgb(var(--border-secondary));
+      border-bottom: none;
+      border-left: none;
+      background-color: rgb(var(--bg-secondary));
+      display: block;
+      transition: background-color .2s ease-in-out;
+      position: relative;
+      z-index: 1;
+
+      .icon {
+        top: 3px;
+        margin-right: 8px;
+        font-size: 16px;
+        line-height: 14px;
+        position: relative;
+      }
+
+      &:first-child {
+        border-left: 1px solid rgb(var(--border-secondary));
+        border-top-left-radius: 5px;
+      }
+
+      &:last-child {
+        border-top-right-radius: 5px;
+      }
+
+      &.active {
+        background-color: rgb(var(--bg-primary));
+        z-index: 3;
+      }
+    }
+  }
+
+  .tabs-content {
+    border: 1px solid rgb(var(--border-secondary));
+    background-color: rgb(var(--bg-primary));
+    border-radius: 0 5px 5px 5px;
+    transition: background-color .2s ease-in-out;
+    position: relative;
+    z-index: 2;
+  }
+}
