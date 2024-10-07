@@ -56,7 +56,6 @@ export const JsonCodeEditor: FC<JsonCodeEditorPops> = ({ value, onChange }) => {
           } else if (doc.text) {
             value = doc.text.join('\n');
           }
-          console.log(value);
           valueRef.current = value;
 
           changeRef.current?.(value);
