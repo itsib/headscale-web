@@ -33,11 +33,12 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
     esbuild: { legalComments: 'none' },
     build: {
       target: 'esnext',
-      minify: 'esbuild',
+      minify: mode === 'production' ? 'esbuild' : false,
       copyPublicDir: true,
       emptyOutDir: true,
       cssCodeSplit: true,
       rollupOptions: {
+        treeshake: 'recommended',
         output: {
           manualChunks: {
             '@react': [

@@ -30,7 +30,7 @@ export const JsonCodeEditor: FC<JsonCodeEditorPops> = ({ value, onChange }) => {
     if (!parent) return;
 
     const state = EditorState.create({
-      doc: '',
+      doc: valueRef.current || '',
       extensions: [
         lineNumbers(),
         highlightSpecialChars(),
@@ -56,9 +56,9 @@ export const JsonCodeEditor: FC<JsonCodeEditorPops> = ({ value, onChange }) => {
           } else if (doc.text) {
             value = doc.text.join('\n');
           }
-          valueRef.current = value;
+          valueRef.current = value.trim();
 
-          changeRef.current?.(value);
+          changeRef.current?.(valueRef.current);
         }),
       ],
     });

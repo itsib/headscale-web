@@ -6,7 +6,6 @@ import { useMutation } from '@tanstack/react-query';
 import Modal, { ModalProps } from '../../modal-base/modal.tsx';
 import { fetchFn } from '../../../utils/query-fn.ts';
 import { useUsers } from '../../../hooks/use-users.ts';
-import { getAvatarUrl } from '../../../utils/get-avatar-url.ts';
 
 interface FormFields {
   nodekey: string;
@@ -36,7 +35,7 @@ const ModalContent: FC<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, o
     return users.map(user => ({
       value: user.name,
       label: user.name,
-      icon: getAvatarUrl(user.id),
+      icon: `icon icon-avatar-${parseInt(user.id) % 10}`,
     }));
   }, [users]);
 

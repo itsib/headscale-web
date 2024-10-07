@@ -2,8 +2,8 @@ import { FC } from 'react';
 
 export const PreviewPage: FC = () => {
   return (
-    <div>
-      preview
+    <div className="px-6 py-8">
+      In Development
     </div>
   )
 }

@@ -7,7 +7,6 @@ import Modal, { ModalProps } from '../../modal-base/modal.tsx';
 import { fetchFn } from '../../../utils/query-fn.ts';
 import { Node } from '../../../types';
 import { useUsers } from '../../../hooks/use-users.ts';
-import { getAvatarUrl } from '../../../utils/get-avatar-url.ts';
 
 export interface ModalNodeChownProps extends ModalProps {
   node?: Node | null;
@@ -33,7 +32,7 @@ const ModalContent: FC<Omit<ModalNodeChownProps, 'isOpen' | 'node'> & { node: No
     return users.map(user => ({
       value: user.name,
       label: user.name,
-      icon: getAvatarUrl(user.id),
+      icon: `icon icon-avatar-${parseInt(user.id) % 10}`,
     }));
   }, [users]);
 
