@@ -78,6 +78,14 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
       chunkSizeWarningLimit: 1500,
       assetsInlineLimit: 0,
     },
+    test: {
+      css: false,
+      include: ['src/**/*.{spec,test}.{js,jsx,ts,tsx}'],
+      globals: true,
+      environment: 'node',
+      restoreMocks: true,
+      watch: false,
+    },
     optimizeDeps: {
       include: ['react-dom'],
     },
