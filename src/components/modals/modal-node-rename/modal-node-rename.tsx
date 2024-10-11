@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
-import Modal, { ModalProps } from '../../modal-base/modal.tsx';
 import { fetchFn } from '../../../utils/query-fn.ts';
 import { Node } from '../../../types';
+import { ModalProps, Modal } from 'react-just-ui/modal';
 
 export interface ModalNodeRenameProps extends ModalProps {
   node?: Node | null;

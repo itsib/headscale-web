@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import Modal, { ModalProps } from '../../modal-base/modal.tsx';
+import { ModalProps, Modal } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
