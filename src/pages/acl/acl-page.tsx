@@ -1,13 +1,13 @@
 import { useRoutes } from 'react-router-dom';
-import { AclPage } from './acl';
+import { AclContent } from './acl';
 import { EditFile } from './edit-file/edit-file';
 import { PreviewPage } from './preview/preview.tsx';
 import { FC } from 'react';
 
-export const Routes: FC = () => useRoutes([
+export const AclPage: FC = () => useRoutes([
   {
     path: "/",
-    element: <AclPage />,
+    element: <AclContent />,
     children: [
       {
         path: '',

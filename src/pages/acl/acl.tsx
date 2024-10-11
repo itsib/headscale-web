@@ -8,7 +8,7 @@ import { AclPolicy } from '../../types';
 import { formatError } from '../../utils/errors.ts';
 import './acl.css';
 
-export const AclPage: FC = () => {
+export const AclContent: FC = () => {
   const { data, isLoading, error } = useAclPolicy();
   const { policy: policyOrigin = '' } = data || {};
   const [policyNew, setPolicyNew] = useState<string>('');

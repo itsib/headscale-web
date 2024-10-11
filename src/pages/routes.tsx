@@ -40,8 +40,8 @@ export const ROUTES = createRouter(
         {
           path: 'acl/*',
           async lazy() {
-            const { Routes } = await import('./acl/routes');
-            return { Component: Routes };
+            const { AclPage } = await import('./acl/acl-page.tsx');
+            return { Component: AclPage };
           },
           errorElement: <ErrorBoundary />,
         },

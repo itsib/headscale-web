@@ -45,7 +45,8 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
               'react',
               'react-dom',
               'react-router-dom',
-              'react-hook-form',
+            ],
+            '@tanstack': [
               '@tanstack/query-core',
               '@tanstack/react-query',
               '@tanstack/react-query-persist-client',
@@ -53,11 +54,8 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
             '@react-just-ui': [
               'react-just-ui',
             ],
-            '@react-spring': [
-              '@react-spring/web',
-            ],
-            '@lottie-web': [
-              'lottie-web/build/player/lottie_light'
+            '@react-hook-form': [
+              'react-hook-form',
             ],
             '@i18n': [
               'i18next',
@@ -65,7 +63,8 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
               'i18next-http-backend',
               'i18next-browser-languagedetector',
             ],
-            '@codemirror': [
+            '@acl-page': [
+              './src/pages/acl/acl-page.tsx',
               '@codemirror/commands',
               '@codemirror/language',
               '@codemirror/state',
