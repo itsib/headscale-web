@@ -9,15 +9,13 @@ import { FormattedDate } from '../../components/formatters/formatted-date.tsx';
 import { ContextMenu } from '../../components/popups/context-menu.tsx';
 import { PopupPlacement } from '../../components/popups/popup-base/_common.ts';
 
+export type ContextAction = 'delete' | 'create' | 'rename' | 'chown' | 'expiry' | 'tags';
+
 export interface NodeRowProps extends Node {
-  onDelete: (user: Node) => void;
-  onRename: (user: Node) => void;
-  onChown: (user: Node) => void;
-  onExpiry: (user: Node) => void;
-  onTags: (user: Node) => void;
+  onAction: (name: ContextAction) => void;
 }
 
-export const MachineItem = memo(function NodeRow({ onDelete, onRename, onChown, onExpiry, onTags, ...node }: NodeRowProps) {
+export const MachineItem = memo(function NodeRow({ onAction, ...node }: NodeRowProps) {
   const { name, givenName, expiry, ipAddresses, forcedTags, lastSeen, online, user } = node;
   const contextRef = useRef<HTMLButtonElement | null>(null);
 
@@ -75,21 +73,21 @@ export const MachineItem = memo(function NodeRow({ onDelete, onRename, onChown, 
 
         <ContextMenu btnOpenRef={contextRef} placement={PopupPlacement.BOTTOM}>
           <div className="context-menu-item">
-            <button type="button" className="btn-context-menu" onClick={() => onRename(node)}>
+            <button type="button" className="btn-context-menu" onClick={() => onAction('rename')}>
               <Trans i18nKey="rename"/>
             </button>
           </div>
           <div className="context-menu-item">
-            <button type="button" className="btn-context-menu" onClick={() => onChown(node)}>
+            <button type="button" className="btn-context-menu" onClick={() => onAction('chown')}>
               <Trans i18nKey="change_owner"/>
             </button>
           </div>
-          <div className="context-menu-item" onClick={() => onExpiry(node)}>
+          <div className="context-menu-item" onClick={() => onAction('expiry')}>
             <button type="button" className="btn-context-menu">
               <Trans i18nKey="expire_key"/>
             </button>
           </div>
-          <div className="context-menu-item" onClick={() => onTags(node)}>
+          <div className="context-menu-item" onClick={() => onAction('tags')}>
             <button type="button" className="btn-context-menu">
               <Trans i18nKey="edit_acl_tags"/>
             </button>
@@ -97,7 +95,7 @@ export const MachineItem = memo(function NodeRow({ onDelete, onRename, onChown, 
 
           <hr className="context-menu-divider"/>
 
-          <div className="context-menu-item" onClick={() => onDelete(node)}>
+          <div className="context-menu-item" onClick={() => onAction('delete')}>
             <button type="button" className="btn-context-menu text-red-600">
               <Trans i18nKey="delete"/>
             </button>

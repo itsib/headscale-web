@@ -6,10 +6,11 @@ import { ModalUserCreate } from '../../components/modals/modal-user-create/modal
 import { ModalUserRename } from '../../components/modals/modal-user-rename/modal-user-rename.tsx';
 import { User } from '../../types';
 import { UserItem } from './_user-item.tsx';
+import { ListLoading } from '../../components/skeleton/list-loading.tsx';
 
 export const UsersPage: FC = () => {
   const { t } = useTranslation();
-  const { data: users, refetch } = useUsers();
+  const { data: users, refetch, isLoading } = useUsers();
 
   const [opened, setOpened] = useState<'delete' | 'create' | 'rename' | null>(null);
   const [selected, setSelected] = useState<User | null>(null);
@@ -35,31 +36,40 @@ export const UsersPage: FC = () => {
         </button>
       </div>
 
-      <table className="w-full table-auto border-spacing-px" border={1}>
-        <thead>
-        <tr className="border-b border-b-primary h-[50px] text-sm">
-          <th className="text-left font-semibold text-secondary uppercase pl-[46px]">{t('user')}</th>
-          <th className="text-right font-semibold text-secondary uppercase">{t('joined')}</th>
-          <th/>
-        </tr>
-        </thead>
-        <tbody>
-        {users?.map(user => (
-          <UserItem
-            key={user.id}
-            onDelete={user => {
-              setSelected(user);
-              setOpened('delete');
-            }}
-            onRename={user => {
-              setSelected(user);
-              setOpened('rename');
-            }}
-            {...user}
-          />
-        ))}
-        </tbody>
-      </table>
+      {isLoading ? (
+        <ListLoading />
+      ) : users?.length ? (
+        <table className="w-full table-auto border-spacing-px" border={1}>
+          <thead>
+          <tr className="border-b border-b-primary h-[50px] text-sm">
+            <th className="text-left font-semibold text-secondary uppercase pl-[46px]">{t('user')}</th>
+            <th className="text-right font-semibold text-secondary uppercase">{t('joined')}</th>
+            <th/>
+          </tr>
+          </thead>
+          <tbody>
+          {users?.map(user => (
+            <UserItem
+              key={user.id}
+              onDelete={user => {
+                setSelected(user);
+                setOpened('delete');
+              }}
+              onRename={user => {
+                setSelected(user);
+                setOpened('rename');
+              }}
+              {...user}
+            />
+          ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className="border-primary border rounded-md p-8 text-center">
+          <Trans i18nKey="empty_list"/>
+        </div>
+      )}
+
 
       <ModalUserCreate
         isOpen={opened === 'create'}

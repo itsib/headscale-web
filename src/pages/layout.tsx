@@ -1,8 +1,7 @@
 import { FC, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Header } from '../components/header/header.tsx';
-// overflow-y: auto;
-//   max-height: calc(100vh - 60px);
+
 export const LayoutPage: FC = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();

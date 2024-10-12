@@ -1,5 +1,5 @@
 import { FC, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input, Select, SelectOption } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
@@ -16,7 +16,7 @@ export interface ModalNodeRegisterProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalNodeRegister: FC<ModalNodeRegisterProps> = ({ isOpen, onDismiss, ...props }) => {
+export const ModalNodeCreate: FC<ModalNodeRegisterProps> = ({ isOpen, onDismiss, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <ModalContent onDismiss={onDismiss} {...props} />
@@ -95,7 +95,13 @@ const ModalContent: FC<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, o
             />
           </div>
           <div className="text-sm text-secondary mb-4">
-            The device key returns the command "tailscale up --login-server https://am.itsib.su" executed on your device.
+            <Trans
+              i18nKey="tailscale_up_command"
+              values={{ url: localStorage.getItem('headscale.url') }}
+              components={{
+                code: <div className="border border-secondary rounded-md py-2 px-3 my-1" />
+              }}
+            />
           </div>
 
           <div>

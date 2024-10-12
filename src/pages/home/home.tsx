@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { HttpError } from '../../utils/errors.ts';
-import { ApiKeys } from '../../types';
+import { AuthKey } from '../../types';
 
 interface FormValues {
   url: string;
@@ -36,7 +36,7 @@ export const HomePage: FC = () =>  {
       if (!res.ok) {
         throw new HttpError(res.statusText, res.status);
       }
-      return  (await res.json()) as { apiKeys: ApiKeys[] };
+      return  (await res.json()) as { apiKeys: AuthKey[] };
     },
     onSuccess(_, values) {
       localStorage.setItem('headscale.token', values.token);

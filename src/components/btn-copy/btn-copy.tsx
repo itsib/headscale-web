@@ -19,7 +19,7 @@ export const BtnCopy: FC<IBtnCopy> = ({ text, tooltip = 'copy_to_clipboard', too
       type="button"
       className={className ?? 'btn btn-icon'}
       aria-label={tooltip == undefined ? undefined : (copied ? t('copied') : t(tooltip))}
-      data-tooltip-pos={tooltipPosition}
+      data-position={tooltipPosition}
       onClick={event => {
         event.stopPropagation();
         if (text) {

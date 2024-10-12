@@ -42,6 +42,13 @@ export const Header: FC = () => {
             <i className="icon icon-lock mr-1.5" />
             <Trans i18nKey="access_controls"/>
           </NavLink>
+          <NavLink
+            to="/tokens"
+            className={({ isActive }) => `flex items-center px-2 font-bold transition ${isActive ? 'text-accent' : ''}`}
+          >
+            <i className="icon icon-key mr-1.5" />
+            <Trans i18nKey="tokens"/>
+          </NavLink>
         </nav>
 
         <div className="">

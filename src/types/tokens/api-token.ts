@@ -1,4 +1,4 @@
-export interface ApiKeys {
+export interface ApiToken {
   id: string;
   prefix: string;
   lastSeen?: string | null;
