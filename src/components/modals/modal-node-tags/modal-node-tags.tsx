@@ -67,9 +67,7 @@ const ModalContent: FC<Omit<ModalNodeTagsProps, 'isOpen' | 'node'> & { node: Nod
         <div className="title">
           <span>{t('manage_tags_node_modal_title')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()}>
-          <i className="icon icon-close"/>
-        </button>
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
         <form
@@ -110,18 +108,18 @@ const ModalContent: FC<Omit<ModalNodeTagsProps, 'isOpen' | 'node'> & { node: Nod
           </div>
           {tags.length ? (
             <div className="p-3 mb-4 border-primary border rounded-md flex flex-wrap justify-start gap-2">
-              {tags.map(tag => <AclTag key={tag} tag={tag} onRemove={tag => setTags(old => old.filter(i => i !== tag))} />)}
+              {tags.map(tag => <AclTag key={tag} tag={tag}
+                                       onRemove={tag => setTags(old => old.filter(i => i !== tag))}/>)}
             </div>
           ) : null}
-          {isPending ? (
-            <button type="button" className="btn-primary w-full" disabled>
-              <div className="jj jj-spinner"/>
-            </button>
-          ) : (
-            <button type="button" className="btn-primary w-full" disabled={!isDifferent} onClick={() => mutate({ id: node.id, tags, })}>
-              <span>{t('save')}</span>
-            </button>
-          )}
+          <button
+            type="button"
+            className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}
+            disabled={!isDifferent}
+            onClick={() => mutate({ id: node.id, tags, })}
+          >
+            <span>{t('save')}</span>
+          </button>
           {error ? (
             <div className="text-red-500 text-[12px] leading-[14px] mt-2 px-1">
               {t(error.message)}

@@ -54,7 +54,8 @@ const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: U
         </button>
       </div>
       <div className="modal-content">
-        <form onSubmit={handleSubmit((values: { name: string }) => mutate({ oldName: user.name, newName: values.name }))}>
+        <form
+          onSubmit={handleSubmit((values: { name: string }) => mutate({ oldName: user.name, newName: values.name }))}>
           <div className="mb-4">
             <Input
               id="new-user-name"
@@ -68,15 +69,12 @@ const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: U
             />
           </div>
 
-          {isPending ? (
-            <button type="button" className="btn-primary w-full" disabled>
-              <div className="jj jj-spinner"/>
-            </button>
-          ) : (
-            <button type="submit" className="btn-primary w-full">
-              <span>{t('rename')}</span>
-            </button>
-          )}
+          <button
+            type="submit"
+            className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}
+          >
+            <span>{t('rename')}</span>
+          </button>
           {error ? (
             <div className="text-red-500 text-[12px] leading-[14px] mt-2 px-1">
               {t(error.message)}

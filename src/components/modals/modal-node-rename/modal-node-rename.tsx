@@ -69,15 +69,13 @@ const ModalContent: FC<Omit<ModalNodeRenameProps, 'isOpen' | 'node'> & { node: N
             />
           </div>
 
-          {isPending ? (
-            <button type="button" className="btn-primary w-full" disabled>
-              <div className="jj jj-spinner"/>
-            </button>
-          ) : (
-            <button type="submit" className="btn-primary w-full" disabled={currentName === watch('name')}>
-              <span>{t('rename')}</span>
-            </button>
-          )}
+          <button
+            type="submit"
+            className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}
+            disabled={currentName === watch('name')}
+          >
+            <span>{t('rename')}</span>
+          </button>
           {error ? (
             <div className="text-red-500 text-[12px] leading-[14px] mt-2 px-1">
               {t(error.message)}

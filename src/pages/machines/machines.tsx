@@ -24,9 +24,9 @@ export const MachinesPage: FC = () => {
           <p className="text-secondary"><Trans i18nKey="machines_page_subtitle"/></p>
         </div>
 
-        <button type="button" className="btn-primary" onClick={() => setOpened('register')}>
+        <button type="button" className="btn btn-primary flex items-center gap-2" onClick={() => setOpened('register')}>
           <i className="icon icon-devices text-lg"/>
-          <span><Trans i18nKey="register_device"/></span>
+          <span className="font-semibold"><Trans i18nKey="register_device"/></span>
         </button>
       </div>
 

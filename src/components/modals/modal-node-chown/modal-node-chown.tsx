@@ -62,12 +62,11 @@ const ModalContent: FC<Omit<ModalNodeChownProps, 'isOpen' | 'node'> & { node: No
         <div className="title">
           <span>{t('chown_node_modal_title')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()}>
-          <i className="icon icon-close"/>
-        </button>
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
-        <form onSubmit={handleSubmit((values: { userName: string }) => mutate({ id: node.id, userName: values.userName }))}>
+        <form
+          onSubmit={handleSubmit((values: { userName: string }) => mutate({ id: node.id, userName: values.userName }))}>
           <div className="mb-4">
             <Select
               id="new-user-name"
@@ -81,15 +80,13 @@ const ModalContent: FC<Omit<ModalNodeChownProps, 'isOpen' | 'node'> & { node: No
             />
           </div>
 
-          {isPending ? (
-            <button type="button" className="btn-primary w-full" disabled>
-              <div className="jj jj-spinner"/>
-            </button>
-          ) : (
-            <button type="submit" className="btn-primary w-full" disabled={node.user.name === watch('userName')}>
-              <span>{t('apply')}</span>
-            </button>
-          )}
+          <button
+            type="submit"
+            className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}
+            disabled={node.user.name === watch('userName')}
+          >
+            <span>{t('apply')}</span>
+          </button>
           {error ? (
             <div className="text-red-500 text-[12px] leading-[14px] mt-2 px-1">
               {t(error.message)}

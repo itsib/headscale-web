@@ -91,22 +91,22 @@ const ButtonBlock: FC<ButtonBlock> = ({ policyOrigin, policyNew, onReset, error:
       </div>
       <div className="mt-4 flex gap-4 justify-end">
         <button
-          className="btn btn-primary min-w-[180px]"
+          className="btn btn-outline-danger min-w-[180px]"
           disabled={(policyOrigin === policyNew || isPending) && !error1}
           onClick={() => {
             reset();
             onReset?.();
           }}
         >
-          <Trans i18nKey="discard_changes"/>
+          <span><Trans i18nKey="discard_changes"/></span>
         </button>
 
         <button
-          className="btn btn-primary min-w-[120px]"
+          className={`btn btn-primary min-w-[120px] ${isPending ? 'loading' : ''}`}
           disabled={policyOrigin === policyNew || isPending}
           onClick={() => mutate(policyNew || '')}
         >
-          {isPending ? <i className="icon icon-spinner"/> : <Trans i18nKey="save"/>}
+          <span><Trans i18nKey="save"/></span>
         </button>
       </div>
     </>

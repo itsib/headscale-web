@@ -99,15 +99,9 @@ const ModalContent: FC<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, o
           </div>
 
           <div>
-            {isPending ? (
-              <button type="button" className="btn-primary w-full" disabled>
-                <div className="jj jj-spinner"/>
-              </button>
-            ) : (
-              <button type="submit" className="btn-primary w-full">
-                <span>{t('create')}</span>
-              </button>
-            )}
+            <button type="submit" className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}>
+              <span>{t('create')}</span>
+            </button>
             {error ? (
               <div className="text-red-500 text-[12px] leading-[14px] mt-2 px-1">
                 {t(error.message)}

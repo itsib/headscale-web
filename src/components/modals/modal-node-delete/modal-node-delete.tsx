@@ -83,15 +83,13 @@ const ModalContent: FC<Omit<ModalNodeDeleteProps, 'isOpen' | 'node'> & { node: N
           </div>
         </div>
         <div>
-          {isPending ? (
-            <button type="button" className="btn-primary w-full" disabled>
-              <div className="jj jj-spinner"/>
-            </button>
-          ) : (
-            <button type="button" className="btn-primary w-full" onClick={() => mutate(node.id)}>
-              <span>{t('delete')}</span>
-            </button>
-          )}
+          <button
+            type="button"
+            className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}
+            onClick={() => mutate(node.id)}
+          >
+            <span>{t('delete')}</span>
+          </button>
 
           {error ? (
             <div className="text-red-500 text-[12px] leading-[14px] mt-2">
