@@ -1,6 +1,6 @@
 {
   "name": "headscale-ui",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "Web interface for headscale 0.23.0",
   "homepage": "https://itsib.su",
   "license": "MIT",
