@@ -66,11 +66,11 @@ export const HomePage: FC = () =>  {
           <Input id="token-input" label={t('headscale_api_key')} error={errors?.token} {...register('token', { required: t('error_required') })} />
 
           {isPending ? (
-            <button type="button" className="btn-primary w-full" disabled>
+            <button type="button" className="btn-accent w-full" disabled>
               <div className="jj jj-spinner" />
             </button>
           ) : (
-            <button type="submit" className="btn-primary w-full">
+            <button type="submit" className="btn-accent w-full">
               <span>{t('save')}</span>
             </button>
           )}

@@ -23,7 +23,7 @@ export const AuthKeyItem = memo(function AuthKeyItem(props: AuthKeyItem) {
     <tr className={`h-[60px] border-b border-b-primary ${isExpired ? 'opacity-30' : ''}`}>
       <td className="w-[60px]">
         <div className="w-[36px] h-[36px] rounded-full bg-green-700 bg-opacity-70 text-center">
-          <i className="icon icon-keys text-[18px] leading-[36px]"/>
+          <i className="icon icon-keys text-[18px] leading-[36px] text-white"/>
         </div>
       </td>
       <td >
@@ -63,7 +63,7 @@ export const AuthKeyItem = memo(function AuthKeyItem(props: AuthKeyItem) {
           <div aria-label={t('expire_auth_key')} data-position="left" className="w-[26px] inline-block text-right">
             <button
               type="button"
-              className="text-stone-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
+              className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
               onClick={() => onAction('expire')}
             >
               <i className="icon icon-expire text-[24px]"/>

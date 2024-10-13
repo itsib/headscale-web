@@ -9,6 +9,7 @@ import { ModalNodeDelete } from '../../components/modals/modal-node-delete/modal
 import { ModalNodeTags } from '../../components/modals/modal-node-tags/modal-node-tags.tsx';
 import { ContextAction, MachineItem } from './_machine-item.tsx';
 import { ListLoading } from '../../components/skeleton/list-loading.tsx';
+import { ModalNodeExpire } from '../../components/modals/modal-node-expire/modal-node-expire.tsx';
 
 export const MachinesPage: FC = () => {
   const { t } = useTranslation();
@@ -25,9 +26,9 @@ export const MachinesPage: FC = () => {
           <p className="text-secondary"><Trans i18nKey="machines_page_subtitle"/></p>
         </div>
 
-        <button type="button" className="btn btn-primary flex items-center gap-2" onClick={() => setOpened('create')}>
+        <button type="button" className="btn btn-accent flex items-center gap-2" onClick={() => setOpened('create')}>
           <i className="icon icon-devices text-lg"/>
-          <span className="font-semibold"><Trans i18nKey="register_device"/></span>
+          <span className="font-medium"><Trans i18nKey="register_device"/></span>
         </button>
       </div>
 
@@ -36,7 +37,7 @@ export const MachinesPage: FC = () => {
       ) : nodes?.length ? (
         <table className="w-full table-auto border-spacing-px" border={1}>
           <thead>
-          <tr className="border-b border-b-primary h-[50px] text-sm font-semibold text-secondary uppercase">
+          <tr className="border-b border-b-primary h-[30px] text-xs font-medium text-secondary uppercase">
             <th/>
             <th className="text-left ">{t('machine')}</th>
             <th className="text-left">{t('user')}</th>
@@ -91,6 +92,12 @@ export const MachinesPage: FC = () => {
       <ModalNodeTags
         node={selected}
         isOpen={opened === 'tags'}
+        onDismiss={() => setOpened(null)}
+        onSuccess={() => refetch()}
+      />
+      <ModalNodeExpire
+        node={selected}
+        isOpen={opened === 'expiry'}
         onDismiss={() => setOpened(null)}
         onSuccess={() => refetch()}
       />

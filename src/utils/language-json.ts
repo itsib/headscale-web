@@ -11,7 +11,7 @@ import {
   LanguageSupport,
 } from '@codemirror/language';
 
-export function languageHJSON() {
+export function languageJson() {
   const jsonHighlighting = styleTags({
     LineComment: tags.lineComment,
     BlockComment: tags.blockComment,

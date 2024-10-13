@@ -23,9 +23,9 @@ export const ApiTokens: FC = () => {
           <p className="text-secondary"><Trans i18nKey="api_access_tokens_subtitle"/></p>
         </div>
 
-        <button type="button" className="btn btn-primary flex items-center gap-2" onClick={() => setOpened('create')}>
+        <button type="button" className="btn btn-accent flex items-center gap-2" onClick={() => setOpened('create')}>
           <i className="icon icon-key-plus text-lg"/>
-          <span className="font-semibold">
+          <span className="font-medium">
             <Trans i18nKey="generate_access_token"/>
           </span>
         </button>
@@ -37,7 +37,7 @@ export const ApiTokens: FC = () => {
         <div className="overflow-x-auto lg:overflow-x-hidden">
           <table className="w-full table-auto border-spacing-px" border={1}>
             <thead>
-            <tr className="border-b border-b-primary h-[50px] text-sm font-semibold text-secondary uppercase">
+            <tr className="border-b border-b-primary h-[30px] text-xs font-medium text-secondary uppercase">
               <th/>
               <th className="text-left ">{t('key_id')}</th>
               <th className="text-left">{t('created')}</th>

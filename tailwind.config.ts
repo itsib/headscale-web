@@ -2,10 +2,7 @@ import type { Config } from 'tailwindcss';
 
 export default {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
-  darkMode: ['variant', [
-    '@media (prefers-color-scheme: dark) { &:not(.light *) }',
-    '&:is(.dark *)',
-  ]],
+  darkMode: 'class',
   theme: {
     backgroundColor: ({ theme }) => ({
       ...theme('colors'),

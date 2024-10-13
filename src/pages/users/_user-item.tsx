@@ -25,7 +25,7 @@ export const UserItem = memo(function UserItem({ id, name, createdAt, onDelete, 
       <td className="text-right w-[52px]">
         <button
           type="button"
-          className="text-stone-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
+          className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
           ref={btnRef}
         >
           <i className="icon icon-context-menu text-[24px]" />

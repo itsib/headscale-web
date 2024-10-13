@@ -2,10 +2,8 @@
   min-width: 180px;
   padding: 10px 0;
   background-color: rgb(var(--bg-popover) / 1);
-  //border: 1px solid rgb(var(--border-popover));
   border-radius: .5rem;
   overflow: hidden;
-  //box-shadow: 0 4px 6px -1px rgb(0 0 0 / .3), 0 2px 4px -2px rgb(0 0 0 / .3);
 
   .context-menu-item {
     list-style: none;
@@ -27,10 +25,12 @@
         height: auto;
         aspect-ratio: 1;
         margin-right: 12px;
-        font-size: 16px;
-        line-height: 16px;
-        text-align: center;
-        display: block;
+        font-size: 14px;
+        line-height: 14px;
+
+        &.icon-check {
+          margin-right: 0;
+        }
       }
 
       &:hover {

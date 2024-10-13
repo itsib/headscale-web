@@ -9,7 +9,7 @@ import {
   lineNumbers, ViewUpdate,
 } from '@codemirror/view';
 import { defaultKeymap, historyKeymap, history } from '@codemirror/commands';
-import { languageHJSON } from '../../utils/language-hjson.ts';
+import { languageJson } from '../../utils/language-json.ts';
 import './json-code-editor.css';
 
 export interface JsonCodeEditorPops {
@@ -42,7 +42,7 @@ export const JsonCodeEditor: FC<JsonCodeEditorPops> = ({ value, onChange }) => {
           ...historyKeymap,
         ]),
         EditorState.tabSize.of(4),
-        languageHJSON(),
+        languageJson(),
         EditorView.updateListener.of((update: ViewUpdate) => {
           if (!update.docChanged) {
             return;

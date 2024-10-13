@@ -9,6 +9,7 @@ import { defaultQueryFn } from './utils/query-fn';
 import './i18n';
 import 'react-just-ui/theme/minimal.css';
 import './index.css'
+import { ApplicationProvider } from './context/application/application.provider.tsx';
 
 // export const API_URL_USER = '/api/v1/user';
 // export const API_URL_NODE = '/api/v1/node';
@@ -49,7 +50,9 @@ const QUERY_CLIENT = new QueryClient({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <PersistQueryClientProvider client={QUERY_CLIENT} persistOptions={{ persister: QUERY_CLIENT_STORAGE }}>
-      <RouterProvider router={ROUTES} />
+      <ApplicationProvider>
+        <RouterProvider router={ROUTES} />
+      </ApplicationProvider>
     </PersistQueryClientProvider>
   </StrictMode>,
 )

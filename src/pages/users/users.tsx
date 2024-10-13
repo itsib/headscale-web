@@ -30,7 +30,7 @@ export const UsersPage: FC = () => {
           <p className="text-secondary"><Trans i18nKey="users_page_subtitle"/></p>
         </div>
 
-        <button type="button" className="btn btn-primary flex items-center gap-2" onClick={() => setOpened('create')}>
+        <button type="button" className="btn btn-accent flex items-center gap-2" onClick={() => setOpened('create')}>
           <i className="icon icon-user-plus text-lg" />
           <span className="font-semibold"><Trans i18nKey="create_user" /></span>
         </button>
@@ -39,11 +39,11 @@ export const UsersPage: FC = () => {
       {isLoading ? (
         <ListLoading />
       ) : users?.length ? (
-        <table className="w-full table-auto border-spacing-px" border={1}>
+        <table className="w-full table-auto border-spacing-px " border={1}>
           <thead>
-          <tr className="border-b border-b-primary h-[50px] text-sm">
-            <th className="text-left font-semibold text-secondary uppercase pl-[46px]">{t('user')}</th>
-            <th className="text-right font-semibold text-secondary uppercase">{t('joined')}</th>
+          <tr className="border-b border-b-primary h-[30px] text-xs font-medium text-secondary uppercase">
+            <th className="text-left pl-[46px]">{t('user')}</th>
+            <th className="text-right">{t('joined')}</th>
             <th/>
           </tr>
           </thead>

@@ -82,7 +82,6 @@
   "joined": "Joined",
   "key_id": "Key ID",
   "last_seen": "Last Seen",
-  "logout_tooltip": "Remove the access token from the local storage",
   "machine": "Machine",
   "machines": "Machines",
   "machines_page_subtitle": "Manage the devices connected to your tailnet.",
@@ -113,5 +112,11 @@
   "users_page_subtitle": "Manage the users in your network.",
   "expired_at": "Expired at",
   "generated_new_auth_key": "Generated Auth Key",
-  "show_expired_auth_keys": "Show expired auth keys"
+  "show_expired_auth_keys": "Show expired auth keys",
+  "light": "Light",
+  "dark": "Dark",
+  "system": "System",
+  "logout": "Logout",
+  "expiration_node_modal_title": "Expiration the node access key",
+  "expiration_node_modal_summary": "After the key is expired, the device \"{{name}}\" will lose access to your network."
 }

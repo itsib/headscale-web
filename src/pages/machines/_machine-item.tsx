@@ -25,19 +25,19 @@ export const MachineItem = memo(function NodeRow({ onAction, ...node }: NodeRowP
   return (
     <tr className="h-[80px] border-b border-b-primary">
       <td className="w-[60px]">
-        <div className="w-[36px] h-[36px] rounded-full bg-blue-700 bg-opacity-70 text-center">
+        <div className="w-[36px] h-[36px] rounded-full bg-blue-700 bg-opacity-70 text-center text-white">
           <i className="icon icon-connection text-[18px] leading-[36px]"/>
         </div>
       </td>
       <td className="">
-        <div className="text-primary font-semibold text-lg">{givenName || name}</div>
+        <div className="text-primary font-medium text-lg">{givenName || name}</div>
         <div className="flex justify-start">
           {expiryDisabled ? (
-            <div className="text-xs text-secondary bg-stone-300 dark:bg-stone-700 px-1 rounded-sm">
+            <div className="text-secondary text-xs font-normal">
               <Trans i18nKey="expiry_disabled"/>
             </div>
           ) : (
-            <div className="text-xs text-secondary bg-stone-300 dark:bg-stone-700 px-1 rounded-sm">
+            <div className="text-secondary text-xs font-normal">
               <FormattedDuration timestamp={expiryDate.getTime()}/>
             </div>
           )}
@@ -65,7 +65,7 @@ export const MachineItem = memo(function NodeRow({ onAction, ...node }: NodeRowP
       </td>
       <td className="text-right w-[52px]">
         <button
-          className="text-stone-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
+          className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
           ref={contextRef}
         >
           <i className="icon icon-context-menu text-[24px]"/>

@@ -82,7 +82,7 @@ const ModalContent: FC<Omit<ModalNodeChownProps, 'isOpen' | 'node'> & { node: No
 
           <button
             type="submit"
-            className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}
+            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
             disabled={node.user.name === watch('userName')}
           >
             <span>{t('apply')}</span>

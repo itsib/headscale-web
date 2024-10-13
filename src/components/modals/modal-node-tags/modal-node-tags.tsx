@@ -114,7 +114,7 @@ const ModalContent: FC<Omit<ModalNodeTagsProps, 'isOpen' | 'node'> & { node: Nod
           ) : null}
           <button
             type="button"
-            className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}
+            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
             disabled={!isDifferent}
             onClick={() => mutate({ id: node.id, tags, })}
           >

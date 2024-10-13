@@ -1,4 +1,4 @@
-@import "/fonts/sf-pro-display/style.css";
+@import "/fonts/roboto/style.css";
 @import "/fonts/jet-brains-mono/style.css";
 @import "/fonts/sf-pro-text/style.css";
 @import "/fonts/icon-font/icon-font.css";
@@ -45,86 +45,87 @@ html {
   --green-950: 5 46 22;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    --accent: 0 115 229;
-    --black: 0 0 0;
+html {
+  --accent: 0 115 229;
+  --black: 0 0 0;
 
-    --bg-primary: 31 30 30;
-    --bg-secondary: 46 45 45;
+  --bg-primary: 238 235 234;
+  --bg-secondary: 247 245 244;
 
-    --border-primary: 45 45 45;
-    --border-secondary: 75 75 75;
+  --border-primary: 218 214 213;
+  --border-secondary: 190 194 194;
 
-    /** Text */
-    --text-primary: 255 255 255;
-    --text-secondary: 200 200 200; /** #C8C8C8 */
+  --text-primary: 0 0 0;
+  --text-secondary: 50 50 50;
 
-    /** Context menu popover */
-    --bg-popover: 31 30 30;
-    --bg-popover-hover: 38 37 37;
-    --border-popover: 46 45 45;
+  --bg-popover: 247 245 244;
+  --bg-popover-hover: 230 230 230;
+  --border-popover: 218 214 213;
 
-    /* JSON editor highlight */
-    --code-highlight-number: #2AACB8;
-    --code-highlight-string: #6AAB73;
-    --code-highlight-null: #c16841;
-    --code-highlight-property: #C77DBB;
-    --code-highlight-brace: #BCBEC4;
-    --code-highlight-comments: #7A7E85;
-    --code-trailing-space: rgba(255 116 104 / .33);
-    --code-selection: rgb(33 66 131 / .5);
+  /* JSON editor highlight */
+  --code-highlight-number: #1c86c6;
+  --code-highlight-string: #22782c;
+  --code-highlight-null: #c16841;
+  --code-highlight-property: #aa2395;
+  --code-highlight-brace: #60686c;
+  --code-highlight-comments: #60686c;
+  --code-trailing-space: rgba(255 116 104 / .33);
+  --code-selection: rgb(33 66 131 / .5);
 
-    color-scheme: dark;
-  }
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: light) {
-  html {
-    --accent: 0 115 229;
-    --black: 0 0 0;
+html.dark {
+  --accent: 0 115 229;
+  --black: 0 0 0;
 
-    --bg-primary: 238 235 234;
-    --bg-secondary: 247 245 244;
+  --bg-primary: 31 30 30;
+  --bg-secondary: 15 15 15;
 
-    --border-primary: 230 234 234;
-    --border-secondary: 190 194 194;
+  --border-primary: 45 45 45;
+  --border-secondary: 75 75 75;
 
-    --text-primary: 0 0 0;
-    --text-secondary: 50 50 50;
+  /** Text */
+  --text-primary: 255 255 255;
+  --text-secondary: 200 200 200; /** #C8C8C8 */
 
-    --bg-popover: 31 30 30;
-    --bg-popover-hover: 38 37 37;
-    --border-popover: 46 45 45;
+  /** Context menu popover */
+  --bg-popover: 31 30 30;
+  --bg-popover-hover: 38 37 37;
+  --border-popover: 46 45 45;
 
-    /* JSON editor highlight */
-    --code-highlight-number: #2AACB8;
-    --code-highlight-string: #6AAB73;
-    --code-highlight-null: #c16841;
-    --code-highlight-property: #C77DBB;
-    --code-highlight-brace: #BCBEC4;
-    --code-highlight-comments: #7A7E85;
-    --code-trailing-space: rgba(255 116 104 / .33);
-    --code-selection: rgb(33 66 131 / .5);
+  /* JSON editor highlight */
+  --code-highlight-number: #2AACB8;
+  --code-highlight-string: #6AAB73;
+  --code-highlight-null: #c16841;
+  --code-highlight-property: #C77DBB;
+  --code-highlight-brace: #BCBEC4;
+  --code-highlight-comments: #7A7E85;
+  --code-trailing-space: rgba(255 116 104 / .33);
+  --code-selection: rgb(33 66 131 / .5);
 
-    color-scheme: light;
-
-  }
+  color-scheme: dark;
 }
 
 html, body {
   min-height: 100vh;
-  background-color: rgb(var(--bg-primary));
+  background-color: rgb(var(--bg-secondary));
 
-  font-family: SF-Pro-Display, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Roboto, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 22px;
   font-weight: 400;
   font-synthesis: none;
-  text-rendering: geometricPrecision;
-  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  tab-size: 4;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 
   color-scheme: light dark;
   color: rgb(var(--text-primary));
@@ -135,16 +136,16 @@ html, body {
 @layer components {
   h1 {
     font-size: 1.875rem;
-    font-weight: 600;
+    font-weight: 500;
   }
   h2 {
     font-size: 1.25rem;
     line-height: 1.75rem;
-    font-weight: 600;
+    font-weight: 500;
   }
   h3 {
     font-size: 1.375rem;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .digits {

@@ -41,9 +41,7 @@ const ModalContent: FC<Omit<ModalUserDeleteProps, 'isOpen' | 'user'> & { user: U
         <div className="title">
           <span>{t('deleting_user_modal_title')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()}>
-          <i className="icon icon-close"/>
-        </button>
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
         <div className="pt-2 pb-4">
@@ -66,7 +64,7 @@ const ModalContent: FC<Omit<ModalUserDeleteProps, 'isOpen' | 'user'> & { user: U
         <div>
           <button
             type="button"
-            className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}
+            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
             onClick={() => mutate(user.name)}
           >
             <span>{t('delete')}</span>

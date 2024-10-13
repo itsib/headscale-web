@@ -22,7 +22,7 @@ export const ApiTokenItem = memo(function ApiTokenItem(props: ApiTokenItemProps)
     <tr className="h-[60px] border-b border-b-primary">
       <td className="w-[60px]">
         <div className="w-[36px] h-[36px] rounded-full bg-green-700 bg-opacity-70 text-center">
-          <i className="icon icon-keys text-[18px] leading-[36px]"/>
+          <i className="icon icon-keys text-[18px] leading-[36px] text-white"/>
         </div>
       </td>
       <td className="">
@@ -56,7 +56,7 @@ export const ApiTokenItem = memo(function ApiTokenItem(props: ApiTokenItemProps)
       </td>
       <td className="text-right w-[52px]">
         <button
-          className="text-stone-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
+          className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
           ref={contextRef}
         >
           <i className="icon icon-context-menu text-[24px]"/>

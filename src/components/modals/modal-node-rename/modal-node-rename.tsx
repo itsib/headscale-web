@@ -50,9 +50,7 @@ const ModalContent: FC<Omit<ModalNodeRenameProps, 'isOpen' | 'node'> & { node: N
         <div className="title">
           <span>{t('renaming_node_modal_title')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()}>
-          <i className="icon icon-close"/>
-        </button>
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
         <form onSubmit={handleSubmit((values: { name: string }) => mutate({ id: node.id, newName: values.name }))}>
@@ -71,7 +69,7 @@ const ModalContent: FC<Omit<ModalNodeRenameProps, 'isOpen' | 'node'> & { node: N
 
           <button
             type="submit"
-            className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}
+            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
             disabled={currentName === watch('name')}
           >
             <span>{t('rename')}</span>

@@ -91,7 +91,7 @@ const ModalContent: FC<Omit<ModalApiTokenCreateProps, 'isOpen'>> = ({ onDismiss,
               />
             </div>
 
-            <button type="button" className="btn btn-primary w-full mt-6" onClick={() => {
+            <button type="button" className="btn btn-accent w-full mt-6" onClick={() => {
               onDismiss?.();
               onSuccess?.();
 
@@ -132,7 +132,7 @@ const ModalContent: FC<Omit<ModalApiTokenCreateProps, 'isOpen'>> = ({ onDismiss,
             </div>
 
             <div>
-              <button type="submit" className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}>
+              <button type="submit" className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}>
                 <span>{t('create')}</span>
               </button>
               {error ? (
