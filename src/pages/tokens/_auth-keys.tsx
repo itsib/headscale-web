@@ -18,7 +18,7 @@ export const AuthKeys: FC = () => {
   const [isShowExpired, setIsShowExpired] = useState(false);
 
   const activeAuthKeys = useMemo(() => {
-    return authKeys?.filter(authKey => (new Date(authKey.expiration).getTime() - Date.now()) > 0);
+    return authKeys?.filter(authKey => !!authKey && (new Date(authKey.expiration).getTime() - Date.now()) > 0);
   }, [authKeys]);
 
   return (

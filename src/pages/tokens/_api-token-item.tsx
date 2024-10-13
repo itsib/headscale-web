@@ -16,7 +16,7 @@ export const ApiTokenItem = memo(function ApiTokenItem(props: ApiTokenItemProps)
   const contextRef = useRef<HTMLButtonElement | null>(null);
   const { prefix, createdAt, expiration, lastSeen, onAction } = props;
 
-  const isExpired = useMemo(() => (new Date(expiration).getTime() - Date.now()) < 0, [expiration]);
+  const isExpired = useMemo(() => !!expiration && (new Date(expiration).getTime() - Date.now()) < 0, [expiration]);
 
   return (
     <tr className="h-[60px] border-b border-b-primary">
