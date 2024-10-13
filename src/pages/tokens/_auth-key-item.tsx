@@ -60,7 +60,7 @@ export const AuthKeyItem = memo(function AuthKeyItem(props: AuthKeyItem) {
       </td>
       <td className="text-right w-[52px]">
         {!isExpired ? (
-          <div aria-label={t('expire_auth_key')} data-position="top" className="w-[26px] inline-block text-right">
+          <div aria-label={t('expire_auth_key')} data-position="left" className="w-[26px] inline-block text-right">
             <button
               type="button"
               className="text-stone-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"

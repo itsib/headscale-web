@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useAuthKeys } from '../../hooks/use-auth-keys.ts';
 import { ContextAction } from './_api-token-item.tsx';
@@ -7,6 +7,7 @@ import { AuthKeyItem } from './_auth-key-item.tsx';
 import { ListLoading } from '../../components/skeleton/list-loading.tsx';
 import { ModalAuthKeyCreate } from '../../components/modals/modal-auth-key-create/modal-auth-key-create.tsx';
 import { ModalAuthKeyExpire } from '../../components/modals/modal-auth-key-expire/modal-auth-key-expire.tsx';
+import { Checkbox } from 'react-just-ui';
 
 export const AuthKeys: FC = () => {
   const { t } = useTranslation();
@@ -14,6 +15,11 @@ export const AuthKeys: FC = () => {
 
   const [opened, setOpened] = useState<ContextAction | null>(null);
   const [selected, setSelected] = useState<AuthKeyWithUser | null>(null);
+  const [isShowExpired, setIsShowExpired] = useState(false);
+
+  const activeAuthKeys = useMemo(() => {
+    return authKeys?.filter(authKey => (new Date(authKey.expiration).getTime() - Date.now()) > 0);
+  }, [authKeys]);
 
   return (
     <>
@@ -47,7 +53,7 @@ export const AuthKeys: FC = () => {
             </tr>
             </thead>
             <tbody>
-            {authKeys?.map(({ key, ...authKey }) => (
+            {(isShowExpired ? authKeys : activeAuthKeys)?.map(({ key, ...authKey }) => (
               <AuthKeyItem
                 key={key}
                 authKey={key}
@@ -65,6 +71,19 @@ export const AuthKeys: FC = () => {
           <Trans i18nKey="no_auth_keys"/>
         </div>
       )}
+
+      {authKeys && activeAuthKeys && authKeys.length !== activeAuthKeys.length ? (
+        <div className="mt-6 -mr-2">
+          <Checkbox
+            id="show-expired-auth-keys"
+            label={t('show_expired_auth_keys')}
+            rowReverse
+            className="justify-end"
+            checked={isShowExpired}
+            onChange={() => setIsShowExpired(!isShowExpired)}
+          />
+        </div>
+      ) : null}
 
       <ModalAuthKeyCreate
         isOpen={opened === 'create'}

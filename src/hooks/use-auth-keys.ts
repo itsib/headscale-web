@@ -29,8 +29,8 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () =>
         data: results.flatMap((result) => result.data as any as AuthKeyWithUser[]),
         isLoading: results.some((result) => result.isLoading),
         error: results.find((result) => !!result.error)?.error, // results
-        refetch: () => {
-          return Promise.all(results.map(result => result.refetch()))
+        refetch: async () => {
+          return await Promise.all(results.map(result => result.refetch({ cancelRefetch: true })))
         },
       };
     }
