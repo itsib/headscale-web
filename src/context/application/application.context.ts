@@ -3,10 +3,16 @@ import { getActiveTheme, Theme } from '../../utils/theme.ts';
 
 export interface ApplicationContext {
   theme: Theme;
-  setTheme: (theme: Theme) => void;
+  updateTheme: (theme: Theme) => void;
+  logout: () => void;
+  login: (credentials: { url: string; token: string }) => void;
+  authorized: boolean;
 }
 
 export default createContext<ApplicationContext>({
   theme: getActiveTheme(),
-  setTheme: () => {throw new Error('NOT_IMPLEMENTED')},
+  updateTheme: () => {throw new Error('NOT_IMPLEMENTED')},
+  logout: () => {throw new Error('NOT_IMPLEMENTED')},
+  login: () => {throw new Error('NOT_IMPLEMENTED')},
+  authorized: false,
 });

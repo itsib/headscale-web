@@ -1,15 +1,20 @@
 import { FC, useMemo, useRef } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import { useTheme } from '../../hooks/use-theme.ts';
 import { Theme } from '../../utils/theme.ts';
 import './header.css';
 import { PopupPlacement } from '../popups/popup-base/_common.ts';
 import { ContextMenu } from '../popups/context-menu.tsx';
+import { useLogout } from '../../hooks/use-logout.ts';
+import { useAuthorized } from '../../hooks/use-authorized.ts';
 
 export const Header: FC = () => {
   const contextRef = useRef<HTMLButtonElement | null>(null);
   const [ theme, setTheme ] = useTheme();
+  const logout = useLogout();
+  const navigate = useNavigate();
+  const authorized = useAuthorized();
 
   const prefix = useMemo(() => {
     const token = localStorage.getItem('headscale.token');
@@ -58,7 +63,7 @@ export const Header: FC = () => {
           </NavLink>
         </nav>
 
-        {prefix && url ? (
+        {authorized ? (
           <div className="flex items-center gap-4">
             <button
               className="text-primary dark:text-opacity-80 text-opacity-70 hover:text-primary transition"
@@ -103,7 +108,13 @@ export const Header: FC = () => {
               <hr className="context-menu-divider"/>
 
               <div className="context-menu-item">
-                <button type="button" className="btn-context-menu flex items-center">
+                <button
+                  type="button"
+                  className="btn-context-menu flex items-center"
+                  onClick={() => {
+                    logout();
+                    navigate('/');
+                  }}>
                   <i className="icon icon-logout"/>
                   <span><Trans i18nKey="logout"/></span>
                 </button>

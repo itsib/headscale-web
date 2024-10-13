@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { createBrowserRouter as createRouter, isRouteErrorResponse, Navigate, useRouteError } from 'react-router-dom';
+import { isRouteErrorResponse, Navigate, useRouteError, createHashRouter as createRouter } from 'react-router-dom';
 import { Error500Page } from './error-500/error-500-page';
 import { Error404Page } from './error-404/error-404.page';
 import { MachinesPage } from './machines/machines.tsx';
