@@ -2,33 +2,33 @@ import { FC } from 'react';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
-import { AuthKeyWithUser, User } from '../../../types';
+import { ApiToken } from '../../../types';
 import { fetchFn } from '../../../utils/query-fn.ts';
 
-export interface ModalAuthKeyExpireProps extends ModalProps {
-  authKey?: AuthKeyWithUser | null;
+export interface ModalApiTokenExpireProps extends ModalProps {
+  apiToken?: ApiToken | null;
   onSuccess: () => void;
 }
 
-export const ModalAuthKeyExpire: FC<ModalAuthKeyExpireProps> = ({ isOpen, onDismiss, authKey, ...props }) => {
+export const ModalApiTokenExpire: FC<ModalApiTokenExpireProps> = ({ isOpen, onDismiss, apiToken, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
-      {authKey ? <ModalContent onDismiss={onDismiss} authKey={authKey} {...props} /> : null}
+      {apiToken ? <ModalContent onDismiss={onDismiss} apiToken={apiToken} {...props} /> : null}
     </Modal>
   );
 };
 
-const ModalContent: FC<Omit<ModalAuthKeyExpireProps, 'isOpen' | 'authKey'> & { authKey: AuthKeyWithUser }> = props => {
-  const { onDismiss, onSuccess, authKey } = props;
+const ModalContent: FC<Omit<ModalApiTokenExpireProps, 'isOpen' | 'apiToken'> & { apiToken: ApiToken }> = props => {
+  const { onDismiss, onSuccess, apiToken } = props;
   const { t } = useTranslation();
 
   const { mutate, isPending, error } = useMutation({
-    async mutationFn(values: { user: string, key: string }) {
-      const data = await fetchFn<{ user: User }>(`/api/v1/preauthkey/expire`, {
+    async mutationFn(values: { prefix: string }) {
+      const data = await fetchFn<{ apiToken: ApiToken }>(`/api/v1/apikey/expire`, {
         method: 'POST',
         body: JSON.stringify(values)
       });
-      return data.user;
+      return data.apiToken;
     },
     onSuccess: () => {
       onSuccess();
@@ -40,7 +40,7 @@ const ModalContent: FC<Omit<ModalAuthKeyExpireProps, 'isOpen' | 'authKey'> & { a
     <div className="modal w-[400px]">
       <div className="modal-header">
         <div className="title">
-          <span>{t('expire_auth_key_modal_title')}</span>
+          <span>{t('expire_api_token_modal_title')}</span>
         </div>
         <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
       </div>
@@ -53,10 +53,8 @@ const ModalContent: FC<Omit<ModalAuthKeyExpireProps, 'isOpen' | 'authKey'> & { a
           <hr className="border-t-primary mb-3"/>
 
           <div className="text-start grid grid-cols-[0.4fr,1fr] gap-y-2">
-            <div className="text-secondary text-sm self-center whitespace-nowrap"><Trans i18nKey="auth_key"/>:&nbsp;</div>
-            <div className="truncate text-primary self-center">{authKey.key}</div>
-            <div className="text-secondary text-sm self-center whitespace-nowrap"><Trans i18nKey="user_name"/>:&nbsp;</div>
-            <div className="truncate text-primary self-center">{authKey.user.name}</div>
+            <div className="text-secondary text-sm self-center whitespace-nowrap"><Trans i18nKey="api_token"/>:&nbsp;</div>
+            <div className="truncate text-primary self-center">{apiToken.prefix}</div>
           </div>
         </div>
         <div>
@@ -64,8 +62,7 @@ const ModalContent: FC<Omit<ModalAuthKeyExpireProps, 'isOpen' | 'authKey'> & { a
             type="button"
             className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}
             onClick={() => mutate({
-              user: authKey.user.name,
-              key: authKey.key,
+              prefix: apiToken.prefix,
             })}
           >
             <span>{t('expiry')}</span>

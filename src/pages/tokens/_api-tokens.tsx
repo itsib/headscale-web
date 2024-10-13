@@ -1,15 +1,19 @@
 import { FC, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApiTokenItem, ContextAction } from './_api-token-item.tsx';
-import { AuthKey } from '../../types';
+import { ApiToken } from '../../types';
 import { useApiTokens } from '../../hooks/use-api-tokens.ts';
+import { ListLoading } from '../../components/skeleton/list-loading.tsx';
+import { ModalApiTokenCreate } from '../../components/modals/modal-api-token-create/modal-api-token-create.tsx';
+import { ModalApiTokenExpire } from '../../components/modals/modal-api-token-expire/modal-api-token-expire.tsx';
+import { ModalApiTokenDelete } from '../../components/modals/modal-api-token-delete/modal-api-token-delete.tsx';
 
 export const ApiTokens: FC = () => {
   const { t } = useTranslation();
-  const { data: apiTokens } = useApiTokens();
+  const { data: apiTokens, isLoading, refetch } = useApiTokens();
 
-  const [, setOpened] = useState<ContextAction | null>(null);
-  const [selected, setSelected] = useState<AuthKey | null>(null);
+  const [opened, setOpened] = useState<ContextAction | null>(null);
+  const [selected, setSelected] = useState<ApiToken | null>(null);
 
   return (
     <>
@@ -19,42 +23,65 @@ export const ApiTokens: FC = () => {
           <p className="text-secondary"><Trans i18nKey="api_access_tokens_subtitle"/></p>
         </div>
 
-        <button type="button" className="btn btn-primary flex items-center gap-2">
+        <button type="button" className="btn btn-primary flex items-center gap-2" onClick={() => setOpened('create')}>
           <i className="icon icon-key-plus text-lg"/>
           <span className="font-semibold">
             <Trans i18nKey="generate_access_token"/>
           </span>
         </button>
       </div>
-      {apiTokens?.length ? (
-        <table className="w-full table-auto border-spacing-px" border={1}>
-          <thead>
-          <tr className="border-b border-b-primary h-[50px] text-sm font-semibold text-secondary uppercase">
-            <th/>
-            <th className="text-left ">{t('key_id')}</th>
-            <th className="text-left">{t('created')}</th>
-            <th className="text-left">{t('expiry')}</th>
-            <th className="text-right">{t('last_seen')}</th>
-            <th/>
-          </tr>
-          </thead>
-          <tbody>
-          {apiTokens?.map(authKey => (
-            <ApiTokenItem
-              key={authKey.id}
-              onAction={action => {
-                setSelected(selected);
-                setOpened(action);
-              }}
-              {...authKey} />
-          ))}
-          </tbody>
-        </table>
+
+      {isLoading ? (
+        <ListLoading />
+      ) : apiTokens?.length ? (
+        <div className="overflow-x-auto lg:overflow-x-hidden">
+          <table className="w-full table-auto border-spacing-px" border={1}>
+            <thead>
+            <tr className="border-b border-b-primary h-[50px] text-sm font-semibold text-secondary uppercase">
+              <th/>
+              <th className="text-left ">{t('key_id')}</th>
+              <th className="text-left">{t('created')}</th>
+              <th className="text-left">{t('expiry')}</th>
+              <th className="text-right">{t('last_seen')}</th>
+              <th/>
+            </tr>
+            </thead>
+            <tbody>
+            {apiTokens?.map(apiToken => (
+              <ApiTokenItem
+                key={apiToken.id}
+                onAction={action => {
+                  setSelected(apiToken);
+                  setOpened(action);
+                }}
+                {...apiToken} />
+            ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <div className="border-primary border rounded-md p-8 text-center">
-          <Trans i18nKey="no_api_tokens" />
+          <Trans i18nKey="no_api_tokens"/>
         </div>
       )}
+
+      <ModalApiTokenCreate
+        isOpen={opened === 'create'}
+        onDismiss={() => setOpened(null)}
+        onSuccess={() => refetch()}
+      />
+      <ModalApiTokenExpire
+        isOpen={opened === 'expire'}
+        apiToken={selected}
+        onDismiss={() => setOpened(null)}
+        onSuccess={() => refetch()}
+      />
+      <ModalApiTokenDelete
+        isOpen={opened === 'delete'}
+        apiToken={selected}
+        onDismiss={() => setOpened(null)}
+        onSuccess={() => refetch()}
+      />
     </>
   );
 }

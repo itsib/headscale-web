@@ -17,23 +17,27 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () =>
         signal,
       }),
       staleTime: 30_000,
-      select: ({ preAuthKeys }: { preAuthKeys: AuthKey[] }) => preAuthKeys.map(key => ({ ...key, user, }))
+      select: ({ preAuthKeys }: { preAuthKeys: AuthKey[] }) => preAuthKeys.map(key => ({ ...key, user, })),
+
     }))
   }, [users])
 
-  const { data, isLoading, error } = useQueries({
+  const { data, isLoading, error, refetch: _refetch } = useQueries({
     queries,
     combine: (results) => {
       return {
         data: results.flatMap((result) => result.data as any as AuthKeyWithUser[]),
         isLoading: results.some((result) => result.isLoading),
-        error: results.find((result) => !!result.error)?.error,
+        error: results.find((result) => !!result.error)?.error, // results
+        refetch: () => {
+          return Promise.all(results.map(result => result.refetch()))
+        },
       };
     }
   });
 
   const refetch = useCallback(() => {
-
+    _refetch().catch(console.error);
   }, []);
 
   return { data, isLoading, error, refetch };

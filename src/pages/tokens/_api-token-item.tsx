@@ -1,9 +1,10 @@
-import { memo, useRef } from 'react';
+import { memo, useMemo, useRef } from 'react';
 import { ApiToken } from '../../types';
 import { Trans } from 'react-i18next';
 import { ContextMenu } from '../../components/popups/context-menu.tsx';
 import { PopupPlacement } from '../../components/popups/popup-base/_common.ts';
 import { FormattedDate } from '../../components/formatters/formatted-date.tsx';
+import { FormattedDuration } from '../../components/formatters/formatted-duration.tsx';
 
 export type ContextAction = 'expire' | 'delete' | 'create';
 
@@ -14,6 +15,8 @@ export interface ApiTokenItemProps extends ApiToken {
 export const ApiTokenItem = memo(function ApiTokenItem(props: ApiTokenItemProps) {
   const contextRef = useRef<HTMLButtonElement | null>(null);
   const { prefix, createdAt, expiration, lastSeen, onAction } = props;
+
+  const isExpired = useMemo(() => (new Date(expiration).getTime() - Date.now()) < 0, [expiration]);
 
   return (
     <tr className="h-[60px] border-b border-b-primary">
@@ -26,10 +29,23 @@ export const ApiTokenItem = memo(function ApiTokenItem(props: ApiTokenItemProps)
         <div>{prefix}</div>
       </td>
       <td className="text-left">
-        <FormattedDate iso={createdAt} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
+        <div className="text-sm text-secondary">
+          <FormattedDate iso={createdAt} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
+        </div>
       </td>
       <td className="text-left">
-        <FormattedDate iso={expiration} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
+        <div className="text-sm text-secondary">
+          <FormattedDate iso={expiration} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
+        </div>
+        {isExpired ? (
+          <div className="text-sm text-red-500">
+            <Trans i18nKey="expired" />
+          </div>
+        ) : (
+          <div className="text-sm text-secondary">
+            <FormattedDuration iso={expiration} format="long"/>
+          </div>
+        )}
       </td>
       <td className="text-right">
         {lastSeen ? (
