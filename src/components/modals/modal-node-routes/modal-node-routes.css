@@ -27,15 +27,6 @@
       .jj-subscript {
         display: none;
       }
-
-      &.disabled {
-
-        .jj-label {
-          opacity: 0.5;
-          color: rgb(var(--text-secondary));
-          cursor: default;
-        }
-      }
     }
   }
 }

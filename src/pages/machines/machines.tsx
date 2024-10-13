@@ -28,8 +28,8 @@ export const MachinesPage: FC = () => {
         </div>
 
         <button type="button" className="btn btn-accent flex items-center gap-2" onClick={() => setOpened('create')}>
-          <i className="icon icon-devices text-lg"/>
-          <span className="font-medium"><Trans i18nKey="register_device"/></span>
+          <i className="icon icon-devices text-lg text-white"/>
+          <span className="font-medium text-white"><Trans i18nKey="register_device"/></span>
         </button>
       </div>
 
