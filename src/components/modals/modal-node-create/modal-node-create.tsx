@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { ModalProps, Modal } from 'react-just-ui/modal';
 import { fetchFn } from '../../../utils/query-fn.ts';
 import { useUsers } from '../../../hooks/use-users.ts';
+import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
 
 interface FormFields {
   nodekey: string;
@@ -27,6 +28,7 @@ export const ModalNodeCreate: FC<ModalNodeRegisterProps> = ({ isOpen, onDismiss,
 const ModalContent: FC<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
   const { t } = useTranslation();
   const { data: users } = useUsers();
+  const url = useMemo(() => localStorage.getItem('headscale.url'), []);
 
   const options: SelectOption[] = useMemo(() => {
     if (!users) {
@@ -97,9 +99,18 @@ const ModalContent: FC<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, o
               i18nKey="tailscale_up_command"
               values={{ url: localStorage.getItem('headscale.url') }}
               components={{
-                code: <div className="border border-secondary rounded-md py-2 px-3 my-1" />
+                code: (
+                  <div className="border border-secondary rounded-md py-2 px-3 my-1 relative">
+                    <span>tailscale up --login-server {url}</span>
+
+                    <div className="absolute right-2 top-2">
+                      <BtnCopy text={`tailscale up --login-server ${url}`} className="" />
+                    </div>
+                  </div>
+                )
               }}
             />
+
           </div>
 
           <div>

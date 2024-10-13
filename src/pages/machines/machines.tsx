@@ -10,6 +10,7 @@ import { ModalNodeTags } from '../../components/modals/modal-node-tags/modal-nod
 import { ContextAction, MachineItem } from './_machine-item.tsx';
 import { ListLoading } from '../../components/skeleton/list-loading.tsx';
 import { ModalNodeExpire } from '../../components/modals/modal-node-expire/modal-node-expire.tsx';
+import { ModalNodeRoutes } from '../../components/modals/modal-node-routes/modal-node-routes.tsx';
 
 export const MachinesPage: FC = () => {
   const { t } = useTranslation();
@@ -86,6 +87,12 @@ export const MachinesPage: FC = () => {
       <ModalNodeDelete
         node={selected}
         isOpen={opened === 'delete'}
+        onDismiss={() => setOpened(null)}
+        onSuccess={() => refetch()}
+      />
+      <ModalNodeRoutes
+        node={selected}
+        isOpen={opened === 'routes'}
         onDismiss={() => setOpened(null)}
         onSuccess={() => refetch()}
       />

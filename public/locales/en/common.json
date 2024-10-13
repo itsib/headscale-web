@@ -103,7 +103,7 @@
   "single_use": "Single-use",
   "tag_name": "Tag Name",
   "tags": "Tags",
-  "tailscale_up_command": "The device key returns the command <code>tailscale up --login-server {{url}}</code> executed on your device.",
+  "tailscale_up_command": "The device key returns the command <code /> executed on your device.",
   "tokens": "Tokens",
   "type": "Type",
   "unknown_error": "Unknown Error",
@@ -118,5 +118,17 @@
   "system": "System",
   "logout": "Logout",
   "expiration_node_modal_title": "Expiration the node access key",
-  "expiration_node_modal_summary": "After the key is expired, the device \"{{name}}\" will lose access to your network."
+  "expiration_node_modal_summary": "After the key is expired, the device \"{{name}}\" will lose access to your network.",
+  "edit_route_settings": "Edit Route Settings",
+  "edit_route_settings_of": "Edit route settings of {{name}}",
+  "subnet_routes": "Subnet Routes",
+  "subnet_routes_summary": "Connect to devices you can’t install Tailscale on by advertising IP ranges as subnet routes.",
+  "prefix": "Prefix",
+  "advertised": "Advertised",
+  "primary": "Primary",
+  "enabled": "Enabled",
+  "no_subnet_routes": "This machine does not expose any routes.",
+  "exit_node": "Exit Node",
+  "exit_node_subtitle": "Allow your network to route internet traffic through this machine.",
+  "use_as_exit_node": "Use as exit node"
 }

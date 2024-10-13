@@ -1,0 +1,41 @@
+.modal-node-routes {
+
+  .subnet-routes-block {
+
+    .subnet-route {
+      margin: 6px 0;
+
+      .control-toggler {
+        margin-left: 0;
+      }
+
+      .jj-subscript {
+        display: none;
+      }
+    }
+  }
+
+  .exit-node-checkbox-wrap {
+
+    .exit-node-checkbox {
+      margin: 8px 0 0;
+
+      .control-toggler {
+        margin-left: 0;
+      }
+
+      .jj-subscript {
+        display: none;
+      }
+
+      &.disabled {
+
+        .jj-label {
+          opacity: 0.5;
+          color: rgb(var(--text-secondary));
+          cursor: default;
+        }
+      }
+    }
+  }
+}

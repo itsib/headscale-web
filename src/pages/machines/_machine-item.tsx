@@ -9,7 +9,7 @@ import { FormattedDate } from '../../components/formatters/formatted-date.tsx';
 import { ContextMenu } from '../../components/popups/context-menu.tsx';
 import { PopupPlacement } from '../../components/popups/popup-base/_common.ts';
 
-export type ContextAction = 'delete' | 'create' | 'rename' | 'chown' | 'expiry' | 'tags';
+export type ContextAction = 'delete' | 'create' | 'rename' | 'chown' | 'expiry' | 'tags' | 'routes';
 
 export interface NodeRowProps extends Node {
   onAction: (name: ContextAction) => void;
@@ -87,6 +87,15 @@ export const MachineItem = memo(function NodeRow({ onAction, ...node }: NodeRowP
               <Trans i18nKey="expire_key"/>
             </button>
           </div>
+
+          <hr className="context-menu-divider"/>
+
+          <div className="context-menu-item" onClick={() => onAction('routes')}>
+            <button type="button" className="btn-context-menu">
+              <Trans i18nKey="edit_route_settings"/>
+            </button>
+          </div>
+
           <div className="context-menu-item" onClick={() => onAction('tags')}>
             <button type="button" className="btn-context-menu">
               <Trans i18nKey="edit_acl_tags"/>
