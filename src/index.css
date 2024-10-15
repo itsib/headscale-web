@@ -167,7 +167,8 @@ html, body {
   }
 
   .skeleton {
-    background-color: rgb(var(34 34 34) / 90%);
+    background-color: rgb(34 34 34 / 90%);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     @apply animate-pulse;
   }
 }

@@ -1,7 +1,6 @@
 /* eslint-disable prefer-const,no-case-declarations */
 /**
- * Generates the same unique color for the string value (salt).
- * CYRB53 Hash Algorithm
+ * Generates the same unique color for the string value (salt). CYRB53 Hash Algorithm
  *
  * @param str any string
  * @param seed if you need different colors for same string

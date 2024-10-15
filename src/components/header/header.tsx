@@ -3,11 +3,12 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import { useTheme } from '../../hooks/use-theme.ts';
 import { Theme } from '../../utils/theme.ts';
-import './header.css';
 import { PopupPlacement } from '../popups/popup-base/_common.ts';
 import { ContextMenu } from '../popups/context-menu.tsx';
 import { useLogout } from '../../hooks/use-logout.ts';
 import { useAuthorized } from '../../hooks/use-authorized.ts';
+import { BrandLogo } from '../brand-logo/brand-logo.tsx';
+import './header.css';
 
 export const Header: FC = () => {
   const contextRef = useRef<HTMLButtonElement | null>(null);
@@ -29,19 +30,8 @@ export const Header: FC = () => {
   return (
     <header className="header bg-primary dark:border-gray-800 border-b-primary">
       <div className="container flex items-center justify-between h-[60px]">
-        <Link className="flex items-center" to="/">
-          <svg width={24} height={24} viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"
-               className="-top-[1px] relative">
-            <circle opacity="0.2" cx="3.4" cy="3.25" r="2.7" fill="currentColor"/>
-            <circle cx="3.4" cy="11.3" r="2.7" fill="currentColor"/>
-            <circle opacity="0.2" cx="3.4" cy="19.5" r="2.7" fill="currentColor"/>
-            <circle cx="11.5" cy="11.3" r="2.7" fill="currentColor"/>
-            <circle cx="11.5" cy="19.5" r="2.7" fill="currentColor"/>
-            <circle opacity="0.2" cx="11.5" cy="3.25" r="2.7" fill="currentColor"/>
-            <circle opacity="0.2" cx="19.5" cy="3.25" r="2.7" fill="currentColor"/>
-            <circle cx="19.5" cy="11.3" r="2.7" fill="currentColor"/>
-            <circle opacity="0.2" cx="19.5" cy="19.5" r="2.7" fill="currentColor"/>
-          </svg>
+        <Link className="flex items-center text-neutral-500 dark:text-gray-300" to="/">
+          <BrandLogo size={34} />
         </Link>
 
         <nav className="main-menu ml-6 mr-auto">
@@ -50,32 +40,29 @@ export const Header: FC = () => {
             <Trans i18nKey="machines"/>
           </NavLink>
           <NavLink to="/users" className="nav-link">
-            <i className="icon icon-users mr-2" />
+            <i className="icon icon-users mr-2"/>
             <Trans i18nKey="users"/>
           </NavLink>
           <NavLink to="/acl" className="nav-link">
-            <i className="icon icon-lock mr-2" />
+            <i className="icon icon-lock mr-2"/>
             <Trans i18nKey="access_controls"/>
           </NavLink>
           <NavLink to="/tokens" className="nav-link">
-            <i className="icon icon-key mr-2" />
+            <i className="icon icon-key mr-2"/>
             <Trans i18nKey="tokens"/>
           </NavLink>
         </nav>
 
         {authorized ? (
-          <div className="flex items-center gap-4">
-            <button
-              className="text-primary dark:text-opacity-80 text-opacity-70 hover:text-primary transition"
-              ref={contextRef}
-            >
-              <i className="icon icon-profile text-[30px] leading-[30px] block"/>
+          <div className="config">
+            <button className="btn btn-config" ref={contextRef}>
+              <i className="icon icon-settings text-[26px] leading-[26px] block"/>
             </button>
 
             <ContextMenu btnOpenRef={contextRef} placement={PopupPlacement.BOTTOM}>
               <div className="context-menu-item">
                 <div className="px-[16px] py-[6px]">
-                  <div className="text-sm text-primary font-medium">{prefix}</div>
+                <div className="text-sm text-primary font-medium">{prefix}</div>
                   <div className="text-xs text-secondary">{url}</div>
                 </div>
               </div>
@@ -83,25 +70,28 @@ export const Header: FC = () => {
               <hr className="context-menu-divider"/>
 
               <div className="context-menu-item">
-                <button type="button" className="btn-context-menu flex items-center" onClick={() => setTheme(Theme.Light)}>
+                <button type="button" className="btn-context-menu flex items-center"
+                        onClick={() => setTheme(Theme.Light)}>
                   <i className="icon icon-sun"/>
                   <Trans i18nKey="light"/>
 
-                  {theme === Theme.Light ? <i className="icon icon-check text-[11px] ml-auto" /> : null }
+                  {theme === Theme.Light ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
                 </button>
               </div>
               <div className="context-menu-item">
-                <button type="button" className="btn-context-menu flex items-center" onClick={() => setTheme(Theme.Dark)}>
+                <button type="button" className="btn-context-menu flex items-center"
+                        onClick={() => setTheme(Theme.Dark)}>
                   <i className="icon icon-moon"/>
                   <Trans i18nKey="dark"/>
-                  {theme === Theme.Dark ? <i className="icon icon-check text-[11px] ml-auto" /> : null }
+                  {theme === Theme.Dark ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
                 </button>
               </div>
               <div className="context-menu-item">
-                <button type="button" className="btn-context-menu flex items-center" onClick={() => setTheme(Theme.System)}>
+                <button type="button" className="btn-context-menu flex items-center"
+                        onClick={() => setTheme(Theme.System)}>
                   <i className="icon icon-sun-moon"/>
                   <Trans i18nKey="system"/>
-                  {theme === Theme.System ? <i className="icon icon-check text-[11px] ml-auto" /> : null }
+                  {theme === Theme.System ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
                 </button>
               </div>
 

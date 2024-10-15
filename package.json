@@ -1,5 +1,5 @@
 {
-  "name": "headscale-ui",
+  "name": "headscale-web",
   "version": "0.1.2",
   "description": "Web interface for headscale 0.23.0",
   "homepage": "https://itsib.su",
@@ -13,7 +13,7 @@
   "browser": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/itsib/headscale-ui.git"
+    "url": "git+https://github.com/itsib/headscale-web.git"
   },
   "files": [
     "dist"

@@ -23,5 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 *.tsbuildinfo
-headscale-ui-*.tgz
-headscale-ui.tgz
+headscale-web-*.tgz
+headscale-web.tgz
