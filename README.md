@@ -1,8 +1,6 @@
-<p align="left">
-  <a href="https://github.com/juanfont/headscale" style="font-size: 24px">
-    <img src="public/logo.svg" width="38" height="28">
-    <span style="color: #eee">Headscale Web UI</span>
-  </a>
+<p align="left" style="position: relative">
+ <img src="public/logo.svg" width="38" height="28" style="position: relative; top: 4px;">
+ <span style="color: #eee; font-size: 24px; font-weight: 600; ">Headscale Web UI</span>
 </p>
 
 A web frontend for the [headscale](https://github.com/juanfont/headscale) coordination server.
