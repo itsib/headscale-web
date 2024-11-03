@@ -35,9 +35,14 @@ jobs:
           rm -rf node_modules
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: headscale-web@${{ github.ref_name }}
+          path: dist
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: 'headscale-web.tgz'
+          artifacts: 'headscale-web@${{ github.ref_name }}.tgz'
           artifactErrorsFailBuild: true
-          name: 'Release ${{ github.ref }}'
+          name: 'Release ${{ github.ref_name }}'

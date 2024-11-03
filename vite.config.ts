@@ -2,6 +2,7 @@ import { defineConfig, UserConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc'
 import { resolve } from 'node:path';
 import compression from 'vite-plugin-compression2';
+import pluginCp from 'vite-plugin-cp';
 
 /**
  * Vite
@@ -29,6 +30,13 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
         deleteOriginalAssets: false,
         algorithm: 'gzip',
       }),
+      pluginCp({
+        targets: [
+          { src: 'package.json', dest: 'dist' },
+          { src: 'LICENSE', dest: 'dist' },
+          { src: 'README.md', dest: 'dist' },
+        ]
+      })
     ],
     esbuild: { legalComments: 'none' },
     build: {
