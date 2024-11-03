@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./app
+        working-directory: /home/runner/work/headscale-web
     permissions:
       contents: write
     steps:
@@ -50,6 +50,6 @@ jobs:
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ./app/headscale-web@${{ github.ref_name }}.zip
+          artifacts: /home/runner/work/headscale-web/headscale-web@${{ github.ref_name }}.zip
           artifactErrorsFailBuild: true
           name: 'Release ${{ github.ref_name }}'
