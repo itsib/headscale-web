@@ -31,16 +31,18 @@ jobs:
           npm run lint
           npm test
       - name: Build
-        run: npm run build
+        run: |
+          npm run build
+          npm pack
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         id: upload-artifact-step
         with:
-          compression-level: '3'
-          name: headscale-web-${{ github.ref_name }}
-          path: dist
+          compression-level: '0'
+          name: headscale-web-${{ github.ref_name }}.tgz
+          path: headscale-web-*.tgz
 
   release:
     runs-on: ubuntu-latest
@@ -51,15 +53,15 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: headscale-web-${{ github.ref_name }}
+          name: headscale-web-${{ github.ref_name }}.tgz
           path: ${{ github.workspace }}
       - name: Check FS
         run: |
+          ls -R
           pwd
-          ls -al
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ${{ github.workspace }}/headscale-web-${{ github.ref_name }}.zip
+          artifacts: ${{ github.workspace }}/headscale-web-${{ github.ref_name }}.tgz
           artifactErrorsFailBuild: true
           name: 'Release ${{ github.ref_name }}'
