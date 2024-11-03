@@ -53,6 +53,10 @@ jobs:
         with:
           name: headscale-web-${{ github.ref_name }}
           path: ${{ github.workspace }}
+      - name: Check FS
+        run: |
+          pwd
+          ls -al
       - name: Release
         uses: ncipollo/release-action@v1
         with:
