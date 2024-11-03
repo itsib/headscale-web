@@ -50,7 +50,6 @@ jobs:
       contents: write
     defaults:
       run:
-        shell: bash
         working-directory: app
     needs: [build]
     steps:
@@ -58,9 +57,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: headscale-web-${{ github.ref_name }}.tgz
-          path: ${{ github.workspace }}
+          path: ${{ github.workspace }}/app
       - name: Check FS
         run: |
+          pwd
           echo "ls:"
           ls -al
           echo "ls end\n"
