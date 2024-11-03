@@ -8,15 +8,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: /home/runner/work/headscale-web
     permissions:
       contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          path:
           fetch-depth: 0
       - name: Setup .npmrc file
         uses: actions/setup-node@v4
@@ -50,6 +48,6 @@ jobs:
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: /home/runner/work/headscale-web/headscale-web@${{ github.ref_name }}.zip
+          artifacts: ${{ github.workspace }}/headscale-web@${{ github.ref_name }}.zip
           artifactErrorsFailBuild: true
           name: 'Release ${{ github.ref_name }}'
