@@ -69,6 +69,6 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: headscale-web-${{ github.ref_name }}.tgz
+          artifacts: '**/headscale*.tgz'
           artifactErrorsFailBuild: true
           name: 'Release ${{ github.ref_name }}'
