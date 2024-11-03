@@ -4,6 +4,9 @@ on:
   push:
     tags:
       - 'v*'
+#on:
+#  workflow_dispatch:
+
 
 jobs:
   build:
@@ -40,6 +43,8 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs: [build]
     steps:
       - name: Download artifact
