@@ -48,6 +48,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    defaults:
+      run:
+        shell: /bin/bash
+        working-directory: app
     needs: [build]
     steps:
       - name: Download artifact
@@ -57,11 +61,14 @@ jobs:
           path: ${{ github.workspace }}
       - name: Check FS
         run: |
-          ls -R
-          pwd
+          echo "ls:"
+          ls -al
+          echo "ls end\n"
+          echo "Artifact pattern: headscale-web-${{ github.ref_name }}.tgz"
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ${{ github.workspace }}/headscale-web-${{ github.ref_name }}.tgz
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: headscale-web-${{ github.ref_name }}.tgz
           artifactErrorsFailBuild: true
           name: 'Release ${{ github.ref_name }}'
