@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
     permissions:
       contents: write
     steps:
@@ -40,9 +43,13 @@ jobs:
         with:
           name: headscale-web@${{ github.ref_name }}
           path: dist
+      - name: Check Artifact Place
+        run: |
+          pwd
+          ls -al
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: headscale-web@${{ github.ref_name }}.zip
+          artifacts: ./app/headscale-web@${{ github.ref_name }}.zip
           artifactErrorsFailBuild: true
           name: 'Release ${{ github.ref_name }}'
