@@ -1,4 +1,4 @@
-export interface MetricItem {
+export interface MetricRowProps {
   id: string;
   type: string;
   group: string;

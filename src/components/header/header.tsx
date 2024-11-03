@@ -34,24 +34,31 @@ export const Header: FC = () => {
           <BrandLogo size={34} />
         </Link>
 
-        <nav className="main-menu ml-6 mr-auto">
-          <NavLink to="/machines" className="nav-link">
-            <i className="icon icon-connection mr-2"/>
-            <Trans i18nKey="machines"/>
-          </NavLink>
-          <NavLink to="/users" className="nav-link">
-            <i className="icon icon-users mr-2"/>
-            <Trans i18nKey="users"/>
-          </NavLink>
-          <NavLink to="/acl" className="nav-link">
-            <i className="icon icon-lock mr-2"/>
-            <Trans i18nKey="access_controls"/>
-          </NavLink>
-          <NavLink to="/tokens" className="nav-link">
-            <i className="icon icon-key mr-2"/>
-            <Trans i18nKey="tokens"/>
-          </NavLink>
-        </nav>
+        {authorized ? (
+          <nav className="main-menu ml-6 mr-auto">
+            <NavLink to="/machines" className="nav-link">
+              <i className="icon icon-connection mr-2"/>
+              <Trans i18nKey="machines"/>
+            </NavLink>
+            <NavLink to="/users" className="nav-link">
+              <i className="icon icon-users mr-2"/>
+              <Trans i18nKey="users"/>
+            </NavLink>
+            <NavLink to="/acl" className="nav-link">
+              <i className="icon icon-lock mr-2"/>
+              <Trans i18nKey="access_controls"/>
+            </NavLink>
+            <NavLink to="/tokens" className="nav-link">
+              <i className="icon icon-key mr-2"/>
+              <Trans i18nKey="tokens"/>
+            </NavLink>
+            <NavLink to="/metrics" className="nav-link">
+              <i className="icon icon-metrics mr-2"/>
+              <Trans i18nKey="metrics"/>
+            </NavLink>
+          </nav>
+        ) : null}
+
 
         {authorized ? (
           <div className="config">

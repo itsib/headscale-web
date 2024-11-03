@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,5 +32,12 @@ jobs:
         run: |
           npm run build
           npm pack
+          rm -rf node_modules
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: 'headscale-web.tgz'
+          artifactErrorsFailBuild: true
+          name: 'Release ${{ github.ref }}'

@@ -1,0 +1,10 @@
+deploy.sh
+acl-example.jsonc
+eslint.config.js
+headscale-web.tgz
+docker
+!docker/frontend/nginx.conf
+node_modules
+.github
+.idea
+dist

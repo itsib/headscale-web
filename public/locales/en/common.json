@@ -130,5 +130,18 @@
   "no_subnet_routes": "This machine does not expose any routes.",
   "exit_node": "Exit Node",
   "exit_node_subtitle": "Allow your network to route internet traffic through this machine.",
-  "use_as_exit_node": "Use as exit node"
+  "use_as_exit_node": "Use as exit node",
+  "metrics": "Metrics",
+  "metrics_page_subtitle": "Headscale server statistics.",
+  "metrics_group": {
+    "gc": "GC",
+    "goroutines": "Go Routines",
+    "headscale": "Headscale",
+    "info": "Info",
+    "memstats": "Memory Statistic",
+    "process": "Process",
+    "promhttp": "Prom HTTP",
+    "sched": "Sched",
+    "threads": "Threads"
+  }
 }

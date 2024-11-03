@@ -1,0 +1,1 @@
+export type Measure = 'bytes' | 'seconds' | 'percent';

@@ -5,6 +5,10 @@
 
 A web frontend for the [headscale](https://github.com/juanfont/headscale) coordination server.
 
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000)](https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000)
+[![Release](https://github.com/itsib/headscale-web/actions/workflows/main.yaml/badge.svg)](https://github.com/itsib/headscale-web/actions/workflows/main.yaml)
+
+
 ![Screenshot Home Page](public/screenshot.png)
 
 ---

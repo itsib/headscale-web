@@ -7,6 +7,7 @@ import { LayoutPage } from './layout.tsx';
 import { HomePage } from './home/home.tsx';
 import { UsersPage } from './users/users.tsx';
 import { TokensPage } from './tokens/tokens.tsx';
+import { MetricsPage } from './metrics/metrics.tsx';
 
 const ErrorBoundary: FC = () => {
   const error = useRouteError();
@@ -49,7 +50,11 @@ export const ROUTES = createRouter(
         {
           path: 'tokens',
           Component: TokensPage,
-        }
+        },
+        {
+          path: 'metrics',
+          Component: MetricsPage,
+        },
       ],
     },
     {
