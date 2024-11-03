@@ -13,7 +13,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: headscale-web-v0.2.4
+          name: headscale-web-v0.2.3
           path: ${{ github.workspace }}
       - name: Check FS
         run: |
