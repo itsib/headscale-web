@@ -54,6 +54,6 @@ jobs:
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: headscale-web-${{ github.ref_name }}
+          artifacts: headscale-web-${{ github.ref_name }}.*
           artifactErrorsFailBuild: true
           name: 'Release ${{ github.ref_name }}'
