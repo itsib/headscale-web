@@ -1,8 +1,10 @@
 import { defineConfig, UserConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc'
-import { resolve } from 'node:path';
+import { resolve, join } from 'node:path';
 import compression from 'vite-plugin-compression2';
 import pluginCp from 'vite-plugin-cp';
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
 
 /**
  * Vite
@@ -38,6 +40,16 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
         ]
       })
     ],
+    css: {
+      postcss: {
+        plugins: [
+          tailwindcss({
+            config: join(__dirname, 'tailwind.config.ts'),
+          }),
+          autoprefixer(),
+        ]
+      }
+    },
     esbuild: { legalComments: 'none' },
     build: {
       target: 'esnext',
