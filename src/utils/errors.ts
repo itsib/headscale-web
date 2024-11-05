@@ -19,6 +19,14 @@ export class UnauthorizedError extends HttpError {
   }
 }
 
+export class ConnectionError extends HttpError {
+  name = 'ConnectionError';
+
+  constructor(message = 'err_connection_refused') {
+    super('ERR_CONNECTION_REFUSED', -1, message);
+  }
+}
+
 export function formatError(error: Error): string {
   const message = error.message || '';
   return `${message.charAt(0).toUpperCase()}${message.substring(1)}`;

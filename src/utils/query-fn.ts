@@ -1,37 +1,66 @@
 import { QueryFunctionContext, QueryKey } from '@tanstack/react-query';
-import { HttpError, UnauthorizedError } from './errors';
-import { QueryError } from '../types';
+import { ConnectionError, HttpError, UnauthorizedError } from './errors';
 
-export async function fetchFn<T = unknown>(url: string, init: RequestInit & { accessToken?: string } = {}): Promise<T> {
-  const accessToken = init.accessToken || localStorage.getItem('headscale.token');
-  const base = localStorage.getItem('headscale.url');
-  Reflect.deleteProperty(init, 'accessToken');
+async function resolveFailureRes(res: Response): Promise<never> {
+  let errorMessage = (await res.text());
+  try {
+    const error = JSON.parse(errorMessage);
+    errorMessage = error.message;
+  } catch { /* empty */ }
 
-  const res = await fetch(`${base}${url}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(accessToken ? { Authorization: 'Bearer ' + accessToken } : {}),
-      ...(init.headers || {}),
-    },
-    ...init,
-  });
+  if (errorMessage === 'Unauthorized') {
+    throw new UnauthorizedError();
+  }
+  throw new HttpError(res.statusText, res.status, errorMessage || res.statusText);
+}
+
+export async function fetchFn<T = unknown>(url: string, init: RequestInit = {}, token?: string): Promise<T> {
+  const headers = new Headers(init.headers);
+  if (token) {
+    headers.set('Authorization', 'Bearer ' + token);
+  }
+  if (!headers.has('content-type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      ...init,
+      headers: headers,
+    });
+  } catch {
+    throw new ConnectionError();
+  }
 
   if (!res.ok) {
     if (res.status === 401) {
       throw new UnauthorizedError();
     } else {
-      const error = (await res.json()) as QueryError;
-      throw new HttpError(res.statusText, res.status, error.message || res.statusText);
+      await resolveFailureRes(res);
     }
   }
 
-  return (await res.json()) as Promise<T>;
+  const raw = (await res.text()) as string;
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return raw as T;
+  }
 }
 
 export async function defaultQueryFn<T = unknown, TQueryKey extends QueryKey = QueryKey, TPageParam = never>(context: QueryFunctionContext<TQueryKey, TPageParam>): Promise<T> {
-  const { queryKey, signal, meta } = context;
-  const url = queryKey[0] as string;
+  const { queryKey, signal } = context;
+  let url = queryKey[0] as string;
   const method = (queryKey[1] as string) || 'GET';
+  const token = localStorage.getItem('headscale.token') || undefined;
 
-  return await fetchFn(url, { method, signal, accessToken: meta?.accessToken as string });
+  if (!url.startsWith('http')) {
+    const base = localStorage.getItem('headscale.url');
+    if (base) {
+      url = `${base}${url}`;
+    }
+  }
+
+  return await fetchFn(url, { method, signal }, token);
 }

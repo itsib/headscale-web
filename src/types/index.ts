@@ -8,3 +8,4 @@ export * from './users/users';
 export * from './acl-policy/acl-policy';
 export * from './metrics/metric-row-props';
 export * from './metrics/measure';
+export * from './auth/credentials';

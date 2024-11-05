@@ -5,9 +5,7 @@ import { QueryResult, Node } from '../types';
 export function useNodes(): QueryResult<Node[]> & { refetch: () => void } {
   const { data, isLoading, error, refetch: _refetch } = useQuery<{ nodes: Node[] }, Error, Node[]>({
     queryKey: ['/api/v1/node'],
-    enabled: true,
     select: (data) => data.nodes,
-    staleTime: 15_000,
     refetchInterval: 20_000,
   });
 

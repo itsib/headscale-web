@@ -1,33 +1,47 @@
 import { FC, useState } from 'react';
+import { Modal, ModalProps } from 'react-just-ui/modal';
+import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input, url } from 'react-just-ui';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { Credentials } from '../../types';
-import { useAppAuth } from '../../hooks/use-app-auth.ts';
+import { Credentials } from '../../../types';
 
-export const HomePage: FC = () =>  {
+export interface ModalAuthorizationProps extends ModalProps {
+  baseUrl?: string;
+  token?: string;
+  metricsUrl?: string;
+  onSubmit: (credentials: Required<Credentials>) => Promise<any>;
+}
+
+export const ModalAuthorization: FC<ModalAuthorizationProps> = ({ isOpen, onDismiss, ...props }) => {
+  return (
+    <Modal isOpen={isOpen} onDismiss={onDismiss}>
+      <ModalContent {...props} />
+    </Modal>
+  );
+};
+
+const ModalContent: FC<Omit<ModalAuthorizationProps, 'isOpen' | 'onDismiss'>> = ({ onSubmit, baseUrl, metricsUrl, token }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [, signIn] = useAppAuth();
 
-  const { handleSubmit, register, formState, setError } = useForm<Credentials>({
+  const { register, handleSubmit, formState, setError } = useForm<Required<Credentials>>({
     defaultValues: {
-      baseUrl: localStorage.getItem('headscale.url') || '',
-      token: localStorage.getItem('headscale.token') || '',
-      metricsUrl: localStorage.getItem('headscale.metric-url') || '',
-    }
+      baseUrl,
+      metricsUrl,
+      token,
+    },
+    shouldUseNativeValidation: false,
   });
-  const { errors } = formState;
+  const { errors, isValid } = formState;
 
-  async function onSubmit(values: Credentials) {
-    setIsLoading(true)
+  async function onSubmitCallback(credentials: Required<Credentials>) {
+    setIsLoading(true);
 
     try {
-      await signIn(values);
-      setIsLoading(false);
-      navigate('/machines');
+      const result = await onSubmit(credentials);
+      if (result) {
+        return;
+      }
     } catch (error: any) {
       if (error.code === 401) {
         setError('token', { message: t('error_invalid_token') });
@@ -36,20 +50,26 @@ export const HomePage: FC = () =>  {
       } else {
         setError('baseUrl', { message: t('error_invalid_response') });
       }
-      setIsLoading(false);
     }
+    setIsLoading(false);
   }
 
   return (
-    <div className="container">
-      <div className="w-full h-[80vh] min-h-[max(80vh, 700px)] flex items-start justify-center">
-
-        <form className="card w-[460px] mt-[16vh] mb-[200px]" onSubmit={handleSubmit(onSubmit)}>
-          <h3 className="mb-4 font-bold">{t('credentials_form_header_new')}</h3>
-
+    <div className="modal w-[400px]">
+      <div className="modal-header">
+        <div className="title">
+          {token ? (
+            <span>{t('credentials_form_header_expired')}</span>
+          ) : (
+            <span>{t('credentials_form_header_new')}</span>
+          )}
+        </div>
+      </div>
+      <div className="modal-content">
+        <form className="" onSubmit={handleSubmit(onSubmitCallback)}>
           <div className="mb-2">
             <Input
-              id="base-url-input-home"
+              id="base-url-input"
               placeholder="https://"
               label={t('server_instance_url')}
               error={errors?.baseUrl}
@@ -63,7 +83,7 @@ export const HomePage: FC = () =>  {
 
           <div className="mb-2">
             <Input
-              id="token-input-home"
+              id="token-input"
               label={t('headscale_api_key')}
               error={errors?.token}
               markRequired
@@ -75,7 +95,7 @@ export const HomePage: FC = () =>  {
 
           <div className="mb-2">
             <Input
-              id="metric-url-input-home"
+              id="metric-url-input"
               placeholder="https://"
               label={t('url_to_get_metrics')}
               error={errors?.metricsUrl}
@@ -86,12 +106,13 @@ export const HomePage: FC = () =>  {
           </div>
 
           <div className="mt-4">
-            <button type="submit" className={`btn btn-accent w-full ${isLoading ? 'loading' : ''}`}>
+            <button type="submit" disabled={!isValid} className={`btn btn-accent w-full ${isLoading ? 'loading' : ''}`}>
               <span>{t('save')}</span>
             </button>
           </div>
         </form>
       </div>
     </div>
+
   );
-}
+};

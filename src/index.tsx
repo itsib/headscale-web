@@ -27,14 +27,12 @@ const QUERY_CLIENT_STORAGE: Persister = {
 const QUERY_CLIENT = new QueryClient({
   defaultOptions: {
     queries: {
-      networkMode: 'online', // 'offlineFirst',
-      gcTime: 86400_000, // 24 hours ms
+      gcTime: 3600_000,
+      staleTime: 0,
       retry: 3,
       retryDelay: 3000,
-      meta: {
-        accessToken: null,
-      },
       queryFn: defaultQueryFn as any,
+      enabled: false,
     },
   },
 });

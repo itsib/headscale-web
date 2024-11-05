@@ -1,31 +1,25 @@
 import { FC, useMemo, useRef } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import { useTheme } from '../../hooks/use-theme.ts';
 import { Theme } from '../../utils/theme.ts';
 import { PopupPlacement } from '../popups/popup-base/_common.ts';
 import { ContextMenu } from '../popups/context-menu.tsx';
-import { useLogout } from '../../hooks/use-logout.ts';
-import { useAuthorized } from '../../hooks/use-authorized.ts';
+import { useAppAuth } from '../../hooks/use-app-auth.ts';
 import { BrandLogo } from '../brand-logo/brand-logo.tsx';
+import { useAppCredentials } from '../../hooks/use-app-credentials.ts';
 import './header.css';
 
 export const Header: FC = () => {
   const contextRef = useRef<HTMLButtonElement | null>(null);
   const [ theme, setTheme ] = useTheme();
-  const logout = useLogout();
-  const navigate = useNavigate();
-  const authorized = useAuthorized();
+  const [authorized,, logout] = useAppAuth();
+  const { token, baseUrl } = useAppCredentials();
 
   const prefix = useMemo(() => {
-    const token = localStorage.getItem('headscale.token');
     if (!token) return undefined;
     return token.split('.')[0];
-  }, []);
-
-  const url = useMemo(() => {
-    return localStorage.getItem('headscale.url');
-  }, []);
+  }, [token]);
 
   return (
     <header className="header bg-primary dark:border-gray-800 border-b-primary">
@@ -70,7 +64,7 @@ export const Header: FC = () => {
               <div className="context-menu-item">
                 <div className="px-[16px] py-[6px]">
                 <div className="text-sm text-primary font-medium">{prefix}</div>
-                  <div className="text-xs text-secondary">{url}</div>
+                  <div className="text-xs text-secondary">{baseUrl}</div>
                 </div>
               </div>
 
@@ -108,10 +102,7 @@ export const Header: FC = () => {
                 <button
                   type="button"
                   className="btn-context-menu flex items-center"
-                  onClick={() => {
-                    logout();
-                    navigate('/');
-                  }}>
+                  onClick={logout}>
                   <i className="icon icon-logout"/>
                   <span><Trans i18nKey="logout"/></span>
                 </button>

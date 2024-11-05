@@ -18,7 +18,6 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () =>
       }),
       staleTime: 30_000,
       select: ({ preAuthKeys }: { preAuthKeys: AuthKey[] }) => preAuthKeys.map(key => ({ ...key, user, })),
-
     }))
   }, [users])
 

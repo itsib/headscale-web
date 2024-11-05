@@ -35,7 +35,7 @@
   "created": "Created",
   "created_at": "Created at",
   "creating_user_modal_title": "Creating a new user",
-  "credentials_form_header": "API key and url for you Headscale instance",
+  "credentials_form_header_new": "API key and url for you Headscale instance",
   "days": "Days",
   "delete": "Delete",
   "deleting_api_token_modal_title": "Removing API Token",
@@ -60,6 +60,9 @@
   "error_required": "Field id required",
   "error_tag_format": "The tag name can only consist of small letters.",
   "error_tag_prefix": "The tag name must start with \"tag:\"",
+  "error_invalid_token": "It is not possible to log in with this token.",
+  "error_connection_error": "Failed to connect to the server",
+  "error_invalid_response": "Invalid server response",
   "expiration": "Expiration",
   "expiration_hint": "Number of days this key is valid for.",
   "expire": "Expire",
@@ -77,7 +80,7 @@
   "given_name": "Given Name",
   "generated_new_api_token": "Generated New API Token",
   "headscale_api_key": "Headscale API Key",
-  "instance_url": "Instance URL",
+  "server_instance_url": "Server instance URL",
   "ip_address": "IP Address",
   "joined": "Joined",
   "key_id": "Key ID",
@@ -143,5 +146,10 @@
     "promhttp": "Prom HTTP",
     "sched": "Sched",
     "threads": "Threads"
-  }
+  },
+  "credentials": "Credentials",
+  "url_to_get_metrics": "URL For getting the server metric",
+  "credentials_form_header_expired": "Your token has expired. Renew is required.",
+  "no_metric_page_header": "Headscale Server Metrics",
+  "no_metric_page_label": "You need to specify the URL of the server to download the metric."
 }

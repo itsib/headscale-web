@@ -1,22 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
 import { parseGoMetrics } from '../utils/parse-go-metrics.ts';
 import { MetricRowProps, QueryResult } from '../types';
+import { fetchFn } from '../utils/query-fn.ts';
 
-export function useMetrics(): QueryResult<MetricRowProps[]> {
+export function useMetrics(url: string): QueryResult<MetricRowProps[]> {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['metrics'],
-    queryFn: async () => {
-      const base = localStorage.getItem('headscale.url');
-      const req = await fetch(`${base}/metrics`, {
+    queryKey: [url],
+    queryFn: async ({ queryKey, signal }) => {
+      const url = queryKey[0] as string;
+      const text = await fetchFn<string>(url, {
+        signal,
         headers: {
           'Content-Type': 'text/plain;utf-8'
         }
-      });
+      })
 
-      const text = await req.text();
       return parseGoMetrics(text);
     },
-    enabled: true,
     staleTime: 0,
     refetchInterval: 15_000,
   });
