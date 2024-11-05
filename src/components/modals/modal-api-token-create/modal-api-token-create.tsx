@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { fetchFn } from '../../../utils/query-fn.ts';
+import { signedQueryFn } from '../../../utils/query-fn.ts';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
 import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
 
@@ -39,7 +39,7 @@ const ModalContent: FC<Omit<ModalApiTokenCreateProps, 'isOpen'>> = ({ onDismiss,
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(values: { expiration: string }) {
-      return await fetchFn<{ apiKey: string }>(`/api/v1/apikey`, {
+      return await signedQueryFn<{ apiKey: string }>(`/api/v1/apikey`, {
         method: 'POST',
         body: JSON.stringify(values),
       });

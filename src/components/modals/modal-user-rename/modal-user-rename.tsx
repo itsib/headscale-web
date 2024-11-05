@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
-import { ModalProps, Modal } from 'react-just-ui/modal';
-import { fetchFn } from '../../../utils/query-fn.ts';
+import { Modal, ModalProps } from 'react-just-ui/modal';
+import { signedQueryFn } from '../../../utils/query-fn.ts';
 import { User } from '../../../types';
 
 export interface ModalUserRenameProps extends ModalProps {
@@ -32,7 +32,7 @@ const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: U
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn({ oldName, newName }: { oldName: string, newName: string }) {
-      const data = await fetchFn<{ user: User }>(`/api/v1/user/${oldName}/rename/${newName}`, {
+      const data = await signedQueryFn<{ user: User }>(`/api/v1/user/${oldName}/rename/${newName}`, {
         method: 'POST',
       });
       return data.user;

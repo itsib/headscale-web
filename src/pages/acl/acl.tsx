@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAclPolicy } from '../../hooks/use-acl-policy.ts';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchFn } from '../../utils/query-fn.ts';
+import { signedQueryFn } from '../../utils/query-fn.ts';
 import { AclPolicy } from '../../types';
 import { formatError } from '../../utils/errors.ts';
 import './acl.css';
@@ -70,7 +70,7 @@ const ButtonBlock: FC<ButtonBlock> = ({ policyOrigin, policyNew, onReset, error:
   const { mutate, isPending, error: error1, reset } = useMutation({
     mutationKey: ['/api/v1/policy'],
     mutationFn(policy: string) {
-      return fetchFn<AclPolicy>('/api/v1/policy', {
+      return signedQueryFn<AclPolicy>('/api/v1/policy', {
         method: 'PUT',
         body: JSON.stringify({ policy }),
       });

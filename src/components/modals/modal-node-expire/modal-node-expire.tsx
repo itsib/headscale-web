@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import { ModalProps, Modal } from 'react-just-ui/modal';
+import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
 import { Node } from '../../../types';
-import { fetchFn } from '../../../utils/query-fn.ts';
+import { signedQueryFn } from '../../../utils/query-fn.ts';
 
 export interface ModalNodeExpireProps extends ModalProps {
   node?: Node | null;
@@ -24,7 +24,7 @@ const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: N
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(nodeId: string) {
-      const data = await fetchFn<{ node: Node }>(`/api/v1/node/${nodeId}/expire`, {
+      const data = await signedQueryFn<{ node: Node }>(`/api/v1/node/${nodeId}/expire`, {
         method: 'POST',
       });
       return data.node;

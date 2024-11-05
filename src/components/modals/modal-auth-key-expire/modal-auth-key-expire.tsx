@@ -3,7 +3,7 @@ import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { AuthKeyWithUser, User } from '../../../types';
-import { fetchFn } from '../../../utils/query-fn.ts';
+import { signedQueryFn } from '../../../utils/query-fn.ts';
 
 export interface ModalAuthKeyExpireProps extends ModalProps {
   authKey?: AuthKeyWithUser | null;
@@ -24,7 +24,7 @@ const ModalContent: FC<Omit<ModalAuthKeyExpireProps, 'isOpen' | 'authKey'> & { a
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(values: { user: string, key: string }) {
-      const data = await fetchFn<{ user: User }>(`/api/v1/preauthkey/expire`, {
+      const data = await signedQueryFn<{ user: User }>(`/api/v1/preauthkey/expire`, {
         method: 'POST',
         body: JSON.stringify(values)
       });

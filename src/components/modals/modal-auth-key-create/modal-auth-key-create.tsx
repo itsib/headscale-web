@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Input, Select, SelectOption, Switch } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { fetchFn } from '../../../utils/query-fn.ts';
+import { signedQueryFn } from '../../../utils/query-fn.ts';
 import { useUsers } from '../../../hooks/use-users.ts';
 import { AuthKey } from '../../../types';
 import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
@@ -60,7 +60,7 @@ const ModalContent: FC<Omit<ModalAuthKeyCreateProps, 'isOpen'>> = ({ onDismiss, 
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(values: Omit<AuthKey, 'createdAt' | 'used' | 'id' | 'key'>) {
-      return await fetchFn<{ preAuthKey: AuthKey }>(`/api/v1/preauthkey`, {
+      return await signedQueryFn<{ preAuthKey: AuthKey }>(`/api/v1/preauthkey`, {
         method: 'POST',
         body: JSON.stringify(values),
       });

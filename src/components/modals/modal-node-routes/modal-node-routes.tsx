@@ -6,7 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNodeRoutes } from '../../../hooks/use-node-routes.ts';
 import { Checkbox } from 'react-just-ui/checkbox';
 import { useMutation } from '@tanstack/react-query';
-import { fetchFn } from '../../../utils/query-fn.ts';
+import { signedQueryFn } from '../../../utils/query-fn.ts';
 import { isExitNodeRoute } from '../../../utils/is-exit-node-route.ts';
 import './modal-node-routes.css';
 
@@ -47,7 +47,7 @@ const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: N
   const { mutate, isPending } = useMutation({
     mutationFn: async (variables: RequestData[]) => {
       return await Promise.all(variables.map(({ enable, routeId }) => {
-        return fetchFn(`/api/v1/routes/${routeId}/${enable ? 'enable' : 'disable'}`, {
+        return signedQueryFn(`/api/v1/routes/${routeId}/${enable ? 'enable' : 'disable'}`, {
           method: 'POST',
         });
       }));

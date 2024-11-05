@@ -2,7 +2,7 @@ import { useQueries } from '@tanstack/react-query';
 import { AuthKey, AuthKeyWithUser, QueryResult } from '../types';
 import { useUsers } from './use-users.ts';
 import { useCallback, useMemo } from 'react';
-import { fetchFn } from '../utils/query-fn.ts';
+import { signedQueryFn } from '../utils/query-fn.ts';
 
 export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () => void } {
   const { data: users } = useUsers();
@@ -13,7 +13,7 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () =>
     }
     return users.map(user => ({
       queryKey: [`/api/v1/preauthkey?user=${user.name}`],
-      queryFn: ({ queryKey, signal }: any) => fetchFn<{ preAuthKeys: AuthKey[] }>(queryKey[0], {
+      queryFn: ({ queryKey, signal }: any) => signedQueryFn<{ preAuthKeys: AuthKey[] }>(queryKey[0], {
         signal,
       }),
       staleTime: 30_000,

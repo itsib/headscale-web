@@ -3,7 +3,7 @@ import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { ApiToken } from '../../../types';
-import { fetchFn } from '../../../utils/query-fn.ts';
+import { signedQueryFn } from '../../../utils/query-fn.ts';
 
 export interface ModalApiTokenExpireProps extends ModalProps {
   apiToken?: ApiToken | null;
@@ -24,7 +24,7 @@ const ModalContent: FC<Omit<ModalApiTokenExpireProps, 'isOpen' | 'apiToken'> & {
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(values: { prefix: string }) {
-      const data = await fetchFn<{ apiToken: ApiToken }>(`/api/v1/apikey/expire`, {
+      const data = await signedQueryFn<{ apiToken: ApiToken }>(`/api/v1/apikey/expire`, {
         method: 'POST',
         body: JSON.stringify(values)
       });

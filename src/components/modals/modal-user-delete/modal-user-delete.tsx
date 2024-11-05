@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import { ModalProps, Modal } from 'react-just-ui/modal';
+import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
 import { User } from '../../../types';
-import { fetchFn } from '../../../utils/query-fn.ts';
+import { signedQueryFn } from '../../../utils/query-fn.ts';
 
 export interface ModalUserDeleteProps extends ModalProps {
   user?: User | null;
@@ -24,7 +24,7 @@ const ModalContent: FC<Omit<ModalUserDeleteProps, 'isOpen' | 'user'> & { user: U
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(name: string) {
-      const data = await fetchFn<{ user: User }>(`/api/v1/user/${name}`, {
+      const data = await signedQueryFn<{ user: User }>(`/api/v1/user/${name}`, {
         method: 'DELETE',
       });
       return data.user;

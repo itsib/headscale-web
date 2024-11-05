@@ -3,9 +3,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AuthContext } from './auth.context.ts';
 import { ModalAuthorization } from '../../components/modals/modal-authorization/modal-authorization.tsx';
 import { noop } from '../../utils/noop.ts';
-import { fetchFn } from '../../utils/query-fn.ts';
+import { fetchFn, normalizeUrl } from '../../utils/query-fn.ts';
 import { Credentials, Node } from '../../types';
-import { normalizeUrl } from '../../utils/normalize-url.ts';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {

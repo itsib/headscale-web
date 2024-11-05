@@ -3,8 +3,8 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input, Select, SelectOption } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
-import { ModalProps, Modal } from 'react-just-ui/modal';
-import { fetchFn } from '../../../utils/query-fn.ts';
+import { Modal, ModalProps } from 'react-just-ui/modal';
+import { signedQueryFn } from '../../../utils/query-fn.ts';
 import { useUsers } from '../../../hooks/use-users.ts';
 import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
 
@@ -52,7 +52,7 @@ const ModalContent: FC<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, o
   const { mutate, isPending, error } = useMutation({
     async mutationFn({ nodekey, user }: FormFields) {
       const queryParams = '?user=' + user + '&key=' + nodekey;
-      return await fetchFn<Node>(`/api/v1/node/register${queryParams}`);
+      return await signedQueryFn<Node>(`/api/v1/node/register${queryParams}`);
     },
     onSuccess: () => {
       onSuccess();

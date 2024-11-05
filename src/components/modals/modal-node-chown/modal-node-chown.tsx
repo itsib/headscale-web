@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Select, SelectOption } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
-import { ModalProps, Modal } from 'react-just-ui/modal';
-import { fetchFn } from '../../../utils/query-fn.ts';
+import { Modal, ModalProps } from 'react-just-ui/modal';
+import { signedQueryFn } from '../../../utils/query-fn.ts';
 import { Node } from '../../../types';
 import { useUsers } from '../../../hooks/use-users.ts';
 
@@ -45,7 +45,7 @@ const ModalContent: FC<Omit<ModalNodeChownProps, 'isOpen' | 'node'> & { node: No
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn({ id, userName }: { id: string, userName: string }) {
-      const data = await fetchFn<{ node: Node }>(`/api/v1/node/${id}/user?user=${userName}`, {
+      const data = await signedQueryFn<{ node: Node }>(`/api/v1/node/${id}/user?user=${userName}`, {
         method: 'POST',
       });
       return data.node;

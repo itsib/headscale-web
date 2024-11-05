@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import { ModalProps, Modal } from 'react-just-ui/modal';
+import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
 import { ApiToken, Node } from '../../../types';
-import { fetchFn } from '../../../utils/query-fn.ts';
+import { signedQueryFn } from '../../../utils/query-fn.ts';
 
 export interface ModalApiTokenDeleteProps extends ModalProps {
   apiToken?: ApiToken | null;
@@ -24,7 +24,7 @@ const ModalContent: FC<Omit<ModalApiTokenDeleteProps, 'isOpen' | 'node'> & { api
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(prefix: string) {
-      const data = await fetchFn<{ node: Node }>(`/api/v1/apikey/${prefix}`, {
+      const data = await signedQueryFn<{ node: Node }>(`/api/v1/apikey/${prefix}`, {
         method: 'DELETE',
       });
       return data.node;

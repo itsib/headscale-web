@@ -14,6 +14,13 @@ async function resolveFailureRes(res: Response): Promise<never> {
   throw new HttpError(res.statusText, res.status, errorMessage || res.statusText);
 }
 
+export function normalizeUrl(base: string, path: string): string {
+  if (base.endsWith('/') && path.startsWith('/')) {
+    path = path.slice(1);
+  }
+  return base + path;
+}
+
 export async function fetchFn<T = unknown>(url: string, init: RequestInit = {}, token?: string): Promise<T> {
   const headers = new Headers(init.headers);
   if (token) {
@@ -63,4 +70,17 @@ export async function defaultQueryFn<T = unknown, TQueryKey extends QueryKey = Q
   }
 
   return await fetchFn(url, { method, signal }, token);
+}
+
+export async function signedQueryFn<T = unknown>(path: string, init: RequestInit = {}): Promise<T> {
+  const token = localStorage.getItem('headscale.token') || undefined;
+  const base = localStorage.getItem('headscale.url');
+
+  if (!base || !token) {
+    throw new UnauthorizedError();
+  }
+
+  const url = normalizeUrl(base, path)
+
+  return await fetchFn<T>(url, init, token);
 }

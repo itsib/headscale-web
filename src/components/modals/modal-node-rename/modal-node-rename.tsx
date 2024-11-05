@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
-import { fetchFn } from '../../../utils/query-fn.ts';
+import { signedQueryFn } from '../../../utils/query-fn.ts';
 import { Node } from '../../../types';
-import { ModalProps, Modal } from 'react-just-ui/modal';
+import { Modal, ModalProps } from 'react-just-ui/modal';
 
 export interface ModalNodeRenameProps extends ModalProps {
   node?: Node | null;
@@ -33,7 +33,7 @@ const ModalContent: FC<Omit<ModalNodeRenameProps, 'isOpen' | 'node'> & { node: N
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn({ id, newName }: { id: string, newName: string }) {
-      const data = await fetchFn<{ node: Node }>(`/api/v1/node/${id}/rename/${newName}`, {
+      const data = await signedQueryFn<{ node: Node }>(`/api/v1/node/${id}/rename/${newName}`, {
         method: 'POST',
       });
       return data.node;
