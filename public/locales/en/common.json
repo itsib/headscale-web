@@ -56,7 +56,7 @@
   "error_expiry_min": "The validity period of the token is at least {{value}} day",
   "error_invalid_name": "User name should bu in lowercase",
   "error_invalid_url": "Invalid URL",
-  "error_nodekey_format": "Node key should start with nodekey:",
+  "error_nodekey_format": "Node key should start with mkey:",
   "error_required": "Field id required",
   "error_tag_format": "The tag name can only consist of small letters.",
   "error_tag_prefix": "The tag name must start with \"tag:\"",

@@ -78,7 +78,7 @@ const ModalContent: FC<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, o
               error={errors?.nodekey}
               {...register('nodekey', {
                 required: t('error_required'),
-                validate: value => value.startsWith('nodekey:') ? true : t('error_nodekey_format'),
+                validate: value => (value.startsWith('mkey:') || value.startsWith('nodekey:')) ? true : t('error_nodekey_format'),
               })}
             />
           </div>
