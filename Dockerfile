@@ -9,9 +9,12 @@ RUN npm install -g npm@latest && \
 
 FROM nginx:1.27-alpine
 
-COPY --from=builder /app/dist /var/www
-COPY --from=builder /app/nginx.conf /etc/nginx/templates/default.conf.template
+COPY --from=builder /app/nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+WORKDIR /usr/share/nginx/html
+
+RUN rm -rf ./*
+
+COPY --from=builder /app/dist .
 
 CMD ["nginx", "-g", "daemon off;"]
