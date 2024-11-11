@@ -1,16 +1,21 @@
-import { defineConfig, UserConfig } from 'vite';
+import { defineConfig, UserConfig,  } from 'vite';
 import react from '@vitejs/plugin-react-swc'
 import { resolve, join } from 'node:path';
 import compression from 'vite-plugin-compression2';
 import pluginCp from 'vite-plugin-cp';
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
+import { VitePWA } from 'vite-plugin-pwa'
+import { readFile } from 'node:fs/promises';
 
 /**
  * Vite
  * @see https://vitejs.dev/config/
  */
 export default defineConfig(async ({ mode }): Promise<UserConfig> => {
+  const pkgJson = JSON.parse(await readFile('package.json', 'utf8'));
+  const manifestJson = JSON.parse(await readFile('manifest.json', 'utf8'));
+
   return {
     clearScreen: false,
     logLevel: 'info',
@@ -21,12 +26,42 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
     },
     resolve: {
       alias: {
-        '@/': `${resolve(__dirname, 'src')}/`,
-        $fonts: `${resolve(__dirname, 'public/fonts')}/`,
+        '@/': resolve(__dirname, 'src'),
+        $fonts: resolve(__dirname, 'public/fonts'),
       }
     },
     plugins: [
       react(),
+      VitePWA({
+        registerType: 'autoUpdate',
+        devOptions: {
+          enabled: mode === 'development',
+        },
+        manifestFilename: 'site.webmanifest',
+        manifest: {
+          ...manifestJson,
+          name: pkgJson.name,
+          description: pkgJson.description,
+        },
+        // includeAssets: ['/**/*.svg', '/**/*.png', '/fonts/icon-font/**', '/images/**', '/locales/**'],
+        workbox: {
+          globDirectory: resolve(__dirname, 'dist'),
+          globPatterns: [
+            '**/*.{js,css,html,png,gz}',
+            '**/locales/**/*.json',
+            '**/fonts/roboto/Roboto-Bold.woff*',
+            '**/fonts/roboto/Roboto-Regular.woff*',
+            '**/fonts/roboto/Roboto-Medium.woff*',
+            '**/fonts/icon-font/IconFont.woff**',
+          ],
+          globIgnores: [
+            "**/node_modules/**/*",
+            "sw.js",
+            "workbox-*.js"
+          ],
+          maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+        }
+      }),
       compression({
         include: [/\.(js)$/, /\.(css)$/],
         deleteOriginalAssets: false,
@@ -109,5 +144,14 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
     optimizeDeps: {
       include: ['react-dom'],
     },
+    preview: {
+      port: 4005,
+      proxy: {
+
+      }
+    },
+    server: {
+      port: 3005,
+    }
   } as UserConfig;
 })

@@ -1,11 +1,11 @@
 @font-face {
   font-family: "IconFont";
   font-display: block;
-  src: url("/fonts/icon-font/IconFont.eot?2aeae7b00fdb29a48951f9696c7ec309#iefix") format("embedded-opentype"),
-url("/fonts/icon-font/IconFont.woff2?2aeae7b00fdb29a48951f9696c7ec309") format("woff2"),
-url("/fonts/icon-font/IconFont.woff?2aeae7b00fdb29a48951f9696c7ec309") format("woff"),
-url("/fonts/icon-font/IconFont.ttf?2aeae7b00fdb29a48951f9696c7ec309") format("truetype"),
-url("/fonts/icon-font/IconFont.svg?2aeae7b00fdb29a48951f9696c7ec309#IconFont") format("svg");
+  src: url("/fonts/icon-font/IconFont.eot#iefix") format("embedded-opentype"),
+url("/fonts/icon-font/IconFont.woff2") format("woff2"),
+url("/fonts/icon-font/IconFont.woff") format("woff"),
+url("/fonts/icon-font/IconFont.ttf") format("truetype"),
+url("/fonts/icon-font/IconFont.svg#IconFont") format("svg");
 }
 
 .icon {

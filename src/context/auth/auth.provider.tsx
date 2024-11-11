@@ -19,7 +19,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const { mutateAsync: signIn } = useMutation({
     mutationFn: async (credentials: Credentials) => {
       const url = normalizeUrl(credentials.url, '/api/v1/node');
-      return await fetchFn<{ nodes: Node[] }>(url, {}, credentials.token);
+      return await fetchFn<{ nodes: Node[] }>(url, {}, credentials.token, credentials.tokenType);
     },
     onSuccess: async ({ nodes }, credentials: Credentials) => {
       setStoredCredentials(credentials);

@@ -85,7 +85,7 @@ export async function defaultQueryFn<T = unknown, TQueryKey extends QueryKey = Q
   const { queryKey, signal } = context;
   let url = queryKey[0] as string;
   const method = (queryKey[1] as string) || 'GET';
-  const { token, url: base, tokenType } = getStoredCredentials();
+  const { token, url: base, tokenType } = getStoredCredentials('auth');
 
   if (!url.startsWith('http') && base) {
     url = `${base}${url}`;
@@ -95,7 +95,7 @@ export async function defaultQueryFn<T = unknown, TQueryKey extends QueryKey = Q
 }
 
 export async function signedQueryFn<T = unknown>(path: string, init: RequestInit = {}): Promise<T> {
-  const { token, url: base, tokenType } = getStoredCredentials();
+  const { token, url: base, tokenType } = getStoredCredentials('auth');
 
   if (!base || !token) {
     throw new UnauthorizedError();

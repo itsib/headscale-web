@@ -9,7 +9,6 @@ import { useAppAuth } from '../../hooks/use-app-auth.ts';
 import { BrandLogo } from '../brand-logo/brand-logo.tsx';
 import { useAppCredentials } from '../../hooks/use-app-credentials.ts';
 import './header.css';
-import { useLog } from '../../hooks/use-log.ts';
 
 export const Header: FC = () => {
   const contextRef = useRef<HTMLButtonElement | null>(null);
@@ -17,8 +16,6 @@ export const Header: FC = () => {
   const [ theme, setTheme ] = useTheme();
   const [authorized,, logout] = useAppAuth();
   const { token, url } = useAppCredentials();
-
-  useLog({ language: i18n.language })
 
   const prefix = useMemo(() => {
     if (!token) return undefined;
