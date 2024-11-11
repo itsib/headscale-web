@@ -19,7 +19,7 @@ export function useMetrics(url?: string, token?: string, tokenType?: TokenType):
 
       return parseGoMetrics(text);
     },
-    enabled: !!url && !!token,
+    enabled: !!url,
     staleTime: 0,
     retry(_: any, error: any): any {
       if (error.code === 401) return false;
