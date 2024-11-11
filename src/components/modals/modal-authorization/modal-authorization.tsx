@@ -6,9 +6,7 @@ import { Input, url } from 'react-just-ui';
 import { Credentials } from '../../../types';
 
 export interface ModalAuthorizationProps extends ModalProps {
-  baseUrl?: string;
-  token?: string;
-  metricsUrl?: string;
+  credentials: Partial<Credentials>;
   onSubmit: (credentials: Required<Credentials>) => Promise<any>;
 }
 
@@ -20,15 +18,15 @@ export const ModalAuthorization: FC<ModalAuthorizationProps> = ({ isOpen, onDism
   );
 };
 
-const ModalContent: FC<Omit<ModalAuthorizationProps, 'isOpen' | 'onDismiss'>> = ({ onSubmit, baseUrl, metricsUrl, token }) => {
+const ModalContent: FC<Omit<ModalAuthorizationProps, 'isOpen' | 'onDismiss'>> = ({ onSubmit, credentials }) => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, formState, setError } = useForm<Required<Credentials>>({
     defaultValues: {
-      baseUrl,
-      metricsUrl,
-      token,
+      url: credentials?.url || '',
+      token: credentials?.token || '',
+      tokenType: credentials?.tokenType || 'Bearer',
     },
     shouldUseNativeValidation: false,
   });
@@ -46,9 +44,9 @@ const ModalContent: FC<Omit<ModalAuthorizationProps, 'isOpen' | 'onDismiss'>> = 
       if (error.code === 401) {
         setError('token', { message: t('error_invalid_token') });
       } else if (error.code === -1) {
-        setError('baseUrl', { message: t('error_connection_error') });
+        setError('url', { message: t('error_connection_error') });
       } else {
-        setError('baseUrl', { message: t('error_invalid_response') });
+        setError('url', { message: t('error_invalid_response') });
       }
     }
     setIsLoading(false);
@@ -58,7 +56,7 @@ const ModalContent: FC<Omit<ModalAuthorizationProps, 'isOpen' | 'onDismiss'>> = 
     <div className="modal w-[400px]">
       <div className="modal-header">
         <div className="title">
-          {token ? (
+          {credentials?.token ? (
             <span>{t('credentials_form_header_expired')}</span>
           ) : (
             <span>{t('credentials_form_header_new')}</span>
@@ -72,9 +70,9 @@ const ModalContent: FC<Omit<ModalAuthorizationProps, 'isOpen' | 'onDismiss'>> = 
               id="base-url-input"
               placeholder="https://"
               label={t('server_instance_url')}
-              error={errors?.baseUrl}
+              error={errors?.url}
               markRequired
-              {...register('baseUrl', {
+              {...register('url', {
                 required: t('error_required'),
                 validate: url(t('error_invalid_url')),
               })}
@@ -89,18 +87,6 @@ const ModalContent: FC<Omit<ModalAuthorizationProps, 'isOpen' | 'onDismiss'>> = 
               markRequired
               {...register('token', {
                 required: t('error_required'),
-              })}
-            />
-          </div>
-
-          <div className="mb-2">
-            <Input
-              id="metric-url-input"
-              placeholder="https://"
-              label={t('url_to_get_metrics')}
-              error={errors?.metricsUrl}
-              {...register('metricsUrl', {
-                validate: url(t('error_invalid_url')),
               })}
             />
           </div>

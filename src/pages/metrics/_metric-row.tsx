@@ -24,7 +24,7 @@ export const MetricItem: FC<MetricRowProps> = ({ id, description, data, type }) 
   }, [id]);
 
   return (
-    <div className="py-2 border-primary border-b flex justify-between items-center last:border-b-0">
+    <div className="py-2 border-primary border-t flex justify-between items-start">
       <div className="text-base w-1/2">
         <div>{title}</div>
         <div className="text-xs text-secondary opacity-60">{description}</div>

@@ -1,5 +1,8 @@
+
+export type TokenType = 'Bearer' | 'apiKey';
+
 export interface Credentials {
+  url: string;
   token: string;
-  baseUrl: string;
-  metricsUrl?: string;
+  tokenType: TokenType;
 }

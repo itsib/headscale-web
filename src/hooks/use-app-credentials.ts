@@ -3,6 +3,6 @@ import { Credentials } from '../types';
 import { AuthContext } from '../context/auth/auth.context.ts';
 
 export function useAppCredentials(): Partial<Credentials> {
-  const { baseUrl, metricsUrl, token } = useContext(AuthContext);
-  return { baseUrl, metricsUrl, token };
+  const { credentials } = useContext(AuthContext);
+  return { url: credentials?.url, token: credentials?.token };
 }

@@ -4,10 +4,11 @@ export const ListLoading: FC = () => {
 
   return (
     <div className="">
-      <div className="h-[46px] w-full bg-secondary rounded-md bg-opacity-65 animate-pulse mb-6" />
-      <div className="h-[46px] w-full bg-secondary rounded-md bg-opacity-65 animate-pulse mb-6" />
-      <div className="h-[46px] w-[80%] bg-secondary rounded-md bg-opacity-65 animate-pulse mb-6" />
-      <div className="h-[46px] w-[80%] bg-secondary rounded-md bg-opacity-65 animate-pulse mb-6" />
+      <div className="h-[40px] w-full bg-skeleton rounded-lg bg-opacity-50 animate-pulse mb-5" />
+      <div className="h-[40px] w-full bg-skeleton rounded-lg bg-opacity-50 animate-pulse mb-5" />
+      <div className="h-[40px] w-[80%] bg-skeleton rounded-lg bg-opacity-50 animate-pulse mb-5" />
+      <div className="h-[40px] w-[80%] bg-skeleton rounded-lg bg-opacity-50 animate-pulse mb-5" />
+      <div className="h-[40px] w-[80%] bg-skeleton rounded-lg bg-opacity-50 animate-pulse mb-5" />
     </div>
   );
 };

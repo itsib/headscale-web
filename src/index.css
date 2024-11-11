@@ -51,6 +51,7 @@ html {
 
   --bg-primary: 238 235 234;
   --bg-secondary: 247 245 244;
+  --bg-skeleton: 190 194 194;
 
   --border-primary: 218 214 213;
   --border-secondary: 190 194 194;
@@ -81,6 +82,7 @@ html.dark {
 
   --bg-primary: 31 30 30;
   --bg-secondary: 15 15 15;
+  --bg-skeleton: 45 45 45;
 
   --border-primary: 45 45 45;
   --border-secondary: 75 75 75;

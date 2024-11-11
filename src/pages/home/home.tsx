@@ -1,22 +1,24 @@
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Input, url } from 'react-just-ui';
+import { Input, url as urlValidator } from 'react-just-ui';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Credentials } from '../../types';
 import { useAppAuth } from '../../hooks/use-app-auth.ts';
+import { useAppCredentials } from '../../hooks/use-app-credentials.ts';
 
 export const HomePage: FC = () =>  {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { url, token, tokenType } = useAppCredentials();
   const [isLoading, setIsLoading] = useState(false);
   const [, signIn] = useAppAuth();
 
   const { handleSubmit, register, formState, setError } = useForm<Credentials>({
     defaultValues: {
-      baseUrl: localStorage.getItem('headscale.url') || '',
-      token: localStorage.getItem('headscale.token') || '',
-      metricsUrl: localStorage.getItem('headscale.metric-url') || '',
+      url: url || '',
+      token: token || '',
+      tokenType: tokenType || 'Bearer',
     }
   });
   const { errors } = formState;
@@ -32,9 +34,9 @@ export const HomePage: FC = () =>  {
       if (error.code === 401) {
         setError('token', { message: t('error_invalid_token') });
       } else if (error.code === -1) {
-        setError('baseUrl', { message: t('error_connection_error') });
+        setError('url', { message: t('error_connection_error') });
       } else {
-        setError('baseUrl', { message: t('error_invalid_response') });
+        setError('url', { message: t('error_invalid_response') });
       }
       setIsLoading(false);
     }
@@ -52,11 +54,11 @@ export const HomePage: FC = () =>  {
               id="base-url-input-home"
               placeholder="https://"
               label={t('server_instance_url')}
-              error={errors?.baseUrl}
+              error={errors?.url}
               markRequired
-              {...register('baseUrl', {
+              {...register('url', {
                 required: t('error_required'),
-                validate: url(t('error_invalid_url')),
+                validate: urlValidator(t('error_invalid_url')),
               })}
             />
           </div>
@@ -69,18 +71,6 @@ export const HomePage: FC = () =>  {
               markRequired
               {...register('token', {
                 required: t('error_required'),
-              })}
-            />
-          </div>
-
-          <div className="mb-2">
-            <Input
-              id="metric-url-input-home"
-              placeholder="https://"
-              label={t('url_to_get_metrics')}
-              error={errors?.metricsUrl}
-              {...register('metricsUrl', {
-                validate: url(t('error_invalid_url')),
               })}
             />
           </div>

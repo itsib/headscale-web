@@ -1,6 +1,6 @@
 import { FC, useMemo, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useTheme } from '../../hooks/use-theme.ts';
 import { Theme } from '../../utils/theme.ts';
 import { PopupPlacement } from '../popups/popup-base/_common.ts';
@@ -9,12 +9,16 @@ import { useAppAuth } from '../../hooks/use-app-auth.ts';
 import { BrandLogo } from '../brand-logo/brand-logo.tsx';
 import { useAppCredentials } from '../../hooks/use-app-credentials.ts';
 import './header.css';
+import { useLog } from '../../hooks/use-log.ts';
 
 export const Header: FC = () => {
   const contextRef = useRef<HTMLButtonElement | null>(null);
+  const { i18n } = useTranslation();
   const [ theme, setTheme ] = useTheme();
   const [authorized,, logout] = useAppAuth();
-  const { token, baseUrl } = useAppCredentials();
+  const { token, url } = useAppCredentials();
+
+  useLog({ language: i18n.language })
 
   const prefix = useMemo(() => {
     if (!token) return undefined;
@@ -63,8 +67,8 @@ export const Header: FC = () => {
             <ContextMenu btnOpenRef={contextRef} placement={PopupPlacement.BOTTOM}>
               <div className="context-menu-item">
                 <div className="px-[16px] py-[6px]">
-                <div className="text-sm text-primary font-medium">{prefix}</div>
-                  <div className="text-xs text-secondary">{baseUrl}</div>
+                  <div className="text-sm text-primary font-medium">{prefix}</div>
+                  <div className="text-xs text-secondary">{url}</div>
                 </div>
               </div>
 
@@ -93,6 +97,26 @@ export const Header: FC = () => {
                   <i className="icon icon-sun-moon"/>
                   <Trans i18nKey="system"/>
                   {theme === Theme.System ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
+                </button>
+              </div>
+
+              <hr className="context-menu-divider"/>
+
+              <div className="context-menu-item">
+                <button type="button" className="btn-context-menu flex items-center"
+                        onClick={() => i18n.changeLanguage('en')}>
+                  <img className="icon" src="/locales/en/_icon.svg" alt="en-EN" width={16} height={16}/>
+                  <>English</>
+                  {i18n.language === 'en' ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
+                </button>
+              </div>
+
+              <div className="context-menu-item">
+                <button type="button" className="btn-context-menu flex items-center"
+                        onClick={() => i18n.changeLanguage('ru')}>
+                  <img className="icon" src="/locales/ru/_icon.svg" alt="en-EN" width={16} height={16}/>
+                  <>Русский</>
+                  {i18n.language === 'ru' ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
                 </button>
               </div>
 

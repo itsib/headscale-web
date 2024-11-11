@@ -6,30 +6,24 @@ import { noop } from '../../utils/noop.ts';
 import { fetchFn, normalizeUrl } from '../../utils/query-fn.ts';
 import { Credentials, Node } from '../../types';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { getStoredCredentials, removeTokenCredentials, setStoredCredentials } from '../../utils/local-storage.ts';
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const [baseUrl, setBaseUrl] = useState<string>();
-  const [token, setToken] = useState<string>();
-  const [metricsUrl, setMetricsUrl] = useState<string>();
-  const [authenticated, setAuthenticated] = useState(true);
+  const [credentials, setCredentials] = useState<Partial<Credentials>>(getStoredCredentials());
+  const [authenticated, setAuthenticated] = useState(!!credentials.token);
 
   const { mutateAsync: signIn } = useMutation({
     mutationFn: async (credentials: Credentials) => {
-      const url = normalizeUrl(credentials.baseUrl, '/api/v1/node');
+      const url = normalizeUrl(credentials.url, '/api/v1/node');
       return await fetchFn<{ nodes: Node[] }>(url, {}, credentials.token);
     },
     onSuccess: async ({ nodes }, credentials: Credentials) => {
-      localStorage.setItem('headscale.token', credentials.token);
-      localStorage.setItem('headscale.url', credentials.baseUrl);
-      localStorage.setItem('headscale.metric-url', credentials.metricsUrl || '');
-
-      setToken(credentials.token);
-      setBaseUrl(credentials.baseUrl);
-      setMetricsUrl(credentials.metricsUrl);
+      setStoredCredentials(credentials);
+      setCredentials(credentials);
 
       queryClient.setQueryData(['/api/v1/node'], { nodes })
 
@@ -37,35 +31,24 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     },
   });
 
-  const setMetricUrl = useCallback((metricsUrl: string) => {
-    localStorage.setItem('headscale.metric-url', metricsUrl);
-    setMetricsUrl(metricsUrl);
-  }, [])
-
   const logout = useCallback(() => {
-    localStorage.removeItem('headscale.token');
+    removeTokenCredentials();
     setAuthenticated(false);
     navigate('/')
   }, []);
 
   // Restore credentials
-  useEffect(() => {
-    const token = localStorage.getItem('headscale.token');
-    const baseUrl = localStorage.getItem('headscale.url');
-    const metricsUrl = localStorage.getItem('headscale.metric-url');
-
-    if (token) setToken(token);
-    if (baseUrl) setBaseUrl(baseUrl);
-    if (metricsUrl) setMetricsUrl(metricsUrl);
-
-    setAuthenticated(!!token && !!baseUrl);
-  }, []);
+  useEffect(() => setAuthenticated(!!credentials.token), [credentials.token]);
 
   // Handle queries errors
   useEffect(() => {
     const cache = queryClient.getQueryCache();
     cache.subscribe(event => {
       if (event.type === 'updated' && event?.action?.type === 'failed' && event.action?.error?.name === 'UnauthorizedError') {
+        const metric = getStoredCredentials('metrics');
+        const url = event.query?.queryKey?.[0];
+        if (metric && url && metric.url === url) return;
+
         setAuthenticated(false);
       }
     });
@@ -90,18 +73,13 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         authenticated,
         signIn,
         logout,
-        setMetricUrl,
-        baseUrl,
-        metricsUrl,
-        token,
+        credentials,
       }}>
       {children}
 
       <ModalAuthorization
         isOpen={!authenticated && pathname !== '/'}
-        baseUrl={baseUrl}
-        token={token}
-        metricsUrl={metricsUrl}
+        credentials={credentials}
         onDismiss={noop}
         onSubmit={(credentials: Credentials) => signIn(credentials)}
       />

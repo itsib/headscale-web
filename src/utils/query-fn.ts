@@ -1,8 +1,26 @@
 import { QueryFunctionContext, QueryKey } from '@tanstack/react-query';
 import { ConnectionError, HttpError, UnauthorizedError } from './errors';
+import { getStoredCredentials } from './local-storage.ts';
+import { TokenType } from '../types';
+
+function getStatusText(code: number): string {
+  switch (code) {
+    case 400: return 'error_bad_request';
+    case 401: return 'error_unauthorized';
+    case 403: return 'error_forbidden';
+    case 404: return 'error_not_found';
+    case 500: return 'error_internal_server_error'
+    default: return 'error_unknown';
+  }
+}
 
 async function resolveFailureRes(res: Response): Promise<never> {
   let errorMessage = (await res.text());
+  const statusText = res.statusText || getStatusText(res.status);
+  if (!errorMessage) {
+    throw new HttpError(statusText, res.status, errorMessage || statusText);
+  }
+
   try {
     const error = JSON.parse(errorMessage);
     errorMessage = error.message;
@@ -11,7 +29,7 @@ async function resolveFailureRes(res: Response): Promise<never> {
   if (errorMessage === 'Unauthorized') {
     throw new UnauthorizedError();
   }
-  throw new HttpError(res.statusText, res.status, errorMessage || res.statusText);
+  throw new HttpError(statusText, res.status, errorMessage || statusText);
 }
 
 export function normalizeUrl(base: string, path: string): string {
@@ -21,13 +39,20 @@ export function normalizeUrl(base: string, path: string): string {
   return base + path;
 }
 
-export async function fetchFn<T = unknown>(url: string, init: RequestInit = {}, token?: string): Promise<T> {
+export async function fetchFn<T = unknown>(url: string, init: RequestInit = {}, token?: string, tokenType?: TokenType): Promise<T> {
   const headers = new Headers(init.headers);
-  if (token) {
+  if (token && (tokenType === 'Bearer')) {
     headers.set('Authorization', 'Bearer ' + token);
   }
   if (!headers.has('content-type')) {
     headers.set('Content-Type', 'application/json');
+  }
+
+  if (token && tokenType === 'apiKey') {
+    const [baseUrl, queryString] = url.split('?');
+    const params = new URLSearchParams(queryString);
+    params.set('token', token);
+    url = `${baseUrl}?${params.toString()}`;
   }
 
   let res: Response;
@@ -60,21 +85,17 @@ export async function defaultQueryFn<T = unknown, TQueryKey extends QueryKey = Q
   const { queryKey, signal } = context;
   let url = queryKey[0] as string;
   const method = (queryKey[1] as string) || 'GET';
-  const token = localStorage.getItem('headscale.token') || undefined;
+  const { token, url: base, tokenType } = getStoredCredentials();
 
-  if (!url.startsWith('http')) {
-    const base = localStorage.getItem('headscale.url');
-    if (base) {
-      url = `${base}${url}`;
-    }
+  if (!url.startsWith('http') && base) {
+    url = `${base}${url}`;
   }
 
-  return await fetchFn(url, { method, signal }, token);
+  return await fetchFn(url, { method, signal }, token, tokenType);
 }
 
 export async function signedQueryFn<T = unknown>(path: string, init: RequestInit = {}): Promise<T> {
-  const token = localStorage.getItem('headscale.token') || undefined;
-  const base = localStorage.getItem('headscale.url');
+  const { token, url: base, tokenType } = getStoredCredentials();
 
   if (!base || !token) {
     throw new UnauthorizedError();
@@ -82,5 +103,5 @@ export async function signedQueryFn<T = unknown>(path: string, init: RequestInit
 
   const url = normalizeUrl(base, path)
 
-  return await fetchFn<T>(url, init, token);
+  return await fetchFn<T>(url, init, token, tokenType);
 }

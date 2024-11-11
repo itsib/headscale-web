@@ -9,6 +9,7 @@ export default {
       accent: 'rgb(var(--accent) / <alpha-value>)',
       primary: 'rgb(var(--bg-primary) / <alpha-value>)',
       secondary: 'rgb(var(--bg-secondary) / <alpha-value>)',
+      skeleton: 'rgb(var(--bg-skeleton) / <alpha-value>)',
     }),
     borderColor: ({ theme }) => ({
       ...theme('colors'),

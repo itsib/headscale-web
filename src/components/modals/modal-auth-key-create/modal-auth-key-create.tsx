@@ -149,7 +149,7 @@ const ModalContent: FC<Omit<ModalAuthKeyCreateProps, 'isOpen'>> = ({ onDismiss, 
                 id="key-reusable"
                 label={
                   <>
-                    <div className="text-base font-semibold">{t('auth_key_reusable_title')}</div>
+                    <div className="text-base font-semibold">{t('reusable')}</div>
                     <div className="text-secondary text-xs">{t('auth_key_reusable_hint')}</div>
                   </>
                 }
