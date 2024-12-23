@@ -150,7 +150,8 @@
   "system": "System",
   "tag_name": "Tag Name",
   "tags": "Tags",
-  "tailscale_up_command": "The device key returns the command <code /> executed on your device.",
+  "tailscale_up_command_before": "The device key returns the command",
+  "tailscale_up_command_after": "executed on your device.",
   "tokens": "Tokens",
   "type": "Type",
   "unknown_error": "Unknown Error",
@@ -158,5 +159,6 @@
   "user_name": "User Name",
   "users": "Users",
   "users_page_subtitle": "Manage the users in your network.",
-  "edit_metrics_url": "Edit metrics URL"
+  "edit_metrics_url": "Edit metrics URL",
+  "error_offline": "You're offline trying to reconnect"
 }

@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+dev-dist
+cert
 
 # Editor directories and files
 .vscode/*
@@ -24,4 +26,4 @@ dist-ssr
 *.sw?
 *.tsbuildinfo
 headscale-web-*.tgz
-headscale-web.tgz
+headscale-web.tgz!/dev-dist/

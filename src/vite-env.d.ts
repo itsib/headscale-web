@@ -1,15 +1,17 @@
 /// <reference types="vite/client" />
-// import '@tanstack/react-query';
-//
-// interface AppMeta extends Record<string, unknown> {
-//   base?: string;
-//   token?: string;
-//   metricsBase?: string;
-// }
-//
-// declare module '@tanstack/react-query' {
-//   interface Register {
-//     queryMeta: AppMeta
-//     mutationMeta: AppMeta
-//   }
-// }
+/// <reference types="vite-plugin-pwa/react" />
+/// <reference types="vite-plugin-pwa/info" />
+/// <reference types="react-just-ui" />
+/// <reference types="@types/react" />
+/// <reference lib="webworker" />
+
+
+interface ImportMetaEnv {
+  readonly DEV;
+  readonly VITE_ACCESS_URL?: string;
+  readonly VITE_ACCESS_TOKEN?: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}

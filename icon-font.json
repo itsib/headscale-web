@@ -1,0 +1,6 @@
+{
+  "name": "IconFont",
+  "input": "icons",
+  "output": "public/fonts/icon-font",
+  "fontUrl": "/fonts/icon-font"
+}

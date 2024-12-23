@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef } from 'react';
+import { memo, useMemo } from 'react';
 import { ApiToken } from '../../types';
 import { Trans } from 'react-i18next';
 import { ContextMenu } from '../../components/popups/context-menu.tsx';
@@ -13,7 +13,6 @@ export interface ApiTokenItemProps extends ApiToken {
 }
 
 export const ApiTokenItem = memo(function ApiTokenItem(props: ApiTokenItemProps) {
-  const contextRef = useRef<HTMLButtonElement | null>(null);
   const { prefix, createdAt, expiration, lastSeen, onAction } = props;
 
   const isExpired = useMemo(() => !!expiration && (new Date(expiration).getTime() - Date.now()) < 0, [expiration]);
@@ -55,26 +54,32 @@ export const ApiTokenItem = memo(function ApiTokenItem(props: ApiTokenItemProps)
         )}
       </td>
       <td className="text-right w-[52px]">
-        <button
-          className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
-          ref={contextRef}
+        <ContextMenu
+          placement={PopupPlacement.BOTTOM}
+          menu={() => (
+            <>
+              <div className="context-menu-item">
+                <button type="button" className="btn-context-menu" onClick={() => onAction('expire')}>
+                  <Trans i18nKey="expire"/>
+                </button>
+              </div>
+
+              <hr className="context-menu-divider"/>
+
+              <div className="context-menu-item" onClick={() => onAction('delete')}>
+                <button type="button" className="btn-context-menu text-red-600">
+                  <Trans i18nKey="delete"/>
+                </button>
+              </div>
+            </>
+          )}
         >
-          <i className="icon icon-context-menu text-[24px]"/>
-        </button>
-        <ContextMenu btnOpenRef={contextRef} placement={PopupPlacement.BOTTOM}>
-          <div className="context-menu-item">
-            <button type="button" className="btn-context-menu" onClick={() => onAction('expire')}>
-              <Trans i18nKey="expire"/>
-            </button>
-          </div>
-
-          <hr className="context-menu-divider"/>
-
-          <div className="context-menu-item" onClick={() => onAction('delete')}>
-            <button type="button" className="btn-context-menu text-red-600">
-              <Trans i18nKey="delete"/>
-            </button>
-          </div>
+          <button
+            type="button"
+            className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
+          >
+            <i className="icon icon-context-menu text-[24px]"/>
+          </button>
         </ContextMenu>
       </td>
     </tr>

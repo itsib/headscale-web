@@ -1,6 +1,5 @@
-@import "/fonts/roboto/style.css";
-@import "/fonts/jet-brains-mono/style.css";
-@import "/fonts/sf-pro-text/style.css";
+@import "/fonts/roboto/roboto-font.css";
+@import "/fonts/jet-brains-mono/jet-brains-mono-font.css";
 @import "/fonts/icon-font/icon-font.css";
 
 @tailwind base;
@@ -61,6 +60,7 @@ html {
 
   --bg-popover: 247 245 244;
   --bg-popover-hover: 230 230 230;
+  --bg-toast-danger: 147 3 3;
   --border-popover: 218 214 213;
 
   /* JSON editor highlight */
@@ -94,6 +94,7 @@ html.dark {
   /** Context menu popover */
   --bg-popover: 31 30 30;
   --bg-popover-hover: 38 37 37;
+  --bg-toast-danger: 147 3 3;
   --border-popover: 46 45 45;
 
   /* JSON editor highlight */
@@ -172,5 +173,32 @@ html, body {
     background-color: rgb(34 34 34 / 90%);
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     @apply animate-pulse;
+  }
+
+  .toast {
+    width: 340px;
+    left: -170px;
+    margin-left: 50%;
+    padding: 10px 10px;
+    background: rgb(var(--bg-toast-danger));
+    border-radius: 6px;
+    align-items: center;
+    justify-content: start;
+    position: relative;
+    transform: translateY(-105%);
+    transition: transform .2s ease-out;
+    box-shadow: 0 3px 6px 6px rgb(var(--black) / .15);
+    display: flex;
+    user-select: none;
+    cursor: default;
+
+    .wait {
+      margin-right: 10px;
+    }
+
+    &.show {
+      transition: transform .2s ease-in;
+      transform: translateY(20px);
+    }
   }
 }

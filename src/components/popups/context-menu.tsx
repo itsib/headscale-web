@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { FC, PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react';
 import { PopupPlacement } from './popup-base/_common';
 import { PopupBaseAnchor } from './popup-base/popup-base-anchor';
 import './context-menu.css';
@@ -9,10 +9,11 @@ export interface ContextMenuProps {
    */
   placement?: PopupPlacement;
 
-  btnOpenRef?: React.RefObject<HTMLButtonElement>;
+  menu: ReactNode | (() => ReactNode);
 }
 
-export const ContextMenu: FC<PropsWithChildren<ContextMenuProps>> = ({ placement, btnOpenRef, children }) => {
+export const ContextMenu: FC<PropsWithChildren<ContextMenuProps>> = ({ placement, children, menu }) => {
+  const childWrapperRef = useRef<HTMLDivElement | null>(null);
   const contextMenuRef = useRef<HTMLMenuElement | null>(null);
   const [openBtnElement, setOpenBtnElement] = useState<HTMLElement>();
 
@@ -21,10 +22,12 @@ export const ContextMenu: FC<PropsWithChildren<ContextMenuProps>> = ({ placement
 
   // Context menu display stuff
   useEffect(() => {
-    const btn = btnOpenRef?.current;
+    const wrapper = childWrapperRef?.current;
+    const btn = wrapper?.firstChild as HTMLElement;
     if (!btn) {
       return setOpenBtnElement(undefined);
     }
+
     setOpenBtnElement(btn);
 
     const click = (e: MouseEvent) => {
@@ -37,7 +40,7 @@ export const ContextMenu: FC<PropsWithChildren<ContextMenuProps>> = ({ placement
     return () => {
       btn.removeEventListener('click', click);
     };
-  }, [btnOpenRef]);
+  }, []);
 
   // Context menu hide stuff
   useEffect(() => {
@@ -69,10 +72,13 @@ export const ContextMenu: FC<PropsWithChildren<ContextMenuProps>> = ({ placement
   }, [openBtnElement, isOpen]);
 
   return (
-    <PopupBaseAnchor rect={rect} open={isOpen} placement={placement}>
-      <menu className="popup context-menu" ref={contextMenuRef} onClick={e => e.stopPropagation()}>
-        {children}
-      </menu>
-    </PopupBaseAnchor>
+    <>
+      <div ref={childWrapperRef}>{children}</div>
+      <PopupBaseAnchor rect={rect} open={isOpen} placement={placement}>
+        <menu className="popup context-menu" ref={contextMenuRef} onClick={e => e.stopPropagation()}>
+          {typeof menu === 'function' ? menu() : menu}
+        </menu>
+      </PopupBaseAnchor>
+    </>
   );
 };

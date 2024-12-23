@@ -7,10 +7,11 @@ import { ModalNodeRename } from '../../components/modals/modal-node-rename/modal
 import { ModalNodeChown } from '../../components/modals/modal-node-chown/modal-node-chown.tsx';
 import { ModalNodeDelete } from '../../components/modals/modal-node-delete/modal-node-delete.tsx';
 import { ModalNodeTags } from '../../components/modals/modal-node-tags/modal-node-tags.tsx';
-import { ContextAction, MachineItem } from './_machine-item.tsx';
+import { MachineItem } from './_machine-item.tsx';
 import { ListLoading } from '../../components/skeleton/list-loading.tsx';
 import { ModalNodeExpire } from '../../components/modals/modal-node-expire/modal-node-expire.tsx';
 import { ModalNodeRoutes } from '../../components/modals/modal-node-routes/modal-node-routes.tsx';
+import { ContextAction } from './_machine-menu.tsx';
 
 export const MachinesPage: FC = () => {
   const { t } = useTranslation();
@@ -27,7 +28,7 @@ export const MachinesPage: FC = () => {
           <p className="text-secondary"><Trans i18nKey="machines_page_subtitle"/></p>
         </div>
 
-        <button type="button" className="btn btn-accent flex items-center gap-2" onClick={() => setOpened('create')}>
+        <button type="button" className="jj-btn btn-accent flex items-center gap-2" onClick={() => setOpened('create')}>
           <i className="icon icon-devices text-lg text-white"/>
           <span className="font-medium text-white"><Trans i18nKey="register_device"/></span>
         </button>

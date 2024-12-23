@@ -8,26 +8,25 @@ export interface IPAddressesProps {
 }
 
 export const IpAddresses: FC<IPAddressesProps> = ({ addresses }) => {
-  const ref = useRef<HTMLButtonElement | null>(null);
-
   return (
-    <>
-      <button type="button" className="" ref={ref}>
+    <Popover
+      placement={PopupPlacement.BOTTOM}
+      content={() => (
+        <div className="py-1.5">
+          {addresses.map(address => (<AddressRow key={address} address={address}/>))}
+        </div>
+      )}
+    >
+      <button type="button" className="">
         <span className="digits">{addresses[0]}</span>
         <i className="icon icon-dropdown text-secondary text-xs ml-2"/>
       </button>
-
-      <Popover btnOpenRef={ref} placement={PopupPlacement.BOTTOM}>
-        <div className="py-1.5">
-          {addresses.map(address => (<AddressRow key={address} address={address} />))}
-        </div>
-      </Popover>
-    </>
+    </Popover>
   );
 };
 
 const AddressRow: FC<{ address: string }> = ({ address }) => {
-  const ref = useRef<ReturnType<typeof setTimeout>>();
+  const ref = useRef<ReturnType<typeof setTimeout>>(null);
   const [copied, setCopied] = useState(false);
 
   return (
@@ -36,7 +35,10 @@ const AddressRow: FC<{ address: string }> = ({ address }) => {
       className="flex items-center justify-between w-full px-4 py-1.5 hover:bg-secondary hover:bg-opacity-70 "
       onClick={event => {
         event.stopPropagation();
-        clearTimeout(ref.current);
+        if (ref.current) {
+          clearTimeout(ref.current);
+        }
+
         copyText(address).then(() => {
           setCopied(true);
           ref.current = setTimeout(() => setCopied(false), 1000);

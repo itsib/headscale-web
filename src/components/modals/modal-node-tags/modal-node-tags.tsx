@@ -67,7 +67,7 @@ const ModalContent: FC<Omit<ModalNodeTagsProps, 'isOpen' | 'node'> & { node: Nod
         <div className="title">
           <span>{t('manage_tags_node_modal_title')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
+        <button type="button" className="jj-btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
         <form
@@ -114,7 +114,7 @@ const ModalContent: FC<Omit<ModalNodeTagsProps, 'isOpen' | 'node'> & { node: Nod
           ) : null}
           <button
             type="button"
-            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
+            className={`jj-btn btn-accent w-full ${isPending ? 'loading' : ''}`}
             disabled={!isDifferent}
             onClick={() => mutate({ id: node.id, tags, })}
           >

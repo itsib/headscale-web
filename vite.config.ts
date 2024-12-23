@@ -1,20 +1,23 @@
-import { defineConfig, UserConfig,  } from 'vite';
-import react from '@vitejs/plugin-react-swc'
-import { resolve, join } from 'node:path';
+import { defineConfig, loadEnv, UserConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import { join, resolve } from 'node:path';
 import compression from 'vite-plugin-compression2';
 import pluginCp from 'vite-plugin-cp';
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
-import { VitePWA } from 'vite-plugin-pwa'
+import { VitePWA } from 'vite-plugin-pwa';
 import { readFile } from 'node:fs/promises';
+import * as fs from 'node:fs';
 
 /**
  * Vite
  * @see https://vitejs.dev/config/
  */
-export default defineConfig(async ({ mode }): Promise<UserConfig> => {
-  const pkgJson = JSON.parse(await readFile('package.json', 'utf8'));
-  const manifestJson = JSON.parse(await readFile('manifest.json', 'utf8'));
+export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
+  const env = loadEnv(mode, process.cwd());
+  const pkg = JSON.parse(await readFile('package.json', 'utf8'));
+  const webmanifest = JSON.parse(await readFile('manifest.webmanifest', 'utf8'));
+  const isDevSSL = command === 'serve' && fs.existsSync('cert');
 
   return {
     clearScreen: false,
@@ -23,6 +26,8 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
     publicDir: 'public',
     define: {
       'import.meta.env.NODE_ENV': JSON.stringify(mode),
+      'import.meta.env.VITE_ACCESS_URL': JSON.stringify(env.VITE_ACCESS_URL),
+      'import.meta.env.VITE_ACCESS_TOKEN': JSON.stringify(env.VITE_ACCESS_TOKEN),
     },
     resolve: {
       alias: {
@@ -33,33 +38,101 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
     plugins: [
       react(),
       VitePWA({
+        base: '/',
         registerType: 'autoUpdate',
+        injectRegister: 'auto',
+        strategies: 'generateSW', //'generateSW',
+        // srcDir: 'src',
+        // filename: 'sw.ts',
         devOptions: {
           enabled: mode === 'development',
+          type: 'module',
+          navigateFallback: 'index.html',
         },
-        manifestFilename: 'site.webmanifest',
         manifest: {
-          ...manifestJson,
-          name: pkgJson.name,
-          description: pkgJson.description,
+          ...webmanifest,
+          name: pkg.name,
+          description: pkg.description,
         },
-        // includeAssets: ['/**/*.svg', '/**/*.png', '/fonts/icon-font/**', '/images/**', '/locales/**'],
+        // injectManifest: {
+        //   minify: false,
+        //   enableWorkboxModulesLogs: true,
+        //   rollupFormat: 'iife',
+        //   globPatterns: [
+        //     '**/*.{js,css,html}',
+        //     'locales/**/*.{json,svg}',
+        //     'fonts/**/*.{woff2,woff,ttf,eot}',
+        //     'screenshot.png'
+        //   ],
+        // },
         workbox: {
-          globDirectory: resolve(__dirname, 'dist'),
+          globDirectory: join(process.cwd(), 'dist'),
           globPatterns: [
-            '**/*.{js,css,html,png,gz}',
-            '**/locales/**/*.json',
-            '**/fonts/roboto/Roboto-Bold.woff*',
-            '**/fonts/roboto/Roboto-Regular.woff*',
-            '**/fonts/roboto/Roboto-Medium.woff*',
-            '**/fonts/icon-font/IconFont.woff**',
+            '**/*.{js,css,html}',
+            'locales/**/*.{json,svg}',
+            'screenshot.png'
           ],
-          globIgnores: [
-            "**/node_modules/**/*",
-            "sw.js",
-            "workbox-*.js"
+          modifyURLPrefix: { '': '/' },
+          navigateFallback: 'index.html',
+          runtimeCaching: [
+            {
+              urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)(?:\?hash=\d{6,8})?$/i,
+              handler: 'StaleWhileRevalidate',
+              options: {
+                cacheName: 'static-font-assets',
+                expiration: {
+                  maxEntries: 4,
+                  maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+                },
+              },
+            },
+            // {
+            //   urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,
+            //   handler: 'StaleWhileRevalidate',
+            //   options: {
+            //     cacheName: 'static-image-assets',
+            //     expiration: {
+            //       maxEntries: 64,
+            //       maxAgeSeconds: 24 * 60 * 60, // 24 hours
+            //     },
+            //   },
+            // },
+            // {
+            //   urlPattern: /\.js$/i,
+            //   handler: 'StaleWhileRevalidate',
+            //   options: {
+            //     cacheName: 'static-js-assets',
+            //     expiration: {
+            //       maxEntries: 32,
+            //       maxAgeSeconds: 24 * 60 * 60, // 24 hours
+            //     },
+            //   },
+            // },
+            // {
+            //   urlPattern: /\.css$/i,
+            //   handler: 'StaleWhileRevalidate',
+            //   options: {
+            //     cacheName: 'static-style-assets',
+            //     expiration: {
+            //       maxEntries: 32,
+            //       maxAgeSeconds: 24 * 60 * 60, // 24 hours
+            //     },
+            //   },
+            // },
+            {
+              handler: 'NetworkOnly',
+              urlPattern: /\/api\/.*$/,
+              method: 'POST',
+              options: {
+                backgroundSync: {
+                  name: 'myQueueName',
+                  options: {
+                    maxRetentionTime: 24 * 60,
+                  },
+                },
+              },
+            },
           ],
-          maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
         }
       }),
       compression({
@@ -86,6 +159,9 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
       }
     },
     esbuild: { legalComments: 'none' },
+    optimizeDeps: {
+      include: ['react-dom'],
+    },
     build: {
       target: 'esnext',
       minify: mode === 'production' ? 'esbuild' : false,
@@ -141,17 +217,18 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
       restoreMocks: true,
       watch: false,
     },
-    optimizeDeps: {
-      include: ['react-dom'],
-    },
     preview: {
       port: 4005,
-      proxy: {
-
-      }
     },
     server: {
       port: 3005,
+      host: 'localhost',
+      keepAlive: true,
+      https: isDevSSL ? {
+        cert: './cert/localhost.crt',
+        key: './cert/localhost.key',
+        serverName: 'localhost',
+      } : undefined,
     }
   } as UserConfig;
-})
+});

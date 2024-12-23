@@ -49,7 +49,7 @@ const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: U
         <div className="title">
           <span>{t('renaming_user_modal_title')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
+        <button type="button" className="jj-btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
         <form
@@ -69,7 +69,7 @@ const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: U
 
           <button
             type="submit"
-            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
+            className={`jj-btn btn-accent w-full ${isPending ? 'loading' : ''}`}
           >
             <span>{t('rename')}</span>
           </button>

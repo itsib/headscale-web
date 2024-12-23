@@ -91,7 +91,7 @@ const ModalContent: FC<Omit<ModalAuthKeyCreateProps, 'isOpen'>> = ({ onDismiss, 
             <span>{t('generate_auth_key_modal')}</span>
           )}
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
+        <button type="button" className="jj-btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
         {newAuthKey ? (
@@ -115,7 +115,7 @@ const ModalContent: FC<Omit<ModalAuthKeyCreateProps, 'isOpen'>> = ({ onDismiss, 
               />
             </div>
 
-            <button type="button" className="btn btn-accent w-full mt-6" onClick={() => {
+            <button type="button" className="jj-btn btn-accent w-full mt-6" onClick={() => {
               onSuccess?.();
               onDismiss?.();
 
@@ -202,7 +202,7 @@ const ModalContent: FC<Omit<ModalAuthKeyCreateProps, 'isOpen'>> = ({ onDismiss, 
             </div>
 
             <div>
-              <button type="submit" className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}>
+              <button type="submit" className={`jj-btn btn-accent w-full ${isPending ? 'loading' : ''}`}>
                 <span>{t('create')}</span>
               </button>
               {error ? (

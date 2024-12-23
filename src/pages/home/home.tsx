@@ -16,8 +16,8 @@ export const HomePage: FC = () =>  {
 
   const { handleSubmit, register, formState, setError } = useForm<Credentials>({
     defaultValues: {
-      url: url || '',
-      token: token || '',
+      url: url || import.meta.env.VITE_ACCESS_URL || '',
+      token: token || import.meta.env.VITE_ACCESS_TOKEN || '',
       tokenType: tokenType || 'Bearer',
     }
   });
@@ -76,7 +76,7 @@ export const HomePage: FC = () =>  {
           </div>
 
           <div className="mt-4">
-            <button type="submit" className={`btn btn-accent w-full ${isLoading ? 'loading' : ''}`}>
+            <button type="submit" className={`jj-btn btn-accent w-full ${isLoading ? 'loading' : ''}`}>
               <span>{t('save')}</span>
             </button>
           </div>

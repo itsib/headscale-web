@@ -1,10 +1,10 @@
 import { User } from '../../types';
-import { memo, useRef } from 'react';
+import { memo } from 'react';
 import { UserInfo } from '../../components/user-info/user-info.tsx';
 import { FormattedDate } from '../../components/formatters/formatted-date.tsx';
 import { ContextMenu } from '../../components/popups/context-menu.tsx';
 import { PopupPlacement } from '../../components/popups/popup-base/_common.ts';
-import { Trans } from 'react-i18next';
+import { UserMenu } from './_user-menu.tsx';
 
 export interface UserItemProps extends User {
   onDelete: (user: User) => void;
@@ -12,8 +12,6 @@ export interface UserItemProps extends User {
 }
 
 export const UserItem = memo(function UserItem({ id, name, createdAt, onDelete, onRename }: UserItemProps) {
-  const btnRef = useRef<HTMLButtonElement | null>(null);
-
   return (
     <tr className="h-[60px] border-b border-b-primary">
       <td>
@@ -23,26 +21,24 @@ export const UserItem = memo(function UserItem({ id, name, createdAt, onDelete, 
         <FormattedDate iso={createdAt}  hourCycle="h24" dateStyle="medium" timeStyle="medium" />
       </td>
       <td className="text-right w-[52px]">
-        <button
-          type="button"
-          className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
-          ref={btnRef}
+        <ContextMenu
+          placement={PopupPlacement.BOTTOM}
+          menu={() => (
+            <UserMenu onClick={action => {
+              if (action === 'rename') {
+                onRename({ id, name, createdAt });
+              } else if (action === 'delete') {
+                onDelete({ id, name, createdAt });
+              }
+            }} />
+          )}
         >
-          <i className="icon icon-context-menu text-[24px]" />
-        </button>
-
-        <ContextMenu btnOpenRef={btnRef} placement={PopupPlacement.BOTTOM}>
-          <div className="context-menu-item">
-            <button type="button" className="btn-context-menu" onClick={() => onRename({ id, name, createdAt })}>
-              <Trans i18nKey="rename"/>
-            </button>
-          </div>
-          <hr className="context-menu-divider" />
-          <div className="context-menu-item">
-            <button type="button" className="btn-context-menu text-red-600"  onClick={() => onDelete({ id, name, createdAt })}>
-              <Trans i18nKey="delete"/>
-            </button>
-          </div>
+          <button
+            type="button"
+            className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
+          >
+            <i className="icon icon-context-menu text-[24px]"/>
+          </button>
         </ContextMenu>
       </td>
     </tr>

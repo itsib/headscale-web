@@ -30,7 +30,7 @@ export const UsersPage: FC = () => {
           <p className="text-secondary"><Trans i18nKey="users_page_subtitle"/></p>
         </div>
 
-        <button type="button" className="btn btn-accent flex items-center gap-2" onClick={() => setOpened('create')}>
+        <button type="button" className="jj-btn btn-accent flex items-center gap-2" onClick={() => setOpened('create')}>
           <i className="icon icon-user-plus text-lg text-white" />
           <span className="font-semibold text-white"><Trans i18nKey="create_user" /></span>
         </button>

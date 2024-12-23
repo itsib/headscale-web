@@ -63,7 +63,7 @@ const ModalContent: FC<Omit<ModalMetricsUrlProps, 'isOpen'>> = ({ onDismiss, cre
         <div className="title">
           <span>{t('no_metric_page_header')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()}/>
+        <button type="button" className="jj-btn btn-close" onClick={() => onDismiss()}/>
       </div>
       <div className="modal-content">
         <form className="" onSubmit={handleSubmit(values => mutate(values))}>
@@ -103,7 +103,7 @@ const ModalContent: FC<Omit<ModalMetricsUrlProps, 'isOpen'>> = ({ onDismiss, cre
 
           <div className="mt-4">
             <button type="submit" disabled={!isValid || isPending}
-                    className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}>
+                    className={`jj-btn btn-accent w-full ${isPending ? 'loading' : ''}`}>
               <span>{t('save')}</span>
             </button>
           </div>

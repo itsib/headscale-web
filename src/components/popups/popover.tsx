@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useEffect, useRef, useState, RefObject } from 'react';
+import { FC, PropsWithChildren, useEffect, useRef, useState, ReactNode } from 'react';
 import { PopupPlacement } from './popup-base/_common';
 import { PopupBaseAnchor } from './popup-base/popup-base-anchor';
 import './popover.css';
@@ -9,19 +9,20 @@ export interface PopupProps {
    */
   placement?: PopupPlacement;
 
-  btnOpenRef?: RefObject<HTMLButtonElement>;
+  content: ReactNode | (() => ReactNode);
 }
 
-export const Popover: FC<PropsWithChildren<PopupProps>> = ({ placement = PopupPlacement.TOP, btnOpenRef, children }) => {
+export const Popover: FC<PropsWithChildren<PopupProps>> = ({ placement = PopupPlacement.TOP, content, children }) => {
   const contentWrapperRef = useRef<HTMLDivElement | null>(null);
-
+  const childWrapperRef = useRef<HTMLDivElement | null>(null);
   const [openBtnElement, setOpenBtnElement] = useState<HTMLElement>();
   const [isOpen, setIsOpen] = useState(false);
   const [rect, setRect] = useState<DOMRect>();
 
   // Popover menu display stuff
   useEffect(() => {
-    const btn = btnOpenRef?.current;
+    const wrapper = childWrapperRef?.current;
+    const btn = wrapper?.firstChild as HTMLElement;
     if (!btn) {
       return setOpenBtnElement(undefined);
     }
@@ -37,7 +38,7 @@ export const Popover: FC<PropsWithChildren<PopupProps>> = ({ placement = PopupPl
     return () => {
       btn.removeEventListener('click', click);
     };
-  }, [btnOpenRef]);
+  }, []);
 
   // Context menu hide stuff
   useEffect(() => {
@@ -63,10 +64,13 @@ export const Popover: FC<PropsWithChildren<PopupProps>> = ({ placement = PopupPl
   }, [openBtnElement, isOpen]);
 
   return (
-    <PopupBaseAnchor rect={rect} open={isOpen} placement={placement} margin={5}>
-      <div className="popup" ref={contentWrapperRef}>
-        {children}
-      </div>
-    </PopupBaseAnchor>
+    <>
+      <div ref={childWrapperRef}>{children}</div>
+      <PopupBaseAnchor rect={rect} open={isOpen} placement={placement} margin={5}>
+        <div className="popup" ref={contentWrapperRef}>
+          {typeof content === 'function' ? content() : content}
+        </div>
+      </PopupBaseAnchor>
+    </>
   );
 };

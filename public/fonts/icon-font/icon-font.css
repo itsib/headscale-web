@@ -1,260 +1,512 @@
 @font-face {
   font-family: "IconFont";
-  font-display: block;
-  src: url("/fonts/icon-font/IconFont.eot#iefix") format("embedded-opentype"),
-url("/fonts/icon-font/IconFont.woff2") format("woff2"),
-url("/fonts/icon-font/IconFont.woff") format("woff"),
-url("/fonts/icon-font/IconFont.ttf") format("truetype"),
-url("/fonts/icon-font/IconFont.svg#IconFont") format("svg");
+  src: url("/fonts/icon-font/icon-font.woff2") format("woff2"),
+     url("/fonts/icon-font/icon-font.woff") format("woff"),
+     url("/fonts/icon-font/icon-font.ttf") format("truetype"),
+     url("/fonts/icon-font/icon-font.eot#iefix") format("embedded-opentype");
 }
 
 .icon {
-  display: inline-block;
   font-family: "IconFont", sans-serif;
-  font-weight: 400;
-  font-size: inherit;
-  text-rendering: auto;
-  text-transform: none;
+  font-weight: 500;
+  font-size: var(--icon-size, 1em);
   font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+  display: var(--icon-display, inline-block);
   speak: none;
-  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
 }
 
-.icon-users:before {
-  content: "\f101";
+.icon-1x {
+  font-size: 1em
+}
+.icon-2x {
+  font-size: 2em
+}
+.icon-3x {
+  font-size: 3em
+}
+.icon-4x {
+  font-size: 4em
+}
+.icon-5x {
+  font-size: 5em
+}
+.icon-6x {
+  font-size: 6em
+}
+.icon-7x {
+  font-size: 7em
+}
+.icon-8x {
+  font-size: 8em
+}
+.icon-9x {
+  font-size: 9em
+}
+.icon-10x {
+  font-size: 10em
+}
+.icon-2xs {
+  font-size: .625em;
+  line-height: .1em;
+  vertical-align: .225em
+}
+.icon-xs {
+  font-size: .75em;
+  line-height: .08333em;
+  vertical-align: .125em
+}
+.icon-sm {
+  font-size: .875em;
+  line-height: .07143em;
+  vertical-align: .05357em
+}
+.icon-lg {
+  font-size: 1.25em;
+  line-height: .05em;
+  vertical-align: -.075em
+}
+.icon-xl {
+  font-size: 1.5em;
+  line-height: .04167em;
+  vertical-align: -.125em
+}
+.icon-2xl {
+  font-size: 2em;
+  line-height: .03125em;
+  vertical-align: -.1875em
+}
+.icon-fw {
+  text-align: center;
+  width: 1.25em
 }
 
-.icon-user-plus:before {
-  content: "\f102";
+.icon-beat {
+  animation-name: icon-motion-beat;
+  animation-delay: var(--icon-animation-delay, 0s);
+  animation-direction: var(--icon-animation-direction, normal);
+  animation-duration: var(--icon-animation-duration, 1s);
+  animation-iteration-count: var(--icon-animation-iteration-count, infinite);
+  animation-timing-function: var(--icon-animation-timing, ease-in-out)
 }
 
-.icon-tag-add:before {
-  content: "\f103";
+.icon-bounce {
+  animation-name: icon-motion-bounce;
+  animation-delay: var(--icon-animation-delay, 0s);
+  animation-direction: var(--icon-animation-direction, normal);
+  animation-duration: var(--icon-animation-duration, 1s);
+  animation-iteration-count: var(--icon-animation-iteration-count, infinite);
+  animation-timing-function: var(--icon-animation-timing, cubic-bezier(.28,.84,.42,1));
 }
 
-.icon-sun:before {
-  content: "\f104";
+.icon-fade {
+  animation-name: icon-motion-fade;
+  animation-iteration-count: var(--icon-animation-iteration-count, infinite);
+  animation-timing-function: var(--icon-animation-timing, cubic-bezier(.4,0,.6,1));
 }
 
-.icon-sun-moon:before {
-  content: "\f105";
+.icon-beat-fade,
+.icon-fade {
+  animation-delay: var(--icon-animation-delay,0s);
+  animation-direction: var(--icon-animation-direction,normal);
+  animation-duration: var(--icon-animation-duration,1s);
 }
 
-.icon-star:before {
-  content: "\f106";
+.icon-beat-fade {
+  animation-name: icon-motion-beat-fade;
+  animation-iteration-count: var(--icon-animation-iteration-count,infinite);
+  animation-timing-function: var(--icon-animation-timing,cubic-bezier(.4,0,.6,1));
 }
 
-.icon-star-o:before {
-  content: "\f107";
+.icon-flip {
+  animation-name: icon-motion-flip;
+  animation-delay: var(--icon-animation-delay,0s);
+  animation-direction: var(--icon-animation-direction,normal);
+  animation-duration: var(--icon-animation-duration,1s);
+  animation-iteration-count: var(--icon-animation-iteration-count,infinite);
+  animation-timing-function: var(--icon-animation-timing,ease-in-out);
 }
 
-.icon-spinner:before {
-  content: "\f108";
+.icon-shake {
+  animation-name: icon-motion-shake;
+  animation-duration: var(--icon-animation-duration,1s);
+  animation-iteration-count: var(--icon-animation-iteration-count,infinite);
+  animation-timing-function: var(--icon-animation-timing,linear);
 }
 
-.icon-settings:before {
-  content: "\f109";
+.icon-spin-reverse {
+  --icon-animation-direction: reverse;
 }
 
-.icon-server:before {
-  content: "\f10a";
+.icon-shake,
+.icon-spin-reverse,
+.icon-spin {
+  animation-delay: var(--icon-animation-delay,0s);
+  animation-direction: var(--icon-animation-direction,normal);
 }
 
-.icon-search:before {
-  content: "\f10b";
+.icon-spin-reverse,
+.icon-spin {
+  animation-name: icon-motion-spin;
+  animation-duration: var(--icon-animation-duration,2s);
+  animation-iteration-count: var(--icon-animation-iteration-count,infinite);
+  animation-timing-function: var(--icon-animation-timing,linear);
 }
 
-.icon-profile:before {
-  content: "\f10c";
+
+.icon-pulse,
+.icon-spin-pulse {
+  animation-name: icon-motion-spin;
+  animation-direction: var(--icon-animation-direction, normal);
+  animation-duration: var(--icon-animation-duration, 1s);
+  animation-iteration-count: var(--icon-animation-iteration-count, infinite);
+  animation-timing-function: var(--icon-animation-timing, steps(8));
 }
 
-.icon-pc:before {
-  content: "\f10d";
+@media (prefers-reduced-motion:reduce) {
+  .icon-beat, 
+  .icon-beat-fade, 
+  .icon-bounce, 
+  .icon-fade, 
+  .icon-flip, 
+  .icon-pulse, 
+  .icon-shake, 
+  .icon-spin-reverse, 
+  .icon-spin, 
+  .icon-spin-pulse {
+    animation-delay: -1ms;
+    animation-duration: 1ms;
+    animation-iteration-count: 1;
+    transition-delay: 0s;
+    transition-duration: 0s
+  }
 }
 
-.icon-moon:before {
-  content: "\f10e";
+@keyframes icon-motion-beat {
+  0%,90% {
+    transform: scale(1)
+  }
+
+  45% {
+    transform: scale(var(--icon-beat-scale,1.25))
+  }
 }
 
-.icon-metrics:before {
-  content: "\f10f";
+@keyframes icon-motion-bounce {
+  0% {
+    transform: scale(1) translateY(0)
+  }
+
+  10% {
+    transform: scale(var(--icon-bounce-start-scale-x,1.1),var(--icon-bounce-start-scale-y,.9)) translateY(0)
+  }
+
+  30% {
+    transform: scale(var(--icon-bounce-jump-scale-x,.9),var(--icon-bounce-jump-scale-y,1.1)) translateY(var(--icon-bounce-height,-.5em))
+  }
+
+  50% {
+    transform: scale(var(--icon-bounce-land-scale-x,1.05),var(--icon-bounce-land-scale-y,.95)) translateY(0)
+  }
+
+  57% {
+    transform: scale(1) translateY(var(--icon-bounce-rebound,-.125em))
+  }
+
+  64% {
+    transform: scale(1) translateY(0)
+  }
+
+  to {
+    transform: scale(1) translateY(0)
+  }
 }
 
-.icon-machine:before {
-  content: "\f110";
+@keyframes icon-motion-fade {
+  50% {
+    opacity: var(--icon-fade-opacity,.4)
+  }
 }
 
-.icon-logout:before {
-  content: "\f111";
+@keyframes icon-motion-beat-fade {
+  0%,to {
+    opacity: var(--icon-beat-fade-opacity,.4);
+    transform: scale(1)
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(var(--icon-beat-fade-scale,1.125))
+  }
 }
 
-.icon-lock:before {
-  content: "\f112";
+@keyframes icon-motion-flip {
+  50% {
+    transform: rotate3d(var(--icon-flip-x,0),var(--icon-flip-y,1),var(--icon-flip-z,0),var(--icon-flip-angle,-180deg))
+  }
 }
 
-.icon-laptop:before {
-  content: "\f113";
+@keyframes icon-motion-shake {
+  0% {
+    transform: rotate(-15deg)
+  }
+
+  4% {
+    transform: rotate(15deg)
+  }
+
+  8%,24% {
+    transform: rotate(-18deg)
+  }
+
+  12%,28% {
+    transform: rotate(18deg)
+  }
+
+  16% {
+    transform: rotate(-22deg)
+  }
+
+  20% {
+    transform: rotate(22deg)
+  }
+
+  32% {
+    transform: rotate(-12deg)
+  }
+
+  36% {
+    transform: rotate(12deg)
+  }
+
+  40%,to {
+    transform: rotate(0deg)
+  }
 }
 
-.icon-keys:before {
-  content: "\f114";
+@keyframes icon-motion-spin {
+  0% {
+    transform: rotate(0deg)
+  }
+
+  to {
+    transform: rotate(1turn)
+  }
 }
 
-.icon-key:before {
-  content: "\f115";
+i.icon-api:before {
+  content: "\ea01";
 }
 
-.icon-key-plus:before {
-  content: "\f116";
+i.icon-arrow-down:before {
+  content: "\ea02";
 }
 
-.icon-jwt:before {
-  content: "\f117";
+i.icon-arrow-left:before {
+  content: "\ea03";
 }
 
-.icon-json:before {
-  content: "\f118";
+i.icon-arrow-right:before {
+  content: "\ea04";
 }
 
-.icon-info:before {
-  content: "\f119";
+i.icon-arrow-up:before {
+  content: "\ea05";
 }
 
-.icon-gear:before {
-  content: "\f11a";
+i.icon-avatar-0:before {
+  content: "\ea06";
 }
 
-.icon-eye:before {
-  content: "\f11b";
+i.icon-avatar-1:before {
+  content: "\ea07";
 }
 
-.icon-expire:before {
-  content: "\f11c";
+i.icon-avatar-2:before {
+  content: "\ea08";
 }
 
-.icon-edit-url:before {
-  content: "\f11d";
+i.icon-avatar-3:before {
+  content: "\ea09";
 }
 
-.icon-edit-code:before {
-  content: "\f11e";
+i.icon-avatar-4:before {
+  content: "\ea0a";
 }
 
-.icon-dropdown:before {
-  content: "\f11f";
+i.icon-avatar-5:before {
+  content: "\ea0b";
 }
 
-.icon-devices:before {
-  content: "\f120";
+i.icon-avatar-6:before {
+  content: "\ea0c";
 }
 
-.icon-copy:before {
-  content: "\f121";
+i.icon-avatar-7:before {
+  content: "\ea0d";
 }
 
-.icon-context-menu:before {
-  content: "\f122";
+i.icon-avatar-8:before {
+  content: "\ea0e";
 }
 
-.icon-connection:before {
-  content: "\f123";
+i.icon-avatar-9:before {
+  content: "\ea0f";
 }
 
-.icon-close:before {
-  content: "\f124";
+i.icon-bearer:before {
+  content: "\ea10";
 }
 
-.icon-check:before {
-  content: "\f125";
+i.icon-check:before {
+  content: "\ea11";
 }
 
-.icon-bearer:before {
-  content: "\f126";
+i.icon-close:before {
+  content: "\ea12";
 }
 
-.icon-avatar-9:before {
-  content: "\f127";
+i.icon-connection:before {
+  content: "\ea13";
 }
 
-.icon-avatar-8:before {
-  content: "\f128";
+i.icon-context-menu:before {
+  content: "\ea14";
 }
 
-.icon-avatar-7:before {
-  content: "\f129";
+i.icon-copy:before {
+  content: "\ea15";
 }
 
-.icon-avatar-6:before {
-  content: "\f12a";
+i.icon-devices:before {
+  content: "\ea16";
 }
 
-.icon-avatar-5:before {
-  content: "\f12b";
+i.icon-dropdown:before {
+  content: "\ea17";
 }
 
-.icon-avatar-4:before {
-  content: "\f12c";
+i.icon-edit-code:before {
+  content: "\ea18";
 }
 
-.icon-avatar-3:before {
-  content: "\f12d";
+i.icon-edit-url:before {
+  content: "\ea19";
 }
 
-.icon-avatar-2:before {
-  content: "\f12e";
+i.icon-expire:before {
+  content: "\ea1a";
 }
 
-.icon-avatar-1:before {
-  content: "\f12f";
+i.icon-eye:before {
+  content: "\ea1b";
 }
 
-.icon-avatar-0:before {
-  content: "\f130";
+i.icon-gear:before {
+  content: "\ea1c";
 }
 
-.icon-arrow-up:before {
-  content: "\f131";
+i.icon-info:before {
+  content: "\ea1d";
 }
 
-.icon-arrow-right:before {
-  content: "\f132";
+i.icon-json:before {
+  content: "\ea1e";
 }
 
-.icon-arrow-left:before {
-  content: "\f133";
+i.icon-jwt:before {
+  content: "\ea1f";
 }
 
-.icon-arrow-down:before {
-  content: "\f134";
+i.icon-key:before {
+  content: "\ea20";
 }
 
-.icon-api:before {
-  content: "\f135";
+i.icon-key-plus:before {
+  content: "\ea21";
 }
 
-.icon-spinner {
-animation: 2s spin-rotate linear infinite;
+i.icon-keys:before {
+  content: "\ea22";
 }
 
-@keyframes spin-rotate {
-
-from {
-transform: rotate(0deg);
+i.icon-laptop:before {
+  content: "\ea23";
 }
 
-to {
-transform: rotate(360deg);
-}
-}
-
-@-webkit-keyframes spin-rotate {
-
-from {
-transform: rotate(0deg);
+i.icon-lock:before {
+  content: "\ea24";
 }
 
-to {
-transform: rotate(360deg);
+i.icon-logout:before {
+  content: "\ea25";
 }
+
+i.icon-machine:before {
+  content: "\ea26";
 }
+
+i.icon-metrics:before {
+  content: "\ea27";
+}
+
+i.icon-moon:before {
+  content: "\ea28";
+}
+
+i.icon-pc:before {
+  content: "\ea29";
+}
+
+i.icon-profile:before {
+  content: "\ea2a";
+}
+
+i.icon-search:before {
+  content: "\ea2b";
+}
+
+i.icon-server:before {
+  content: "\ea2c";
+}
+
+i.icon-settings:before {
+  content: "\ea2d";
+}
+
+i.icon-spinner:before {
+  content: "\ea2e";
+}
+
+i.icon-star:before {
+  content: "\ea2f";
+}
+
+i.icon-star-o:before {
+  content: "\ea30";
+}
+
+i.icon-sun:before {
+  content: "\ea31";
+}
+
+i.icon-sun-moon:before {
+  content: "\ea32";
+}
+
+i.icon-tag-add:before {
+  content: "\ea33";
+}
+
+i.icon-user-plus:before {
+  content: "\ea34";
+}
+
+i.icon-users:before {
+  content: "\ea35";
+}
+
