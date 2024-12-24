@@ -64,7 +64,7 @@ const ModalContent: FC<Omit<ModalAuthKeyExpireProps, 'isOpen' | 'authKey'> & { a
             type="button"
             className={`jj-btn btn-accent w-full ${isPending ? 'loading' : ''}`}
             onClick={() => mutate({
-              user: authKey.user.name,
+              user: authKey.user.id,
               key: authKey.key,
             })}
           >

@@ -23,7 +23,7 @@ export const ModalUserRename: FC<ModalUserRenameProps> = ({ isOpen, onDismiss, u
 const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: User }> = ({ onDismiss, onSuccess, user }) => {
   const { t } = useTranslation();
 
-  const { handleSubmit, register, formState } = useForm({
+  const { handleSubmit, register, formState } = useForm<{ name: string }>({
     defaultValues: {
       name: user.name,
     }
@@ -43,6 +43,10 @@ const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: U
     },
   });
 
+  function submit(values: { name: string }) {
+    mutate({ oldName: user.displayName || user.name || '', newName: values.name });
+  }
+
   return (
     <div className="modal modal-confirmation w-[400px]">
       <div className="modal-header">
@@ -52,8 +56,7 @@ const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: U
         <button type="button" className="jj-btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
-        <form
-          onSubmit={handleSubmit((values: { name: string }) => mutate({ oldName: user.name, newName: values.name }))}>
+        <form onSubmit={handleSubmit(submit)}>
           <div className="mb-4">
             <Input
               id="new-user-name"

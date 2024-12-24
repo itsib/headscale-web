@@ -28,6 +28,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
       'import.meta.env.NODE_ENV': JSON.stringify(mode),
       'import.meta.env.VITE_ACCESS_URL': JSON.stringify(env.VITE_ACCESS_URL),
       'import.meta.env.VITE_ACCESS_TOKEN': JSON.stringify(env.VITE_ACCESS_TOKEN),
+      'import.meta.env.VITE_BUILD_ID': JSON.stringify(Math.floor(Math.random() * 10000000).toString(16).toUpperCase()),
     },
     resolve: {
       alias: {
@@ -48,23 +49,13 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
           enabled: mode === 'development',
           type: 'module',
           navigateFallback: 'index.html',
+          resolveTempFolder: () => join(process.cwd(), 'dist'),
         },
         manifest: {
           ...webmanifest,
           name: pkg.name,
           description: pkg.description,
         },
-        // injectManifest: {
-        //   minify: false,
-        //   enableWorkboxModulesLogs: true,
-        //   rollupFormat: 'iife',
-        //   globPatterns: [
-        //     '**/*.{js,css,html}',
-        //     'locales/**/*.{json,svg}',
-        //     'fonts/**/*.{woff2,woff,ttf,eot}',
-        //     'screenshot.png'
-        //   ],
-        // },
         workbox: {
           globDirectory: join(process.cwd(), 'dist'),
           globPatterns: [
@@ -74,6 +65,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
           ],
           modifyURLPrefix: { '': '/' },
           navigateFallback: 'index.html',
+          disableDevLogs: true,
           runtimeCaching: [
             {
               urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)(?:\?hash=\d{6,8})?$/i,
@@ -86,17 +78,17 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
                 },
               },
             },
-            // {
-            //   urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,
-            //   handler: 'StaleWhileRevalidate',
-            //   options: {
-            //     cacheName: 'static-image-assets',
-            //     expiration: {
-            //       maxEntries: 64,
-            //       maxAgeSeconds: 24 * 60 * 60, // 24 hours
-            //     },
-            //   },
-            // },
+            {
+              urlPattern: /^https:\/\/lh3\.googleusercontent\.com\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'google-content',
+                expiration: {
+                  maxEntries: 64,
+                  maxAgeSeconds: 24 * 60 * 60 * 30, // 1 month
+                },
+              },
+            },
             // {
             //   urlPattern: /\.js$/i,
             //   handler: 'StaleWhileRevalidate',

@@ -1,45 +1,45 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistedClient, Persister, PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { ApplicationProvider } from './context/application/application.provider.tsx';
 import { RouterProvider } from 'react-router-dom';
 import { ROUTES } from './pages/routes';
-import { IndexedDbUtils } from './utils/indexed-db';
+import { IDBStorage } from './utils/idb-storage.ts';
 import { defaultQueryFn } from './utils/query-fn';
 import './i18n';
 import 'react-just-ui/theme/minimal.css';
-import './index.css'
+import './index.css';
 
-const IDB_KEY = 'HeadscaleUI';
-const QUERY_CLIENT_STORAGE: Persister = {
-  persistClient: async (client: PersistedClient) => {
-    await IndexedDbUtils.set(IDB_KEY, client);
-  },
-  restoreClient: async () => {
-    return await IndexedDbUtils.get<PersistedClient>(IDB_KEY);
-  },
-  removeClient: async () => {
-    await IndexedDbUtils.del(IDB_KEY);
-  },
-};
+const BUILD_ID = import.meta.env.VITE_BUILD_ID;
 
-const QUERY_CLIENT = new QueryClient({
+const storage = IDBStorage.get('HeadscaleUI', 4, { cache: [] });
+
+const persister: Persister = {
+  async persistClient(persistClient: PersistedClient): Promise<void> {
+    await storage.writeCache('persister', persistClient);
+  },
+  async restoreClient(): Promise<PersistedClient | undefined> {
+    return await storage.readCache('persister')
+  },
+  async removeClient(): Promise<void> {
+    await storage.deleteCache('persister');
+  },
+}
+
+const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      gcTime: 3600_000,
-      staleTime: 0,
-      retry: 3,
+      retry: 4,
       retryDelay: 3000,
       queryFn: defaultQueryFn as any,
-      enabled: false,
     },
   },
 });
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <PersistQueryClientProvider client={QUERY_CLIENT} persistOptions={{ persister: QUERY_CLIENT_STORAGE }}>
+    <PersistQueryClientProvider client={queryClient} persistOptions={{ persister, buster: BUILD_ID }}>
       <ApplicationProvider>
         <RouterProvider router={ROUTES} />
       </ApplicationProvider>

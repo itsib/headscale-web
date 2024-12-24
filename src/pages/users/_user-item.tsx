@@ -11,11 +11,12 @@ export interface UserItemProps extends User {
   onRename: (user: User) => void;
 }
 
-export const UserItem = memo(function UserItem({ id, name, createdAt, onDelete, onRename }: UserItemProps) {
+export const UserItem = memo(function UserItem(props: UserItemProps) {
+  const { id, name, displayName, email, profilePicUrl, createdAt, onDelete, onRename } = props
   return (
     <tr className="h-[60px] border-b border-b-primary">
       <td>
-        <UserInfo id={id} name={name} size={30} />
+        <UserInfo id={id} name={displayName || name} profilePicUrl={profilePicUrl} size={30} />
       </td>
       <td className="text-right">
         <FormattedDate iso={createdAt}  hourCycle="h24" dateStyle="medium" timeStyle="medium" />
@@ -26,9 +27,9 @@ export const UserItem = memo(function UserItem({ id, name, createdAt, onDelete, 
           menu={() => (
             <UserMenu onClick={action => {
               if (action === 'rename') {
-                onRename({ id, name, createdAt });
+                onRename({ id, name, displayName, profilePicUrl, email, createdAt });
               } else if (action === 'delete') {
-                onDelete({ id, name, createdAt });
+                onDelete({ id, name, displayName, profilePicUrl, email, createdAt });
               }
             }} />
           )}

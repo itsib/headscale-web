@@ -65,7 +65,7 @@ const ModalContent: FC<Omit<ModalUserDeleteProps, 'isOpen' | 'user'> & { user: U
           <button
             type="button"
             className={`jj-btn btn-accent w-full ${isPending ? 'loading' : ''}`}
-            onClick={() => mutate(user.name)}
+            onClick={() => mutate(user.id)}
           >
             <span>{t('delete')}</span>
           </button>

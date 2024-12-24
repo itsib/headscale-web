@@ -5,6 +5,7 @@ import { useRegisterSW } from 'virtual:pwa-register/react';
 import { AnimatedShow } from '../../components/animated-show/animated-show.tsx';
 import { ImgCompass } from '../../components/img-compass/img-compass.tsx';
 import { Trans } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
 
 export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(getActiveTheme());
@@ -14,6 +15,12 @@ export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
   const updateTheme = useCallback((theme: Theme) => {
     setTheme(theme);
   }, []);
+
+  const { data } = useQuery<{ status: string }>({
+    queryKey: ['/health'],
+    refetchInterval: 5000,
+    retryDelay: 5000,
+  });
 
   useRegisterSW({
     onNeedRefresh() {
@@ -67,6 +74,14 @@ export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
       window.addEventListener('offline', offLine);
     };
   }, []);
+
+  // Display health status
+  useEffect(() => {
+    if (!data || (data && data.status === 'pass')) {
+      return;
+    }
+    console.warn(data);
+  }, [data]);
 
   return (
     <ApplicationContext.Provider value={{ theme, updateTheme, isOffLine }}>

@@ -35,7 +35,7 @@ const ModalContent: FC<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, o
       return [];
     }
     return users.map(user => ({
-      value: user.name,
+      value: user.id,
       label: user.name,
       icon: `icon icon-avatar-${parseInt(user.id) % 10}`,
     }));

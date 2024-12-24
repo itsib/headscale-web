@@ -1,5 +1,13 @@
 export interface User {
   id: string;
-  name: string;
+  displayName?: string;
+  name?: string;
+  email: string;
+  profilePicUrl?: string;
   createdAt: string;
+}
+
+export interface UserWithProvider extends User {
+  provider: 'oidc'
+  providerId: string;
 }

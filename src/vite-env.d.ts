@@ -7,7 +7,8 @@
 
 
 interface ImportMetaEnv {
-  readonly DEV;
+  readonly DEV: boolean;
+  readonly VITE_BUILD_ID: string;
   readonly VITE_ACCESS_URL?: string;
   readonly VITE_ACCESS_TOKEN?: string;
 }

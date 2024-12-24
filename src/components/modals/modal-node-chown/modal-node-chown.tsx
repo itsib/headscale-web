@@ -30,7 +30,7 @@ const ModalContent: FC<Omit<ModalNodeChownProps, 'isOpen' | 'node'> & { node: No
       return [];
     }
     return users.map(user => ({
-      value: user.name,
+      value: user.id,
       label: user.name,
       icon: `icon icon-avatar-${parseInt(user.id) % 10}`,
     }));
