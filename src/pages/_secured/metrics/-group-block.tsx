@@ -19,10 +19,8 @@ export const GroupBlock: FC<GroupBlockProps> = ({ group, metrics: _metrics }) =>
 
       <div>
         {metrics.map(metric => {
-          const key = `metric_${group}_${metric.id}`;
-          console.log(key);
           return (
-            <MetricItem key={key} {...metric} />
+            <MetricItem key={ `metric_${group}_${metric.id}`} {...metric} />
           );
         })}
       </div>
