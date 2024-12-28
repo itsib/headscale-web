@@ -1,4 +1,4 @@
-import { base64url, SignJWT, jwtVerify, EncryptJWT, jwtDecrypt, importJWK } from 'jose';
+import { base64url, SignJWT, jwtVerify } from 'jose';
 
 (async () => {
   const alg = process.env.JWT_SIGN_ALGORITHM; // 'HS256';
@@ -23,4 +23,4 @@ import { base64url, SignJWT, jwtVerify, EncryptJWT, jwtDecrypt, importJWK } from
     ...result.payload,
     aud: Array.isArray(result.payload.aud) ? result.payload.aud.join('\n') : result.payload.aud,
   });
-})()
+})();

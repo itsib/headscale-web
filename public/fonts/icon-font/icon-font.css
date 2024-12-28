@@ -1,4 +1,5 @@
 @font-face {
+  font-display: fallback;
   font-family: "IconFont";
   src: url("/fonts/icon-font/icon-font.woff2") format("woff2"),
      url("/fonts/icon-font/icon-font.woff") format("woff"),
@@ -466,47 +467,51 @@ i.icon-profile:before {
   content: "\ea2a";
 }
 
-i.icon-search:before {
+i.icon-random:before {
   content: "\ea2b";
 }
 
-i.icon-server:before {
+i.icon-search:before {
   content: "\ea2c";
 }
 
-i.icon-settings:before {
+i.icon-server:before {
   content: "\ea2d";
 }
 
-i.icon-spinner:before {
+i.icon-settings:before {
   content: "\ea2e";
 }
 
-i.icon-star:before {
+i.icon-spinner:before {
   content: "\ea2f";
 }
 
-i.icon-star-o:before {
+i.icon-star:before {
   content: "\ea30";
 }
 
-i.icon-sun:before {
+i.icon-star-o:before {
   content: "\ea31";
 }
 
-i.icon-sun-moon:before {
+i.icon-sun:before {
   content: "\ea32";
 }
 
-i.icon-tag-add:before {
+i.icon-sun-moon:before {
   content: "\ea33";
 }
 
-i.icon-user-plus:before {
+i.icon-tag-add:before {
   content: "\ea34";
 }
 
-i.icon-users:before {
+i.icon-user-plus:before {
   content: "\ea35";
+}
+
+i.icon-users:before {
+  content: "\ea36";
 }
 

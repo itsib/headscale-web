@@ -20,17 +20,31 @@
   ],
   "scripts": {
     "start": "vite",
-    "build": "tsc -b && NODE_ENV=production vite build --mode production",
+    "build": "npm run build:icons && tsc -b && NODE_ENV=production vite build --mode production",
     "build:dev": "tsc -b && NODE_ENV=development vite build --mode development",
-    "build:icons": "fantasticon --config icon-font/config.cjs --normalize --round=1024 --debug",
+    "build:icons": "icon-font g",
     "jwt:secret": "node --env-file=./.env scripts/jwt-secret-jose.mjs",
     "jwt:token": "node --env-file=./.env ./scripts/jwt-token.mjs",
+    "deps:patch": "node ./scripts/patch-deps.js",
     "lint": "eslint .",
     "test": "vitest",
     "preview": "vite preview",
+    "swagger": "docker compose -f swagger/compose.yml up",
     "preversion": "npm run lint && npm run test",
     "version": "node ./scripts/version.mjs && git add .",
     "postversion": "git push && git push --tags"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "dependencies": {
     "@codemirror/commands": "^6.7.0",
@@ -39,23 +53,23 @@
     "@codemirror/view": "^6.34.1",
     "@lezer/highlight": "^1.2.1",
     "@lezer/lr": "^1.4.2",
-    "@tanstack/query-async-storage-persister": "^5.62.8",
     "@tanstack/react-query": "^5.56.2",
     "@tanstack/react-query-persist-client": "^5.56.2",
+    "@tanstack/react-router": "^1.92.6",
     "i18next": "^24.2.0",
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-http-backend": "^3.0.0",
-    "jose": "^5.9.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.53.0",
     "react-i18next": "^15.2.0",
-    "react-just-ui": "^0.6.1",
-    "react-router-dom": "^7.1.0"
+    "react-just-ui": "^0.6.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
-    "@itsib/icon-font": "^0.3.1",
+    "@itsib/icon-font": "^0.3.3",
+    "@tanstack/router-devtools": "^1.92.6",
+    "@tanstack/router-plugin": "^1.91.1",
     "@types/express": "^5.0.0",
     "@types/node": "^22.7.4",
     "@types/react": "^19.0.0",
@@ -67,7 +81,9 @@
     "eslint-visitor-keys": "^4.2.0",
     "express": "^4.21.2",
     "globals": "^15.9.0",
+    "jose": "^5.9.6",
     "postcss": "^8.4.47",
+    "rollup-plugin-visualizer": "^5.13.1",
     "sirv": "^3.0.0",
     "tailwindcss": "^3.4.13",
     "tsx": "^4.19.2",

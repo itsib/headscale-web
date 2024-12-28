@@ -1,10 +1,11 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
 import { ApiToken, Node } from '../../../types';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 export interface ModalApiTokenDeleteProps extends ModalProps {
   apiToken?: ApiToken | null;
@@ -21,12 +22,13 @@ export const ModalApiTokenDelete: FC<ModalApiTokenDeleteProps> = ({ isOpen, onDi
 
 const ModalContent: FC<Omit<ModalApiTokenDeleteProps, 'isOpen' | 'node'> & { apiToken: ApiToken }> = ({ onDismiss, onSuccess, apiToken }) => {
   const { t } = useTranslation();
+  const { storage } = useContext(ApplicationContext);
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(prefix: string) {
-      const data = await signedQueryFn<{ node: Node }>(`/api/v1/apikey/${prefix}`, {
+      const data = await fetchWithContext<{ node: Node }>(`/api/v1/apikey/${prefix}`, {
         method: 'DELETE',
-      });
+      }, storage);
       return data.node;
     },
     onSuccess: () => {

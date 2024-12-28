@@ -1,14 +1,15 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useContext, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input, Select, SelectOption, Switch } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { useUsers } from '../../../hooks/use-users.ts';
 import { AuthKey } from '../../../types';
 import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 interface FormFields {
   user: string;
@@ -32,6 +33,7 @@ export const ModalAuthKeyCreate: FC<ModalAuthKeyCreateProps> = ({ isOpen, onDism
 
 const ModalContent: FC<Omit<ModalAuthKeyCreateProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
   const { t } = useTranslation();
+  const { storage } = useContext(ApplicationContext);
   const { data: users } = useUsers();
   const [newAuthKey, setNewAuthKey] = useState<AuthKey | undefined>();
 
@@ -40,9 +42,9 @@ const ModalContent: FC<Omit<ModalAuthKeyCreateProps, 'isOpen'>> = ({ onDismiss, 
       return [];
     }
     return users.map(user => ({
-      value: user.id,
-      label: user.name,
-      icon: `icon icon-avatar-${parseInt(user.id) % 10}`,
+      value: user.name,
+      label: user.name || user.displayName,
+      icon: user.profilePicUrl || `icon icon-avatar-${parseInt(user.id) % 10}`,
     }));
   }, [users]);
 
@@ -60,10 +62,10 @@ const ModalContent: FC<Omit<ModalAuthKeyCreateProps, 'isOpen'>> = ({ onDismiss, 
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(values: Omit<AuthKey, 'createdAt' | 'used' | 'id' | 'key'>) {
-      return await signedQueryFn<{ preAuthKey: AuthKey }>(`/api/v1/preauthkey`, {
+      return await fetchWithContext<{ preAuthKey: AuthKey }>(`/api/v1/preauthkey`, {
         method: 'POST',
         body: JSON.stringify(values),
-      });
+      }, storage);
     },
     onSuccess: (result) => {
       setNewAuthKey(result.preAuthKey);

@@ -1,10 +1,11 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
 import { User } from '../../../types';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 export interface ModalUserDeleteProps extends ModalProps {
   user?: User | null;
@@ -21,12 +22,13 @@ export const ModalUserDelete: FC<ModalUserDeleteProps> = ({ isOpen, onDismiss, u
 
 const ModalContent: FC<Omit<ModalUserDeleteProps, 'isOpen' | 'user'> & { user: User }> = ({ onDismiss, onSuccess, user }) => {
   const { t } = useTranslation();
+  const { storage } = useContext(ApplicationContext);
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(name: string) {
-      const data = await signedQueryFn<{ user: User }>(`/api/v1/user/${name}`, {
+      const data = await fetchWithContext<{ user: User }>(`/api/v1/user/${name}`, {
         method: 'DELETE',
-      });
+      }, storage);
       return data.user;
     },
     onSuccess: () => {
@@ -48,8 +50,12 @@ const ModalContent: FC<Omit<ModalUserDeleteProps, 'isOpen' | 'user'> & { user: U
           <div className="grid grid-cols-[min-content_minmax(0,1fr)] mb-4 gap-y-1 gap-x-4">
             <div className="text-secondary text-right font-light text-base">ID:</div>
             <div>{user.id}</div>
-            <div className="text-secondary text-right font-light text-base"><Trans i18nKey="name"/>:</div>
+            <div className="text-secondary text-right font-light text-base"><Trans i18nKey="login"/>:</div>
             <div>{user.name}</div>
+            <div className="text-secondary text-right font-light text-base"><Trans i18nKey="name"/>:</div>
+            <div>{user.displayName}</div>
+            <div className="text-secondary text-right font-light text-base"><Trans i18nKey="email"/>:</div>
+            <div>{user.email}</div>
             <div className="text-secondary text-right font-light text-base"><Trans i18nKey="joined"/>:</div>
             <div><FormattedDate iso={user.createdAt} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
             </div>

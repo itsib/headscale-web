@@ -1,0 +1,1565 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Headscale API v1",
+    "description": "This documentation has the goal of showing a user how-to control a headscale instance from a remote machine with the headscale API.",
+    "version": "v0.24.0-beta.2",
+    "contact": {
+      "url": "https://github.com/itsib",
+      "name": "Sergey"
+    }
+  },
+  "host": "am.itsib.su",
+  "basePath": "/api/v1",
+  "schemes": ["https"],
+  "securityDefinitions": {
+    "BearerToken": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization"
+    }
+  },
+  "security": [
+    { "BearerToken": [] }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Manage users accounts"
+    },
+    {
+      "name": "API Key",
+      "description": "API keys are used to call coordinator management commands"
+    },
+    {
+      "name": "Devices",
+      "description": "Network device management"
+    },
+    {
+      "name": "ACL Policies",
+      "description": "Network access management",
+      "externalDocs": {
+        "url": "https://tailscale.com/kb/1337/acl-syntax"
+      }
+    },
+    {
+      "name": "Pre-Auth keys",
+      "description": "Alternative method of device authorization"
+    },
+    {
+      "name": "Routes",
+      "description": "Network routing"
+    }
+  ],
+  "paths": {
+    "/user": {
+      "get": {
+        "summary": "Get users list",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "users": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "$ref": "#/definitions/v1User"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of user in database",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "name",
+            "description": "User name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "description": "User email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create User",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "$ref": "#/definitions/v1User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "discriminator": "",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "displayName": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "pictureUrl": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/user/{id}": {
+      "delete": {
+        "summary": "Delete user",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteUserResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ]
+      }
+    },
+    "/user/{oldId}/rename/{newName}": {
+      "post": {
+        "summary": "Rename user",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1RenameUserResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "oldId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "newName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/apikey": {
+      "get": {
+        "summary": "Get API keys list",
+        "description": "Retrieves the list of all API keys",
+        "tags": ["API Key"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/responses/v1ListApiKeysResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        }
+      },
+      "post": {
+        "summary": "Creating a new API key",
+        "description": "Creating a new API key. The entire key will be returned only upon creation, then the key will be masked.",
+        "tags": ["API Key"],
+        "parameters": [
+          {
+            "name": "Body",
+            "description": "To create an API key, you need to pass an object with a single \"expiration\" field.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "expiration": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success. The API key that needs to be shown to the user with a request to save it.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "apiKey": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/apikey/expire": {
+      "post": {
+        "summary": "Expiry API Key",
+        "tags": ["API Key"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "Body",
+            "description": "API key 10-digit prefix",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["prefix"],
+              "properties": {
+                "prefix": {
+                  "type": "string",
+                  "minLength": 10,
+                  "maxLength": 10
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/apikey/{prefix}": {
+      "delete": {
+        "summary": "Delete API key",
+        "tags": ["API Key"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "prefix",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/debug/node": {
+      "post": {
+        "summary": "Create Node for debug",
+        "tags": ["Devices"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DebugCreateNodeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1DebugCreateNodeResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/node": {
+      "get": {
+        "summary": "List of Nodes",
+        "tags": ["Devices"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1ListNodesResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/node/backfillips": {
+      "post": {
+        "summary": "",
+        "tags": ["Devices"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1BackfillNodeIPsResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "confirmed",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ]
+      }
+    },
+    "/node/register": {
+      "post": {
+        "summary": "Register new Node",
+        "tags": ["Devices"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1RegisterNodeResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "key",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/node/{nodeId}": {
+      "get": {
+        "summary": "Get full Node info",
+        "tags": ["Devices"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1GetNodeResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "nodeId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Node",
+        "tags": ["Devices"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteNodeResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "nodeId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ]
+      }
+    },
+    "/node/{nodeId}/expire": {
+      "post": {
+        "operationId": "Expire node AuthKey",
+        "tags": ["Devices"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1ExpireNodeResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "nodeId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ]
+      }
+    },
+    "/node/{nodeId}/rename/{newName}": {
+      "post": {
+        "summary": "Rename Node",
+        "tags": ["Devices"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1RenameNodeResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "nodeId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "newName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/node/{nodeId}/routes": {
+      "get": {
+        "summary": "Manage Node routes",
+        "tags": ["Devices"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1GetNodeRoutesResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "nodeId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ]
+      }
+    },
+    "/node/{nodeId}/tags": {
+      "post": {
+        "summary": "Manage Node tag",
+        "tags": ["Devices"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1SetTagsResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "nodeId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HeadscaleServiceSetTagsBody"
+            }
+          }
+        ]
+      }
+    },
+    "/node/{nodeId}/user": {
+      "post": {
+        "operationId": "Attach a user to Node",
+        "tags": ["Devices"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1MoveNodeResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "nodeId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HeadscaleServiceMoveNodeBody"
+            }
+          }
+        ]
+      }
+    },
+    "/policy": {
+      "get": {
+        "summary": "Read ACL file",
+        "tags": ["ACL Policies"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1GetPolicyResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        }
+      },
+      "put": {
+        "summary": "Write ACL file",
+        "tags": ["ACL Policies"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1SetPolicyResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SetPolicyRequest"
+            }
+          }
+        ]
+      }
+    },
+    "/preauthkey": {
+      "post": {
+        "summary": "Create new pre-auth key",
+        "tags": ["Pre-Auth keys"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1CreatePreAuthKeyResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreatePreAuthKeyRequest"
+            }
+          }
+        ]
+      },
+      "get": {
+        "summary": "Get all pre-auth keys",
+        "tags": ["Pre-Auth keys"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1ListPreAuthKeysResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ]
+
+      }
+    },
+    "/preauthkey/expire": {
+      "post": {
+        "summary": "Expire pre-auth key",
+        "tags": ["Pre-Auth keys"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1ExpirePreAuthKeyResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ExpirePreAuthKeyRequest"
+            }
+          }
+        ]
+      }
+    },
+    "/routes": {
+      "get": {
+        "summary": "Get routes list",
+        "tags": ["Routes"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1GetRoutesResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        }
+      }
+    },
+    "/routes/{routeId}": {
+      "delete": {
+        "summary": "Remove route",
+        "tags": ["Routes"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteRouteResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "routeId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ]
+      }
+    },
+    "/routes/{routeId}/disable": {
+      "post": {
+        "summary": "Disable route",
+        "tags": ["Routes"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1DisableRouteResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "routeId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ]
+      }
+    },
+    "/routes/{routeId}/enable": {
+      "post": {
+        "summary": "Enable route",
+        "tags": ["Routes"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/v1EnableRouteResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "default": {
+            "$ref": "#/responses/DefaultErrorResponse"
+          }
+        },
+        "parameters": [
+          {
+            "name": "routeId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "v1Node": {
+      "title": "Node",
+      "description": "Node represents entity of the device",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "machineKey": {
+          "type": "string"
+        },
+        "nodeKey": {
+          "type": "string"
+        },
+        "discoKey": {
+          "type": "string"
+        },
+        "ipAddresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/v1User"
+        },
+        "lastSeen": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expiry": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "preAuthKey": {
+          "$ref": "#/definitions/v1PreAuthKey"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "registerMethod": {
+          "type": "string",
+          "enum": [
+            "REGISTER_METHOD_UNSPECIFIED",
+            "REGISTER_METHOD_AUTH_KEY",
+            "REGISTER_METHOD_CLI",
+            "REGISTER_METHOD_OIDC"
+          ],
+          "default": "REGISTER_METHOD_UNSPECIFIED"
+        },
+        "forcedTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "invalidTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "givenName": {
+          "type": "string"
+        },
+        "online": {
+          "type": "boolean"
+        }
+      },
+      "example": {
+        "id": "1",
+        "machineKey": "mkey:0719....60594d",
+        "nodeKey": "nodekey:603ed....3837",
+        "discoKey": "discokey:693ead4....1ffef17f823d",
+        "ipAddresses": [
+          "100.64.0.1",
+          "fd7a:115c:a1e0::1"
+        ],
+        "name": "MacBook",
+        "user": {
+
+        },
+        "createdAt": "2024-10-02T10:00:54.185693158Z",
+        "lastSeen": "2024-12-24T12:13:48.904215158Z",
+        "expiry": "2025-06-21T03:46:26.512925424Z",
+        "preAuthKey": null,
+        "registerMethod": "REGISTER_METHOD_CLI",
+        "forcedTags": ["tag:admin", "tag:user"],
+        "validTags": ["tag:admin", "tag:user"],
+        "invalidTags": [],
+        "givenName": "MacBook",
+        "online": true
+      }
+    },
+    "v1Nodes": {
+      "title": "Nodes",
+      "description": "Nodes list",
+      "type": "object",
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Node"
+          }
+        }
+      }
+    },
+    "v1UserIdentity": {
+      "title": "UserIdentity",
+      "description": "User identification information",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "profilePicUrl": {
+          "type": "string",
+          "format": "url"
+        }
+      }
+    },
+    "v1User": {
+      "title": "User",
+      "description": "User entity model",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64",
+          "uniqueItems": true,
+          "minimum": 0,
+          "required": true
+        },
+        "name": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "providerId": {
+          "type": "string",
+          "format": "url"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "profilePicUrl": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "required": true,
+          "readOnly": true
+        }
+      },
+      "example": {
+        "id": "2",
+        "name": "robert",
+        "createdAt": "2024-10-03T08:43:59.709732315Z",
+        "displayName": "Robert Sapolsky",
+        "email": "sapolsky@gmail.com",
+        "providerId": "https://accounts.google.com/000000000000000000000",
+        "provider": "oidc",
+        "profilePicUrl": "https://example-file-server.com/avatar.png"
+      }
+    },
+    "v1Users": {
+      "title": "Users",
+      "description": "Users list",
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1User"
+          }
+        }
+      }
+    },
+    "v1PreAuthKey": {
+      "title": "PreAuthKey",
+      "description": "Auth Key for device authorization",
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "reusable": {
+          "type": "boolean"
+        },
+        "ephemeral": {
+          "type": "boolean"
+        },
+        "used": {
+          "type": "boolean"
+        },
+        "expiration": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "aclTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1ApiKey": {
+      "title": "ApiKey",
+      "description": "API key represents an access token for manage Headscale server",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "expiration": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastSeen": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1ApiKeys": {
+      "title": "ApiKeys",
+      "description": "All API keys",
+      "type": "object",
+      "properties": {
+        "apiKeys": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1ApiKey"
+          }
+        }
+      }
+    },
+    "v1Route": {
+      "title": "Route",
+      "description": "Manage network routes",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "node": {
+          "$ref": "#/definitions/v1Node"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "advertised": {
+          "type": "boolean"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "isPrimary": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+
+    "HeadscaleServiceMoveNodeBody": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "string"
+        }
+      }
+    },
+    "HeadscaleServiceSetTagsBody": {
+      "type": "object",
+      "properties": {
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+
+    "v1BackfillNodeIPsResponse": {
+      "type": "object",
+      "properties": {
+        "changes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1CreateApiKeyResponse": {
+      "type": "object",
+      "properties": {
+        "apiKey": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreatePreAuthKeyRequest": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "reusable": {
+          "type": "boolean"
+        },
+        "ephemeral": {
+          "type": "boolean"
+        },
+        "expiration": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "aclTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1CreatePreAuthKeyResponse": {
+      "type": "object",
+      "properties": {
+        "preAuthKey": {
+          "$ref": "#/definitions/v1PreAuthKey"
+        }
+      }
+    },
+    "v1CreateUserResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/v1User"
+        }
+      }
+    },
+    "v1DebugCreateNodeRequest": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1DebugCreateNodeResponse": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "$ref": "#/definitions/v1Node"
+        }
+      }
+    },
+    "v1DeleteNodeResponse": {
+      "type": "object"
+    },
+    "v1DeleteRouteResponse": {
+      "type": "object"
+    },
+    "v1DeleteUserResponse": {
+      "type": "object"
+    },
+    "v1DisableRouteResponse": {
+      "type": "object"
+    },
+    "v1EnableRouteResponse": {
+      "type": "object"
+    },
+    "v1ExpireNodeResponse": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "$ref": "#/definitions/v1Node"
+        }
+      }
+    },
+    "v1ExpirePreAuthKeyRequest": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ExpirePreAuthKeyResponse": {
+      "type": "object"
+    },
+    "v1GetNodeResponse": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "$ref": "#/definitions/v1Node"
+        }
+      }
+    },
+    "v1GetNodeRoutesResponse": {
+      "type": "object",
+      "properties": {
+        "routes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Route"
+          }
+        }
+      }
+    },
+    "v1GetPolicyResponse": {
+      "type": "object",
+      "properties": {
+        "policy": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1GetRoutesResponse": {
+      "type": "object",
+      "properties": {
+        "routes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Route"
+          }
+        }
+      }
+    },
+
+    "v1ListNodesResponse": {
+      "type": "object",
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Node"
+          }
+        }
+      }
+    },
+    "v1ListPreAuthKeysResponse": {
+      "type": "object",
+      "properties": {
+        "preAuthKeys": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PreAuthKey"
+          }
+        }
+      }
+    },
+    "v1MoveNodeResponse": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "$ref": "#/definitions/v1Node"
+        }
+      }
+    },
+    "v1RegisterNodeResponse": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "$ref": "#/definitions/v1Node"
+        }
+      }
+    },
+    "v1RenameNodeResponse": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "$ref": "#/definitions/v1Node"
+        }
+      }
+    },
+    "v1RenameUserResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/v1User"
+        }
+      }
+    },
+
+    "v1SetPolicyRequest": {
+      "type": "object",
+      "properties": {
+        "policy": {
+          "type": "string"
+        }
+      }
+    },
+    "v1SetPolicyResponse": {
+      "type": "object",
+      "properties": {
+        "policy": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1SetTagsResponse": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "$ref": "#/definitions/v1Node"
+        }
+      }
+    }
+
+  },
+  "responses": {
+    "DefaultErrorResponse": {
+      "description": "Sometimes additional information is received in the error response body.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1ListApiKeysResponse": {
+      "description": "Response for GET /api/v1/apikey",
+      "schema": {
+        "$ref": "#/definitions/v1ApiKeys"
+      }
+    }
+  }
+}

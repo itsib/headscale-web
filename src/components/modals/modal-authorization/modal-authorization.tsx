@@ -24,7 +24,7 @@ const ModalContent: FC<Omit<ModalAuthorizationProps, 'isOpen' | 'onDismiss'>> = 
 
   const { register, handleSubmit, formState, setError } = useForm<Required<Credentials>>({
     defaultValues: {
-      url: credentials?.url || '',
+      base: credentials?.base || '',
       token: credentials?.token || '',
       tokenType: credentials?.tokenType || 'Bearer',
     },
@@ -44,9 +44,9 @@ const ModalContent: FC<Omit<ModalAuthorizationProps, 'isOpen' | 'onDismiss'>> = 
       if (error.code === 401) {
         setError('token', { message: t('error_invalid_token') });
       } else if (error.code === -1) {
-        setError('url', { message: t('error_connection_error') });
+        setError('base', { message: t('error_connection_error') });
       } else {
-        setError('url', { message: t('error_invalid_response') });
+        setError('base', { message: t('error_invalid_response') });
       }
     }
     setIsLoading(false);
@@ -70,9 +70,9 @@ const ModalContent: FC<Omit<ModalAuthorizationProps, 'isOpen' | 'onDismiss'>> = 
               id="base-url-input"
               placeholder="https://"
               label={t('server_instance_url')}
-              error={errors?.url}
+              error={errors?.base}
               markRequired
-              {...register('url', {
+              {...register('base', {
                 required: t('error_required'),
                 validate: url(t('error_invalid_url')),
               })}

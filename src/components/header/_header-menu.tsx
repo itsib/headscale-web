@@ -1,27 +1,52 @@
-import { FC, useMemo } from 'react';
+import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useTheme } from '../../hooks/use-theme.ts';
-import { useAppAuth } from '../../hooks/use-app-auth.ts';
-import { useAppCredentials } from '../../hooks/use-app-credentials.ts';
 import { Theme } from '../../utils/theme.ts';
+import ApplicationContext from '../../context/application/application.context.ts';
+import { getCredentials, removeCredentials } from '../../utils/credentials.ts';
+import { useNavigate } from '@tanstack/react-router';
+import { copyText } from '../../utils/copy-text.ts';
 
 export const HeaderMenu: FC = () => {
   const { i18n } = useTranslation();
+  const navigate = useNavigate();
   const [ theme, setTheme ] = useTheme();
-  const [,, logout] = useAppAuth();
-  const { token, url } = useAppCredentials();
+  const { storage, setIsAuthorized, isAuthorized } = useContext(ApplicationContext);
+
+  const [token, setToken] = useState<string | null>(null);
+  const [baseUrl, setBaseUrl] = useState<string | null>(null);
 
   const prefix = useMemo(() => {
     if (!token) return undefined;
     return token.split('.')[0];
   }, [token]);
 
+  async function logout() {
+    await removeCredentials(storage, 'main');
+    setIsAuthorized(false);
+    await navigate({ to: '/home' });
+  }
+
+  useEffect(() => {
+    async function refresh() {
+      const { base, token } = await getCredentials(storage, 'main');
+      setBaseUrl(base);
+      setToken(token);
+    }
+    refresh().catch(console.error);
+  }, [isAuthorized, storage]);
+
   return (
     <>
       <div className="context-menu-item">
         <div className="px-[16px] py-[6px]">
-          <div className="text-sm text-primary font-medium">{prefix}</div>
-          <div className="text-xs text-secondary">{url}</div>
+          <div
+            className="text-sm text-primary font-medium cursor-pointer"
+            onClick={() => token && copyText(token)}
+          >
+            <span>{prefix}</span>
+          </div>
+          <div className="text-xs text-secondary">{baseUrl}</div>
         </div>
       </div>
 

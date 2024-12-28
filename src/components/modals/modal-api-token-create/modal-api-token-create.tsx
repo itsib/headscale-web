@@ -1,12 +1,13 @@
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
 import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 interface FormFields {
   expiration: number;
@@ -26,6 +27,7 @@ export const ModalApiTokenCreate: FC<ModalApiTokenCreateProps> = ({ isOpen, onDi
 
 const ModalContent: FC<Omit<ModalApiTokenCreateProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
   const { t } = useTranslation();
+  const { storage } = useContext(ApplicationContext);
   const [newApiToken, setNewApiToken] = useState<string | undefined>();
   const [newApiTokenExpiry, setNewApiTokenExpiry] = useState<string | undefined>();
 
@@ -39,10 +41,10 @@ const ModalContent: FC<Omit<ModalApiTokenCreateProps, 'isOpen'>> = ({ onDismiss,
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(values: { expiration: string }) {
-      return await signedQueryFn<{ apiKey: string }>(`/api/v1/apikey`, {
+      return await fetchWithContext<{ apiKey: string }>(`/api/v1/apikey`, {
         method: 'POST',
         body: JSON.stringify(values),
-      });
+      }, storage);
     },
     onSuccess: (result, values) => {
       setNewApiToken(result.apiKey);

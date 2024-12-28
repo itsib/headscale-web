@@ -1,14 +1,15 @@
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Node } from '../../../types';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { ModalNodeExpireProps } from '../modal-node-expire/modal-node-expire.tsx';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNodeRoutes } from '../../../hooks/use-node-routes.ts';
 import { Checkbox } from 'react-just-ui/checkbox';
 import { useMutation } from '@tanstack/react-query';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { isExitNodeRoute } from '../../../utils/is-exit-node-route.ts';
 import './modal-node-routes.css';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 export interface ModalNodeRoutesProps extends ModalProps {
   node?: Node | null;
@@ -33,6 +34,7 @@ const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: N
   const [checkboxes, setCheckboxes] = useState<{ [routeId: string]: boolean }>({});
   const [exitNode, setExitNode] = useState(false);
   const [changed, setChanged] = useState(false);
+  const { storage } = useContext(ApplicationContext);
   const { onDismiss, onSuccess, node } = props;
 
   const { data: routes, isLoading } = useNodeRoutes(node.id);
@@ -47,9 +49,9 @@ const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: N
   const { mutate, isPending } = useMutation({
     mutationFn: async (variables: RequestData[]) => {
       return await Promise.all(variables.map(({ enable, routeId }) => {
-        return signedQueryFn(`/api/v1/routes/${routeId}/${enable ? 'enable' : 'disable'}`, {
+        return fetchWithContext(`/api/v1/routes/${routeId}/${enable ? 'enable' : 'disable'}`, {
           method: 'POST',
-        });
+        }, storage);
       }));
     },
     onSuccess: () => {

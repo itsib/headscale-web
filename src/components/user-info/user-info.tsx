@@ -1,20 +1,39 @@
 import { FC } from 'react';
-import { User } from '../../types';
 
-export const UserInfo: FC<Pick<User, 'id' | 'name' | 'profilePicUrl'> & { size?: number }> = ({ id, name, profilePicUrl, size = 22 }) => {
-  const avatar =  `icon icon-avatar-${Number(id) % 10}`;
+export interface UserInfoProps {
+  id: string;
+  name?: string;
+  displayName?: string;
+  pictureUrl?: string;
+  size?: number;
+  className?: string;
+}
+
+export const UserInfo: FC<UserInfoProps> = ({ id, name, displayName, pictureUrl, size = 22, className }) => {
+  const avatar = !pictureUrl ? `icon icon-avatar-${Number(id) % 10}` : '';
+
   return (
-    <div className="flex gap-4 items-center">
-      {profilePicUrl ? (
-        <div className="text-center rounded-full bg-white overflow-hidden" style={{ width: size, height: size }}>
-          <img src={profilePicUrl} alt="avatar" style={{ width: '80%', height: '80%', margin: '3px' }}/>
+    <div className={`flex gap-4 items-center ${className}`}>
+      {pictureUrl ? (
+        <div className="text-center rounded-full bg-transparent overflow-hidden" style={{ width: size, height: size }}>
+          <img src={pictureUrl} alt="avatar" style={{ width: '100%', height: '100%' }}/>
         </div>
       ) : (
         <div className="text-center rounded-full bg-orange-600 bg-opacity-70 text-white" style={{ width: size, height: size }}>
-            <i className={avatar} style={{ lineHeight: `${size}px`, fontSize: `${size * 0.55}px` }}/>
-          </div>
-        )}
-      <div className="font-medium text-lg">{name}</div>
+          <i className={avatar} style={{ lineHeight: `${size}px`, fontSize: `${size * 0.55}px` }}/>
+        </div>
+      )}
+      {displayName && name ? (
+        <div className="text-start">
+          <div className="text-base">{name}</div>
+          <div className="text-secondary text-xs">{displayName}</div>
+        </div>
+      ) : (
+        <div className="text-start">
+          <div className="text-base">{name || displayName}</div>
+          <div className="text-secondary text-xs">&nbsp;</div>
+        </div>
+      )}
     </div>
   );
 };

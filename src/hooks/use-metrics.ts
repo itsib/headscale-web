@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { parseGoMetrics } from '../utils/parse-go-metrics.ts';
-import { MetricRowProps, QueryResult, TokenType } from '../types';
+import { Credentials, MetricRowProps, QueryResult, TokenType } from '../types';
 import { fetchFn } from '../utils/query-fn.ts';
 
-export function useMetrics(url?: string, token?: string, tokenType?: TokenType): QueryResult<MetricRowProps[]> {
+export function useMetrics(credentials: Partial<Credentials> | null): QueryResult<MetricRowProps[]> {
   const { data, isLoading, error } = useQuery({
-    queryKey: [url, token, tokenType],
+    queryKey: credentials && credentials.base ? [credentials.base, credentials.token || null, credentials.tokenType || null] : [],
     queryFn: async ({ queryKey, signal }) => {
       const url = queryKey[0] as string;
       const token = queryKey[1] as string;
@@ -19,7 +19,7 @@ export function useMetrics(url?: string, token?: string, tokenType?: TokenType):
 
       return parseGoMetrics(text);
     },
-    enabled: !!url,
+    enabled: !!(credentials && credentials.base),
     staleTime: 0,
     retry(_: any, error: any): any {
       if (error.code === 401) return false;

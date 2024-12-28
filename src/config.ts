@@ -1,5 +1,7 @@
 import type { SelectOption } from 'react-just-ui';
 
+export const IDB_VERSION = 8;
+
 export const METRICS_TOKEN_TYPES: SelectOption[] = [
   {
     value: 'Bearer',

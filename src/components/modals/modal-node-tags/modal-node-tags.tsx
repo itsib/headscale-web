@@ -1,12 +1,13 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useContext, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { Node } from '../../../types';
 import { AclTag } from '../../acl-tag/acl-tag.tsx';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 interface FormFields {
   tagName: string;
@@ -27,6 +28,7 @@ export const ModalNodeTags: FC<ModalNodeTagsProps> = ({ isOpen, onDismiss, node,
 
 const ModalContent: FC<Omit<ModalNodeTagsProps, 'isOpen' | 'node'> & { node: Node }> = ({ onDismiss, onSuccess, node }) => {
   const { t } = useTranslation();
+  const { storage } = useContext(ApplicationContext);
   const [tags, setTags] = useState<string[]>(node.forcedTags);
   const isDifferent = useMemo(() => {
     if (tags.length !== node.forcedTags.length) {
@@ -49,10 +51,10 @@ const ModalContent: FC<Omit<ModalNodeTagsProps, 'isOpen' | 'node'> & { node: Nod
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn({ id, tags }: { id: string, tags: string[] }) {
-      const data = await signedQueryFn<{ node: Node }>(`/api/v1/node/${id}/tags`, {
+      const data = await fetchWithContext<{ node: Node }>(`/api/v1/node/${id}/tags`, {
         method: 'POST',
-        body: JSON.stringify({ tags, })
-      });
+        body: JSON.stringify({ tags })
+      }, storage);
       return data.node;
     },
     onSuccess: () => {

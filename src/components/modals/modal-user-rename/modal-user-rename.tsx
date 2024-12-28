@@ -1,11 +1,12 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { User } from '../../../types';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 export interface ModalUserRenameProps extends ModalProps {
   user?: User | null;
@@ -22,6 +23,7 @@ export const ModalUserRename: FC<ModalUserRenameProps> = ({ isOpen, onDismiss, u
 
 const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: User }> = ({ onDismiss, onSuccess, user }) => {
   const { t } = useTranslation();
+  const { storage } = useContext(ApplicationContext);
 
   const { handleSubmit, register, formState } = useForm<{ name: string }>({
     defaultValues: {
@@ -31,10 +33,10 @@ const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: U
   const { errors } = formState;
 
   const { mutate, isPending, error } = useMutation({
-    async mutationFn({ oldName, newName }: { oldName: string, newName: string }) {
-      const data = await signedQueryFn<{ user: User }>(`/api/v1/user/${oldName}/rename/${newName}`, {
+    async mutationFn({ id, newName }: { id: string, newName: string }) {
+      const data = await fetchWithContext<{ user: User }>(`/api/v1/user/${id}/rename/${newName}`, {
         method: 'POST',
-      });
+      }, storage);
       return data.user;
     },
     onSuccess: () => {
@@ -44,7 +46,7 @@ const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: U
   });
 
   function submit(values: { name: string }) {
-    mutate({ oldName: user.displayName || user.name || '', newName: values.name });
+    mutate({ id: user.id, newName: values.name });
   }
 
   return (

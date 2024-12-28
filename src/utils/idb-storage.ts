@@ -4,7 +4,7 @@ export interface IDBIndexConfig {
   options?: IDBIndexParameters;
 }
 
-export type IDBTablesConfig = Record<string, IDBIndexConfig[]>;
+export type IDBTablesConfig = { [key: string]: IDBIndexConfig[] };
 
 type IDBReadInterface<Tables extends IDBTablesConfig> = {
   [Name in keyof Tables as `read${Capitalize<string & Name>}`]: <T>(key: string) => Promise<T>;
@@ -18,10 +18,9 @@ type IDBDeleteInterface<Tables extends IDBTablesConfig> = {
   [Name in keyof Tables as `delete${Capitalize<string & Name>}`]: (key: string) => Promise<void>;
 }
 
-type IDBStorageType<Tables extends IDBTablesConfig> = IDBReadInterface<Tables> & IDBWriteInterface<Tables> & IDBDeleteInterface<Tables>;
+export type IDBStorageInstance<Tables extends IDBTablesConfig> = { new(): IDBStorage<IDBTablesConfig> } & IDBReadInterface<Tables> & IDBWriteInterface<Tables> & IDBDeleteInterface<Tables>;
 
 export class IDBStorage<Tables extends IDBTablesConfig> {
-  [s: string]: any;
   /**
    * IDB Name (app name)
    * @private
@@ -39,13 +38,13 @@ export class IDBStorage<Tables extends IDBTablesConfig> {
 
   private _db?: Promise<IDBDatabase>;
 
-  private static _INSTANCE?: IDBStorage<IDBTablesConfig>;
+  private static _INSTANCE?: IDBStorageInstance<IDBTablesConfig>;
 
-  static get<Tables extends IDBTablesConfig>(name: string, version: number, tables: Tables): IDBStorage<Tables> & IDBStorageType<Tables> {
+  static get<Tables extends IDBTablesConfig>(name: string, version: number, tables: Tables): IDBStorageInstance<Tables> {
     if (!IDBStorage._INSTANCE) {
-      IDBStorage._INSTANCE = new IDBStorage(name, version, tables);
+      IDBStorage._INSTANCE = new IDBStorage(name, version, tables) as any;
     }
-    return IDBStorage._INSTANCE as IDBStorage<Tables> & IDBStorageType<Tables>;
+    return IDBStorage._INSTANCE as IDBStorageInstance<Tables>;
   }
 
   private constructor(name: string, version: number, tables: Tables) {
@@ -85,8 +84,11 @@ export class IDBStorage<Tables extends IDBTablesConfig> {
 
   private _upgrade(event: IDBVersionChangeEvent): void {
     const db = (event.target as any)!.result as IDBDatabase;
+    const tableNames = Array.from(this._tables.keys());
 
-    for (const [tableName, indexes] of this._tables.entries()) {
+    for (let i = 0; i < tableNames.length; i++) {
+      const tableName = tableNames[i];
+      const indexes = this._tables.get(tableName)!;
       if (db.objectStoreNames.contains(tableName)) {
         db.deleteObjectStore(tableName);
       }
@@ -206,3 +208,5 @@ export class IDBStorage<Tables extends IDBTablesConfig> {
     return new Error((error?.target as any)?.error || 'IDB_UNKNOWN_ERROR');
   }
 }
+
+

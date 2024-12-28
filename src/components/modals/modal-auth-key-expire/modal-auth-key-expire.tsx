@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { AuthKeyWithUser, User } from '../../../types';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 export interface ModalAuthKeyExpireProps extends ModalProps {
   authKey?: AuthKeyWithUser | null;
@@ -20,14 +21,15 @@ export const ModalAuthKeyExpire: FC<ModalAuthKeyExpireProps> = ({ isOpen, onDism
 
 const ModalContent: FC<Omit<ModalAuthKeyExpireProps, 'isOpen' | 'authKey'> & { authKey: AuthKeyWithUser }> = props => {
   const { onDismiss, onSuccess, authKey } = props;
+  const { storage } = useContext(ApplicationContext);
   const { t } = useTranslation();
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(values: { user: string, key: string }) {
-      const data = await signedQueryFn<{ user: User }>(`/api/v1/preauthkey/expire`, {
+      const data = await fetchWithContext<{ user: User }>(`/api/v1/preauthkey/expire`, {
         method: 'POST',
         body: JSON.stringify(values)
-      });
+      }, storage);
       return data.user;
     },
     onSuccess: () => {
@@ -64,7 +66,7 @@ const ModalContent: FC<Omit<ModalAuthKeyExpireProps, 'isOpen' | 'authKey'> & { a
             type="button"
             className={`jj-btn btn-accent w-full ${isPending ? 'loading' : ''}`}
             onClick={() => mutate({
-              user: authKey.user.id,
+              user: authKey.user.name,
               key: authKey.key,
             })}
           >

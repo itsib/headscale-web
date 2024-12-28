@@ -1,12 +1,13 @@
-import { FC, useMemo } from 'react';
+import { FC, useContext, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input, Select, SelectOption } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { useUsers } from '../../../hooks/use-users.ts';
 import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 interface FormFields {
   nodekey: string;
@@ -28,6 +29,7 @@ export const ModalNodeCreate: FC<ModalNodeRegisterProps> = ({ isOpen, onDismiss,
 const ModalContent: FC<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
   const { t } = useTranslation();
   const { data: users } = useUsers();
+  const { storage } = useContext(ApplicationContext);
   const url = useMemo(() => localStorage.getItem('headscale.url'), []);
 
   const options: SelectOption[] = useMemo(() => {
@@ -52,7 +54,7 @@ const ModalContent: FC<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, o
   const { mutate, isPending, error } = useMutation({
     async mutationFn({ nodekey, user }: FormFields) {
       const queryParams = '?user=' + user + '&key=' + nodekey;
-      return await signedQueryFn<Node>(`/api/v1/node/register${queryParams}`);
+      return await fetchWithContext<Node>(`/api/v1/node/register${queryParams}`, { method: 'POST' }, storage);
     },
     onSuccess: () => {
       onSuccess();

@@ -1,10 +1,11 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
 import { Node } from '../../../types';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 export interface ModalNodeExpireProps extends ModalProps {
   node?: Node | null;
@@ -21,12 +22,13 @@ export const ModalNodeExpire: FC<ModalNodeExpireProps> = ({ isOpen, onDismiss, n
 
 const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: Node }> = ({ onDismiss, onSuccess, node }) => {
   const { t } = useTranslation();
+  const { storage } = useContext(ApplicationContext);
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(nodeId: string) {
-      const data = await signedQueryFn<{ node: Node }>(`/api/v1/node/${nodeId}/expire`, {
+      const data = await fetchWithContext<{ node: Node }>(`/api/v1/node/${nodeId}/expire`, {
         method: 'POST',
-      });
+      }, storage);
       return data.node;
     },
     onSuccess: () => {

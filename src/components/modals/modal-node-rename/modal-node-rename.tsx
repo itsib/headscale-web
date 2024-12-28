@@ -1,11 +1,12 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { Node } from '../../../types';
 import { Modal, ModalProps } from 'react-just-ui/modal';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 export interface ModalNodeRenameProps extends ModalProps {
   node?: Node | null;
@@ -22,6 +23,7 @@ export const ModalNodeRename: FC<ModalNodeRenameProps> = ({ isOpen, onDismiss, n
 
 const ModalContent: FC<Omit<ModalNodeRenameProps, 'isOpen' | 'node'> & { node: Node }> = ({ onDismiss, onSuccess, node }) => {
   const { t } = useTranslation();
+  const { storage } = useContext(ApplicationContext);
   const currentName = node.givenName || node.name;
 
   const { handleSubmit, register, formState, watch } = useForm({
@@ -33,9 +35,9 @@ const ModalContent: FC<Omit<ModalNodeRenameProps, 'isOpen' | 'node'> & { node: N
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn({ id, newName }: { id: string, newName: string }) {
-      const data = await signedQueryFn<{ node: Node }>(`/api/v1/node/${id}/rename/${newName}`, {
+      const data = await fetchWithContext<{ node: Node }>(`/api/v1/node/${id}/rename/${newName}`, {
         method: 'POST',
-      });
+      }, storage);
       return data.node;
     },
     onSuccess: () => {

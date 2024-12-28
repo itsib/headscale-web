@@ -1,23 +1,35 @@
 import { useQueries } from '@tanstack/react-query';
 import { AuthKey, AuthKeyWithUser, QueryResult } from '../types';
 import { useUsers } from './use-users.ts';
-import { useCallback, useMemo } from 'react';
-import { signedQueryFn } from '../utils/query-fn.ts';
+import { useCallback, useContext, useMemo } from 'react';
+import { fetchWithContext } from '../utils/query-fn.ts';
+import ApplicationContext from '../context/application/application.context.ts';
 
 export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () => void } {
   const { data: users } = useUsers();
+  const { storage } = useContext(ApplicationContext);
 
   const queries = useMemo(() => {
     if (!users) {
       return [];
     }
     return users.map(user => ({
-      queryKey: [`/api/v1/preauthkey?user=${user.name}`],
-      queryFn: ({ queryKey, signal }: any) => signedQueryFn<{ preAuthKeys: AuthKey[] }>(queryKey[0], {
-        signal,
-      }),
+      queryKey: ['/api/v1/preauthkey', user.name],
+      queryFn: async ({ queryKey, signal }: any) => {
+        try {
+          const url = queryKey[0] + '?user=' + queryKey[1];
+          const result = await fetchWithContext<{ preAuthKeys: AuthKey[] }>(url, { signal }, storage);
+          return result.preAuthKeys;
+        } catch(error: any) {
+          if (error.code === 500) {
+            return [];
+          }
+          throw error;
+        }
+
+      },
       staleTime: 30_000,
-      select: ({ preAuthKeys }: { preAuthKeys: AuthKey[] }) => preAuthKeys.map(key => ({ ...key, user, })),
+      select: (preAuthKeys: AuthKey[]) => preAuthKeys.map(key => ({ ...key, user, })),
     }))
   }, [users])
 
@@ -32,7 +44,7 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () =>
           return await Promise.all(results.map(result => result.refetch({ cancelRefetch: true })))
         },
       };
-    }
+    },
   });
 
   const refetch = useCallback(() => {

@@ -57,11 +57,6 @@ export function parseGoMetrics(text: string): MetricRowProps[] {
 
       metrics[id] = metric;
     }
-
-
-
   }
-
-
   return Object.values(metrics);
 }

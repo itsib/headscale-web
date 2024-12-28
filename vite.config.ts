@@ -7,6 +7,8 @@ import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 import { VitePWA } from 'vite-plugin-pwa';
 import { readFile } from 'node:fs/promises';
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import { visualizer } from 'rollup-plugin-visualizer';
 import * as fs from 'node:fs';
 
 /**
@@ -36,8 +38,76 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
         $fonts: resolve(__dirname, 'public/fonts'),
       }
     },
+    css: {
+      postcss: {
+        plugins: [
+          tailwindcss({
+            config: join(__dirname, 'tailwind.config.ts'),
+          }),
+          autoprefixer(),
+        ]
+      }
+    },
+    esbuild: { legalComments: 'none' },
+    optimizeDeps: {
+      include: [...Object.keys(pkg.dependencies)],
+    },
+    build: {
+      target: 'esnext',
+      minify: mode === 'production' ? 'esbuild' : false,
+      copyPublicDir: true,
+      emptyOutDir: true,
+      cssCodeSplit: true,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            '@react': [
+              'react',
+              'react-dom',
+              'node_modules/react-dom/client.js',
+              'react-just-ui',
+              'react-hook-form',
+              'react/jsx-runtime',
+              '@tanstack/react-router',
+              'scheduler',
+            ],
+            '@tanstack': [
+              '@tanstack/query-core',
+              '@tanstack/react-query',
+              '@tanstack/react-query-persist-client',
+            ],
+            '@i18n': [
+              'i18next',
+              'react-i18next',
+              'i18next-http-backend',
+              'i18next-browser-languagedetector',
+            ],
+            '@acl-page': [
+              './src/pages/_secured/acl/_layout.tsx',
+              '@codemirror/commands',
+              '@codemirror/language',
+              '@codemirror/state',
+              '@codemirror/view',
+              '@lezer/highlight',
+              '@lezer/lr',
+            ],
+          },
+        },
+      },
+      modulePreload: false,
+      // chunkSizeWarningLimit: 1500,
+      assetsInlineLimit: 0,
+    },
     plugins: [
       react(),
+      TanStackRouterVite({
+        routeFileIgnorePrefix: '-',
+        generatedRouteTree: './src/route-tree.gen.ts',
+        routesDirectory: './src/pages',
+        quoteStyle: 'single',
+        semicolons: true,
+        disableLogging: true,
+      }),
       VitePWA({
         base: '/',
         registerType: 'autoUpdate',
@@ -46,7 +116,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
         // srcDir: 'src',
         // filename: 'sw.ts',
         devOptions: {
-          enabled: mode === 'development',
+          enabled: false,
           type: 'module',
           navigateFallback: 'index.html',
           resolveTempFolder: () => join(process.cwd(), 'dist'),
@@ -138,69 +208,15 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
           { src: 'LICENSE', dest: 'dist' },
           { src: 'README.md', dest: 'dist' },
         ]
-      })
+      }),
+      visualizer ({
+        emitFile: true,
+        template: 'treemap',
+        include: [
+          { file: '*/**/*.js' }
+        ],
+      }) as any,
     ],
-    css: {
-      postcss: {
-        plugins: [
-          tailwindcss({
-            config: join(__dirname, 'tailwind.config.ts'),
-          }),
-          autoprefixer(),
-        ]
-      }
-    },
-    esbuild: { legalComments: 'none' },
-    optimizeDeps: {
-      include: ['react-dom'],
-    },
-    build: {
-      target: 'esnext',
-      minify: mode === 'production' ? 'esbuild' : false,
-      copyPublicDir: true,
-      emptyOutDir: true,
-      cssCodeSplit: true,
-      rollupOptions: {
-        treeshake: 'recommended',
-        output: {
-          manualChunks: {
-            '@react': [
-              'react',
-              'react-dom',
-              'react-router-dom',
-            ],
-            '@tanstack': [
-              '@tanstack/query-core',
-              '@tanstack/react-query',
-              '@tanstack/react-query-persist-client',
-            ],
-            '@react-just-ui': [
-              'react-just-ui',
-            ],
-            '@react-hook-form': [
-              'react-hook-form',
-            ],
-            '@i18n': [
-              'i18next',
-              'react-i18next',
-              'i18next-http-backend',
-              'i18next-browser-languagedetector',
-            ],
-            '@acl-page': [
-              './src/pages/acl/acl-page.tsx',
-              '@codemirror/commands',
-              '@codemirror/language',
-              '@codemirror/state',
-              '@codemirror/view',
-              '@lezer/highlight',
-              '@lezer/lr',
-            ],
-          },
-        },
-      },
-      chunkSizeWarningLimit: 1500,
-      assetsInlineLimit: 0,
-    },
     test: {
       css: false,
       include: ['src/**/*.{spec,test}.{js,jsx,ts,tsx}'],

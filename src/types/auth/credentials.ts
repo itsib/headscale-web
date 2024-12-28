@@ -2,7 +2,7 @@
 export type TokenType = 'Bearer' | 'apiKey';
 
 export interface Credentials {
-  url: string;
+  base: string;
   token: string;
   tokenType: TokenType;
 }

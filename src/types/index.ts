@@ -1,5 +1,6 @@
-export * from './common/query-error';
 export * from './common/query-result';
+export * from './common/storage-tables';
+export * from './common/router-context';
 
 export * from './tokens/auth-key';
 export * from './tokens/api-token';

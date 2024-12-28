@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { ApiToken } from '../../../types';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 export interface ModalApiTokenExpireProps extends ModalProps {
   apiToken?: ApiToken | null;
@@ -20,14 +21,15 @@ export const ModalApiTokenExpire: FC<ModalApiTokenExpireProps> = ({ isOpen, onDi
 
 const ModalContent: FC<Omit<ModalApiTokenExpireProps, 'isOpen' | 'apiToken'> & { apiToken: ApiToken }> = props => {
   const { onDismiss, onSuccess, apiToken } = props;
+  const { storage } = useContext(ApplicationContext);
   const { t } = useTranslation();
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(values: { prefix: string }) {
-      const data = await signedQueryFn<{ apiToken: ApiToken }>(`/api/v1/apikey/expire`, {
+      const data = await fetchWithContext<{ apiToken: ApiToken }>(`/api/v1/apikey/expire`, {
         method: 'POST',
         body: JSON.stringify(values)
-      });
+      }, storage);
       return data.apiToken;
     },
     onSuccess: () => {

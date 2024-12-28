@@ -1,12 +1,13 @@
-import { FC, useMemo } from 'react';
+import { FC, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Select, SelectOption } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { Node } from '../../../types';
 import { useUsers } from '../../../hooks/use-users.ts';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 export interface ModalNodeChownProps extends ModalProps {
   node?: Node | null;
@@ -23,6 +24,7 @@ export const ModalNodeChown: FC<ModalNodeChownProps> = ({ isOpen, onDismiss, nod
 
 const ModalContent: FC<Omit<ModalNodeChownProps, 'isOpen' | 'node'> & { node: Node }> = ({ onDismiss, onSuccess, node }) => {
   const { t } = useTranslation();
+  const { storage } = useContext(ApplicationContext);
   const { data: users } = useUsers();
 
   const options: SelectOption[] = useMemo(() => {
@@ -31,23 +33,23 @@ const ModalContent: FC<Omit<ModalNodeChownProps, 'isOpen' | 'node'> & { node: No
     }
     return users.map(user => ({
       value: user.id,
-      label: user.name,
+      label: user.name || user.displayName,
       icon: `icon icon-avatar-${parseInt(user.id) % 10}`,
     }));
   }, [users]);
 
   const { handleSubmit, register, formState, watch } = useForm<{ userName: string }>({
     defaultValues: {
-      userName: node.user.name,
+      userName: node.user.id,
     }
   });
   const { errors } = formState;
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn({ id, userName }: { id: string, userName: string }) {
-      const data = await signedQueryFn<{ node: Node }>(`/api/v1/node/${id}/user?user=${userName}`, {
+      const data = await fetchWithContext<{ node: Node }>(`/api/v1/node/${id}/user?user=${userName}`, {
         method: 'POST',
-      });
+      }, storage);
       return data.node;
     },
     onSuccess: () => {

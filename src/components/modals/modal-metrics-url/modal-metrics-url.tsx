@@ -10,7 +10,7 @@ import { Credentials } from '../../../types';
 import { METRICS_TOKEN_TYPES } from '../../../config.ts';
 
 export interface ModalMetricsUrlProps extends ModalProps {
-  credentials: Partial<Credentials>;
+  credentials: Partial<Credentials> | null;
   onSuccess?: (credentials: Required<Credentials>) => void;
 }
 
@@ -26,9 +26,9 @@ const ModalContent: FC<Omit<ModalMetricsUrlProps, 'isOpen'>> = ({ onDismiss, cre
   const { t } = useTranslation();
   const { handleSubmit, register, formState, setError, control } = useForm<Required<Credentials>>({
     defaultValues: {
-      url: credentials.url || '',
-      token: credentials.token || '',
-      tokenType: credentials.tokenType || 'Bearer',
+      base: credentials?.base || '',
+      token: credentials?.token || '',
+      tokenType: credentials?.tokenType || 'Bearer',
     }
   });
   const tokenType = useWatch({ control, name: 'tokenType' });
@@ -36,8 +36,8 @@ const ModalContent: FC<Omit<ModalMetricsUrlProps, 'isOpen'>> = ({ onDismiss, cre
 
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async ({ url, token, tokenType }: Required<Credentials>) => {
-      const result = await fetchFn(url, {
+    mutationFn: async ({ base, token, tokenType }: Required<Credentials>) => {
+      const result = await fetchFn(base, {
         headers: {
           'Content-Type': 'text/plain;utf-8'
         }
@@ -53,7 +53,7 @@ const ModalContent: FC<Omit<ModalMetricsUrlProps, 'isOpen'>> = ({ onDismiss, cre
       onDismiss();
     },
     onError: (error: any) => {
-      setError('url', { message: t(error.message || '') });
+      setError('base', { message: t(error.message || '') });
     }
   });
 
@@ -73,8 +73,8 @@ const ModalContent: FC<Omit<ModalMetricsUrlProps, 'isOpen'>> = ({ onDismiss, cre
               markRequired
               placeholder="https://example.com/metrics"
               label={t('metric_url_label')}
-              error={errors?.url}
-              {...register('url', {
+              error={errors?.base}
+              {...register('base', {
                 validate: url(t('error_invalid_url')),
               })}
             />
@@ -93,9 +93,10 @@ const ModalContent: FC<Omit<ModalMetricsUrlProps, 'isOpen'>> = ({ onDismiss, cre
           <div className="mb-2">
             <Textarea
               id="metric-access-token"
+              className="w-[calc(100%-26px)]"
               placeholder={tokenType === 'Bearer' ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp....' : 'M2CfUFPaNA.CQAk7cErsC7...'}
               label={t('metric_token_label')}
-              minHeight={120}
+              minHeight={80}
               error={errors?.token}
               {...register('token')}
             />

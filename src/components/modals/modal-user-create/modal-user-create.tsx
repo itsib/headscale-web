@@ -1,11 +1,12 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { Input } from 'react-just-ui';
+import { email, Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { signedQueryFn } from '../../../utils/query-fn.ts';
-import { User } from '../../../types';
+import { fetchWithContext } from '../../../utils/query-fn.ts';
+import { User, UserIdentity } from '../../../types';
+import ApplicationContext from '../../../context/application/application.context.ts';
 
 export interface ModalUserCreateProps extends ModalProps {
   onSuccess: () => void;
@@ -21,20 +22,23 @@ export const ModalUserCreate: FC<ModalUserCreateProps> = ({ isOpen, onDismiss, .
 
 const ModalContent: FC<Omit<ModalUserCreateProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
   const { t } = useTranslation();
+  const { storage } = useContext(ApplicationContext);
 
-  const { handleSubmit, register, formState } = useForm({
+  const { handleSubmit, register, formState } = useForm<UserIdentity>({
     defaultValues: {
       name: '',
+      displayName: '',
+      email: '',
     }
   });
   const { errors } = formState;
 
   const { mutate, isPending, error } = useMutation({
-    async mutationFn(values: { name: string }) {
-      const data = await signedQueryFn<{ user: User }>('/api/v1/user', {
+    async mutationFn(values: UserIdentity) {
+      const data = await fetchWithContext<{ user: User }>('/api/v1/user', {
         method: 'POST',
         body: JSON.stringify(values),
-      });
+      }, storage);
       return data.user;
     },
     onSuccess: () => {
@@ -58,7 +62,33 @@ const ModalContent: FC<Omit<ModalUserCreateProps, 'isOpen'>> = ({ onDismiss, onS
               id="new-user-name"
               label={t('user_name')}
               error={errors?.name}
-              {...register('name', { required: t('error_required') })}
+              {...register('name', {
+                required: t('error_required'),
+              })}
+            />
+          </div>
+
+          <div className="mb-2">
+            <Input
+              id="new-user-display-name"
+              label={t('user_display_name')}
+              error={errors?.displayName}
+              {...register('displayName', {
+                required: t('error_required'),
+              })}
+            />
+          </div>
+
+          <div className="mb-2">
+            <Input
+              id="new-user-email"
+              type="email"
+              label={t('user_email')}
+              error={errors?.email}
+              {...register('email', {
+                required: t('error_required'),
+                validate: email('error_invalid_email'),
+              })}
             />
           </div>
 

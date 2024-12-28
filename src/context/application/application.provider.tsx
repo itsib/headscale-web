@@ -1,26 +1,27 @@
-import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import ApplicationContext from './application.context';
-import { getActiveTheme, Theme } from '../../utils/theme.ts';
 import { useRegisterSW } from 'virtual:pwa-register/react';
+import { Trans } from 'react-i18next';
+import { getActiveTheme, Theme } from '../../utils/theme.ts';
 import { AnimatedShow } from '../../components/animated-show/animated-show.tsx';
 import { ImgCompass } from '../../components/img-compass/img-compass.tsx';
-import { Trans } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
+import { IDBStorageInstance } from '../../utils/idb-storage.ts';
+import { StorageTables, TokenType } from '../../types';
 
-export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
+export interface ApplicationProviderProps {
+  storage: IDBStorageInstance<StorageTables>;
+  children: (context: { isAuthorized: boolean }) => ReactNode;
+}
+
+export function ApplicationProvider({ children, storage }: ApplicationProviderProps) {
   const [theme, setTheme] = useState<Theme>(getActiveTheme());
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [isOffLine, setIsOffLine] = useState<boolean>(!navigator.onLine);
   const [, setNeedsRefresh] = useState<boolean>(false);
 
   const updateTheme = useCallback((theme: Theme) => {
     setTheme(theme);
   }, []);
-
-  const { data } = useQuery<{ status: string }>({
-    queryKey: ['/health'],
-    refetchInterval: 5000,
-    retryDelay: 5000,
-  });
 
   useRegisterSW({
     onNeedRefresh() {
@@ -75,16 +76,21 @@ export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
     };
   }, []);
 
-  // Display health status
+  // Init authorization
   useEffect(() => {
-    if (!data || (data && data.status === 'pass')) {
-      return;
+    async function init() {
+      const [base, token, tokenType] = await Promise.all([
+        storage.readAppStore<string>('main-url'),
+        storage.readAppStore<string>('main-token'),
+        storage.readAppStore<TokenType>('main-token-type'),
+      ]);
+      setIsAuthorized(!!base && !!token && !!tokenType);
     }
-    console.warn(data);
-  }, [data]);
+    init().catch(console.error);
+  }, [storage]);
 
   return (
-    <ApplicationContext.Provider value={{ theme, updateTheme, isOffLine }}>
+    <ApplicationContext.Provider value={{ theme, updateTheme, isOffLine, isAuthorized, setIsAuthorized, storage }}>
       <div className="fixed inset-0 bottom-auto h-0 z-30">
         <AnimatedShow show={isOffLine}>
           <div className="toast">
@@ -96,7 +102,7 @@ export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
           </div>
         </AnimatedShow>
       </div>
-      {children}
+      {children({ isAuthorized })}
     </ApplicationContext.Provider>
   )
 }
