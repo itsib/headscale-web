@@ -112,22 +112,15 @@
   "machines_page_subtitle": "Manage the devices connected to your tailnet.",
   "manage_tags_node_modal_summary": "Tags help you manage a machine based on its purpose instead of its creator (example: tag:server), and they can be used in ACLs to control access.",
   "manage_tags_node_modal_title": "Edit ACL tags",
-  "metric_server_url": "Metric Server URL: <span />",
+  "metric_server_url": "Metric Server URL",
   "metric_token_label": "Access token",
   "metric_token_type": "Access Token Type",
   "metric_url_label": "URL to fetch the metrics of server ",
   "metrics": "Metrics",
-  "metrics_group": {
-    "gc": "GC",
-    "goroutines": "Go Routines",
-    "headscale": "Headscale",
-    "info": "Info",
-    "memstats": "Memory Statistic",
-    "process": "Process",
-    "promhttp": "Prom HTTP",
-    "sched": "Sched",
-    "threads": "Threads"
-  },
+  "metrics_system_go": "The Go Programming Language",
+  "metrics_system_headscale": "Headscale",
+  "metrics_system_process": "Process",
+  "metrics_system_promhttp": "Prometheus HTTP",
   "metrics_page_subtitle": "Headscale server statistics.",
   "name": "Name",
   "new_name": "New Name",
@@ -166,5 +159,7 @@
   "user_photo": "User Photo",
   "users": "Users",
   "users_page_subtitle": "Manage the users in your network.",
-  "provider": "Provider"
+  "provider": "Provider",
+  "formatted": "Formatted",
+  "raw_data": "Raw Data"
 }

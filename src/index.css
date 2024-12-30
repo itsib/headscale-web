@@ -89,7 +89,7 @@ html.dark {
 
   /** Text */
   --text-primary: 255 255 255;
-  --text-secondary: 200 200 200; /** #C8C8C8 */
+  --text-secondary: 180 180 180; /** #C8C8C8 */
 
   /** Context menu popover */
   --bg-popover: 31 30 30;
