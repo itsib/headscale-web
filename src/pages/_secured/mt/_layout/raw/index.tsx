@@ -1,11 +1,11 @@
 import { createFileRoute, getRouteApi } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/_secured/metrics/_layout/raw/')({
+export const Route = createFileRoute('/_secured/mt/_layout/raw/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const routeApi = getRouteApi('/_secured/metrics/_layout');
+  const routeApi = getRouteApi('/_secured/mt/_layout');
   const { metrics: raw } = routeApi.useLoaderData() as {
     metrics: string | null;
     base: string | null;

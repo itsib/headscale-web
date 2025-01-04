@@ -1,14 +1,14 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { getCredentials } from '../../../utils/credentials.ts';
 
-export const Route = createFileRoute('/_secured/metrics/')({
+export const Route = createFileRoute('/_secured/mt/')({
   beforeLoad: async ({ location, context }) => {
     const { base } = await getCredentials(context.storage, 'metric');
-    if (location.pathname === '/metrics') {
+    if (location.pathname === '/mt') {
       if (base) {
-        throw redirect({ to: '/metrics/formatted', replace: true });
+        throw redirect({ to: '/mt/formatted', replace: true });
       } else {
-        throw redirect({ to: '/metrics/credentials', replace: true });
+        throw redirect({ to: '/mt/credentials', replace: true });
       }
     }
   },

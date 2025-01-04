@@ -20,20 +20,20 @@ import { Route as Error500IndexImport } from './pages/error-500/index';
 import { Route as Error404IndexImport } from './pages/error-404/index';
 import { Route as SecuredUsersIndexImport } from './pages/_secured/users/index';
 import { Route as SecuredTokensIndexImport } from './pages/_secured/tokens/index';
-import { Route as SecuredMetricsIndexImport } from './pages/_secured/metrics/index';
+import { Route as SecuredMtIndexImport } from './pages/_secured/mt/index';
 import { Route as SecuredMachinesIndexImport } from './pages/_secured/machines/index';
-import { Route as SecuredMetricsLayoutImport } from './pages/_secured/metrics/_layout';
+import { Route as SecuredMtLayoutImport } from './pages/_secured/mt/_layout';
 import { Route as SecuredAclLayoutImport } from './pages/_secured/acl/_layout';
-import { Route as SecuredMetricsCredentialsIndexImport } from './pages/_secured/metrics/credentials/index';
+import { Route as SecuredMtCredentialsIndexImport } from './pages/_secured/mt/credentials/index';
 import { Route as SecuredAclLayoutIndexImport } from './pages/_secured/acl/_layout/index';
 import { Route as SecuredAclLayoutPreviewImport } from './pages/_secured/acl/_layout/preview';
 import { Route as SecuredAclLayoutEditFileImport } from './pages/_secured/acl/_layout/edit-file';
-import { Route as SecuredMetricsLayoutRawIndexImport } from './pages/_secured/metrics/_layout/raw/index';
-import { Route as SecuredMetricsLayoutFormattedIndexImport } from './pages/_secured/metrics/_layout/formatted/index';
+import { Route as SecuredMtLayoutRawIndexImport } from './pages/_secured/mt/_layout/raw/index';
+import { Route as SecuredMtLayoutFormattedIndexImport } from './pages/_secured/mt/_layout/formatted/index';
 
 // Create Virtual Routes
 
-const SecuredMetricsImport = createFileRoute('/_secured/metrics')();
+const SecuredMtImport = createFileRoute('/_secured/mt')();
 const SecuredAclImport = createFileRoute('/_secured/acl')();
 
 // Create/Update Routes
@@ -49,9 +49,9 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any);
 
-const SecuredMetricsRoute = SecuredMetricsImport.update({
-  id: '/metrics',
-  path: '/metrics',
+const SecuredMtRoute = SecuredMtImport.update({
+  id: '/mt',
+  path: '/mt',
   getParentRoute: () => SecuredRoute,
 } as any);
 
@@ -91,10 +91,10 @@ const SecuredTokensIndexRoute = SecuredTokensIndexImport.update({
   getParentRoute: () => SecuredRoute,
 } as any);
 
-const SecuredMetricsIndexRoute = SecuredMetricsIndexImport.update({
+const SecuredMtIndexRoute = SecuredMtIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => SecuredMetricsRoute,
+  getParentRoute: () => SecuredMtRoute,
 } as any);
 
 const SecuredMachinesIndexRoute = SecuredMachinesIndexImport.update({
@@ -103,9 +103,9 @@ const SecuredMachinesIndexRoute = SecuredMachinesIndexImport.update({
   getParentRoute: () => SecuredRoute,
 } as any);
 
-const SecuredMetricsLayoutRoute = SecuredMetricsLayoutImport.update({
+const SecuredMtLayoutRoute = SecuredMtLayoutImport.update({
   id: '/_layout',
-  getParentRoute: () => SecuredMetricsRoute,
+  getParentRoute: () => SecuredMtRoute,
 } as any);
 
 const SecuredAclLayoutRoute = SecuredAclLayoutImport.update({
@@ -113,12 +113,11 @@ const SecuredAclLayoutRoute = SecuredAclLayoutImport.update({
   getParentRoute: () => SecuredAclRoute,
 } as any);
 
-const SecuredMetricsCredentialsIndexRoute =
-  SecuredMetricsCredentialsIndexImport.update({
-    id: '/credentials/',
-    path: '/credentials/',
-    getParentRoute: () => SecuredMetricsRoute,
-  } as any);
+const SecuredMtCredentialsIndexRoute = SecuredMtCredentialsIndexImport.update({
+  id: '/credentials/',
+  path: '/credentials/',
+  getParentRoute: () => SecuredMtRoute,
+} as any);
 
 const SecuredAclLayoutIndexRoute = SecuredAclLayoutIndexImport.update({
   id: '/',
@@ -138,18 +137,17 @@ const SecuredAclLayoutEditFileRoute = SecuredAclLayoutEditFileImport.update({
   getParentRoute: () => SecuredAclLayoutRoute,
 } as any);
 
-const SecuredMetricsLayoutRawIndexRoute =
-  SecuredMetricsLayoutRawIndexImport.update({
-    id: '/raw/',
-    path: '/raw/',
-    getParentRoute: () => SecuredMetricsLayoutRoute,
-  } as any);
+const SecuredMtLayoutRawIndexRoute = SecuredMtLayoutRawIndexImport.update({
+  id: '/raw/',
+  path: '/raw/',
+  getParentRoute: () => SecuredMtLayoutRoute,
+} as any);
 
-const SecuredMetricsLayoutFormattedIndexRoute =
-  SecuredMetricsLayoutFormattedIndexImport.update({
+const SecuredMtLayoutFormattedIndexRoute =
+  SecuredMtLayoutFormattedIndexImport.update({
     id: '/formatted/',
     path: '/formatted/',
-    getParentRoute: () => SecuredMetricsLayoutRoute,
+    getParentRoute: () => SecuredMtLayoutRoute,
   } as any);
 
 // Populate the FileRoutesByPath interface
@@ -205,19 +203,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SecuredAclLayoutImport;
       parentRoute: typeof SecuredAclRoute;
     };
-    '/_secured/metrics': {
-      id: '/_secured/metrics';
-      path: '/metrics';
-      fullPath: '/metrics';
-      preLoaderRoute: typeof SecuredMetricsImport;
+    '/_secured/mt': {
+      id: '/_secured/mt';
+      path: '/mt';
+      fullPath: '/mt';
+      preLoaderRoute: typeof SecuredMtImport;
       parentRoute: typeof SecuredImport;
     };
-    '/_secured/metrics/_layout': {
-      id: '/_secured/metrics/_layout';
-      path: '/metrics';
-      fullPath: '/metrics';
-      preLoaderRoute: typeof SecuredMetricsLayoutImport;
-      parentRoute: typeof SecuredMetricsRoute;
+    '/_secured/mt/_layout': {
+      id: '/_secured/mt/_layout';
+      path: '/mt';
+      fullPath: '/mt';
+      preLoaderRoute: typeof SecuredMtLayoutImport;
+      parentRoute: typeof SecuredMtRoute;
     };
     '/_secured/machines/': {
       id: '/_secured/machines/';
@@ -226,12 +224,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SecuredMachinesIndexImport;
       parentRoute: typeof SecuredImport;
     };
-    '/_secured/metrics/': {
-      id: '/_secured/metrics/';
+    '/_secured/mt/': {
+      id: '/_secured/mt/';
       path: '/';
-      fullPath: '/metrics/';
-      preLoaderRoute: typeof SecuredMetricsIndexImport;
-      parentRoute: typeof SecuredMetricsImport;
+      fullPath: '/mt/';
+      preLoaderRoute: typeof SecuredMtIndexImport;
+      parentRoute: typeof SecuredMtImport;
     };
     '/_secured/tokens/': {
       id: '/_secured/tokens/';
@@ -268,26 +266,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SecuredAclLayoutIndexImport;
       parentRoute: typeof SecuredAclLayoutImport;
     };
-    '/_secured/metrics/credentials/': {
-      id: '/_secured/metrics/credentials/';
+    '/_secured/mt/credentials/': {
+      id: '/_secured/mt/credentials/';
       path: '/credentials';
-      fullPath: '/metrics/credentials';
-      preLoaderRoute: typeof SecuredMetricsCredentialsIndexImport;
-      parentRoute: typeof SecuredMetricsImport;
+      fullPath: '/mt/credentials';
+      preLoaderRoute: typeof SecuredMtCredentialsIndexImport;
+      parentRoute: typeof SecuredMtImport;
     };
-    '/_secured/metrics/_layout/formatted/': {
-      id: '/_secured/metrics/_layout/formatted/';
+    '/_secured/mt/_layout/formatted/': {
+      id: '/_secured/mt/_layout/formatted/';
       path: '/formatted';
-      fullPath: '/metrics/formatted';
-      preLoaderRoute: typeof SecuredMetricsLayoutFormattedIndexImport;
-      parentRoute: typeof SecuredMetricsLayoutImport;
+      fullPath: '/mt/formatted';
+      preLoaderRoute: typeof SecuredMtLayoutFormattedIndexImport;
+      parentRoute: typeof SecuredMtLayoutImport;
     };
-    '/_secured/metrics/_layout/raw/': {
-      id: '/_secured/metrics/_layout/raw/';
+    '/_secured/mt/_layout/raw/': {
+      id: '/_secured/mt/_layout/raw/';
       path: '/raw';
-      fullPath: '/metrics/raw';
-      preLoaderRoute: typeof SecuredMetricsLayoutRawIndexImport;
-      parentRoute: typeof SecuredMetricsLayoutImport;
+      fullPath: '/mt/raw';
+      preLoaderRoute: typeof SecuredMtLayoutRawIndexImport;
+      parentRoute: typeof SecuredMtLayoutImport;
     };
   }
 }
@@ -321,39 +319,39 @@ const SecuredAclRouteWithChildren = SecuredAclRoute._addFileChildren(
   SecuredAclRouteChildren,
 );
 
-interface SecuredMetricsLayoutRouteChildren {
-  SecuredMetricsLayoutFormattedIndexRoute: typeof SecuredMetricsLayoutFormattedIndexRoute;
-  SecuredMetricsLayoutRawIndexRoute: typeof SecuredMetricsLayoutRawIndexRoute;
+interface SecuredMtLayoutRouteChildren {
+  SecuredMtLayoutFormattedIndexRoute: typeof SecuredMtLayoutFormattedIndexRoute;
+  SecuredMtLayoutRawIndexRoute: typeof SecuredMtLayoutRawIndexRoute;
 }
 
-const SecuredMetricsLayoutRouteChildren: SecuredMetricsLayoutRouteChildren = {
-  SecuredMetricsLayoutFormattedIndexRoute:
-    SecuredMetricsLayoutFormattedIndexRoute,
-  SecuredMetricsLayoutRawIndexRoute: SecuredMetricsLayoutRawIndexRoute,
+const SecuredMtLayoutRouteChildren: SecuredMtLayoutRouteChildren = {
+  SecuredMtLayoutFormattedIndexRoute: SecuredMtLayoutFormattedIndexRoute,
+  SecuredMtLayoutRawIndexRoute: SecuredMtLayoutRawIndexRoute,
 };
 
-const SecuredMetricsLayoutRouteWithChildren =
-  SecuredMetricsLayoutRoute._addFileChildren(SecuredMetricsLayoutRouteChildren);
+const SecuredMtLayoutRouteWithChildren = SecuredMtLayoutRoute._addFileChildren(
+  SecuredMtLayoutRouteChildren,
+);
 
-interface SecuredMetricsRouteChildren {
-  SecuredMetricsLayoutRoute: typeof SecuredMetricsLayoutRouteWithChildren;
-  SecuredMetricsIndexRoute: typeof SecuredMetricsIndexRoute;
-  SecuredMetricsCredentialsIndexRoute: typeof SecuredMetricsCredentialsIndexRoute;
+interface SecuredMtRouteChildren {
+  SecuredMtLayoutRoute: typeof SecuredMtLayoutRouteWithChildren;
+  SecuredMtIndexRoute: typeof SecuredMtIndexRoute;
+  SecuredMtCredentialsIndexRoute: typeof SecuredMtCredentialsIndexRoute;
 }
 
-const SecuredMetricsRouteChildren: SecuredMetricsRouteChildren = {
-  SecuredMetricsLayoutRoute: SecuredMetricsLayoutRouteWithChildren,
-  SecuredMetricsIndexRoute: SecuredMetricsIndexRoute,
-  SecuredMetricsCredentialsIndexRoute: SecuredMetricsCredentialsIndexRoute,
+const SecuredMtRouteChildren: SecuredMtRouteChildren = {
+  SecuredMtLayoutRoute: SecuredMtLayoutRouteWithChildren,
+  SecuredMtIndexRoute: SecuredMtIndexRoute,
+  SecuredMtCredentialsIndexRoute: SecuredMtCredentialsIndexRoute,
 };
 
-const SecuredMetricsRouteWithChildren = SecuredMetricsRoute._addFileChildren(
-  SecuredMetricsRouteChildren,
+const SecuredMtRouteWithChildren = SecuredMtRoute._addFileChildren(
+  SecuredMtRouteChildren,
 );
 
 interface SecuredRouteChildren {
   SecuredAclRoute: typeof SecuredAclRouteWithChildren;
-  SecuredMetricsRoute: typeof SecuredMetricsRouteWithChildren;
+  SecuredMtRoute: typeof SecuredMtRouteWithChildren;
   SecuredMachinesIndexRoute: typeof SecuredMachinesIndexRoute;
   SecuredTokensIndexRoute: typeof SecuredTokensIndexRoute;
   SecuredUsersIndexRoute: typeof SecuredUsersIndexRoute;
@@ -361,7 +359,7 @@ interface SecuredRouteChildren {
 
 const SecuredRouteChildren: SecuredRouteChildren = {
   SecuredAclRoute: SecuredAclRouteWithChildren,
-  SecuredMetricsRoute: SecuredMetricsRouteWithChildren,
+  SecuredMtRoute: SecuredMtRouteWithChildren,
   SecuredMachinesIndexRoute: SecuredMachinesIndexRoute,
   SecuredTokensIndexRoute: SecuredTokensIndexRoute,
   SecuredUsersIndexRoute: SecuredUsersIndexRoute,
@@ -377,17 +375,17 @@ export interface FileRoutesByFullPath {
   '/error-500': typeof Error500IndexRoute;
   '/home': typeof HomeIndexRoute;
   '/acl': typeof SecuredAclLayoutRouteWithChildren;
-  '/metrics': typeof SecuredMetricsLayoutRouteWithChildren;
+  '/mt': typeof SecuredMtLayoutRouteWithChildren;
   '/machines': typeof SecuredMachinesIndexRoute;
-  '/metrics/': typeof SecuredMetricsIndexRoute;
+  '/mt/': typeof SecuredMtIndexRoute;
   '/tokens': typeof SecuredTokensIndexRoute;
   '/users': typeof SecuredUsersIndexRoute;
   '/acl/edit-file': typeof SecuredAclLayoutEditFileRoute;
   '/acl/preview': typeof SecuredAclLayoutPreviewRoute;
   '/acl/': typeof SecuredAclLayoutIndexRoute;
-  '/metrics/credentials': typeof SecuredMetricsCredentialsIndexRoute;
-  '/metrics/formatted': typeof SecuredMetricsLayoutFormattedIndexRoute;
-  '/metrics/raw': typeof SecuredMetricsLayoutRawIndexRoute;
+  '/mt/credentials': typeof SecuredMtCredentialsIndexRoute;
+  '/mt/formatted': typeof SecuredMtLayoutFormattedIndexRoute;
+  '/mt/raw': typeof SecuredMtLayoutRawIndexRoute;
 }
 
 export interface FileRoutesByTo {
@@ -397,15 +395,15 @@ export interface FileRoutesByTo {
   '/error-500': typeof Error500IndexRoute;
   '/home': typeof HomeIndexRoute;
   '/acl': typeof SecuredAclLayoutIndexRoute;
-  '/metrics': typeof SecuredMetricsIndexRoute;
+  '/mt': typeof SecuredMtIndexRoute;
   '/machines': typeof SecuredMachinesIndexRoute;
   '/tokens': typeof SecuredTokensIndexRoute;
   '/users': typeof SecuredUsersIndexRoute;
   '/acl/edit-file': typeof SecuredAclLayoutEditFileRoute;
   '/acl/preview': typeof SecuredAclLayoutPreviewRoute;
-  '/metrics/credentials': typeof SecuredMetricsCredentialsIndexRoute;
-  '/metrics/formatted': typeof SecuredMetricsLayoutFormattedIndexRoute;
-  '/metrics/raw': typeof SecuredMetricsLayoutRawIndexRoute;
+  '/mt/credentials': typeof SecuredMtCredentialsIndexRoute;
+  '/mt/formatted': typeof SecuredMtLayoutFormattedIndexRoute;
+  '/mt/raw': typeof SecuredMtLayoutRawIndexRoute;
 }
 
 export interface FileRoutesById {
@@ -417,18 +415,18 @@ export interface FileRoutesById {
   '/home/': typeof HomeIndexRoute;
   '/_secured/acl': typeof SecuredAclRouteWithChildren;
   '/_secured/acl/_layout': typeof SecuredAclLayoutRouteWithChildren;
-  '/_secured/metrics': typeof SecuredMetricsRouteWithChildren;
-  '/_secured/metrics/_layout': typeof SecuredMetricsLayoutRouteWithChildren;
+  '/_secured/mt': typeof SecuredMtRouteWithChildren;
+  '/_secured/mt/_layout': typeof SecuredMtLayoutRouteWithChildren;
   '/_secured/machines/': typeof SecuredMachinesIndexRoute;
-  '/_secured/metrics/': typeof SecuredMetricsIndexRoute;
+  '/_secured/mt/': typeof SecuredMtIndexRoute;
   '/_secured/tokens/': typeof SecuredTokensIndexRoute;
   '/_secured/users/': typeof SecuredUsersIndexRoute;
   '/_secured/acl/_layout/edit-file': typeof SecuredAclLayoutEditFileRoute;
   '/_secured/acl/_layout/preview': typeof SecuredAclLayoutPreviewRoute;
   '/_secured/acl/_layout/': typeof SecuredAclLayoutIndexRoute;
-  '/_secured/metrics/credentials/': typeof SecuredMetricsCredentialsIndexRoute;
-  '/_secured/metrics/_layout/formatted/': typeof SecuredMetricsLayoutFormattedIndexRoute;
-  '/_secured/metrics/_layout/raw/': typeof SecuredMetricsLayoutRawIndexRoute;
+  '/_secured/mt/credentials/': typeof SecuredMtCredentialsIndexRoute;
+  '/_secured/mt/_layout/formatted/': typeof SecuredMtLayoutFormattedIndexRoute;
+  '/_secured/mt/_layout/raw/': typeof SecuredMtLayoutRawIndexRoute;
 }
 
 export interface FileRouteTypes {
@@ -440,17 +438,17 @@ export interface FileRouteTypes {
     | '/error-500'
     | '/home'
     | '/acl'
-    | '/metrics'
+    | '/mt'
     | '/machines'
-    | '/metrics/'
+    | '/mt/'
     | '/tokens'
     | '/users'
     | '/acl/edit-file'
     | '/acl/preview'
     | '/acl/'
-    | '/metrics/credentials'
-    | '/metrics/formatted'
-    | '/metrics/raw';
+    | '/mt/credentials'
+    | '/mt/formatted'
+    | '/mt/raw';
   fileRoutesByTo: FileRoutesByTo;
   to:
     | '/'
@@ -459,15 +457,15 @@ export interface FileRouteTypes {
     | '/error-500'
     | '/home'
     | '/acl'
-    | '/metrics'
+    | '/mt'
     | '/machines'
     | '/tokens'
     | '/users'
     | '/acl/edit-file'
     | '/acl/preview'
-    | '/metrics/credentials'
-    | '/metrics/formatted'
-    | '/metrics/raw';
+    | '/mt/credentials'
+    | '/mt/formatted'
+    | '/mt/raw';
   id:
     | '__root__'
     | '/'
@@ -477,18 +475,18 @@ export interface FileRouteTypes {
     | '/home/'
     | '/_secured/acl'
     | '/_secured/acl/_layout'
-    | '/_secured/metrics'
-    | '/_secured/metrics/_layout'
+    | '/_secured/mt'
+    | '/_secured/mt/_layout'
     | '/_secured/machines/'
-    | '/_secured/metrics/'
+    | '/_secured/mt/'
     | '/_secured/tokens/'
     | '/_secured/users/'
     | '/_secured/acl/_layout/edit-file'
     | '/_secured/acl/_layout/preview'
     | '/_secured/acl/_layout/'
-    | '/_secured/metrics/credentials/'
-    | '/_secured/metrics/_layout/formatted/'
-    | '/_secured/metrics/_layout/raw/';
+    | '/_secured/mt/credentials/'
+    | '/_secured/mt/_layout/formatted/'
+    | '/_secured/mt/_layout/raw/';
   fileRoutesById: FileRoutesById;
 }
 
@@ -532,7 +530,7 @@ export const routeTree = rootRoute
       "filePath": "_secured.tsx",
       "children": [
         "/_secured/acl",
-        "/_secured/metrics",
+        "/_secured/mt",
         "/_secured/machines/",
         "/_secured/tokens/",
         "/_secured/users/"
@@ -563,30 +561,30 @@ export const routeTree = rootRoute
         "/_secured/acl/_layout/"
       ]
     },
-    "/_secured/metrics": {
-      "filePath": "_secured/metrics",
+    "/_secured/mt": {
+      "filePath": "_secured/mt",
       "parent": "/_secured",
       "children": [
-        "/_secured/metrics/_layout",
-        "/_secured/metrics/",
-        "/_secured/metrics/credentials/"
+        "/_secured/mt/_layout",
+        "/_secured/mt/",
+        "/_secured/mt/credentials/"
       ]
     },
-    "/_secured/metrics/_layout": {
-      "filePath": "_secured/metrics/_layout.tsx",
-      "parent": "/_secured/metrics",
+    "/_secured/mt/_layout": {
+      "filePath": "_secured/mt/_layout.tsx",
+      "parent": "/_secured/mt",
       "children": [
-        "/_secured/metrics/_layout/formatted/",
-        "/_secured/metrics/_layout/raw/"
+        "/_secured/mt/_layout/formatted/",
+        "/_secured/mt/_layout/raw/"
       ]
     },
     "/_secured/machines/": {
       "filePath": "_secured/machines/index.tsx",
       "parent": "/_secured"
     },
-    "/_secured/metrics/": {
-      "filePath": "_secured/metrics/index.tsx",
-      "parent": "/_secured/metrics"
+    "/_secured/mt/": {
+      "filePath": "_secured/mt/index.tsx",
+      "parent": "/_secured/mt"
     },
     "/_secured/tokens/": {
       "filePath": "_secured/tokens/index.tsx",
@@ -608,17 +606,17 @@ export const routeTree = rootRoute
       "filePath": "_secured/acl/_layout/index.tsx",
       "parent": "/_secured/acl/_layout"
     },
-    "/_secured/metrics/credentials/": {
-      "filePath": "_secured/metrics/credentials/index.tsx",
-      "parent": "/_secured/metrics"
+    "/_secured/mt/credentials/": {
+      "filePath": "_secured/mt/credentials/index.tsx",
+      "parent": "/_secured/mt"
     },
-    "/_secured/metrics/_layout/formatted/": {
-      "filePath": "_secured/metrics/_layout/formatted/index.tsx",
-      "parent": "/_secured/metrics/_layout"
+    "/_secured/mt/_layout/formatted/": {
+      "filePath": "_secured/mt/_layout/formatted/index.tsx",
+      "parent": "/_secured/mt/_layout"
     },
-    "/_secured/metrics/_layout/raw/": {
-      "filePath": "_secured/metrics/_layout/raw/index.tsx",
-      "parent": "/_secured/metrics/_layout"
+    "/_secured/mt/_layout/raw/": {
+      "filePath": "_secured/mt/_layout/raw/index.tsx",
+      "parent": "/_secured/mt/_layout"
     }
   }
 }

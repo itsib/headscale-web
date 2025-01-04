@@ -9,13 +9,13 @@ import { Credentials } from '../../../types';
 import ApplicationContext from '../../../context/application/application.context.ts';
 import './_layout.css';
 
-export const Route = createFileRoute('/_secured/metrics/_layout')({
+export const Route = createFileRoute('/_secured/mt/_layout')({
   beforeLoad: async ({ location, context }) => {
     const { base } = await getCredentials(context.storage, 'metric');
-    if (location.pathname === '/metrics' && base) {
-      throw redirect({ to: '/metrics/formatted', replace: true });
-    } else if (location.pathname !== '/metrics/credentials' && !base) {
-      throw redirect({ to: '/metrics/credentials', replace: true });
+    if (location.pathname === '/mt' && base) {
+      throw redirect({ to: '/mt/formatted', replace: true });
+    } else if (location.pathname !== '/mt/credentials' && !base) {
+      throw redirect({ to: '/mt/credentials', replace: true });
     }
   },
   loader: async ({ context, abortController }) => {
@@ -74,7 +74,7 @@ function RouteComponent() {
               <>:&nbsp;</>
               <span className="text-primary">{base}</span>
             </span>
-            <Link to="/metrics/credentials" className="ml-2 size-6 relative top-1.5 transition opacity-70 hover:opacity-100">
+            <Link to="/mt/credentials" className="ml-2 size-6 relative top-1.5 transition opacity-70 hover:opacity-100">
               <i className="icon icon-edit-url icon-lg " />
             </Link>
           </div>
@@ -82,11 +82,11 @@ function RouteComponent() {
       </div>
 
       <nav className="tabs-links">
-        <Link to="/metrics/formatted" className="tab-link">
+        <Link to="/mt/formatted" className="tab-link">
           <Trans i18nKey="formatted" />
         </Link>
 
-        <Link to="/metrics/raw" className="tab-link">
+        <Link to="/mt/raw" className="tab-link">
           <Trans i18nKey="raw_data" />
         </Link>
       </nav>
