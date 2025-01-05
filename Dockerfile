@@ -7,16 +7,12 @@ RUN npm install -g npm@latest && \
     npm install --frozen-lockfile && \
     npm run build
 
-FROM nginx:1.27-alpine
+FROM caddy:2.8-alpine
 
-COPY --from=builder /app/nginx.conf /etc/nginx/conf.d/default.conf
-
-WORKDIR /usr/share/nginx/html
+WORKDIR /usr/share/caddy
 
 RUN rm -rf ./*
 
+COPY --from=builder /app/Caddyfile /etc/caddy/Caddyfile
 COPY --from=builder /app/dist .
 
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
