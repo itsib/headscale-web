@@ -131,6 +131,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
           globPatterns: [
             '**/*.{js,css,html}',
             'locales/**/*.{json,svg}',
+            'fonts/**/*.{woff2,woff,ttf}',
             'screenshot.png'
           ],
           modifyURLPrefix: { '': '/' },
