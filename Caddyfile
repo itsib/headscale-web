@@ -1,9 +1,9 @@
 {$DOMAIN:localhost} {
     encode gzip
 
-    header           Cache-Control "public, max-age=0, s-maxage=0, must-revalidate"
-    header /assets/* Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable"
-    header /workbox-* Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable"
+    header ?Cache-Control "public, max-age=0, s-maxage=0, must-revalidate"
+    header /assets/* >Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable"
+    header /workbox-* >Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable"
 
     root * {$STATIC_DIR:/usr/share/caddy}
     try_files {path} /index.html
