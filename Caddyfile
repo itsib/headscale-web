@@ -1,3 +1,8 @@
+{
+  email: {$EMAIL}
+  admin: off
+}
+
 {$DOMAIN:localhost} {
   encode gzip
 
