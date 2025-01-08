@@ -5,7 +5,7 @@
 
 A web frontend for the [headscale](https://github.com/juanfont/headscale) coordinator server.
 
-![Version](https://img.shields.io/badge/version-0.6.6-blue.svg?cacheSeconds=2592000&label=Version)
+![Version](https://img.shields.io/badge/version-0.6.7-blue.svg?cacheSeconds=2592000&label=Version)
 [![Docker Image Version (tag)](https://img.shields.io/docker/v/sergeyitsib/headscale-web/latest?style=flat&logo=docker&logoColor=%23ffffff&label=Image)](https://hub.docker.com/r/sergeyitsib/headscale-web)
 [![Release](https://github.com/itsib/headscale-web/actions/workflows/main.yaml/badge.svg)](https://github.com/itsib/headscale-web/actions/workflows/main.yaml)
 
