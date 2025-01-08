@@ -1,7 +1,3 @@
-{
-  admin: off
-}
-
 {$DOMAIN:localhost} {
   encode gzip
 
