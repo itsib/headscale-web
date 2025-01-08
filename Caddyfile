@@ -1,4 +1,5 @@
 {$DOMAIN:localhost} {
+  tls {$EMAIL}
   encode gzip
 
   header ?Cache-Control "public, max-age=0, s-maxage=0, must-revalidate"
