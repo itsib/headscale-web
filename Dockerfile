@@ -1,32 +1,40 @@
-FROM caddy:2.8-builder AS caddy-builder
+ARG VERSION=0.6.9
+FROM node:20.17-slim AS builder
 
-RUN xcaddy build \
-    --with github.com/caddyserver/transform-encoder
+COPY package.json \
+     package-lock.json \
+     /usr/web/
 
-COPY Caddyfile /tmp/Caddyfile
+WORKDIR /usr/web/
+RUN npm install -g npm@latest && npm ci
 
-FROM node:20.17-slim AS node-builder
+COPY public/ /usr/web/public/
+COPY src/ /usr/web/src/
+COPY icons/ /usr/web/icons/
+COPY tailwind.config.ts \
+     tsconfig.* \
+     vite.config.ts \
+     icon-font.json \
+     index.html \
+     manifest.webmanifest \
+     LICENSE \
+     README.md \
+     /usr/web/
 
-WORKDIR /app
+RUN npm run build
 
-COPY . .
-RUN npm install -g npm@latest && \
-    npm install --frozen-lockfile && \
-    npm run build
+FROM rtsp/lighttpd
+ARG VERSION
 
-FROM caddy:2.8-alpine
-
-WORKDIR /srv
+WORKDIR /var/www/html
 
 RUN rm -rf ./*
 
-COPY --from=caddy-builder /usr/bin/caddy /usr/bin/caddy
-COPY --from=caddy-builder /tmp/Caddyfile /etc/caddy/Caddyfile
-COPY --from=node-builder /app/dist .
+COPY --from=builder /usr/web/dist .
+COPY ./lighttpd.conf /etc/lighttpd/lighttpd.conf
 
-EXPOSE 80
-EXPOSE 443
-EXPOSE 443/udp
+ENV PORT=80
+ENV VERSION=${VERSION}
 
-CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+ENTRYPOINT ["/usr/sbin/lighttpd", "-D", "-f", "/etc/lighttpd/lighttpd.conf"]
 
