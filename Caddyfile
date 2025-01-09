@@ -1,5 +1,5 @@
 {
-	auto_https off
+	auto_https {$AUTO_HTTPS:off}
 
 	log default {
 		output stdout
@@ -12,6 +12,7 @@
 
 {$DOMAIN:localhost} {
 	encode gzip
+
 	log server {
 		output stdout
 		format transform "[{ts}] {request>remote_ip} - {user_id} {request>method} {request>uri} {request>proto} {status} {size}" {
