@@ -1,12 +1,30 @@
+{
+	auto_https off
+
+	log default {
+		output stdout
+		format transform "[{ts}] {level}: {msg}" {
+			time_format unix_seconds_float
+			level_format upper
+		}
+	}
+}
+
 {$DOMAIN:localhost} {
-  tls {$EMAIL}
-  encode gzip
+	encode gzip
+	log server {
+		output stdout
+		format transform "[{ts}] {request>remote_ip} - {user_id} {request>method} {request>uri} {request>proto} {status} {size}" {
+			time_format unix_seconds_float
+			level_format upper
+		}
+	}
 
-  header ?Cache-Control "public, max-age=0, s-maxage=0, must-revalidate"
-  header /assets/* >Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable"
-  header /workbox-* >Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable"
+	header ?Cache-Control "public, max-age=0, s-maxage=0, must-revalidate"
+	header /assets/* >Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable"
+	header /workbox-* >Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable"
 
-  root * /usr/share/caddy
-  try_files {path} /index.html
-  file_server
+	root * /srv
+	try_files {path} /index.html
+	file_server
 }
