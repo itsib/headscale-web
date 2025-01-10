@@ -1,0 +1,25 @@
+{
+	admin unix//run/caddy-admin.sock
+
+	log default {
+		output stdout
+#		format transform "[{ts}] {level}: {logger} | {msg}" {
+#			time_format unix_seconds_float
+#			level_format upper
+#		}
+	}
+}
+
+localhost {
+	log server {
+		output stdout
+		format transform "[{ts}] INFO: {logger} | {request>remote_ip} - {user_id} {request>method} {request>uri} {request>proto} {status} {size}" {
+			time_format unix_seconds_float
+			level_format upper
+		}
+	}
+
+	reverse_proxy front:8081 {
+		header_up Host {host}
+	}
+}

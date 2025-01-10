@@ -1,0 +1,39 @@
+name: "tailscale"
+
+services:
+  front:
+    image: sergeyitsib/headscale-web
+    container_name: front
+    restart: unless-stopped
+    environment:
+      PORT: 8081
+    ports:
+      - "8081:8081"
+    networks:
+      - network
+  proxy:
+    image: caddy:2.9.1
+    build:
+      context: ./caddy
+    container_name: proxy
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
