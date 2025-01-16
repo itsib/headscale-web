@@ -19,7 +19,7 @@ export const Route = createFileRoute('/home/')({
       };
     }
     try {
-      return await getCredentials(context.storage, 'main')
+      return await getCredentials(context.storage)
     } catch {
       return {
         base: import.meta.env.VITE_ACCESS_URL || '',
@@ -49,7 +49,7 @@ function Component() {
     try {
       await fetchFn(joinUrl(values.base, '/api/v1/node'), { method: 'GET' }, values.token, values.tokenType);
 
-      await setCredentials(storage, { ...values, component: 'main' });
+      await setCredentials(storage, { ...values });
       setIsAuthorized(true);
       setIsLoading(false);
       navigate({ to: '/machines' });

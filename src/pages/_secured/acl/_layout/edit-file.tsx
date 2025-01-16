@@ -1,16 +1,9 @@
-import {
-  createFileRoute,
-  getRouteApi,
-  useRouter,
-} from '@tanstack/react-router';
-import { useContext, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { fetchWithContext } from '../../../../utils/query-fn.ts';
-import { AclPolicy } from '../../../../types';
-import { formatError } from '../../../../utils/errors.ts';
+import { createFileRoute, getRouteApi } from '@tanstack/react-router';
+import { useState } from 'react';
 import { Trans } from 'react-i18next';
+import { formatError } from '../../../../utils/errors.ts';
 import { JsonCodeEditor } from '../../../../components/json-code-editor/json-code-editor.tsx';
-import ApplicationContext from '../../../../context/application/application.context.ts';
+import { useUpdateAcl } from '../../../../hooks/use-update-acl.ts';
 
 export const Route = createFileRoute('/_secured/acl/_layout/edit-file')({
   component: Component,
@@ -18,27 +11,10 @@ export const Route = createFileRoute('/_secured/acl/_layout/edit-file')({
 
 function Component() {
   const routeApi = getRouteApi('/_secured/acl/_layout');
-  const { invalidate } = useRouter();
-  const { storage } = useContext(ApplicationContext);
   const { policy } = routeApi.useLoaderData();
   const [policyTyped, setPolicyTyped] = useState<string>(policy);
 
-  const { mutate, isPending, error, reset } = useMutation({
-    mutationKey: ['/api/v1/policy'],
-    mutationFn(policy: string) {
-      return fetchWithContext<AclPolicy>(
-        '/api/v1/policy',
-        {
-          method: 'PUT',
-          body: JSON.stringify({ policy }),
-        },
-        storage,
-      );
-    },
-    onSuccess() {
-      invalidate();
-    },
-  });
+  const { mutate, isPending, error, reset } = useUpdateAcl();
 
   return (
     <>

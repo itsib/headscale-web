@@ -5,16 +5,13 @@ import { parseMetrics } from '../../../../../utils/parse-metrics.ts';
 import { GroupBlock } from './-group-block.tsx';
 import { Trans } from 'react-i18next';
 
-export const Route = createFileRoute('/_secured/mt/_layout/formatted/')({
+export const Route = createFileRoute('/_secured/metrics/_layout/formatted/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const routeApi = getRouteApi('/_secured/mt/_layout');
-  const { metrics: rawMetrics } = routeApi.useLoaderData() as {
-    metrics: string | null;
-    base: string | null;
-  };
+  const routeApi = getRouteApi('/_secured/metrics/_layout');
+  const rawMetrics = routeApi.useLoaderData() as string;
 
   const grouping = useMemo(() => {
     if (!rawMetrics) {

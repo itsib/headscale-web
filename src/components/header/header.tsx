@@ -36,7 +36,7 @@ export const Header: FC = () => {
               <i className="icon icon-key mr-2"/>
               <Trans i18nKey="tokens"/>
             </Link>
-            <Link to="/mt" className="nav-link">
+            <Link to="/metrics" className="nav-link">
               <i className="icon icon-metrics mr-2"/>
               <Trans i18nKey="metrics"/>
             </Link>

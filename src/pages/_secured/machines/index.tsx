@@ -1,6 +1,6 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { Trans, useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ModalNodeCreate } from '../../../components/modals/modal-node-create/modal-node-create.tsx';
 import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { ListLoading } from '../../../components/skeleton/list-loading.tsx';
@@ -13,12 +13,13 @@ import { ModalNodeDelete } from '../../../components/modals/modal-node-delete/mo
 import { ModalNodeRoutes } from '../../../components/modals/modal-node-routes/modal-node-routes.tsx';
 import { ModalNodeTags } from '../../../components/modals/modal-node-tags/modal-node-tags.tsx';
 import { ModalNodeExpire } from '../../../components/modals/modal-node-expire/modal-node-expire.tsx';
+import { REFRESH_INTERVAL } from '../../../config.ts';
 
 export const Route = createFileRoute('/_secured/machines/')({
-  loader: ({ context, abortController }) => {
+  loader: ({context, abortController}) => {
     return fetchWithContext(
       '/api/v1/node',
-      { signal: abortController.signal },
+      {signal: abortController.signal},
       context.storage,
     );
   },
@@ -27,22 +28,38 @@ export const Route = createFileRoute('/_secured/machines/')({
 });
 
 function Component() {
-  const { t } = useTranslation();
-  const { nodes } = Route.useLoaderData() as { nodes: Node[] };
-  const { invalidate } = useRouter();
+  const {t} = useTranslation();
+  const {nodes} = Route.useLoaderData() as { nodes: Node[] };
+  const {invalidate} = useRouter();
 
   const [opened, setOpened] = useState<ContextAction | null>(null);
   const [selected, setSelected] = useState<Node | null>(null);
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    async function update() {
+      await invalidate();
+      timer = setTimeout(update, REFRESH_INTERVAL);
+    }
+
+    timer = setTimeout(update, REFRESH_INTERVAL);
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    }
+  }, []);
 
   return (
     <div className="container pt-6">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="mb-2">
-            <Trans i18nKey="devices" />
+            <Trans i18nKey="devices"/>
           </h1>
           <p className="text-secondary">
-            <Trans i18nKey="machines_page_subtitle" />
+            <Trans i18nKey="machines_page_subtitle"/>
           </p>
         </div>
 
@@ -51,9 +68,9 @@ function Component() {
           className="jj-btn btn-accent flex items-center gap-2"
           onClick={() => setOpened('create')}
         >
-          <i className="icon icon-devices text-lg text-white" />
+          <i className="icon icon-devices text-lg text-white"/>
           <span className="font-medium text-white">
-            <Trans i18nKey="register_device" />
+            <Trans i18nKey="register_device"/>
           </span>
         </button>
       </div>
@@ -62,13 +79,13 @@ function Component() {
         <table className="w-full table-auto border-spacing-px" border={1}>
           <thead>
           <tr className="border-b border-b-primary h-[30px] text-xs font-medium text-secondary uppercase">
-            <th />
+            <th/>
             <th className="text-left ">{t('machine')}</th>
             <th className="text-left">{t('user')}</th>
             <th className="text-center ">{t('tags')}</th>
             <th className="text-center pr-8">{t('address')}</th>
             <th className="text-right">{t('last_seen')}</th>
-            <th />
+            <th/>
           </tr>
           </thead>
           <tbody>
@@ -86,7 +103,7 @@ function Component() {
         </table>
       ) : (
         <div className="border-primary border rounded-md p-8 text-center">
-          <Trans i18nKey="empty_list" />
+          <Trans i18nKey="empty_list"/>
         </div>
       )}
 
@@ -149,7 +166,7 @@ function Pending() {
         </div>
       </div>
 
-      <ListLoading />
+      <ListLoading/>
     </div>
-  )
+  );
 }

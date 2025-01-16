@@ -22,14 +22,14 @@ export const HeaderMenu: FC = () => {
   }, [token]);
 
   async function logout() {
-    await removeCredentials(storage, 'main');
+    await removeCredentials(storage);
     setIsAuthorized(false);
     await navigate({ to: '/home' });
   }
 
   useEffect(() => {
     async function refresh() {
-      const { base, token } = await getCredentials(storage, 'main');
+      const { base, token } = await getCredentials(storage);
       setBaseUrl(base);
       setToken(token);
     }

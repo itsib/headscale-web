@@ -1,7 +1,11 @@
-import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
+import { createFileRoute, ErrorComponentProps, Link, Outlet, useNavigate } from '@tanstack/react-router';
 import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { Trans, useTranslation } from 'react-i18next';
 import { ListLoading } from '../../../components/skeleton/list-loading.tsx';
+import { useLog } from '../../../hooks/use-log.ts';
+import { useEffect } from 'react';
+import { useUpdateAcl } from '../../../hooks/use-update-acl.ts';
+import { DEFAULT_ACL_POLICY } from '../../../config.ts';
 import './_layout.css';
 
 export const Route = createFileRoute('/_secured/acl/_layout')({
@@ -14,6 +18,7 @@ export const Route = createFileRoute('/_secured/acl/_layout')({
     );
   },
   pendingComponent: Pending,
+  errorComponent: ErrorComponent,
 });
 
 function Component() {
@@ -70,6 +75,29 @@ function Pending() {
         </div>
       </div>
       <ListLoading />
+    </div>
+  );
+}
+
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
+  const navigate = useNavigate();
+  const { mutateAsync } = useUpdateAcl();
+
+  useLog({ error });
+
+  useEffect(() => {
+    if (!error.message?.includes('acl policy not found')) {
+      navigate({ to: '/error-500' });
+    }
+
+    mutateAsync(DEFAULT_ACL_POLICY).then(() => {
+      reset();
+    })
+  }, [error]);
+
+  return (
+    <div className="container pt-6">
+
     </div>
   );
 }

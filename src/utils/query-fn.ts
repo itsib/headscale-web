@@ -52,10 +52,7 @@ export async function fetchFn<T = unknown>(url: string, init: RequestInit = {}, 
 
   let res: Response;
   try {
-    res = await fetch(url, {
-      ...init,
-      headers: headers,
-    });
+    res = await fetch(url, { ...init, headers: headers });
   } catch {
     throw new ConnectionError();
   }
@@ -77,7 +74,7 @@ export async function fetchFn<T = unknown>(url: string, init: RequestInit = {}, 
 }
 
 export async function fetchWithContext<T = unknown>(url: string, init: RequestInit = {}, storage: IDBStorageInstance<StorageTables>): Promise<T> {
-  const { base, token, tokenType } = await getCredentials(storage, 'main');
+  const { base, token, tokenType } = await getCredentials(storage);
   return await fetchFn(joinUrl(base, url), init, token, tokenType);
 }
 
@@ -87,7 +84,7 @@ export function getDefaultQueryFn(storage: IDBStorageInstance<StorageTables>) {
     let url = queryKey[0] as string;
     const method = (queryKey[1] as string) || 'GET';
 
-    const { base, token, tokenType } = await getCredentials(storage, 'main');
+    const { base, token, tokenType } = await getCredentials(storage);
 
     if (!url.startsWith('http') && base) {
       url = `${base}${url}`;
