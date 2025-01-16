@@ -35,12 +35,12 @@ async function resolveFailureRes(res: Response): Promise<never> {
 }
 
 export async function fetchFn<T = unknown>(url: string, init: RequestInit = {}, token?: string, tokenType?: TokenType): Promise<T> {
-  const headers = new Headers(init.headers);
+  const headers: Record<string, string> = (init.headers || {}) as Record<string, string>;
   if (token && (tokenType === 'Bearer')) {
-    headers.set('Authorization', 'Bearer ' + token);
+    headers['Authorization'] = 'Bearer ' + token;
   }
-  if (!headers.has('content-type')) {
-    headers.set('Content-Type', 'application/json');
+  if (!headers['Content-Type']) {
+    headers['Content-Type'] = 'application/json';
   }
 
   if (token && tokenType === 'apiKey') {
