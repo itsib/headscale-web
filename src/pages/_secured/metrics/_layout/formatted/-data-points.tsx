@@ -1,7 +1,24 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { DataPoint, MetricType, MetricUnit } from '../../../../../types';
 import { FormattedMetric } from '../../../../../components/formatters/formatted-metric.tsx';
-import { d3BarChart } from '../../../../../utils/d3-bar-chart.ts';
+import { ChartBar, ChartBars } from '../../../../../components/chart-bars/chart-bars.tsx';
+
+function isBarChart(dataPoints: DataPoint[]) {
+  let isEveryHaveOneAttr = true;
+
+  for (let i = 0; i < dataPoints.length; i++) {
+    const dataPoint = dataPoints[i];
+    if (dataPoint.kind === 'sum' || dataPoint.kind === 'count') {
+      continue;
+    }
+
+    if (dataPoint.attributes.length !== 1) {
+      isEveryHaveOneAttr = false;
+      break;
+    }
+  }
+  return isEveryHaveOneAttr;
+}
 
 export interface DataPointDisplayProps {
   id: string;
@@ -10,29 +27,7 @@ export interface DataPointDisplayProps {
   dataPoints: DataPoint[];
 }
 
-export const DataPoints: FC<DataPointDisplayProps> = ({ id, type, unit, dataPoints }) => {
-  useEffect(() => {
-    // if (dataPoints.length > 1) {
-    //   console.log(id, type, dataPoints)
-    // }
-  }, [id, dataPoints, type]);
-
-  function isBarChart(dataPoints: DataPoint[]) {
-    let isEveryHaveOneAttr = true;
-
-    for (let i = 0; i < dataPoints.length; i++) {
-      const dataPoint = dataPoints[i];
-      if (dataPoint.kind === 'sum' || dataPoint.kind === 'count') {
-        continue;
-      }
-
-      if (dataPoint.attributes.length !== 1) {
-        isEveryHaveOneAttr = false;
-        break;
-      }
-    }
-    return isEveryHaveOneAttr;
-  }
+export const DataPoints: FC<DataPointDisplayProps> = ({ unit, dataPoints }) => {
 
   return dataPoints.length === 1 ? (
     <DataPointsSingle {...dataPoints[0]} />
@@ -60,32 +55,30 @@ function DataPointsSingle({ value, unit, attributes }: DataPoint) {
 }
 
 function DataPointsBarChart({ dataPoints, unit }: { dataPoints: DataPoint[]; unit?: MetricUnit }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const [bars, setBars] = useState<ChartBar[] | undefined>(undefined);
 
   useEffect(() => {
-    const container = ref.current;
-    if (!container) return;
-
-    const bars: { bar: string, value: number }[] = [];
-    let barLabel: string | undefined = undefined;
+    const bars: { label: string, value: number }[] = [];
 
     for (let i = 0; i < dataPoints.length; i += 1) {
       const dataPoint = dataPoints[i];
       if (dataPoint.kind !== 'value' || !dataPoint.attributes.length) continue;
 
       const attr = dataPoint.attributes[0];
-      const bar = `${attr.value}`;
+      const label = `${attr.value}`;
 
       const value = parseFloat(dataPoint.value as string);
 
-      bars.push({ bar, value });
-      barLabel = attr.name;
+      bars.push({ label, value });
     }
 
-    return d3BarChart(container, { bars, barLabel, valueLabel: unit });
+    setBars(bars);
+
   }, [dataPoints, unit]);
 
   return (
-    <div className="bar-chart" ref={ref} />
+    <div className="bar-chart">
+      <ChartBars bars={bars} unit={unit} />
+    </div>
   );
 }
