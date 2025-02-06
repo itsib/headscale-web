@@ -18,7 +18,7 @@ function Component() {
 
   return (
     <>
-      <div className="tabs-content jj-scroll">
+      <div className="tabs-content ui-scroll">
         <div className="py-4 max-h-[calc(100vh-360px)] overflow-y-auto">
           <JsonCodeEditor value={policyTyped} onChange={setPolicyTyped} />
         </div>
@@ -31,7 +31,7 @@ function Component() {
       </div>
       <div className="mt-4 flex gap-4 justify-end">
         <button
-          className="jj-btn btn-outline-secondary min-w-[180px]"
+          className="btn btn-outline-secondary min-w-[180px]"
           disabled={(policy === policyTyped || isPending) && !error}
           onClick={() => {
             setPolicyTyped(policy);
@@ -44,7 +44,7 @@ function Component() {
         </button>
 
         <button
-          className={`jj-btn btn-accent min-w-[120px] ${isPending ? 'loading' : ''}`}
+          className={`btn btn-accent min-w-[120px] ${isPending ? 'loading' : ''}`}
           disabled={policy === policyTyped || isPending}
           onClick={() => mutate(policyTyped || '')}
         >

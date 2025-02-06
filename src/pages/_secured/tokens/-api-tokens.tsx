@@ -23,7 +23,7 @@ export const ApiTokens: FC = () => {
           <p className="text-secondary"><Trans i18nKey="api_access_tokens_subtitle"/></p>
         </div>
 
-        <button type="button" className="jj-btn btn-accent flex items-center gap-2" onClick={() => setOpened('create')}>
+        <button type="button" className="btn btn-accent flex items-center gap-2" onClick={() => setOpened('create')}>
           <i className="icon icon-key-plus text-lg text-white"/>
           <span className="font-medium text-white">
             <Trans i18nKey="generate_access_token"/>

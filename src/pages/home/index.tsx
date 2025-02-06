@@ -1,7 +1,9 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { Input, url as urlValidator } from 'react-just-ui';
+import { Input } from 'react-just-ui/input';
+import { url as urlValidator } from 'react-just-ui/validators';
+import { cn } from 'react-just-ui/cn';
 import { useContext, useState } from 'react';
 import { Credentials } from '../../types';
 import { getCredentials, setCredentials } from '../../utils/credentials.ts';
@@ -99,7 +101,7 @@ function Component() {
           </div>
 
           <div className="mt-4">
-            <button type="submit" className={`jj-btn btn-accent w-full ${isLoading ? 'loading' : ''}`}>
+            <button type="submit" className={cn('btn btn-accent w-full', { loading: isLoading })}>
               <span>{t('save')}</span>
             </button>
           </div>

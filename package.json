@@ -64,7 +64,7 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.53.0",
     "react-i18next": "^15.2.0",
-    "react-just-ui": "^0.6.4"
+    "react-just-ui": "^1.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

@@ -43,7 +43,7 @@ const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: N
         <div className="title">
           <span>{t('expiration_node_modal_title')}</span>
         </div>
-        <button type="button" className="jj-btn btn-close" onClick={() => onDismiss()} />
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
         <div className="pt-2 pb-4">
@@ -85,7 +85,7 @@ const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: N
         <div>
           <button
             type="button"
-            className={`jj-btn btn-accent w-full ${isPending ? 'loading' : ''}`}
+            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
             onClick={() => mutate(node.id)}
           >
             <span>{t('expiry')}</span>

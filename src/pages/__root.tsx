@@ -63,7 +63,7 @@ function Component() {
   }, []);
 
   return (
-    <div className="jj-scroll">
+    <div className="ui-scroll">
       <Header />
       <div className="max-h-[calc(100vh-60px)] overflow-y-auto pb-8" ref={containerRef}>
         <Outlet />

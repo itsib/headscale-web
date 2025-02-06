@@ -92,7 +92,7 @@ const ModalContent: FC<Omit<ModalAuthorizationProps, 'isOpen' | 'onDismiss'>> = 
           </div>
 
           <div className="mt-4">
-            <button type="submit" disabled={!isValid} className={`jj-btn btn-accent w-full ${isLoading ? 'loading' : ''}`}>
+            <button type="submit" disabled={!isValid} className={`btn btn-accent w-full ${isLoading ? 'loading' : ''}`}>
               <span>{t('save')}</span>
             </button>
           </div>

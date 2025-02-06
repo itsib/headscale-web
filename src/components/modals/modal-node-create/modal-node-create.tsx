@@ -68,7 +68,7 @@ const ModalContent: FC<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, o
         <div className="title">
           <span>{t('register_node_modal_title')}</span>
         </div>
-        <button type="button" className="jj-btn btn-close" onClick={() => onDismiss()} />
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
         <form onSubmit={handleSubmit(mutate as any)}>
@@ -109,7 +109,7 @@ const ModalContent: FC<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, o
           </div>
 
           <div>
-            <button type="submit" className={`jj-btn btn-accent w-full ${isPending ? 'loading' : ''}`}>
+            <button type="submit" className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}>
               <span>{t('create')}</span>
             </button>
             {error ? (

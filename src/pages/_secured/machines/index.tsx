@@ -65,7 +65,7 @@ function Component() {
 
         <button
           type="button"
-          className="jj-btn btn-accent flex items-center gap-2"
+          className="btn btn-accent flex items-center gap-2"
           onClick={() => setOpened('create')}
         >
           <i className="icon icon-devices text-lg text-white"/>

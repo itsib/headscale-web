@@ -64,7 +64,7 @@ const ModalContent: FC<Omit<ModalNodeChownProps, 'isOpen' | 'node'> & { node: No
         <div className="title">
           <span>{t('chown_node_modal_title')}</span>
         </div>
-        <button type="button" className="jj-btn btn-close" onClick={() => onDismiss()} />
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
         <form
@@ -84,7 +84,7 @@ const ModalContent: FC<Omit<ModalNodeChownProps, 'isOpen' | 'node'> & { node: No
 
           <button
             type="submit"
-            className={`jj-btn btn-accent w-full ${isPending ? 'loading' : ''}`}
+            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
             disabled={node.user.name === watch('userName')}
           >
             <span>{t('apply')}</span>

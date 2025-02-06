@@ -119,7 +119,7 @@ const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: N
         <div className="title">
           <span>{t('edit_route_settings_of', { name: node.givenName || node.name })}</span>
         </div>
-        <button type="button" className="jj-btn btn-close" onClick={() => onDismiss()}/>
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()}/>
       </div>
       <div className="modal-content">
         <h3 className="font-semibold mb-2 text-base">
@@ -186,7 +186,7 @@ const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: N
         </div>
 
         <div className="mt-4">
-          <button type="button" className={`jj-btn btn-accent w-full ${isPending ? 'loading' : ''}`} disabled={!changed || !routes} onClick={onSave}>
+          <button type="button" className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`} disabled={!changed || !routes} onClick={onSave}>
             <span><Trans i18nKey="save" /></span>
           </button>
         </div>

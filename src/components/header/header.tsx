@@ -51,7 +51,7 @@ export const Header: FC = () => {
               placement={PopupPlacement.BOTTOM}
               menu={() => <HeaderMenu/>}
             >
-              <button type="button" className="jj-btn btn-config">
+              <button type="button" className="btn btn-config">
                 <i className="icon icon-settings text-[26px] leading-[26px] block"/>
               </button>
             </ContextMenu>

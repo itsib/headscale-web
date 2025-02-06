@@ -5,11 +5,11 @@
     .subnet-route {
       margin: 6px 0;
 
-      .control-toggler {
+      .control {
         margin-left: 0;
       }
 
-      .jj-subscript {
+      .ui-subscript {
         display: none;
       }
     }
@@ -20,11 +20,11 @@
     .exit-node-checkbox {
       margin: 8px 0 0;
 
-      .control-toggler {
+      .control {
         margin-left: 0;
       }
 
-      .jj-subscript {
+      .ui-subscript {
         display: none;
       }
     }
