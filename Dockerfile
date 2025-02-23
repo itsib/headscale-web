@@ -17,6 +17,7 @@ COPY tailwind.config.ts \
      icon-font.json \
      index.html \
      manifest.webmanifest \
+     healthcheck \
      LICENSE \
      README.md \
      /usr/web/
@@ -31,6 +32,7 @@ WORKDIR /var/www/html
 RUN rm -rf ./*
 
 COPY --from=builder /usr/web/dist .
+COPY --from=builder /usr/web/healthcheck /usr/bin/healthcheck
 COPY ./lighttpd.conf /etc/lighttpd/lighttpd.conf
 
 ENV PORT=80
