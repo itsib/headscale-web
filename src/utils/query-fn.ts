@@ -54,12 +54,12 @@ export async function fetchFn<T = unknown>(url: string, init: RequestInit = {}, 
   try {
     res = await fetch(url, { ...init, headers: headers });
   } catch {
-    throw new ConnectionError();
+    return Promise.reject(new ConnectionError());
   }
 
   if (!res.ok) {
     if (res.status === 401) {
-      throw new UnauthorizedError();
+      return Promise.reject(new UnauthorizedError());
     } else {
       await resolveFailureRes(res);
     }

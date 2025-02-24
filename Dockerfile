@@ -24,7 +24,7 @@ COPY tailwind.config.ts \
 
 RUN npm run build
 
-FROM rtsp/lighttpd
+FROM rtsp/lighttpd AS production
 ARG VERSION
 
 WORKDIR /var/www/html

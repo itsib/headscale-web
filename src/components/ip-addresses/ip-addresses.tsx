@@ -17,7 +17,7 @@ export const IpAddresses: FC<IPAddressesProps> = ({ addresses }) => {
         </div>
       )}
     >
-      <button type="button" className="">
+      <button type="button" className="whitespace-nowrap">
         <span className="digits">{addresses[0]}</span>
         <i className="icon icon-dropdown text-secondary text-xs ml-2"/>
       </button>

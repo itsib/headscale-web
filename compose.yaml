@@ -5,10 +5,8 @@ services:
     image: sergeyitsib/headscale-web
     container_name: front
     restart: unless-stopped
-    environment:
-      PORT: 8081
     ports:
-      - "8081:8081"
+      - "8081:80"
     networks:
       - network
     healthcheck:
