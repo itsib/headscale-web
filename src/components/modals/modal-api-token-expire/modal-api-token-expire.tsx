@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { ApiToken } from '../../../types';
 import { fetchWithContext } from '../../../utils/query-fn.ts';
-import ApplicationContext from '../../../context/application/application.context.ts';
+import { ApplicationContext } from '@app-context/application';
 
 export interface ModalApiTokenExpireProps extends ModalProps {
   apiToken?: ApiToken | null;

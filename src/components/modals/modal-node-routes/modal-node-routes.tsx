@@ -3,13 +3,13 @@ import { Node } from '../../../types';
 import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { ModalNodeExpireProps } from '../modal-node-expire/modal-node-expire.tsx';
 import { Trans, useTranslation } from 'react-i18next';
-import { useNodeRoutes } from '../../../hooks/use-node-routes.ts';
+import { useNodeRoutes } from '@app-hooks/use-node-routes';
 import { Checkbox } from 'react-just-ui/checkbox';
 import { useMutation } from '@tanstack/react-query';
-import { fetchWithContext } from '../../../utils/query-fn.ts';
-import { isExitNodeRoute } from '../../../utils/is-exit-node-route.ts';
+import { fetchWithContext } from '@app-utils/query-fn.ts';
+import { isExitNodeRoute } from '@app-utils/is-exit-node-route';
+import { ApplicationContext } from '@app-context/application';
 import './modal-node-routes.css';
-import ApplicationContext from '../../../context/application/application.context.ts';
 
 export interface ModalNodeRoutesProps extends ModalProps {
   node?: Node | null;

@@ -12,6 +12,7 @@
       color: rgb(var(--text-secondary) / .9);
       transition: color .15s ease-in;
       position: relative;
+      text-decoration: none;
 
       &:after {
         content: " ";

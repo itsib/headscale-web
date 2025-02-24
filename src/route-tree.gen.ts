@@ -20,8 +20,8 @@ import { Route as Error500IndexImport } from './pages/error-500/index';
 import { Route as Error404IndexImport } from './pages/error-404/index';
 import { Route as SecuredUsersIndexImport } from './pages/_secured/users/index';
 import { Route as SecuredTokensIndexImport } from './pages/_secured/tokens/index';
+import { Route as SecuredNodesIndexImport } from './pages/_secured/nodes/index';
 import { Route as SecuredMetricsIndexImport } from './pages/_secured/metrics/index';
-import { Route as SecuredMachinesIndexImport } from './pages/_secured/machines/index';
 import { Route as SecuredMetricsLayoutImport } from './pages/_secured/metrics/_layout';
 import { Route as SecuredAclLayoutImport } from './pages/_secured/acl/_layout';
 import { Route as SecuredAclLayoutIndexImport } from './pages/_secured/acl/_layout/index';
@@ -90,16 +90,16 @@ const SecuredTokensIndexRoute = SecuredTokensIndexImport.update({
   getParentRoute: () => SecuredRoute,
 } as any);
 
+const SecuredNodesIndexRoute = SecuredNodesIndexImport.update({
+  id: '/nodes/',
+  path: '/nodes/',
+  getParentRoute: () => SecuredRoute,
+} as any);
+
 const SecuredMetricsIndexRoute = SecuredMetricsIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => SecuredMetricsRoute,
-} as any);
-
-const SecuredMachinesIndexRoute = SecuredMachinesIndexImport.update({
-  id: '/machines/',
-  path: '/machines/',
-  getParentRoute: () => SecuredRoute,
 } as any);
 
 const SecuredMetricsLayoutRoute = SecuredMetricsLayoutImport.update({
@@ -211,19 +211,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SecuredMetricsLayoutImport;
       parentRoute: typeof SecuredMetricsRoute;
     };
-    '/_secured/machines/': {
-      id: '/_secured/machines/';
-      path: '/machines';
-      fullPath: '/machines';
-      preLoaderRoute: typeof SecuredMachinesIndexImport;
-      parentRoute: typeof SecuredImport;
-    };
     '/_secured/metrics/': {
       id: '/_secured/metrics/';
       path: '/';
       fullPath: '/metrics/';
       preLoaderRoute: typeof SecuredMetricsIndexImport;
       parentRoute: typeof SecuredMetricsImport;
+    };
+    '/_secured/nodes/': {
+      id: '/_secured/nodes/';
+      path: '/nodes';
+      fullPath: '/nodes';
+      preLoaderRoute: typeof SecuredNodesIndexImport;
+      parentRoute: typeof SecuredImport;
     };
     '/_secured/tokens/': {
       id: '/_secured/tokens/';
@@ -337,7 +337,7 @@ const SecuredMetricsRouteWithChildren = SecuredMetricsRoute._addFileChildren(
 interface SecuredRouteChildren {
   SecuredAclRoute: typeof SecuredAclRouteWithChildren;
   SecuredMetricsRoute: typeof SecuredMetricsRouteWithChildren;
-  SecuredMachinesIndexRoute: typeof SecuredMachinesIndexRoute;
+  SecuredNodesIndexRoute: typeof SecuredNodesIndexRoute;
   SecuredTokensIndexRoute: typeof SecuredTokensIndexRoute;
   SecuredUsersIndexRoute: typeof SecuredUsersIndexRoute;
 }
@@ -345,7 +345,7 @@ interface SecuredRouteChildren {
 const SecuredRouteChildren: SecuredRouteChildren = {
   SecuredAclRoute: SecuredAclRouteWithChildren,
   SecuredMetricsRoute: SecuredMetricsRouteWithChildren,
-  SecuredMachinesIndexRoute: SecuredMachinesIndexRoute,
+  SecuredNodesIndexRoute: SecuredNodesIndexRoute,
   SecuredTokensIndexRoute: SecuredTokensIndexRoute,
   SecuredUsersIndexRoute: SecuredUsersIndexRoute,
 };
@@ -361,8 +361,8 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeIndexRoute;
   '/acl': typeof SecuredAclLayoutRouteWithChildren;
   '/metrics': typeof SecuredMetricsLayoutRouteWithChildren;
-  '/machines': typeof SecuredMachinesIndexRoute;
   '/metrics/': typeof SecuredMetricsIndexRoute;
+  '/nodes': typeof SecuredNodesIndexRoute;
   '/tokens': typeof SecuredTokensIndexRoute;
   '/users': typeof SecuredUsersIndexRoute;
   '/acl/edit-file': typeof SecuredAclLayoutEditFileRoute;
@@ -380,7 +380,7 @@ export interface FileRoutesByTo {
   '/home': typeof HomeIndexRoute;
   '/acl': typeof SecuredAclLayoutIndexRoute;
   '/metrics': typeof SecuredMetricsIndexRoute;
-  '/machines': typeof SecuredMachinesIndexRoute;
+  '/nodes': typeof SecuredNodesIndexRoute;
   '/tokens': typeof SecuredTokensIndexRoute;
   '/users': typeof SecuredUsersIndexRoute;
   '/acl/edit-file': typeof SecuredAclLayoutEditFileRoute;
@@ -400,8 +400,8 @@ export interface FileRoutesById {
   '/_secured/acl/_layout': typeof SecuredAclLayoutRouteWithChildren;
   '/_secured/metrics': typeof SecuredMetricsRouteWithChildren;
   '/_secured/metrics/_layout': typeof SecuredMetricsLayoutRouteWithChildren;
-  '/_secured/machines/': typeof SecuredMachinesIndexRoute;
   '/_secured/metrics/': typeof SecuredMetricsIndexRoute;
+  '/_secured/nodes/': typeof SecuredNodesIndexRoute;
   '/_secured/tokens/': typeof SecuredTokensIndexRoute;
   '/_secured/users/': typeof SecuredUsersIndexRoute;
   '/_secured/acl/_layout/edit-file': typeof SecuredAclLayoutEditFileRoute;
@@ -421,8 +421,8 @@ export interface FileRouteTypes {
     | '/home'
     | '/acl'
     | '/metrics'
-    | '/machines'
     | '/metrics/'
+    | '/nodes'
     | '/tokens'
     | '/users'
     | '/acl/edit-file'
@@ -439,7 +439,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/acl'
     | '/metrics'
-    | '/machines'
+    | '/nodes'
     | '/tokens'
     | '/users'
     | '/acl/edit-file'
@@ -457,8 +457,8 @@ export interface FileRouteTypes {
     | '/_secured/acl/_layout'
     | '/_secured/metrics'
     | '/_secured/metrics/_layout'
-    | '/_secured/machines/'
     | '/_secured/metrics/'
+    | '/_secured/nodes/'
     | '/_secured/tokens/'
     | '/_secured/users/'
     | '/_secured/acl/_layout/edit-file'
@@ -510,7 +510,7 @@ export const routeTree = rootRoute
       "children": [
         "/_secured/acl",
         "/_secured/metrics",
-        "/_secured/machines/",
+        "/_secured/nodes/",
         "/_secured/tokens/",
         "/_secured/users/"
       ]
@@ -556,13 +556,13 @@ export const routeTree = rootRoute
         "/_secured/metrics/_layout/raw/"
       ]
     },
-    "/_secured/machines/": {
-      "filePath": "_secured/machines/index.tsx",
-      "parent": "/_secured"
-    },
     "/_secured/metrics/": {
       "filePath": "_secured/metrics/index.tsx",
       "parent": "/_secured/metrics"
+    },
+    "/_secured/nodes/": {
+      "filePath": "_secured/nodes/index.tsx",
+      "parent": "/_secured"
     },
     "/_secured/tokens/": {
       "filePath": "_secured/tokens/index.tsx",

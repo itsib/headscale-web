@@ -4,10 +4,10 @@ import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { fetchWithContext } from '../../../utils/query-fn.ts';
-import { FormattedDate } from '../../formatters/formatted-date.tsx';
-import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
-import ApplicationContext from '../../../context/application/application.context.ts';
+import { fetchWithContext } from '@app-utils/query-fn';
+import { FormattedDate } from '@app-components/formatters/formatted-date';
+import { BtnCopy } from '@app-components/btn-copy/btn-copy';
+import { ApplicationContext } from '@app-context/application';
 
 interface FormFields {
   expiration: number;

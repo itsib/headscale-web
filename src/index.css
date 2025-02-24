@@ -6,7 +6,15 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
+/* CSS Variables */
+:root {
+  --header-height: 60px;
+  --footer-height: 60px;
+  --content-height: calc(100vh - var(--header-height) - var(--footer-height));
+}
+
+/* Common colors */
+:root {
   --blue-950: 14 51 93;
   --blue-900: 13 84 155;
   --blue-800: 8 97 197;
@@ -44,7 +52,8 @@ html {
   --green-950: 5 46 22;
 }
 
-html {
+/* Light theme colors */
+:root {
   --accent: 0 115 229;
   --black: 0 0 0;
 
@@ -76,6 +85,7 @@ html {
   color-scheme: light;
 }
 
+/* Dark theme colors */
 html.dark {
   --accent: 0 115 229;
   --black: 0 0 0;
@@ -110,32 +120,43 @@ html.dark {
   color-scheme: dark;
 }
 
-html, body {
-  min-height: 100vh;
-  background-color: rgb(var(--bg-secondary));
+/* Base styles fonts, colors, etc. */
+@layer base {
 
-  font-family: Roboto, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 22px;
-  font-weight: 400;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  body {
+    background-color: rgb(var(--bg-secondary));
+
+    font-family: Roboto, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
 
 
-  font-feature-settings: normal;
-  font-variation-settings: normal;
-  tab-size: 4;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: transparent;
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    tab-size: 4;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
 
-  color-scheme: light dark;
-  color: rgb(var(--text-primary));
+    color-scheme: light dark;
+    color: rgb(var(--text-primary));
 
+  }
+
+  * {
+    box-sizing: border-box;
+
+    &:after, &:before {
+      box-sizing: border-box;
+    }
+  }
 }
 
-/* Common components/utils */
+/* Common components */
 @layer components {
   h1 {
     font-size: 1.875rem;
@@ -149,6 +170,16 @@ html, body {
   h3 {
     font-size: 1.375rem;
     font-weight: 500;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 
   .digits {

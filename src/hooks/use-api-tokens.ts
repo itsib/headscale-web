@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { ApiToken, QueryResult } from '../types';
+import { ApiToken, QueryResult } from '@app-types';
 import { useCallback } from 'react';
 
 export function useApiTokens(): QueryResult<ApiToken[]> & { refetch: () => void } {

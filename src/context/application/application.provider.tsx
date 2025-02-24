@@ -1,12 +1,12 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
-import ApplicationContext from './application.context';
+import { ApplicationContext } from './application.context';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { Trans } from 'react-i18next';
-import { getActiveTheme, Theme } from '../../utils/theme.ts';
-import { AnimatedShow } from '../../components/animated-show/animated-show.tsx';
-import { ImgCompass } from '../../components/img-compass/img-compass.tsx';
-import { IDBStorageInstance } from '../../utils/idb-storage.ts';
-import { StorageTables, TokenType } from '../../types';
+import { getActiveTheme, Theme } from '@app-utils/theme';
+import { AnimatedShow } from '@app-components/animated-show/animated-show';
+import { ImgCompass } from '@app-components/img-compass/img-compass';
+import { IDBStorageInstance } from '@app-utils/idb-storage';
+import { StorageTables, TokenType } from '@app-types';
 
 export interface ApplicationProviderProps {
   storage: IDBStorageInstance<StorageTables>;

@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { fetchWithContext } from '../utils/query-fn.ts';
 import { AclPolicy } from '../types';
 import { useContext } from 'react';
-import ApplicationContext from '../context/application/application.context.ts';
+import { ApplicationContext } from '@app-context/application';
 import { useRouter } from '@tanstack/react-router';
 
 export function useUpdateAcl() {

@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
-import { fetchWithContext } from '../../../utils/query-fn.ts';
-import { Node } from '../../../types';
+import { fetchWithContext } from '@app-utils/query-fn';
+import { Node } from '@app-types';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import ApplicationContext from '../../../context/application/application.context.ts';
+import { ApplicationContext } from '@app-context/application';
 
 export interface ModalNodeRenameProps extends ModalProps {
   node?: Node | null;

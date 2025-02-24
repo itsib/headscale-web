@@ -1,11 +1,11 @@
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
-import { RouterContext } from '../types';
-import { Header } from '../components/header/header.tsx';
-import { Error500 } from '../components/errors/error-500.tsx';
-import { Error404 } from '../components/errors/error-404.tsx';
-import { Suspense, useEffect, useRef } from 'react';
-import { DevTools } from '../components/dev-tools/dev-tools.tsx';
-import { debounceAvg } from '../utils/debounce-avg.ts';
+import { useEffect, useRef } from 'react';
+import { RouterContext } from '@app-types';
+import { Header } from '@app-components/header/header';
+import { Error500 } from '@app-components/errors/error-500';
+import { Error404 } from '@app-components/errors/error-404';
+import { debounceAvg } from '@app-utils/debounce-avg';
+import { Footer } from '@app-components/footer/footer.tsx';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: Component,
@@ -65,12 +65,10 @@ function Component() {
   return (
     <div className="ui-scroll">
       <Header />
-      <div className="max-h-[calc(100vh-60px)] overflow-y-auto pb-8" ref={containerRef}>
+      <div className="container mt-[var(--header-height)] min-h-[var(--content-height)]" ref={containerRef}>
         <Outlet />
       </div>
-      <Suspense>
-        <DevTools position="bottom-right" />
-      </Suspense>
+      <Footer />
     </div>
   );
 }

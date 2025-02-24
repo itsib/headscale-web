@@ -9,7 +9,7 @@ import { useUsers } from '../../../hooks/use-users.ts';
 import { AuthKey } from '../../../types';
 import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
-import ApplicationContext from '../../../context/application/application.context.ts';
+import { ApplicationContext } from '@app-context/application';
 
 interface FormFields {
   user: string;

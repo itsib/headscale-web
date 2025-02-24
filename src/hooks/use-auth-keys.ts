@@ -1,9 +1,9 @@
 import { useQueries } from '@tanstack/react-query';
-import { AuthKey, AuthKeyWithUser, QueryResult } from '../types';
+import { AuthKey, AuthKeyWithUser, QueryResult } from '@app-types';
 import { useUsers } from './use-users.ts';
 import { useCallback, useContext, useMemo } from 'react';
-import { fetchWithContext } from '../utils/query-fn.ts';
-import ApplicationContext from '../context/application/application.context.ts';
+import { fetchWithContext } from '@app-utils/query-fn';
+import { ApplicationContext } from '@app-context/application';
 
 export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () => void } {
   const { data: users } = useUsers();

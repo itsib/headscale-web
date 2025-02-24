@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { getActiveTheme, Theme } from '../../utils/theme.ts';
-import { IDBStorageInstance } from '../../utils/idb-storage.ts';
-import { StorageTables } from '../../types';
+import { getActiveTheme, Theme } from '@app-utils/theme';
+import { IDBStorageInstance } from '@app-utils/idb-storage';
+import { StorageTables } from '@app-types';
 
 export interface ApplicationContext {
   isOffLine: boolean;
@@ -12,7 +12,7 @@ export interface ApplicationContext {
   storage: IDBStorageInstance<StorageTables>;
 }
 
-export default createContext<ApplicationContext>({
+export const ApplicationContext = createContext<ApplicationContext>({
   isOffLine: false,
   isAuthorized: false,
   setIsAuthorized: () => {throw new Error('NOT_IMPLEMENTED')},

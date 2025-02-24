@@ -18,7 +18,7 @@ export const Route = createFileRoute('/_secured/metrics/_layout')({
 
 function RouteComponent() {
   return (
-    <div className="metrics-page container pt-6">
+    <div className="metrics-page pt-6">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="mb-2">

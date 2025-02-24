@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { fetchWithContext } from '../../../utils/query-fn.ts';
-import { User } from '../../../types';
-import ApplicationContext from '../../../context/application/application.context.ts';
+import { fetchWithContext } from '@app-utils/query-fn';
+import { User } from '@app-types';
+import { ApplicationContext } from '@app-context/application';
 
 export interface ModalUserRenameProps extends ModalProps {
   user?: User | null;

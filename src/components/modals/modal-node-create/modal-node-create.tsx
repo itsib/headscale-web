@@ -7,7 +7,7 @@ import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { useUsers } from '../../../hooks/use-users.ts';
 import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
-import ApplicationContext from '../../../context/application/application.context.ts';
+import { ApplicationContext } from '@app-context/application';
 
 interface FormFields {
   nodekey: string;

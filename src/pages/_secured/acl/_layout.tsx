@@ -23,7 +23,7 @@ export const Route = createFileRoute('/_secured/acl/_layout')({
 
 function Component() {
   return (
-    <div className="acl-page container pt-6">
+    <div className="acl-page pt-6">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="mb-2">

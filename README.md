@@ -23,6 +23,7 @@ A web frontend for the [headscale](https://github.com/juanfont/headscale) coordi
 -  Add and remove machine tags
 -  ACL access JSON file editor with syntax highlights
 -  Display Go server metrics
+-  Docker [image](https://hub.docker.com/r/sergeyitsib/headscale-web) 
 
 ### Build
 

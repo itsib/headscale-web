@@ -34,8 +34,13 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
     },
     resolve: {
       alias: {
-        '@/': resolve(__dirname, 'src'),
         $fonts: resolve(__dirname, 'public/fonts'),
+        '@app-types': resolve(__dirname, 'src/types/index.ts'),
+        '@app-config': resolve(__dirname, 'src/config.ts'),
+        '@app-components': resolve(__dirname, 'src/components'),
+        '@app-hooks': resolve(__dirname, 'src/hooks'),
+        '@app-context': resolve(__dirname, 'src/context'),
+        '@app-utils': resolve(__dirname, 'src/utils'),
       }
     },
     css: {

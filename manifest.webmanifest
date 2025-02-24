@@ -4,6 +4,8 @@
   "orientation": "any",
   "start_url": "/",
   "display": "standalone",
+  "theme_color": "rgb(0 115 229)",
+  "background_color": "rgb(31 30 30)",
   "display_override": ["fullscreen", "browser"],
   "icons": [
     {
@@ -49,8 +51,6 @@
       "purpose": "any"
     }
   ],
-  "theme_color": "#0073E5",
-  "background_color": "#1F1E1E",
   "screenshots": [
     {
       "sizes": "1201x678",

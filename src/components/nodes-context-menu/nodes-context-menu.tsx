@@ -1,13 +1,13 @@
-import { Trans } from 'react-i18next';
 import { FC } from 'react';
+import { Trans } from 'react-i18next';
 
-export type ContextAction = 'delete' | 'create' | 'rename' | 'chown' | 'expiry' | 'tags' | 'routes';
+export type NodesContextMenuAction = 'delete' | 'create' | 'rename' | 'chown' | 'expiry' | 'tags' | 'routes';
 
-export interface MachineMenuProps {
-  onAction: (name: ContextAction) => void;
+export interface NodesContextMenuProps {
+  onAction: (name: NodesContextMenuAction) => void;
 }
 
-export const MachineMenu: FC<MachineMenuProps> = ({ onAction }) => {
+export const NodesContextMenu: FC<NodesContextMenuProps> = ({ onAction }) => {
   return (
     <>
       <div className="context-menu-item">
@@ -25,23 +25,18 @@ export const MachineMenu: FC<MachineMenuProps> = ({ onAction }) => {
           <Trans i18nKey="expire_key"/>
         </button>
       </div>
-
       <hr className="context-menu-divider"/>
-
       <div className="context-menu-item" onClick={() => onAction('routes')}>
         <button type="button" className="btn-context-menu">
           <Trans i18nKey="edit_route_settings"/>
         </button>
       </div>
-
       <div className="context-menu-item" onClick={() => onAction('tags')}>
         <button type="button" className="btn-context-menu">
           <Trans i18nKey="edit_acl_tags"/>
         </button>
       </div>
-
       <hr className="context-menu-divider"/>
-
       <div className="context-menu-item" onClick={() => onAction('delete')}>
         <button type="button" className="btn-context-menu text-red-600">
           <Trans i18nKey="delete"/>

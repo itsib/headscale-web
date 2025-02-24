@@ -1,11 +1,11 @@
 import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useTheme } from '../../hooks/use-theme.ts';
-import { Theme } from '../../utils/theme.ts';
-import ApplicationContext from '../../context/application/application.context.ts';
-import { getCredentials, removeCredentials } from '../../utils/credentials.ts';
+import { useTheme } from '@app-hooks/use-theme';
+import { Theme } from '@app-utils/theme';
+import { ApplicationContext } from '@app-context/application';
+import { getCredentials, removeCredentials } from '@app-utils/credentials';
 import { useNavigate } from '@tanstack/react-router';
-import { copyText } from '../../utils/copy-text.ts';
+import { copyText } from '@app-utils/copy-text';
 
 export const HeaderMenu: FC = () => {
   const { i18n } = useTranslation();

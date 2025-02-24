@@ -1,17 +1,19 @@
+import './i18n';
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistedClient, Persister, PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import { ApplicationProvider } from './context/application/application.provider.tsx';
+import { ApplicationProvider } from '@app-context/application/application.provider';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
-import { IDBStorage } from './utils/idb-storage.ts';
-import { getDefaultQueryFn } from './utils/query-fn';
+import { IDBStorage } from '@app-utils/idb-storage';
+import { getDefaultQueryFn } from '@app-utils/query-fn';
+import { StorageTables } from '@app-types';
+import { IDB_VERSION } from './config.ts';
 import { routeTree } from './route-tree.gen';
-import './i18n';
+
 import 'react-just-ui/theme/minimal.css';
 import './index.css';
-import { StorageTables } from './types';
-import { IDB_VERSION } from './config.ts';
 
 const BUILD_ID = import.meta.env.VITE_BUILD_ID;
 

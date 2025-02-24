@@ -9,7 +9,7 @@ export const Route = createFileRoute('/_secured/tokens/')({
 
 function Component() {
   return (
-    <div className="container pt-6">
+    <div className="pt-6">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="mb-2">

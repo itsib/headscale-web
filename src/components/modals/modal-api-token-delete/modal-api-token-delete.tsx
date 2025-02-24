@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
 import { ApiToken, Node } from '../../../types';
 import { fetchWithContext } from '../../../utils/query-fn.ts';
-import ApplicationContext from '../../../context/application/application.context.ts';
+import { ApplicationContext } from '@app-context/application';
 
 export interface ModalApiTokenDeleteProps extends ModalProps {
   apiToken?: ApiToken | null;

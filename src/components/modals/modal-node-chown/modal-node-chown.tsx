@@ -7,7 +7,7 @@ import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { Node } from '../../../types';
 import { useUsers } from '../../../hooks/use-users.ts';
-import ApplicationContext from '../../../context/application/application.context.ts';
+import { ApplicationContext } from '@app-context/application';
 
 export interface ModalNodeChownProps extends ModalProps {
   node?: Node | null;

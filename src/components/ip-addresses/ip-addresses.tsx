@@ -1,7 +1,7 @@
 import { FC, useRef, useState } from 'react';
-import { Popover } from '../popups/popover.tsx';
-import { PopupPlacement } from '../popups/popup-base/_common.ts';
-import { copyText } from '../../utils/copy-text.ts';
+import { Popover } from '@app-components/popups/popover';
+import { PopupPlacement } from '@app-components/popups/popup-base/_common';
+import { copyText } from '@app-utils/copy-text';
 
 export interface IPAddressesProps {
   addresses: string[];

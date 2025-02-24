@@ -2,14 +2,14 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui/input';
+import { cn } from 'react-just-ui/utils/cn';
 import { url as urlValidator } from 'react-just-ui/validators';
-import { cn } from 'react-just-ui/cn';
 import { useContext, useState } from 'react';
-import { Credentials } from '../../types';
-import { getCredentials, setCredentials } from '../../utils/credentials.ts';
-import ApplicationContext from '../../context/application/application.context.ts';
-import { fetchFn } from '../../utils/query-fn.ts';
-import { joinUrl } from '../../utils/join-url.ts';
+import { Credentials } from '@app-types';
+import { getCredentials, setCredentials } from '@app-utils/credentials';
+import { ApplicationContext } from '@app-context/application';
+import { fetchFn } from '@app-utils/query-fn';
+import { joinUrl } from '@app-utils/join-url';
 
 export const Route = createFileRoute('/home/')({
   loader: async ({ context }): Promise<Credentials> => {

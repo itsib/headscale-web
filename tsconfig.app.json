@@ -1,10 +1,19 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "target": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable", "WebWorker"],
     "module": "ESNext",
     "skipLibCheck": true,
     "useDefineForClassFields": true,
+    "paths": {
+      "@app-types": ["src/types/index.ts"],
+      "@app-config": ["src/config.ts"],
+      "@app-components/*": ["src/components/*"],
+      "@app-hooks/*": ["src/hooks/*"],
+      "@app-context/*": ["src/context/*"],
+      "@app-utils/*": ["src/utils/*"]
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",

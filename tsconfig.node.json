@@ -1,9 +1,18 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "target": "ES2022",
     "lib": ["ES2023"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "paths": {
+      "@app-types": ["src/types/index.ts"],
+      "@app-config": ["src/config.ts"],
+      "@app-components/*": ["src/components/*"],
+      "@app-hooks/*": ["src/hooks/*"],
+      "@app-context/*": ["src/context/*"],
+      "@app-utils/*": ["src/utils/*"],
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",

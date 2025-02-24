@@ -1,6 +1,6 @@
-import { Theme } from '../utils/theme.ts';
 import { useContext } from 'react';
-import ApplicationContext from '../context/application/application.context.ts';
+import { Theme } from '@app-utils/theme';
+import { ApplicationContext } from '@app-context/application';
 
 export function useTheme(): [Theme, (theme: Theme) => void] {
   const { theme, updateTheme } = useContext(ApplicationContext);
