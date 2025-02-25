@@ -1,5 +1,5 @@
 import { Component, createRef } from 'preact';
-import { Config, DotLottie } from '@lottiefiles/dotlottie-web';
+import { DotLottie, Config } from 'https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm';
 
 export type LottiePlayerMode = 'forward' | 'reverse' | 'bounce' | 'reverse-bounce';
 

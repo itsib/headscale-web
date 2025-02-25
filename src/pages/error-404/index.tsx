@@ -7,7 +7,7 @@ export const Error404 = () => {
   return (
     <main className="w-full flex flex-col items-center justify-center min-h-[var(--content-height)]">
       <div className="aspect-square">
-        <LottiePlayer src="/animations/broken-bot.json" loop speed={1} height={500} width={500} />
+        <LottiePlayer src="/animations/page-not-found.json" loop speed={1} height={500} width={500} />
       </div>
 
       <a href="/" className="btn text-2xl hover:underline underline-offset-4">
