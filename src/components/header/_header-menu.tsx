@@ -1,49 +1,19 @@
-import { useContext, useEffect, useMemo, useState } from 'preact/hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import { useTheme } from '@app-hooks/use-theme';
 import { Theme } from '@app-utils/theme';
-import { ApplicationContext } from '@app-context/application';
-import { getCredentials, removeCredentials } from '@app-utils/credentials';
-import { copyText } from '@app-utils/copy-text';
-import { useLocation } from 'preact-iso/router';
+import { useCredentials } from '@app-hooks/use-credentials.ts';
+import { FunctionComponent } from 'preact';
 
-export const HeaderMenu = () => {
+export const HeaderMenu: FunctionComponent = () => {
   const { i18n } = useTranslation();
-  const { route } = useLocation();
   const [ theme, setTheme ] = useTheme();
-  const { storage, setIsAuthorized, isAuthorized } = useContext(ApplicationContext);
-
-  const [token, setToken] = useState<string | null>(null);
-  const [baseUrl, setBaseUrl] = useState<string | null>(null);
-
-  const prefix = useMemo(() => {
-    if (!token) return undefined;
-    return token.split('.')[0];
-  }, [token]);
-
-  async function logout() {
-    await removeCredentials(storage);
-    setIsAuthorized(false);
-    await route('/home');
-  }
-
-  useEffect(() => {
-    async function refresh() {
-      const { base, token } = await getCredentials(storage);
-      setBaseUrl(base);
-      setToken(token);
-    }
-    refresh().catch(console.error);
-  }, [isAuthorized, storage]);
+  const { logout, prefix, base: baseUrl } = useCredentials();
 
   return (
     <>
       <div className="context-menu-item">
         <div className="px-[16px] py-[6px]">
-          <div
-            className="text-sm text-primary font-medium cursor-pointer"
-            onClick={() => token && copyText(token)}
-          >
+          <div className="text-sm text-primary font-medium cursor-pointer">
             <span>{prefix}</span>
           </div>
           <div className="text-xs text-secondary">{baseUrl}</div>
@@ -111,4 +81,5 @@ export const HeaderMenu = () => {
       </div>
     </>
   )
+
 }

@@ -201,7 +201,7 @@ const NodeItem = memo(function NodeRow({ onAction, ...node }: NodeRowProps) {
       <td className="text-right w-[52px]">
         <ContextMenu
           placement={PopupPlacement.BOTTOM}
-          menu={() => <NodesContextMenu onAction={onAction} />}
+          Menu={()=> <NodesContextMenu onAction={onAction} />}
         >
           <button type="button" className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90">
             <i className="icon icon-context-menu text-[24px]"/>

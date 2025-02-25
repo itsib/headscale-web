@@ -1,40 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
-import { ApplicationContext } from '@app-context/application';
-import { Credentials, QueryResult } from '@app-types';
-import { getCredentials } from '@app-utils/credentials.ts';
+import { useContext } from 'preact/hooks';
+import { AuthContext } from '@app-context/auth';
 
-export function useCredentials(): QueryResult<Credentials> {
-  const [data, setData] = useState<Credentials>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+export function useCredentials(): { isAuthorized: boolean; logout: () => Promise<void>; prefix?: string; base?: string } {
+  const { isAuthorized, logout, prefix, base } = useContext(AuthContext);
 
-  const { storage, isAuthorized } = useContext(ApplicationContext);
-
-  useEffect(() => {
-    setError(null);
-    setIsLoading(true);
-    let canceled = false;
-
-    async function run() {
-      try {
-        const credentials = await getCredentials(storage);
-        if (canceled) return;
-
-        setIsLoading(false);
-        setData(credentials);
-      } catch (e) {
-        if (canceled) return;
-        setIsLoading(false);
-        setError(e as Error);
-      }
-    }
-
-    run();
-
-    return () => {
-      canceled = true;
-    }
-  }, [storage, isAuthorized]);
-
-  return { data, isLoading, error }
+  return { isAuthorized, logout, prefix, base }
 }

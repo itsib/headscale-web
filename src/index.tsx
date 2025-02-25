@@ -4,7 +4,8 @@ import { LocationProvider } from 'preact-iso';
 import { render } from 'preact';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistedClient, Persister, PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import { ApplicationProvider } from '@app-context/application/application.provider';
+import { ApplicationProvider } from '@app-context/application';
+import { AuthProvider } from '@app-context/auth';
 import { IDBStorage } from '@app-utils/idb-storage';
 import { getDefaultQueryFn } from '@app-utils/query-fn';
 import { StorageTables } from '@app-types';
@@ -46,9 +47,11 @@ async function init() {
   render(
     <PersistQueryClientProvider client={queryClient} persistOptions={{ persister, buster: BUILD_ID }}>
       <ApplicationProvider storage={storage}>
-        <LocationProvider>
-          <Application />
-        </LocationProvider>
+        <AuthProvider>
+          <LocationProvider>
+            <Application />
+          </LocationProvider>
+        </AuthProvider>
       </ApplicationProvider>
     </PersistQueryClientProvider>,
     rootElement,

@@ -150,7 +150,7 @@ const UserItem = memo(function UserItem(props: UserItemProps) {
       <td className="text-right w-[52px]">
         <ContextMenu
           placement={PopupPlacement.BOTTOM}
-          menu={() => (
+          Menu={() => (
             <UsersContextMenu onClick={action => {
               if (action === 'rename') {
                 onRename({ id, name, displayName, profilePicUrl, email, createdAt });

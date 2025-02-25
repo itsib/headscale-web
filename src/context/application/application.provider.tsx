@@ -1,4 +1,5 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'preact/hooks';
+import { FunctionComponent } from 'preact';
 import { ApplicationContext } from './application.context';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { Trans } from 'react-i18next';
@@ -6,22 +7,18 @@ import { getActiveTheme, Theme } from '@app-utils/theme';
 import { AnimatedShow } from '@app-components/animated-show/animated-show';
 import { ImgCompass } from '@app-components/img-compass/img-compass';
 import { IDBStorageInstance } from '@app-utils/idb-storage';
-import { StorageTables, TokenType } from '@app-types';
+import { StorageTables } from '@app-types';
 
 export interface ApplicationProviderProps {
   storage: IDBStorageInstance<StorageTables>;
-  children: ReactNode;
 }
 
-export function ApplicationProvider({ children, storage }: ApplicationProviderProps) {
+export const ApplicationProvider: FunctionComponent<ApplicationProviderProps> = ({ children, storage }) => {
   const [theme, setTheme] = useState<Theme>(getActiveTheme());
-  const [isAuthorized, setIsAuthorized] = useState(false);
   const [isOffLine, setIsOffLine] = useState<boolean>(!navigator.onLine);
   const [, setNeedsRefresh] = useState<boolean>(false);
 
-  const updateTheme = useCallback((theme: Theme) => {
-    setTheme(theme);
-  }, []);
+  const updateTheme = useCallback((theme: Theme) => setTheme(theme), []);
 
   useRegisterSW({
     onNeedRefresh() {
@@ -76,21 +73,8 @@ export function ApplicationProvider({ children, storage }: ApplicationProviderPr
     };
   }, []);
 
-  // Init authorization
-  useEffect(() => {
-    async function init() {
-      const [base, token, tokenType] = await Promise.all([
-        storage.readAppStore<string>('main-url'),
-        storage.readAppStore<string>('main-token'),
-        storage.readAppStore<TokenType>('main-token-type'),
-      ]);
-      setIsAuthorized(!!base && !!token && !!tokenType);
-    }
-    init().catch(console.error);
-  }, [storage]);
-
   return (
-    <ApplicationContext.Provider value={{ theme, updateTheme, isOffLine, isAuthorized, setIsAuthorized, storage }}>
+    <ApplicationContext.Provider value={{ theme, updateTheme, isOffLine, storage }}>
       <div className="fixed inset-0 bottom-auto h-0 z-30">
         <AnimatedShow show={isOffLine}>
           <div className="toast">

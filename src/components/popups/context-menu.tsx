@@ -9,11 +9,14 @@ export interface ContextMenuProps {
    * The position of the window relative to the anchor
    */
   placement?: PopupPlacement;
-
-  menu: AnyComponent;
+  /**
+   * Menu component to render
+   */
+  Menu: AnyComponent;
 }
 
 export const ContextMenu = (props: RenderableProps<ContextMenuProps>) => {
+  const { Menu } = props;
   const childWrapperRef = useRef<HTMLDivElement | null>(null);
   const contextMenuRef = useRef<HTMLMenuElement | null>(null);
   const [openBtnElement, setOpenBtnElement] = useState<HTMLElement>();
@@ -77,7 +80,7 @@ export const ContextMenu = (props: RenderableProps<ContextMenuProps>) => {
       <div ref={childWrapperRef}>{props.children}</div>
       <PopupBaseAnchor rect={rect} open={isOpen} placement={props.placement}>
         <menu className="popup context-menu" ref={contextMenuRef} onClick={e => e.stopPropagation()}>
-          {props.menu}
+          <Menu />
         </menu>
       </PopupBaseAnchor>
     </>

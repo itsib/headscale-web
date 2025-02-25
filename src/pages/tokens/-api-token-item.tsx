@@ -56,7 +56,7 @@ export const ApiTokenItem = memo(function ApiTokenItem(props: ApiTokenItemProps)
       <td className="text-right w-[52px]">
         <ContextMenu
           placement={PopupPlacement.BOTTOM}
-          menu={() => (
+          Menu={() => (
             <>
               <div className="context-menu-item">
                 <button type="button" className="btn-context-menu" onClick={() => onAction('expire')}>

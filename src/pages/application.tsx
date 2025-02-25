@@ -14,17 +14,13 @@ const Metrics = lazy(() => import('./metrics'));
 
 export class Application extends Component<any, any> {
 
-  onRouteChange(url: string) {
-    console.log(url);
-  }
-
   render() {
     return (
       <div className="ui-scroll">
         <Header />
         <div className="container mt-[var(--header-height)] min-h-[var(--content-height)]">
           <ErrorBoundary>
-            <Router onRouteChange={this.onRouteChange.bind(this)}>
+            <Router>
               <Route path='/' component={Home} />
               <Route path='/nodes' component={Nodes} />
               <Route path='/users' component={Users} />

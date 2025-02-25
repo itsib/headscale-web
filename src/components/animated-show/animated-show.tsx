@@ -1,12 +1,12 @@
-import React, { FC, ReactElement, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { FunctionComponent, cloneElement } from 'preact';
 
 export interface AnimatedShowProps {
   show?: boolean;
   showClassName?: string;
-  children: ReactElement;
 }
 
-export const AnimatedShow: FC<AnimatedShowProps> = ({ children, show, showClassName = 'show' }) => {
+export const AnimatedShow: FunctionComponent<AnimatedShowProps> = ({ children, show, showClassName = 'show' }) => {
   const [animated, setAnimated] = useState(false);
   const childrenRef = useRef<HTMLElement>(null);
 
@@ -27,7 +27,7 @@ export const AnimatedShow: FC<AnimatedShowProps> = ({ children, show, showClassN
 
   return (
     <>
-      {animated || show ? React.cloneElement(children, { ref: (ref: any) => (childrenRef.current = ref) } as any) : null}
+      {animated || show ? cloneElement(<>{children}</>, { ref: (ref: any) => (childrenRef.current = ref) } as any) : null}
     </>
   );
 }
