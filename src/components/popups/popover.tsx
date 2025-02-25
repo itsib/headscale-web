@@ -1,6 +1,7 @@
-import { FC, PropsWithChildren, useEffect, useRef, useState, ReactNode } from 'react';
-import { PopupPlacement } from './popup-base/_common';
-import { PopupBaseAnchor } from './popup-base/popup-base-anchor';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { AnyComponent, FunctionComponent } from 'preact';
+import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
+import { BasePopup } from '@app-components/popups/base-popup/base-popup.tsx';
 import './popover.css';
 
 export interface PopupProps {
@@ -9,10 +10,11 @@ export interface PopupProps {
    */
   placement?: PopupPlacement;
 
-  content: ReactNode | (() => ReactNode);
+  Content: AnyComponent;
 }
 
-export const Popover: FC<PropsWithChildren<PopupProps>> = ({ placement = PopupPlacement.TOP, content, children }) => {
+export const Popover: FunctionComponent<PopupProps> = props => {
+  const { placement = PopupPlacement.TOP, Content, children } = props;
   const contentWrapperRef = useRef<HTMLDivElement | null>(null);
   const childWrapperRef = useRef<HTMLDivElement | null>(null);
   const [openBtnElement, setOpenBtnElement] = useState<HTMLElement>();
@@ -66,11 +68,11 @@ export const Popover: FC<PropsWithChildren<PopupProps>> = ({ placement = PopupPl
   return (
     <>
       <div ref={childWrapperRef}>{children}</div>
-      <PopupBaseAnchor rect={rect} open={isOpen} placement={placement} margin={5}>
-        <div className="popup" ref={contentWrapperRef}>
-          {typeof content === 'function' ? content() : content}
+      <BasePopup rect={rect} open={isOpen} placement={placement} margin={5}>
+        <div className="popup popover" ref={contentWrapperRef}>
+          <Content />
         </div>
-      </PopupBaseAnchor>
+      </BasePopup>
     </>
   );
 };

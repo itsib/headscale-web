@@ -1,4 +1,5 @@
-import { FC, ReactNode, useState } from 'react';
+import { useState } from 'preact/hooks';
+import { FunctionComponent } from 'preact';
 import { useTranslation } from 'react-i18next';
 import { copyText } from '../../utils/copy-text';
 
@@ -7,10 +8,9 @@ export interface IBtnCopy {
   tooltip?: string | null;
   tooltipPosition?: 'top' | 'bottom' | 'left' | 'right';
   className?: string;
-  children?: ReactNode | ((copied: boolean) => ReactNode);
 }
 
-export const BtnCopy: FC<IBtnCopy> = ({ text, tooltip = 'copy_to_clipboard', tooltipPosition = 'top', children, className }) => {
+export const BtnCopy: FunctionComponent<IBtnCopy> = ({ text, tooltip = 'copy_to_clipboard', tooltipPosition = 'top', children, className }) => {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
@@ -30,7 +30,7 @@ export const BtnCopy: FC<IBtnCopy> = ({ text, tooltip = 'copy_to_clipboard', too
         setTimeout(() => setCopied(false), 120);
       }}
     >
-      {typeof children === 'function' ? children(copied) : (children || <i className="icon icon-copy"/>)}
+      {children || <i className="icon icon-copy"/>}
     </button>
   );
 };

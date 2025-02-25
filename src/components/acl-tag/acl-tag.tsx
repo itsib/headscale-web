@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FunctionComponent } from 'preact';
 import './acl-tag.css';
 
 export interface AclTagProps {
@@ -6,7 +6,7 @@ export interface AclTagProps {
   onRemove?: (tag: string) => void;
 }
 
-export const AclTag: FC<AclTagProps> = ({ tag, onRemove }) => {
+export const AclTag: FunctionComponent<AclTagProps> = ({ tag, onRemove }) => {
   const [prefix, name] = tag.split(':')
   return (
     <div className="acl-tag">

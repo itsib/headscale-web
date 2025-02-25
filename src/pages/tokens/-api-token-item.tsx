@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react';
 import { ApiToken } from '@app-types';
 import { Trans } from 'react-i18next';
 import { ContextMenu } from '@app-components/popups/context-menu.tsx';
-import { PopupPlacement } from '@app-components/popups/popup-base/_common.ts';
+import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
 import { FormattedDate } from '@app-components/formatters/formatted-date.tsx';
 import { FormattedDuration } from '@app-components/formatters/formatted-duration.tsx';
 

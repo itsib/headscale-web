@@ -1,10 +1,11 @@
-import { FC, SVGProps } from 'react';
+import type { JSX, FunctionComponent } from 'preact';
 
-export interface ImgCompassProps extends Omit<SVGProps<SVGSVGElement>, 'width' | 'height' | 'viewBox' | 'xmlns'> {
+
+export interface ImgCompassProps extends Omit<JSX.SVGAttributes<SVGSVGElement>, 'width' | 'height' | 'viewBox' | 'xmlns'> {
   size: number;
 }
 
-export const ImgCompass: FC<ImgCompassProps> = ({ size, ...props }) => {
+export const ImgCompass: FunctionComponent<ImgCompassProps> = ({ size, ...props }) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" {...props}>
       <mask id="loop-compas-animation">

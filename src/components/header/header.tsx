@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { BrandLogo } from '@app-components/brand-logo/brand-logo';
 import { ContextMenu } from '@app-components/popups/context-menu';
-import { PopupPlacement } from '@app-components/popups/popup-base/_common';
+import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
 import { HeaderMenu } from './_header-menu';
 import { useLocation } from 'preact-iso/router';
 import { cn } from 'react-just-ui/utils/cn';
@@ -40,7 +40,6 @@ export const Header = () => {
             {t('metrics')}
           </a>
         </nav>
-
 
         <div className="config">
           <ContextMenu

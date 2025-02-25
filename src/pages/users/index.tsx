@@ -13,7 +13,7 @@ import { useStorage } from '@app-hooks/use-storage';
 import { UserInfo } from '@app-components/user-info/user-info';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { ContextMenu } from '@app-components/popups/context-menu';
-import { PopupPlacement } from '@app-components/popups/popup-base/_common';
+import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
 import { UsersContextMenuAction, UsersContextMenu } from '@app-components/user-context-menu/user-context-menu';
 
 export function Users() {

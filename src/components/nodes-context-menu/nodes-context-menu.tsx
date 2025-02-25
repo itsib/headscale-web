@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FunctionComponent } from 'preact';
 import { Trans } from 'react-i18next';
 
 export type NodesContextMenuAction = 'delete' | 'create' | 'rename' | 'chown' | 'expiry' | 'tags' | 'routes';
@@ -7,7 +7,7 @@ export interface NodesContextMenuProps {
   onAction: (name: NodesContextMenuAction) => void;
 }
 
-export const NodesContextMenu: FC<NodesContextMenuProps> = ({ onAction }) => {
+export const NodesContextMenu: FunctionComponent<NodesContextMenuProps> = ({ onAction }) => {
   return (
     <>
       <div className="context-menu-item">

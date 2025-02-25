@@ -7,7 +7,6 @@ import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 import { VitePWA } from 'vite-plugin-pwa';
 import { readFile } from 'node:fs/promises';
-import { visualizer } from 'rollup-plugin-visualizer';
 import * as fs from 'node:fs';
 
 /**
@@ -68,36 +67,36 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
       cssCodeSplit: true,
       rollupOptions: {
         output: {
-          manualChunks: {
-            '@react': [
-              'react',
-              'react-dom',
-              'node_modules/react-dom/client.js',
-              'react-just-ui',
-              'react-hook-form',
-              'react/jsx-runtime',
-              'scheduler',
-            ],
-            '@tanstack': [
-              '@tanstack/query-core',
-              '@tanstack/react-query',
-              '@tanstack/react-query-persist-client',
-            ],
-            '@i18n': [
-              'i18next',
-              'react-i18next',
-              'i18next-http-backend',
-              'i18next-browser-languagedetector',
-            ],
-            '@acl-page': [
-              '@codemirror/commands',
-              '@codemirror/language',
-              '@codemirror/state',
-              '@codemirror/view',
-              '@lezer/highlight',
-              '@lezer/lr',
-            ],
-          },
+          // manualChunks: {
+          //   '@react': [
+          //     'react',
+          //     'react-dom',
+          //     'node_modules/react-dom/client.js',
+          //     'react-just-ui',
+          //     'react-hook-form',
+          //     'react/jsx-runtime',
+          //     'scheduler',
+          //   ],
+          //   '@tanstack': [
+          //     '@tanstack/query-core',
+          //     '@tanstack/react-query',
+          //     '@tanstack/react-query-persist-client',
+          //   ],
+          //   '@i18n': [
+          //     'i18next',
+          //     'react-i18next',
+          //     'i18next-http-backend',
+          //     'i18next-browser-languagedetector',
+          //   ],
+          //   '@acl-page': [
+          //     '@codemirror/commands',
+          //     '@codemirror/language',
+          //     '@codemirror/state',
+          //     '@codemirror/view',
+          //     '@lezer/highlight',
+          //     '@lezer/lr',
+          //   ],
+          // },
         },
       },
       modulePreload: false,
@@ -153,7 +152,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
             },
             {
               urlPattern: /^https:\/\/lh3\.googleusercontent\.com\/.*/i,
-              handler: 'CacheFirst',
+              handler: 'CacheOnly',
               options: {
                 cacheName: 'google-content',
                 expiration: {
@@ -212,13 +211,6 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
           { src: 'README.md', dest: 'dist' },
         ]
       }),
-      visualizer ({
-        emitFile: true,
-        template: 'treemap',
-        include: [
-          { file: '*/**/*.js' }
-        ],
-      }) as any,
     ],
     test: {
       css: false,

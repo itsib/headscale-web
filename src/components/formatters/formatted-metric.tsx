@@ -1,5 +1,6 @@
-import { FC, useMemo } from 'react';
-import { MetricUnit } from '../../types';
+import { useMemo } from 'preact/hooks';
+import { FunctionComponent } from 'preact';
+import { MetricUnit } from '@app-types';
 import { formatUnits, normalizeNumber } from '../../utils/format-numbers.ts';
 
 export interface FormattedMetricProps {
@@ -7,7 +8,7 @@ export interface FormattedMetricProps {
   unit?: MetricUnit;
 }
 
-export const FormattedMetric: FC<FormattedMetricProps> = ({ value, unit }) => {
+export const FormattedMetric: FunctionComponent<FormattedMetricProps> = ({ value, unit }) => {
   const formatted = useMemo(() => {
     value = normalizeNumber(value);
 

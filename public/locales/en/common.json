@@ -162,7 +162,7 @@
   "provider": "Provider",
   "formatted": "Formatted",
   "raw_data": "Raw Data",
-  "footer_api_url": "Connected with <a/>",
+  "footer_api_url": "Connected with",
   "go_home": "Go Home",
   "devises": "Devises"
 }

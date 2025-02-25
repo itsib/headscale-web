@@ -1,5 +1,6 @@
-import { FC, useEffect, useRef, useState } from 'react';
-import * as d3 from 'd3';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { FunctionComponent } from 'preact';
+import { Selection, max, scaleLinear, easeSinOut, interpolateNumber, select as d3Select } from 'd3';
 
 export interface ChartBar {
   value: number;
@@ -11,9 +12,9 @@ export interface ChartBarsProps {
   unit?: string;
 }
 
-export const ChartBars: FC<ChartBarsProps> = ({ bars: _bars, unit }) => {
+export const ChartBars: FunctionComponent<ChartBarsProps> = ({ bars: _bars, unit }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [container, setContainer] = useState<d3.Selection<HTMLDivElement, ChartBar[], null, undefined>>();
+  const [container, setContainer] = useState<Selection<HTMLDivElement, ChartBar[], null, undefined>>();
   const [bars, setBars] = useState<ChartBar[] | undefined>(undefined);
 
   useEffect(() => {
@@ -36,8 +37,8 @@ export const ChartBars: FC<ChartBarsProps> = ({ bars: _bars, unit }) => {
     }
     container.datum(bars);
 
-    const maxLabelWidth = d3.max(bars, (d) => (`${d.value}`?.length || 0) * 8) as number;
-    const maxValue = d3.max(bars, (d) => d.value) as number;
+    const maxLabelWidth = max(bars, (d) => (`${d.value}`?.length || 0) * 8) as number;
+    const maxValue = max(bars, (d) => d.value) as number;
     const margin = { t: 0, r: 0, l: 0, b: 0 };
     const innerWidth = 240;
     const barHeight = 26;
@@ -55,11 +56,11 @@ export const ChartBars: FC<ChartBarsProps> = ({ bars: _bars, unit }) => {
       .attr('style', 'max-width: 100%; height: auto;')
       .attr('xmlns', 'http://www.w3.org/2000/svg')
 
-    const scaleX = d3.scaleLinear()
+    const scaleX = scaleLinear()
       .domain([0, maxValue])
       .range([0, innerWidth]);
 
-    const scaleY = d3.scaleLinear()
+    const scaleY = scaleLinear()
       .domain([0, bars.length])
       .range([margin.t, height - margin.b]);
 
@@ -89,17 +90,17 @@ export const ChartBars: FC<ChartBarsProps> = ({ bars: _bars, unit }) => {
               .attr('width', (d) => scaleX(d.value || 1))
               .attr('height', barHeight - 6)
               .transition()
-              .ease(d3.easeSinOut)
+              .ease(easeSinOut)
               .duration(1500)
               .attrTween('width', (d, i): ((t: number) => string) => {
-                const interpolate = d3.interpolateNumber(prev(i), d.value);
+                const interpolate = interpolateNumber(prev(i), d.value);
                 return (t: number) => {
                   const width = scaleX(interpolate(t));
                   return Math.max(width, 1).toString();
                 };
               })
               .attrTween('x', (d, i): ((t: number) => string) => {
-                const interpolate = d3.interpolateNumber(prev(i), d.value);
+                const interpolate = interpolateNumber(prev(i), d.value);
                 return (t: number) => {
                   const fullWidth = maxLabelWidth + innerWidth;
                   const x = fullWidth - scaleX(interpolate(t));
@@ -117,31 +118,29 @@ export const ChartBars: FC<ChartBarsProps> = ({ bars: _bars, unit }) => {
               .attr('font-weight', 400)
               .text((d) => d.value)
               .transition()
-              .ease(d3.easeSinOut)
+              .ease(easeSinOut)
               .duration(1500)
               .attrTween('x', (d, i): ((t: number) => string) => {
-                const interpolate = d3.interpolateNumber(prev(i), d.value);
+                const interpolate = interpolateNumber(prev(i), d.value);
                 return (t: number) => ((maxLabelWidth + innerWidth - 6) - scaleX(interpolate(t))).toString();
               })
               .textTween((d, i): ((t: number) => string) => {
                 const decimals = d.value.toString().split('.')[1]?.length || 0;
                 const precision = (10 ** decimals);
 
-                const interpolate = d3.interpolateNumber(prev(i), d.value);
+                const interpolate = interpolateNumber(prev(i), d.value);
                 return (t: number) => {
                   return (Math.round(interpolate(t) * precision) / precision).toString();
                 };
               })
             )
             .call(g => g.on('mouseenter', (e) => {
-              d3
-                .select(e.currentTarget)
+              d3Select(e.currentTarget)
                 .select('.bar')
                 .attr('fill', 'rgba(var(--accent) / 0.8)');
             }))
             .call(g => g.on('mouseout', (e) => {
-              d3
-                .select(e.currentTarget)
+              d3Select(e.currentTarget)
                 .select('.bar')
                 .attr('fill', 'rgba(var(--text-secondary))');
             }));
@@ -153,7 +152,7 @@ export const ChartBars: FC<ChartBarsProps> = ({ bars: _bars, unit }) => {
     const element = ref.current;
     if (!element) return;
 
-    const container = d3.select<HTMLDivElement, ChartBar[]>(element);
+    const container = d3Select<HTMLDivElement, ChartBar[]>(element);
     setContainer(container);
 
     return () => {

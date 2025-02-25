@@ -43,16 +43,18 @@ export default function Acl() {
         </div>
       </div>
 
-      <div className="tabs-links">
-        <a href="/acl/edit-file" className={cn('tab-link', { active: path.startsWith('/acl/edit-file') })}>
-          <i className="icon icon-edit-code"/>
-          {t('edit_file')}
-        </a>
-        <a href="/acl/preview" className={cn('tab-link', { active: path.startsWith('/acl/preview') })}>
-          <i className="icon icon-eye"/>
-          {t('preview')}
-        </a>
-      </div>
+      {isLoading ? null : (
+        <div className="tabs-links">
+          <a href="/acl/edit-file" className={cn('tab-link', { active: path.startsWith('/acl/edit-file') })}>
+            <i className="icon icon-edit-code"/>
+            {t('edit_file')}
+          </a>
+          <a href="/acl/preview" className={cn('tab-link', { active: path.startsWith('/acl/preview') })}>
+            <i className="icon icon-eye"/>
+            {t('preview')}
+          </a>
+        </div>
+      )}
 
       {isLoading ? (
         <ListLoading/>

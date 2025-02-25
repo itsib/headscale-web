@@ -1,5 +1,5 @@
 import { Trans } from 'react-i18next';
-import { FC } from 'react';
+import { FunctionComponent } from 'preact';
 
 export type UsersContextMenuAction = 'delete' | 'create' | 'rename';
 
@@ -7,7 +7,7 @@ export interface UsersContextMenuProps {
   onClick: (action: UsersContextMenuAction) => void;
 }
 
-export const UsersContextMenu: FC<UsersContextMenuProps> = ({ onClick }) => {
+export const UsersContextMenu: FunctionComponent<UsersContextMenuProps> = ({ onClick }) => {
   return (
     <>
       <div className="context-menu-item">

@@ -21,7 +21,7 @@ import { AclTag } from '@app-components/acl-tag/acl-tag';
 import { IpAddresses } from '@app-components/ip-addresses/ip-addresses';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { ContextMenu } from '@app-components/popups/context-menu';
-import { PopupPlacement } from '@app-components/popups/popup-base/_common';
+import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
 
 export function Nodes() {
   const { t } = useTranslation();

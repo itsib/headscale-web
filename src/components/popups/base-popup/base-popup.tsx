@@ -1,10 +1,17 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { RenderableProps } from 'preact';
+import { FunctionComponent } from 'preact';
 import { createPortal } from 'preact/compat';
-import './popup-base-anchor.css';
-import { PopupPlacement } from './_common';
+import { cn } from 'react-just-ui/utils/cn';
+import './base-popup.css';
 
-export interface PopupBaseAnchorProps {
+export enum PopupPlacement {
+  TOP = 'top',
+  BOTTOM = 'bottom',
+  LEFT = 'left',
+  RIGHT = 'right',
+}
+
+export interface BasePopupProps {
   /**
    * Determines how the window appears.
    * 'boolean' - show/hide
@@ -29,7 +36,7 @@ export interface PopupBaseAnchorProps {
   className?: string;
 }
 
-export const PopupBaseAnchor = (props: RenderableProps<PopupBaseAnchorProps>) => {
+export const BasePopup: FunctionComponent<BasePopupProps> = props => {
   const { open, rect: _rect, placement = PopupPlacement.TOP, margin = 10, className } = props;
   const [animated, setAnimated] = useState(false);
   const [rect, setRect] = useState<DOMRect | undefined>(_rect);
@@ -66,8 +73,8 @@ interface PopupContentProps {
   className?: string;
 }
 
-const PopupContent = (props: RenderableProps<PopupContentProps>) => {
-  const { show, rect, placement = PopupPlacement.TOP, margin, className } = props;
+const PopupContent: FunctionComponent<PopupContentProps> = props => {
+  const { show, rect, placement = PopupPlacement.TOP, margin, className, children } = props;
   const popupRef = useRef<HTMLDivElement | null>(null);
 
   // Compute popup position
@@ -155,8 +162,8 @@ const PopupContent = (props: RenderableProps<PopupContentProps>) => {
   }, [rect, placement, show, margin]);
 
   return (
-    <div ref={popupRef} className={`popup-base popup-base-anchor-content ${className || ''}`}>
-      {props.children}
+    <div ref={popupRef} className={cn('base-popup', className)}>
+      {children}
     </div>
   );
 };

@@ -1,4 +1,5 @@
-import { FC, useMemo } from 'react';
+import {  useMemo } from 'preact/hooks';
+import type { FunctionComponent } from 'preact';
 import { useTranslation } from 'react-i18next';
 
 export interface IFormattedDate extends Intl.DateTimeFormatOptions {
@@ -7,7 +8,7 @@ export interface IFormattedDate extends Intl.DateTimeFormatOptions {
   iso?: string;
 }
 
-export const FormattedDate: FC<IFormattedDate & Intl.DateTimeFormatOptions> = ({ className, timestamp, iso, ...props }) => {
+export const FormattedDate: FunctionComponent<IFormattedDate & Intl.DateTimeFormatOptions> = ({ className, timestamp, iso, ...props }) => {
   const { i18n } = useTranslation();
 
   const formatter = useMemo(() => new Intl.DateTimeFormat(i18n.language, { ...props }), [i18n.language, props]);

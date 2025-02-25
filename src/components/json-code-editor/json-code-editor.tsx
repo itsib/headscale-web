@@ -1,4 +1,5 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { FunctionComponent } from 'preact';
 import { EditorState } from '@codemirror/state';
 import {
   drawSelection,
@@ -6,10 +7,11 @@ import {
   highlightSpecialChars,
   highlightTrailingWhitespace,
   keymap,
-  lineNumbers, ViewUpdate,
+  lineNumbers,
+  ViewUpdate,
 } from '@codemirror/view';
 import { defaultKeymap, historyKeymap, history } from '@codemirror/commands';
-import { languageJson } from '../../utils/language-json.ts';
+import { languageJson } from '@app-utils/language-json';
 import './json-code-editor.css';
 
 export interface JsonCodeEditorPops {
@@ -17,7 +19,7 @@ export interface JsonCodeEditorPops {
   onChange?: (value: string) => void;
 }
 
-export const JsonCodeEditor: FC<JsonCodeEditorPops> = ({ value, onChange }) => {
+export const JsonCodeEditor: FunctionComponent<JsonCodeEditorPops> = ({ value, onChange }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const valueRef = useRef(value);
   const changeRef = useRef(onChange);

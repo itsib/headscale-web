@@ -1,4 +1,5 @@
-import React, { FC, useMemo } from 'react';
+import { useMemo } from 'preact/hooks';
+import { FunctionComponent, JSX } from 'preact';
 import { useTranslation } from 'react-i18next';
 
 const SECOND_MS = 1_000;
@@ -7,13 +8,13 @@ const HOUR_MS = MINUTE_MS * 60;
 const DAY_MS = HOUR_MS * 24;
 const MONTH_MS = DAY_MS * 30;
 
-export interface IFormattedDate extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+export interface IFormattedDate extends JSX.HTMLAttributes<HTMLDivElement> {
   timestamp?: number | string;
   iso?: string;
   format?: 'long' | 'short' | 'narrow';
 }
 
-export const FormattedDuration: FC<IFormattedDate> = ({ timestamp, iso, format = 'long', ...props }) => {
+export const FormattedDuration: FunctionComponent<IFormattedDate> = ({ timestamp, iso, format = 'long', ...props }) => {
   const { i18n } = useTranslation();
 
   const formatted: string | null = useMemo(() => {

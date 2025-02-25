@@ -1,7 +1,6 @@
 import { AnyComponent, RenderableProps } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { PopupPlacement } from './popup-base/_common';
-import { PopupBaseAnchor } from './popup-base/popup-base-anchor';
+import { BasePopup, PopupPlacement } from '@app-components/popups/base-popup/base-popup';
 import './context-menu.css';
 
 export interface ContextMenuProps {
@@ -78,11 +77,11 @@ export const ContextMenu = (props: RenderableProps<ContextMenuProps>) => {
   return (
     <>
       <div ref={childWrapperRef}>{props.children}</div>
-      <PopupBaseAnchor rect={rect} open={isOpen} placement={props.placement}>
+      <BasePopup rect={rect} open={isOpen} placement={props.placement}>
         <menu className="popup context-menu" ref={contextMenuRef} onClick={e => e.stopPropagation()}>
           <Menu />
         </menu>
-      </PopupBaseAnchor>
+      </BasePopup>
     </>
   );
 };

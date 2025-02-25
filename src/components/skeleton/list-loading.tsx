@@ -1,7 +1,6 @@
-import { FC } from 'react';
+import type { FunctionComponent } from 'preact';
 
-export const ListLoading: FC<{ count?: number }> = ({ count = 5 }) => {
-
+export const ListLoading: FunctionComponent<{ count?: number }> = ({ count = 5 }) => {
   return (
     <div className="">
       {count >= 5 ? <div className="h-[40px] w-full bg-skeleton rounded-lg bg-opacity-50 animate-pulse mb-5"/> : null}

@@ -1,17 +1,18 @@
-import { FC, useRef, useState } from 'react';
+import { useRef, useState } from 'preact/hooks';
+import { FunctionComponent } from 'preact';
 import { Popover } from '@app-components/popups/popover';
-import { PopupPlacement } from '@app-components/popups/popup-base/_common';
+import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
 import { copyText } from '@app-utils/copy-text';
 
 export interface IPAddressesProps {
   addresses: string[];
 }
 
-export const IpAddresses: FC<IPAddressesProps> = ({ addresses }) => {
+export const IpAddresses: FunctionComponent<IPAddressesProps> = ({ addresses }) => {
   return (
     <Popover
       placement={PopupPlacement.BOTTOM}
-      content={() => (
+      Content={() => (
         <div className="py-1.5">
           {addresses.map(address => (<AddressRow key={address} address={address}/>))}
         </div>
@@ -25,7 +26,7 @@ export const IpAddresses: FC<IPAddressesProps> = ({ addresses }) => {
   );
 };
 
-const AddressRow: FC<{ address: string }> = ({ address }) => {
+const AddressRow: FunctionComponent<{ address: string }> = ({ address }) => {
   const ref = useRef<ReturnType<typeof setTimeout>>(null);
   const [copied, setCopied] = useState(false);
 

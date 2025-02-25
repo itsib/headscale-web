@@ -19,6 +19,7 @@
       display: block;
       transition: background-color .2s ease-in-out;
       position: relative;
+      text-decoration: none;
       z-index: 1;
 
       .icon {
