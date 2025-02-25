@@ -1,5 +1,6 @@
-import { FC, PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { RenderableProps } from 'preact';
+import { createPortal } from 'preact/compat';
 import './popup-base-anchor.css';
 import { PopupPlacement } from './_common';
 
@@ -28,8 +29,8 @@ export interface PopupBaseAnchorProps {
   className?: string;
 }
 
-export const PopupBaseAnchor: FC<PropsWithChildren<PopupBaseAnchorProps>> = props => {
-  const { open, rect: _rect, placement = PopupPlacement.TOP, margin = 10, className, children } = props;
+export const PopupBaseAnchor = (props: RenderableProps<PopupBaseAnchorProps>) => {
+  const { open, rect: _rect, placement = PopupPlacement.TOP, margin = 10, className } = props;
   const [animated, setAnimated] = useState(false);
   const [rect, setRect] = useState<DOMRect | undefined>(_rect);
 
@@ -52,7 +53,7 @@ export const PopupBaseAnchor: FC<PropsWithChildren<PopupBaseAnchorProps>> = prop
 
   return (
     <>
-      {rect && (open || animated) ? createPortal(<PopupContent show={!!open} rect={rect} content={children} placement={placement} margin={margin} className={className} />, document.body) : null}
+      {rect && (open || animated) ? createPortal(<PopupContent show={!!open} rect={rect} children={props.children} placement={placement} margin={margin} className={className} />, document.body) : null}
     </>
   );
 };
@@ -62,11 +63,11 @@ interface PopupContentProps {
   rect: DOMRect;
   margin: number;
   placement: PopupPlacement;
-  content: ReactNode;
   className?: string;
 }
 
-const PopupContent: FC<PopupContentProps> = ({ show, rect, content, placement = PopupPlacement.TOP, margin, className }) => {
+const PopupContent = (props: RenderableProps<PopupContentProps>) => {
+  const { show, rect, placement = PopupPlacement.TOP, margin, className } = props;
   const popupRef = useRef<HTMLDivElement | null>(null);
 
   // Compute popup position
@@ -155,7 +156,7 @@ const PopupContent: FC<PopupContentProps> = ({ show, rect, content, placement = 
 
   return (
     <div ref={popupRef} className={`popup-base popup-base-anchor-content ${className || ''}`}>
-      {content}
+      {props.children}
     </div>
   );
 };

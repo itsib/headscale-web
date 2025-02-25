@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { RenderableProps } from 'preact';
 
 export interface UserInfoProps {
   id: string;
@@ -9,7 +9,7 @@ export interface UserInfoProps {
   className?: string;
 }
 
-export const UserInfo: FC<UserInfoProps> = ({ id, name, displayName, pictureUrl, size = 22, className }) => {
+export const UserInfo = ({ id, name, displayName, pictureUrl, size = 22, className }: RenderableProps<UserInfoProps>) => {
   const avatar = !pictureUrl ? `icon icon-avatar-${Number(id) % 10}` : '';
 
   return (

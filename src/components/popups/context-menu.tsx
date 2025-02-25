@@ -1,4 +1,5 @@
-import { FC, PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react';
+import { AnyComponent, RenderableProps } from 'preact';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { PopupPlacement } from './popup-base/_common';
 import { PopupBaseAnchor } from './popup-base/popup-base-anchor';
 import './context-menu.css';
@@ -9,10 +10,10 @@ export interface ContextMenuProps {
    */
   placement?: PopupPlacement;
 
-  menu: ReactNode | (() => ReactNode);
+  menu: AnyComponent;
 }
 
-export const ContextMenu: FC<PropsWithChildren<ContextMenuProps>> = ({ placement, children, menu }) => {
+export const ContextMenu = (props: RenderableProps<ContextMenuProps>) => {
   const childWrapperRef = useRef<HTMLDivElement | null>(null);
   const contextMenuRef = useRef<HTMLMenuElement | null>(null);
   const [openBtnElement, setOpenBtnElement] = useState<HTMLElement>();
@@ -73,10 +74,10 @@ export const ContextMenu: FC<PropsWithChildren<ContextMenuProps>> = ({ placement
 
   return (
     <>
-      <div ref={childWrapperRef}>{children}</div>
-      <PopupBaseAnchor rect={rect} open={isOpen} placement={placement}>
+      <div ref={childWrapperRef}>{props.children}</div>
+      <PopupBaseAnchor rect={rect} open={isOpen} placement={props.placement}>
         <menu className="popup context-menu" ref={contextMenuRef} onClick={e => e.stopPropagation()}>
-          {typeof menu === 'function' ? menu() : menu}
+          {props.menu}
         </menu>
       </PopupBaseAnchor>
     </>

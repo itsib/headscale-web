@@ -10,7 +10,7 @@ import { StorageTables, TokenType } from '@app-types';
 
 export interface ApplicationProviderProps {
   storage: IDBStorageInstance<StorageTables>;
-  children: (context: { isAuthorized: boolean }) => ReactNode;
+  children: ReactNode;
 }
 
 export function ApplicationProvider({ children, storage }: ApplicationProviderProps) {
@@ -102,7 +102,7 @@ export function ApplicationProvider({ children, storage }: ApplicationProviderPr
           </div>
         </AnimatedShow>
       </div>
-      {children({ isAuthorized })}
+      {children}
     </ApplicationContext.Provider>
   )
 }

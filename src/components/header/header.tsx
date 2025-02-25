@@ -1,45 +1,48 @@
-import { FC, useContext } from 'react';
-import { Link } from '@tanstack/react-router';
-import { Trans } from 'react-i18next';
-import { BrandLogo } from '../brand-logo/brand-logo';
-import { ContextMenu } from '../popups/context-menu';
-import { PopupPlacement } from '../popups/popup-base/_common';
+import { useContext } from 'preact/hooks';
+import { useTranslation } from 'react-i18next';
+import { BrandLogo } from '@app-components/brand-logo/brand-logo';
+import { ContextMenu } from '@app-components/popups/context-menu';
+import { PopupPlacement } from '@app-components/popups/popup-base/_common';
 import { ApplicationContext } from '@app-context/application';
 import { HeaderMenu } from './_header-menu';
+import { useLocation } from 'preact-iso/router';
+import { cn } from 'react-just-ui/utils/cn';
 import './header.css';
 
-export const Header: FC = () => {
+export const Header = () => {
+  const { t } = useTranslation();
   const { isAuthorized } = useContext(ApplicationContext);
+  const { path } = useLocation();
 
   return (
     <header className="header fixed inset-0 bottom-auto z-20 bg-primary">
       <div className="container flex items-center justify-between h-[var(--header-height)]">
-        <Link className="flex items-center text-neutral-500 dark:text-gray-300" to="/">
+        <a href="/" className="flex items-center text-neutral-500 dark:text-gray-300">
           <BrandLogo size={34} />
-        </Link>
+        </a>
 
         {isAuthorized ? (
           <nav className="main-menu ml-6 mr-auto">
-            <Link to="/nodes" className="nav-link">
+            <a href="/nodes" className={cn('nav-link', { active: path.startsWith('/nodes') })}>
               <i className="icon icon-connection mr-2"/>
-              <Trans i18nKey="Devises"/>
-            </Link>
-            <Link to="/users" className="nav-link">
+              {t('devises')}
+            </a>
+            <a href="/users" className={cn('nav-link', { active: path.startsWith('/users') })}>
               <i className="icon icon-users mr-2"/>
-              <Trans i18nKey="users"/>
-            </Link>
-            <Link to="/acl" className="nav-link">
+              {t('users')}
+            </a>
+            <a href="/acl" className={cn('nav-link', { active: path.startsWith('/acl') })}>
               <i className="icon icon-lock mr-2"/>
-              <Trans i18nKey="access_controls"/>
-            </Link>
-            <Link to="/tokens" className="nav-link">
+              {t('access_controls')}
+            </a>
+            <a href="/tokens" className={cn('nav-link', { active: path.startsWith('/tokens') })}>
               <i className="icon icon-key mr-2"/>
-              <Trans i18nKey="tokens"/>
-            </Link>
-            <Link to="/metrics" className="nav-link">
+              {t('tokens')}
+            </a>
+            <a href="/metrics" className={cn('nav-link', { active: path.startsWith('/metrics') })}>
               <i className="icon icon-metrics mr-2"/>
-              <Trans i18nKey="metrics"/>
-            </Link>
+              {t('metrics')}
+            </a>
           </nav>
         ) : null}
 

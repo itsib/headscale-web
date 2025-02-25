@@ -1,0 +1,43 @@
+.metrics-page {
+
+  .tabs-links {
+    margin: 1rem 0 2rem;
+    display: flex;
+    align-items: stretch;
+    justify-content: start;
+    position: relative;
+    gap: 1rem;
+
+    .tab-link {
+      height: 37px;
+      padding: .5rem .25rem .3rem;
+      font-weight: 600;
+      color: rgb(var(--text-secondary));
+      position: relative;
+      text-decoration: none;
+
+      &:after {
+        content: " ";
+        bottom: -5px;
+        left: -2px;
+        width: 0;
+        height: 3px;
+        background-color: rgb(var(--accent));
+        position: absolute;
+        transition: width .15s ease-in;
+      }
+
+      &:hover {
+        color: rgb(var(--text-primary));
+      }
+
+      &.active {
+        color: rgb(var(--accent));
+
+        &:after {
+          width: calc(100% + 4px);
+        }
+      }
+    }
+  }
+}

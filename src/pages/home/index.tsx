@@ -1,42 +1,22 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui/input';
 import { cn } from 'react-just-ui/utils/cn';
 import { url as urlValidator } from 'react-just-ui/validators';
-import { useContext, useState } from 'react';
+import { useContext, useState } from 'preact/hooks';
 import { Credentials } from '@app-types';
-import { getCredentials, setCredentials } from '@app-utils/credentials';
+import { setCredentials } from '@app-utils/credentials';
 import { ApplicationContext } from '@app-context/application';
 import { fetchFn } from '@app-utils/query-fn';
 import { joinUrl } from '@app-utils/join-url';
+import { useLocation } from 'preact-iso/router';
+import { useCredentials } from '@app-hooks/use-credentials.ts';
 
-export const Route = createFileRoute('/home/')({
-  loader: async ({ context }): Promise<Credentials> => {
-    if (!context.isAuthorized) {
-      return {
-        base: import.meta.env.VITE_ACCESS_URL || '',
-        token: import.meta.env.VITE_ACCESS_TOKEN || '',
-        tokenType: 'Bearer',
-      };
-    }
-    try {
-      return await getCredentials(context.storage)
-    } catch {
-      return {
-        base: import.meta.env.VITE_ACCESS_URL || '',
-        token: import.meta.env.VITE_ACCESS_TOKEN || '',
-        tokenType: 'Bearer',
-      };
-    }
-  },
-  component: Component,
-});
-
-function Component() {
+export function Home() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { base, token, tokenType } = Route.useLoaderData() as Credentials;
+  const { route } = useLocation();
+  const { data: credentials } = useCredentials();
+  const { base, token, tokenType } = credentials || {};
   const [isLoading, setIsLoading] = useState(false);
   const { setIsAuthorized, storage } = useContext(ApplicationContext);
 
@@ -54,7 +34,7 @@ function Component() {
       await setCredentials(storage, { ...values });
       setIsAuthorized(true);
       setIsLoading(false);
-      navigate({ to: '/machines' });
+      route('/nodes');
     } catch (error: any) {
       if (error.code === 401) {
         setError('token', { message: t('error_invalid_token') });

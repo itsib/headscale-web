@@ -13,7 +13,7 @@ dist-sw
 dist-ssr
 *.local
 dev-dist
-cert
+cert*
 volumes
 
 # Editor directories and files

@@ -7,7 +7,7 @@ export interface BrandLogoProps {
 export const BrandLogo: FC<BrandLogoProps> = ({ size = 30 }) => {
   return (
     <svg
-      widths={size}
+      width={size}
       height={size}
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"

@@ -17,7 +17,7 @@ A web frontend for the [headscale](https://github.com/juanfont/headscale) coordi
 ### Supported Features
 
 -  Enable/Disable routes and exit nodes
--  Add, move, rename, and remove machines
+-  Add, move, rename, and remove nodes
 -  Add and remove users/namespaces
 -  Add and expire PreAuth keys
 -  Add and remove machine tags

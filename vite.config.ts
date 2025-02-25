@@ -1,5 +1,5 @@
 import { defineConfig, loadEnv, UserConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import preact from '@preact/preset-vite'
 import { join, resolve } from 'node:path';
 import compression from 'vite-plugin-compression2';
 import pluginCp from 'vite-plugin-cp';
@@ -7,7 +7,6 @@ import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 import { VitePWA } from 'vite-plugin-pwa';
 import { readFile } from 'node:fs/promises';
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import { visualizer } from 'rollup-plugin-visualizer';
 import * as fs from 'node:fs';
 
@@ -34,6 +33,10 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
     },
     resolve: {
       alias: {
+        react: 'preact/compat',
+        'react-dom/test-utils': 'preact/test-utils',
+        'react-dom': 'preact/compat', // Должно быть ниже test-utils
+        'react/jsx-runtime': 'preact/jsx-runtime',
         $fonts: resolve(__dirname, 'public/fonts'),
         '@app-types': resolve(__dirname, 'src/types/index.ts'),
         '@app-config': resolve(__dirname, 'src/config.ts'),
@@ -73,7 +76,6 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
               'react-just-ui',
               'react-hook-form',
               'react/jsx-runtime',
-              '@tanstack/react-router',
               'scheduler',
             ],
             '@tanstack': [
@@ -88,7 +90,6 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
               'i18next-browser-languagedetector',
             ],
             '@acl-page': [
-              './src/pages/_secured/acl/_layout.tsx',
               '@codemirror/commands',
               '@codemirror/language',
               '@codemirror/state',
@@ -104,14 +105,9 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
       assetsInlineLimit: 0,
     },
     plugins: [
-      react(),
-      TanStackRouterVite({
-        routeFileIgnorePrefix: '-',
-        generatedRouteTree: './src/route-tree.gen.ts',
-        routesDirectory: './src/pages',
-        quoteStyle: 'single',
-        semicolons: true,
-        disableLogging: true,
+      preact({
+        reactAliasesEnabled: true,
+        devToolsEnabled: true,
       }),
       VitePWA({
         base: '/',
@@ -236,7 +232,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
       port: 4005,
     },
     server: {
-      port: 3005,
+      port: 3008,
       host: 'localhost',
       keepAlive: true,
       https: isDevSSL ? {

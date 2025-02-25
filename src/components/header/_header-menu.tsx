@@ -1,15 +1,15 @@
-import { FC, useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'preact/hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import { useTheme } from '@app-hooks/use-theme';
 import { Theme } from '@app-utils/theme';
 import { ApplicationContext } from '@app-context/application';
 import { getCredentials, removeCredentials } from '@app-utils/credentials';
-import { useNavigate } from '@tanstack/react-router';
 import { copyText } from '@app-utils/copy-text';
+import { useLocation } from 'preact-iso/router';
 
-export const HeaderMenu: FC = () => {
+export const HeaderMenu = () => {
   const { i18n } = useTranslation();
-  const navigate = useNavigate();
+  const { route } = useLocation();
   const [ theme, setTheme ] = useTheme();
   const { storage, setIsAuthorized, isAuthorized } = useContext(ApplicationContext);
 
@@ -24,7 +24,7 @@ export const HeaderMenu: FC = () => {
   async function logout() {
     await removeCredentials(storage);
     setIsAuthorized(false);
-    await navigate({ to: '/home' });
+    await route('/home');
   }
 
   useEffect(() => {

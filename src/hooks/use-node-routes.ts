@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { NodeRoute } from '../types/nodes/node-route.ts';
 import { useCallback } from 'react';
-import { QueryResult } from '../types';
+import type { QueryResult, NodeRoute } from '@app-types';
 
 export function useNodeRoutes(nodeId?: string): QueryResult<NodeRoute[]> & { refetch: () => void } {
   const { data, isLoading, error, refetch: _refetch } = useQuery<{ routes: NodeRoute[] }, Error, NodeRoute[]>({
