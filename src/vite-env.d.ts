@@ -17,10 +17,6 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
-interface HTMLAttributes<RefType extends EventTarget = EventTarget> {
-  writingsuggestions: boolean | 'true' | 'false';
-}
-
 declare module 'https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm' {
   export interface RenderConfig {
     autoResize?: boolean;
