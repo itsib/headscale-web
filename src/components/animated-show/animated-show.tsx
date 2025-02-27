@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { FunctionComponent, cloneElement } from 'preact';
+import { FunctionComponent, cloneElement, Component } from 'preact';
 
 export interface AnimatedShowProps {
   show?: boolean;
@@ -8,10 +8,10 @@ export interface AnimatedShowProps {
 
 export const AnimatedShow: FunctionComponent<AnimatedShowProps> = ({ children, show, showClassName = 'show' }) => {
   const [animated, setAnimated] = useState(false);
-  const childrenRef = useRef<HTMLElement>(null);
+  const childrenRef = useRef<Component>(null);
 
   useEffect(() => {
-    const children = childrenRef.current as HTMLElement;
+    const children = childrenRef.current?.base as HTMLElement;
     if (!children) return;
 
     if (show) {

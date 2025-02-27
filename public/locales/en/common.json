@@ -164,5 +164,6 @@
   "raw_data": "Raw Data",
   "footer_api_url": "Connected with",
   "go_home": "Go Home",
-  "devises": "Devises"
+  "devises": "Devises",
+  "not_found_page_text": "Uh oh. That page doesn't exist."
 }

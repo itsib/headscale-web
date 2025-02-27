@@ -25,8 +25,8 @@ export class LottiePlayer extends Component<LottiePlayerProps> {
 
   async createDotLottie(config: Config) {
     try {
-      const { DotLottie } = await import('https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm');
-      return new DotLottie(config);
+      const { DotLottieWorker } = await import('https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm');
+      return new DotLottieWorker(config);
     } catch {
       return null;
     }
@@ -38,8 +38,13 @@ export class LottiePlayer extends Component<LottiePlayerProps> {
 
     const { width, height, ...props } = this.props;
 
+    let src = props.src;
+    if (!src.startsWith('http')) {
+      src = location.origin + src;
+    }
+
     const config: Config = {
-      src: props.src,
+      src,
       canvas,
       autoplay: props.play ?? true,
       loop: !!props.loop,

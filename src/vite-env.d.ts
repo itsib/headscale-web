@@ -7,10 +7,9 @@
 /// <reference lib="webworker" />
 
 interface ImportMetaEnv {
-  readonly DEV: boolean;
-  readonly VITE_BUILD_ID: string;
-  readonly VITE_ACCESS_URL?: string;
-  readonly VITE_ACCESS_TOKEN?: string;
+  readonly NODE_ENV: string;
+  readonly BUILD_ID: string;
+  readonly VERSION: string;
 }
 
 interface ImportMeta {
@@ -68,5 +67,9 @@ declare module 'https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm' {
     load(config: Omit<DotLottieConfig, 'canvas'>): void;
     destroy(): void;
     resize(): void;
+  }
+
+  export class DotLottieWorker extends DotLottie {
+    workerId: string;
   }
 }

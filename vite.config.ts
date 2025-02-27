@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv, UserConfig } from 'vite';
+import { defineConfig, UserConfig } from 'vite';
 import preact from '@preact/preset-vite';
 import { join, resolve } from 'node:path';
 import compression from 'vite-plugin-compression2';
@@ -14,7 +14,6 @@ import * as fs from 'node:fs';
  * @see https://vitejs.dev/config/
  */
 export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
-  const env = loadEnv(mode, process.cwd());
   const pkg = JSON.parse(await readFile('package.json', 'utf8'));
   const webmanifest = JSON.parse(await readFile('manifest.webmanifest', 'utf8'));
   const isDevSSL = command === 'serve' && fs.existsSync('cert');
@@ -26,9 +25,8 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
     publicDir: 'public',
     define: {
       'import.meta.env.NODE_ENV': JSON.stringify(mode),
-      'import.meta.env.VITE_ACCESS_URL': JSON.stringify(env.VITE_ACCESS_URL),
-      'import.meta.env.VITE_ACCESS_TOKEN': JSON.stringify(env.VITE_ACCESS_TOKEN),
-      'import.meta.env.VITE_BUILD_ID': JSON.stringify(Math.floor(Math.random() * 10000000).toString(16).toUpperCase()),
+      'import.meta.env.VERSION': JSON.stringify(pkg.version),
+      'import.meta.env.BUILD_ID': JSON.stringify(Math.floor(Math.random() * 10000000).toString(16).toUpperCase()),
     },
     resolve: {
       alias: {
@@ -140,10 +138,12 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
         workbox: {
           globDirectory: join(process.cwd(), 'dist'),
           globPatterns: [
-            '**/*.{js,css,html}',
-            'locales/**/*.{json,svg}',
+            'animations/*.json',
+            'assets/*.{css,js}',
             'fonts/**/*.{woff2,woff,ttf}',
-            'screenshot.png',
+            'locales/**/*.{json,svg}',
+            'images/*.svg',
+            '*.{png,ico,svg,html}',
           ],
           modifyURLPrefix: { '': '/' },
           navigateFallback: 'index.html',
@@ -156,18 +156,29 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
               options: {
                 cacheName: 'static-font-assets',
                 expiration: {
-                  maxEntries: 4,
+                  maxEntries: 40,
                   maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
                 },
               },
             },
             {
               urlPattern: /^https:\/\/lh3\.googleusercontent\.com\/.*/i,
-              handler: 'CacheOnly',
+              handler: 'StaleWhileRevalidate',
               options: {
                 cacheName: 'google-content',
                 expiration: {
-                  maxEntries: 64,
+                  maxEntries: 10,
+                  maxAgeSeconds: 24 * 60 * 60 * 30, // 1 month
+                },
+              },
+            },
+            {
+              urlPattern: /^https:\/\/cdn\.jsdelivr\.net\/.*/i,
+              handler: 'StaleWhileRevalidate',
+              options: {
+                cacheName: 'external-packages',
+                expiration: {
+                  maxEntries: 4,
                   maxAgeSeconds: 24 * 60 * 60 * 30, // 1 month
                 },
               },

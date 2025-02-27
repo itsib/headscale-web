@@ -14,7 +14,9 @@ import { IDB_VERSION } from './config.ts';
 import 'react-just-ui/theme/minimal.css';
 import './index.css';
 
-const BUILD_ID = import.meta.env.VITE_BUILD_ID;
+const BUILD_ID = import.meta.env.BUILD_ID;
+const VERSION = import.meta.env.VERSION;
+const NODE_ENV = import.meta.env.NODE_ENV;
 
 const storage = IDBStorage.get<StorageTables>('HeadscaleUI', IDB_VERSION, { cache: [], appStore: [] });
 
@@ -40,6 +42,19 @@ const queryClient = new QueryClient({
   },
 });
 
+function showAppVersion() {
+  const formatRegular = 'color: #ffffff; font-size: 11px;';
+  const formatAccent = 'color: #dfb519; font-weight: bold; font-size: 11px;';
+
+  console.log(
+    `%cApp running in %c${NODE_ENV.toUpperCase()} %cmode. Version %cv${VERSION}`,
+    formatRegular,
+    formatAccent,
+    formatRegular,
+    formatAccent,
+  );
+}
+
 async function init() {
   const { Application } = await import('./pages/application.tsx');
   const rootElement = document.getElementById('root')!
@@ -58,4 +73,5 @@ async function init() {
   );
 }
 
+showAppVersion();
 init();
