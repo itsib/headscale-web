@@ -3,6 +3,7 @@ import preact from '@preact/preset-vite';
 import { join, resolve } from 'node:path';
 import compression from 'vite-plugin-compression2';
 import pluginCp from 'vite-plugin-cp';
+import { createHtmlPlugin } from 'vite-plugin-html';
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -102,6 +103,16 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
       assetsInlineLimit: 0,
     },
     plugins: [
+      createHtmlPlugin({
+        entry: 'src/index.tsx',
+        template: 'index.html',
+        inject: {
+          data: {
+            APP_NAME: pkg.config.name,
+            APP_DESCRIPTION: pkg.description,
+          }
+        }
+      }),
       preact({
         reactAliasesEnabled: true,
         devToolsEnabled: true,
