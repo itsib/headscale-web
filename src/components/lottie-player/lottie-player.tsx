@@ -1,5 +1,5 @@
 import { Component, createRef } from 'preact';
-import { DotLottie, Config } from 'https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm';
+import type { DotLottie, Config } from 'https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm';
 
 export type LottiePlayerMode = 'forward' | 'reverse' | 'bounce' | 'reverse-bounce';
 
@@ -22,6 +22,35 @@ export class LottiePlayer extends Component<LottiePlayerProps> {
   canvas = createRef<HTMLCanvasElement>();
 
   player: DotLottie | null = null;
+
+  async createDotLottie(config: Config) {
+    try {
+      const { DotLottie } = await import('https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm');
+      return new DotLottie(config);
+    } catch {
+      return null;
+    }
+  }
+
+  async componentDidMount() {
+    const canvas = this.canvas.current;
+    if (!canvas) return;
+
+    const { width, height, ...props } = this.props;
+
+    const config: Config = {
+      src: props.src,
+      canvas,
+      autoplay: props.play ?? true,
+      loop: !!props.loop,
+      mode: props.mode || 'forward',
+      speed: props.speed ?? 1,
+    };
+
+    this.width = width || this.width;
+    this.height = height || this.height;
+    this.player = await this.createDotLottie(config);
+  }
 
   shouldComponentUpdate(nextProps: LottiePlayerProps) {
     if ((nextProps.width != null || nextProps.height != null) && (nextProps.width !== this.width || nextProps.height !== this.height)) {
@@ -72,26 +101,6 @@ export class LottiePlayer extends Component<LottiePlayerProps> {
       }
     }
     return false;
-  }
-
-  componentDidMount() {
-    const canvas = this.canvas.current;
-    if (!canvas) return;
-
-    const { width, height, ...props } = this.props;
-
-    const config: Config = {
-      src: props.src,
-      canvas,
-      autoplay: props.play ?? true,
-      loop: !!props.loop,
-      mode: props.mode || 'forward',
-      speed: props.speed ?? 1,
-    };
-
-    this.width = width || this.width;
-    this.height = height || this.height;
-    this.player = new DotLottie(config);
   }
 
   componentWillUnmount() {

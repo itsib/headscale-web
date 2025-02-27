@@ -75,11 +75,13 @@
   /* JSON editor highlight */
   --code-highlight-number: #1c86c6;
   --code-highlight-string: #22782c;
-  --code-highlight-null: #c16841;
+  --code-highlight-keyword: #c16841;
   --code-highlight-property: #aa2395;
   --code-highlight-brace: #60686c;
+  --code-highlight-punctuation: #60686c;
   --code-highlight-comments: #60686c;
   --code-trailing-space: rgba(255 116 104 / .33);
+  --code-trailing-bad: #F75464;
   --code-selection: rgb(33 66 131 / .5);
 
   color-scheme: light;
@@ -110,11 +112,13 @@ html.dark {
   /* JSON editor highlight */
   --code-highlight-number: #2AACB8;
   --code-highlight-string: #6AAB73;
-  --code-highlight-null: #c16841;
+  --code-highlight-keyword: #CF8E6D;
   --code-highlight-property: #C77DBB;
   --code-highlight-brace: #BCBEC4;
+  --code-highlight-punctuation: #BCBEC4;
   --code-highlight-comments: #7A7E85;
   --code-trailing-space: rgba(255 116 104 / .33);
+  --code-trailing-bad: #df2334;
   --code-selection: rgb(33 66 131 / .5);
 
   color-scheme: dark;

@@ -28,9 +28,11 @@ export class Application extends Component<any, any> {
               <Route path='/acl/:tab*' component={Acl} />
               <Route path='/metrics/:tab*' component={Metrics} />
               <Route path='/error-500' component={Error500} />
+              <Route path='/error-404' component={Error404} />
               <Route default component={Error404} />
             </Router>
           </ErrorBoundary>
+          <div className="h-[20px]" />
         </div>
         <Footer />
       </div>

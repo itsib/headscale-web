@@ -1,15 +1,14 @@
 import { useState } from 'preact/hooks';
 import { Trans } from 'react-i18next';
 import { formatError } from '@app-utils/errors';
-import { JsonCodeEditor } from '@app-components/json-code-editor/json-code-editor';
-import { RenderableProps } from 'preact';
+import { FunctionComponent } from 'preact';
 import { useStorage } from '@app-hooks/use-storage.ts';
 import { useMutation } from '@tanstack/react-query';
 import { fetchWithContext } from '@app-utils/query-fn.ts';
 import { AclPolicy } from '@app-types';
+import { JsonEditor } from '@app-components/json-editor/json-editor';
 
-export function EditFile(props: RenderableProps<{ policy: string, refetch: () => void }>) {
-  const { policy, refetch } = props;
+export const EditFile: FunctionComponent<{ policy: string, refetch: () => void }> = ({ policy, refetch })=>  {
   const storage = useStorage();
   const [policyTyped, setPolicyTyped] = useState<string>(policy);
 
@@ -33,8 +32,8 @@ export function EditFile(props: RenderableProps<{ policy: string, refetch: () =>
   return (
     <>
       <div className="tabs-content ui-scroll">
-        <div className="py-4 max-h-[calc(100vh-360px)] overflow-y-auto">
-          <JsonCodeEditor value={policyTyped} onChange={setPolicyTyped} />
+        <div className="py-4 max-h-[calc(100vh-380px)] overflow-y-auto">
+          <JsonEditor value={policyTyped} onChange={setPolicyTyped} />
         </div>
       </div>
 

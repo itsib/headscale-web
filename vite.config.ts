@@ -1,5 +1,5 @@
 import { defineConfig, loadEnv, UserConfig } from 'vite';
-import preact from '@preact/preset-vite'
+import preact from '@preact/preset-vite';
 import { join, resolve } from 'node:path';
 import compression from 'vite-plugin-compression2';
 import pluginCp from 'vite-plugin-cp';
@@ -43,7 +43,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
         '@app-hooks': resolve(__dirname, 'src/hooks'),
         '@app-context': resolve(__dirname, 'src/context'),
         '@app-utils': resolve(__dirname, 'src/utils'),
-      }
+      },
     },
     css: {
       postcss: {
@@ -52,8 +52,8 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
             config: join(__dirname, 'tailwind.config.ts'),
           }),
           autoprefixer(),
-        ]
-      }
+        ],
+      },
     },
     esbuild: { legalComments: 'none' },
     optimizeDeps: {
@@ -107,6 +107,17 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
       preact({
         reactAliasesEnabled: true,
         devToolsEnabled: true,
+        babel: {
+          plugins: [
+            [
+              '@babel/plugin-transform-react-jsx-source',
+              {
+                pragma: 'h',
+                pragmaFrag: 'Fragment',
+              },
+            ],
+          ],
+        },
       }),
       VitePWA({
         base: '/',
@@ -132,7 +143,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
             '**/*.{js,css,html}',
             'locales/**/*.{json,svg}',
             'fonts/**/*.{woff2,woff,ttf}',
-            'screenshot.png'
+            'screenshot.png',
           ],
           modifyURLPrefix: { '': '/' },
           navigateFallback: 'index.html',
@@ -197,7 +208,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
               },
             },
           ],
-        }
+        },
       }),
       compression({
         include: [/\.(js)$/, /\.(css)$/],
@@ -209,7 +220,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
           { src: 'package.json', dest: 'dist' },
           { src: 'LICENSE', dest: 'dist' },
           { src: 'README.md', dest: 'dist' },
-        ]
+        ],
       }),
     ],
     test: {
@@ -232,6 +243,6 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
         key: './cert/localhost.key',
         serverName: 'localhost',
       } : undefined,
-    }
+    },
   } as UserConfig;
 });

@@ -2,7 +2,8 @@
 /// <reference types="vite-plugin-pwa/react" />
 /// <reference types="vite-plugin-pwa/info" />
 /// <reference types="react-just-ui" />
-/// <reference types="@types/react" />
+/// <reference types="preact" />
+/// <reference types="preact-iso" />
 /// <reference lib="webworker" />
 
 interface ImportMetaEnv {
@@ -14,6 +15,10 @@ interface ImportMetaEnv {
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;
+}
+
+interface HTMLAttributes<RefType extends EventTarget = EventTarget> {
+  writingsuggestions: boolean | 'true' | 'false';
 }
 
 declare module 'https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm' {

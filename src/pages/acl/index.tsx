@@ -1,14 +1,14 @@
-import { fetchWithContext } from '@app-utils/query-fn';
 import { useTranslation } from 'react-i18next';
 import { ListLoading } from '@app-components/skeleton/list-loading';
 import { DEFAULT_ACL_POLICY, REFRESH_INTERVAL } from '@app-config';
-import { useStorage } from '@app-hooks/use-storage';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from 'react-just-ui/utils/cn';
 import { useLocation } from 'preact-iso/router';
-import { Redirect } from '@app-components/redirect/redirect.tsx';
+import { Redirect } from '@app-components/redirect/redirect';
 import { EditFile } from './edit-file';
 import { Preview } from './preview';
+import { fetchWithContext } from '@app-utils/query-fn';
+import { useStorage } from '@app-hooks/use-storage';
 import './index.css';
 
 export default function Acl() {
@@ -18,7 +18,7 @@ export default function Acl() {
 
   const { data: policy, isLoading, refetch } = useQuery({
     queryKey: ['/api/v1/policy'],
-    queryFn: async ({ queryKey, signal }) => {
+    queryFn: async ({  queryKey, signal }) => {
       const data = await fetchWithContext<{ policy: string }>(
         queryKey[0] as string,
         { signal },
@@ -61,7 +61,7 @@ export default function Acl() {
       ) : path === '/acl/edit-file' ? (
         <EditFile policy={policy || DEFAULT_ACL_POLICY} refetch={refetch} />
       ) : path === '/acl/preview' ? (
-        <Preview/>
+        <Preview policy={policy || DEFAULT_ACL_POLICY} refetch={refetch} />
       ) : (
         <Redirect to="/acl/edit-file"/>
       )}

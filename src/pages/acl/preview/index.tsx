@@ -1,7 +1,11 @@
-export function Preview() {
+import { FunctionComponent } from 'preact';
+
+export const Preview: FunctionComponent<{ policy: string, refetch: () => void }> = ()=>  {
   return (
     <div className="tabs-content ui-scroll">
-      <div className="px-6 py-8">In Development</div>
+      <div className="p-4 max-h-[calc(100vh-380px)] overflow-y-auto">
+        In development
+      </div>
     </div>
   );
-}
+};
