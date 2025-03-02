@@ -8,7 +8,7 @@ import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 import { VitePWA } from 'vite-plugin-pwa';
 import { readFile } from 'node:fs/promises';
-import * as fs from 'node:fs';
+import { existsSync } from 'node:fs';
 
 /**
  * Vite
@@ -17,7 +17,7 @@ import * as fs from 'node:fs';
 export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
   const pkg = JSON.parse(await readFile('package.json', 'utf8'));
   const webmanifest = JSON.parse(await readFile('manifest.webmanifest', 'utf8'));
-  const isDevSSL = command === 'serve' && fs.existsSync('cert');
+  const isDevSSL = command === 'serve' && existsSync('cert');
 
   return {
     clearScreen: false,

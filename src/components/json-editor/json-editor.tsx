@@ -1,12 +1,14 @@
 import { Component, createRef, VNode } from 'preact';
-import { Gutters } from './gutters.tsx';
+import { Gutters } from './gutters';
+import { TokenizedCode } from './tokenized-code.ts';
+import { HistoryControl } from '@app-utils/history-control.ts';
 import './json-editor.css';
 
-type Keyword = '[' | ']' | '{' | '}' | '"' | ':' | '//' | ',' | 'true' | 'false' | 'null' | 'undefined';
 
 export interface JsonEditorProps {
   value?: string
   onChange?: (value: string) => void
+  onSave?: () => void
 }
 
 export interface JsonEditorState {
@@ -17,13 +19,28 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
 
   editable = createRef<HTMLDivElement>();
 
-  isProperty = true;
+  history: HistoryControl;
+
+  tabSize: number = 0;
+
+  isLocked: boolean = false;
+
+  isOnChange: boolean = false;
 
   constructor(props: JsonEditorProps, context?: any) {
     super(props, context);
     this.state = {
       code: (props.value || ''),
     };
+
+    this.history = new HistoryControl({ value: props.value });
+
+    this.history.onChange(value => {
+      this.setState({ code: value });
+      this.isOnChange = true;
+      this.props.value = value;
+      this.props.onChange?.(value);
+    });
   }
 
   componentDidMount() {
@@ -37,58 +54,59 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
 
   }
 
+  componentWillReceiveProps(nextProps: Readonly<JsonEditorProps>) {
+    if (this.isOnChange) {
+      this.isOnChange = false;
+      return;
+    }
+    this.history.reset(nextProps.value || '');
+  }
+
   onBeforeInput(event: InputEvent) {
+    if (this.isLocked) return;
+    event.preventDefault();
     const data = event.data;
     const selection: Selection | null = document.getSelection();
-    event.preventDefault();
 
     if (!selection) return;
 
     const { selectionStart, selectionEnd } = this._getRangePosition(selection);
-    console.log(event.inputType, 'selectionStart', selectionStart, 'selectionEnd', selectionEnd);
 
     switch (event.inputType) {
       case 'insertText': {
         const text = data || '';
-        const code = this.state.code.slice(0, selectionStart) + text + this.state.code.slice(selectionEnd);
-        this._emitCode(code);
+        this.history.insert(selectionStart, selectionEnd, text);
 
-        requestAnimationFrame(() => this._setCursorPosition(selectionStart + text.length));
+        this.updateCursor(selectionStart + text.length);
         break;
       }
       case 'deleteContentBackward': {
-        let code = this.state.code;
         let cursorPosition = 0;
+
         if (selectionStart === selectionEnd) {
-          code = code.slice(0, selectionStart - 1) + code.slice(selectionStart);
+          this.history.insert(selectionStart - 1, selectionStart);
           cursorPosition = selectionStart - 1;
         } else {
-          code = code.slice(0, selectionStart) + code.slice(selectionEnd);
+          this.history.insert(selectionStart, selectionEnd);
           cursorPosition = selectionStart;
         }
-        this._emitCode(code);
 
-        requestAnimationFrame(() => this._setCursorPosition(cursorPosition));
+        this.updateCursor(cursorPosition);
         break;
       }
       case 'deleteContentForward': {
-        let code = this.state.code;
-
         if (selectionStart === selectionEnd) {
-          code = code.slice(0, selectionStart) + code.slice(selectionStart + 1);
+          this.history.insert(selectionStart, selectionStart + 1);
         } else {
-          code = code.slice(0, selectionStart) + code.slice(selectionEnd);
+          this.history.insert(selectionStart, selectionEnd);
         }
-        this._emitCode(code);
-
-        requestAnimationFrame(() => this._setCursorPosition(selectionStart));
+        this.updateCursor(selectionStart);
         break;
       }
       case 'insertParagraph': {
-        const code = this.state.code.slice(0, selectionStart) + '\n' + this.state.code.slice(selectionEnd);
-        this._emitCode(code);
+        this.history.insert(selectionStart, selectionEnd, '\n');
 
-        requestAnimationFrame(() => this._setCursorPosition(selectionStart + 1));
+        this.updateCursor(selectionStart + 1);
         break;
       }
       default:
@@ -97,142 +115,68 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
   }
 
   onKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Tab' && !event.altKey && !event.shiftKey) {
-      event.preventDefault();
+    if (event.key === 'Tab' && !event.altKey && !event.shiftKey && !event.ctrlKey) {
+      return this.onTabKeyDown(event);
     }
 
+    if (event.code === 'KeyZ' && event.ctrlKey && !event.altKey && !event.shiftKey) {
+      return this.onUndo(event);
+    }
+
+    if (event.code === 'KeyZ' && event.ctrlKey && !event.altKey && event.shiftKey) {
+      return this.onRedo(event);
+    }
+
+    if (event.code === 'KeyS' && event.ctrlKey && !event.altKey && !event.shiftKey) {
+      return this.onSave(event);
+    }
   }
 
-  renderLine(line: string, index: number) {
-    let output = '';
-    let lastIndex = 0;
-    let isString = false;
-    let match: RegExpExecArray | null = null;
-    const regex = /(\[|]|\{|}|"|:|(:?\/\/)|,|(:?true)|(:?false)|(:?null)|(:?undefined))/g;
+  onSave(event: KeyboardEvent): void {
+    event.preventDefault();
+    this.props.onSave?.();
+  }
 
-    const trailingSpaces = line.length - line.trimEnd().length;
-    line = trailingSpaces > 0 ? line.slice(0, -trailingSpaces) : line;
+  onTabKeyDown(event: KeyboardEvent): void {
+    event.preventDefault();
+    const selection: Selection | null = document.getSelection();
+    if (!selection) return;
+    const { selectionStart, selectionEnd } = this._getRangePosition(selection);
 
-    // Handle every special char
-    while ((match = regex.exec(line))) {
-      const keyword = match[0] as Keyword;
-      const word = line.slice(lastIndex, match.index);
+    const lastLine = this.state.code.slice(0, selectionStart).split('\n').pop() || '';
+    const spaces = lastLine.length % this.tabSize || this.tabSize;
 
-      if (isString && keyword !== "\"") {
-        continue;
-      }
+    this.history.insert(selectionStart, selectionEnd, ' '.repeat(spaces));
 
-      if (keyword === '//') {
-        const comment = line.slice(match.index);
+    this.updateCursor(selectionStart + spaces);
+  }
 
-        output += word;
-        output += `<span class="cm-comment">${comment}</span>`;
-        lastIndex = line.length;
-        break;
-      }
+  onUndo(event: KeyboardEvent): void {
+    event.preventDefault();
+    const selection: Selection | null = document.getSelection();
+    if (!selection) return;
+    const { selectionStart } = this._getRangePosition(selection);
 
-      // Wrap number or unknown text
-      const trimmed = word.trim();
-      if (trimmed && keyword !== "\"") {
-        let wrapped = '';
-        if (/^[0-9\-e.]+$/.test(trimmed)) {
-          wrapped = `<span class="cm-number">${trimmed}</span>`;
-        } else {
-          wrapped = `<span class="cm-bad">${trimmed}</span>`;
-        }
+    const newPos = this.history.undo();
 
-        output += word.replace(trimmed, wrapped);
-      } else {
-        output += word;
-      }
+    this.updateCursor(newPos !== null ? newPos : selectionStart);
+  }
 
-      switch(keyword) {
-        case '{':
-          this.isProperty = true;
-          output += `<span class="cm-brace">{</span>`;
-          break;
-        case '}':
-          output += `<span class="cm-brace">}</span>`;
-          break;
-        case '[':
-          this.isProperty = false;
-          output += `<span class="cm-brace">[</span>`;
-          break;
-        case ']':
-          output += `<span class="cm-brace">]</span>`;
-          break;
-        case "\"":
-          if (isString) {
-            isString = false;
-            this.isProperty = true;
-            output += `"</span>`;
-          } else {
-            isString = true;
-            if (this.isProperty) {
-              output += `<span class="cm-property">"`;
-            } else {
-              output += `<span class="cm-string">"`;
-            }
-          }
-          break;
-        case ':':
-          this.isProperty = false;
-          output += '<span class="cm-punctuation">:</span>';
-          break;
-        case ',':
-          this.isProperty = true;
-          output += '<span class="cm-punctuation">,</span>';
-          break;
-        case 'true':
-        case 'false':
-        case 'null':
-        case 'undefined':
-          output += `<span class="cm-keyword">${keyword}</span>`;
-          break;
-      }
+  onRedo(event: KeyboardEvent): void {
+    event.preventDefault();
+    const selection: Selection | null = document.getSelection();
+    if (!selection) return;
+    const { selectionStart } = this._getRangePosition(selection);
 
-      lastIndex = match.index + keyword.length;
-    }
-
-    if (isString) {
-      output += '</span>';
-    }
-
-    // End of line
-    const tail = line.slice(lastIndex);
-    const bad = tail.trim();
-    if (bad) {
-      if (/^[0-9\-e.]+$/.test(bad)) {
-        output += tail.replace(bad, `<span class="cm-number">${bad}</span>`);
-      } else {
-        output += tail.replace(bad, `<span class="cm-bad">${bad}</span>`);
-      }
-    } else {
-      output += tail;
-    }
-
-    // Wrap trailing spaces
-    if (trailingSpaces) {
-      output += `<span class="cm-trailing-space">${' '.repeat(trailingSpaces)}</span>`
-    }
-
-    // Wrap indents
-    const spaces = output.match(/^\s+/)?.[0] || '';
-    output = spaces.length ? `<span class="cm-space">${spaces}</span>` + output.slice(spaces.length) : output;
-
-    return (
-      <div
-        key={index}
-        className="cm-line"
-        data-indent={spaces.length}
-        data-line={index}
-        dangerouslySetInnerHTML={{ __html: output }}
-      />
-    );
+    const newPos = this.history.redo();
+    this.updateCursor(newPos !== null ? newPos : selectionStart);
   }
 
   render(): VNode {
-    const lines = this.state.code.split('\n');
+    const tokenized = TokenizedCode.tokenize(this.history.value);
+    this.tabSize = tokenized.getTabSize();
+
+    const lines = tokenized.toLines();
     return (
       <div className="json-editor">
         <Gutters length={lines.length} />
@@ -244,6 +188,7 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
             translate={false}
             contenteditable={true}
             class="cm-editable-area"
+            style={{ tabSize: this.tabSize }}
             role="textbox"
             aria-multiline="true"
             data-language="json"
@@ -251,16 +196,17 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
             onKeyDown={this.onKeyDown.bind(this)}
             ref={this.editable}
           >
-            {lines.map((line, i) => this.renderLine(line, i))}
+            {lines.map((line, i) => <div key={i} data-line={i} className="cm-line" dangerouslySetInnerHTML={{ __html: line }}></div>)}
           </div>
         </div>
       </div>
     );
   }
 
-  private _emitCode(code: string): void {
-    this.setState({ code });
-    this.props.onChange?.(code);
+  updateCursor(position: number) {
+    this.isLocked = true;
+
+    queueMicrotask(() => this._setCursorPosition(position));
   }
 
   private _getRangePosition(selection: Selection) {
@@ -344,6 +290,8 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
 
     selection.removeAllRanges();
     selection.addRange(range);
+
+    this.isLocked = false;
   }
 }
 
