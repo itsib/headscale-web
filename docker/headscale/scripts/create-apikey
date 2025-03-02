@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+sleep 2
+APIKEY=$(headscale apikey create --expiration 9999d)
+
+echo "DEVELOPMENT API KEY $APIKEY"

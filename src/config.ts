@@ -8,7 +8,7 @@ export const DEFAULT_ACL_POLICY = JSON.stringify({
     src: ['*'],
     dst: ['*:*'],
   }],
-});
+}, null, 2);
 
 export const IDB_VERSION = 8;
 

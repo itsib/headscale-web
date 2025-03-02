@@ -1,42 +1,39 @@
 name: "tailscale"
 
 services:
-  front:
-    image: sergeyitsib/headscale-web
-    container_name: front
-    restart: unless-stopped
+  caddy:
+    image: caddy
+    cap_add:
+      - NET_ADMIN
     ports:
-      - "8081:80"
-    networks:
-      - network
+      - "3080:3080"
+      - "3081:3081"
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+  headscale-web:
+#    image: sergeyitsib/headscale-web
+    build:
+      context: .
     healthcheck:
       test: [ "CMD", "healthcheck" ]
       interval: 10s
       timeout: 5s
       retries: 2
-  proxy:
-    image: caddy:2.9.1
+  headscale:
     build:
-      context: ./caddy
-    container_name: proxy
-    restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
+      context: ./docker/headscale
     volumes:
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
-    networks:
-      - network
-
-networks:
-  network:
-    driver: bridge
+      - ./docker/headscale/config.yaml:/etc/headscale/config.yaml
+      - headscale-data:/var/lib/headscale
+    healthcheck:
+      test: [ "CMD", "healthcheck" ]
+      interval: 10s
+      timeout: 5s
+      retries: 2
 
 volumes:
   caddy_data:
   caddy_config:
+  headscale-data:

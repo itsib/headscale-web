@@ -19,12 +19,19 @@ export default function Acl() {
   const { data: policy, isLoading } = useQuery({
     queryKey: ['/api/v1/policy', 'GET'],
     queryFn: async ({  queryKey, signal }) => {
-      const data = await fetchWithContext<{ policy: string }>(
-        queryKey[0] as string,
-        { signal },
-        storage,
-      );
-      return data.policy;
+      try {
+        const data = await fetchWithContext<{ policy: string }>(
+          queryKey[0] as string,
+          { signal },
+          storage,
+        );
+        return data.policy;
+      } catch (error: any) {
+        if (error.code === 500 && error.message.includes('acl policy not found')) {
+          return DEFAULT_ACL_POLICY;
+        }
+        throw error;
+      }
     },
     staleTime: 0,
     refetchInterval: false,
@@ -58,10 +65,12 @@ export default function Acl() {
 
       {isLoading ? (
         <ListLoading/>
+      ) : !policy ? (
+        <></>
       ) : path === '/acl/edit-file' ? (
-        <EditFile policy={policy || DEFAULT_ACL_POLICY} />
+        <EditFile policy={policy} isDefault={policy === DEFAULT_ACL_POLICY} />
       ) : path === '/acl/preview' ? (
-        <Preview policy={policy || DEFAULT_ACL_POLICY} />
+        <Preview policy={policy} />
       ) : (
         <Redirect to="/acl/edit-file"/>
       )}

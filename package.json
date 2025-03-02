@@ -26,13 +26,9 @@
     "build": "npm run build:icons && tsc -b && NODE_ENV=production vite build --mode production",
     "build:dev": "tsc -b && NODE_ENV=development vite build --mode development",
     "build:icons": "icon-font g",
-    "jwt:secret": "node --env-file=./.env scripts/jwt-secret-jose.mjs",
-    "jwt:token": "node --env-file=./.env ./scripts/jwt-token.mjs",
-    "deps:patch": "node ./scripts/patch-deps.js",
     "lint": "eslint .",
     "test": "vitest",
     "preview": "vite preview",
-    "swagger": "docker compose -f swagger/compose.yml up",
     "preversion": "npm run lint && npm run test",
     "version": "node ./scripts/version.mjs && git add .",
     "postversion": "git push && git push --tags"
@@ -77,12 +73,8 @@
     "eslint-plugin-react-refresh": "^0.4.9",
     "eslint-visitor-keys": "^4.2.0",
     "globals": "^16.0.0",
-    "jose": "^6.0.6",
     "postcss": "^8.4.47",
-    "rollup-plugin-visualizer": "^5.13.1",
-    "sirv": "^3.0.0",
     "tailwindcss": "^3.4.17",
-    "tsx": "^4.19.2",
     "typescript": "~5.6.0",
     "typescript-eslint": "^8.18.1",
     "vite": "^6.0.5",
@@ -90,12 +82,7 @@
     "vite-plugin-cp": "^4.0.8",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-pwa": "^0.21.1",
-    "vitest": "^3.0.6",
-    "workbox-build": "^7.3.0",
-    "workbox-core": "^7.3.0",
-    "workbox-precaching": "^7.3.0",
-    "workbox-routing": "^7.3.0",
-    "workbox-strategies": "^7.3.0"
+    "vitest": "^3.0.6"
   },
   "overrides": {
     "esbuild": "^0.25.0"

@@ -8,11 +8,11 @@ import { fetchWithContext } from '@app-utils/query-fn.ts';
 import { AclPolicy } from '@app-types';
 import { JsonEditor } from '@app-components/json-editor/json-editor';
 
-export const EditFile: FunctionComponent<{ policy: string }> = ({ policy })=>  {
+export const EditFile: FunctionComponent<{ policy: string, isDefault?: boolean }> = ({ policy, isDefault })=>  {
   const storage = useStorage();
   const client = useQueryClient();
   const [policyTyped, setPolicyTyped] = useState<string>(policy || '');
-  const isChanged = policy !== policyTyped;
+  const isChanged = !!isDefault || policy !== policyTyped;
 
   const { mutate, isPending, error, reset } = useMutation({
     mutationKey: ['/api/v1/policy', 'PUT'],

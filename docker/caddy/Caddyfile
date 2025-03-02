@@ -1,0 +1,50 @@
+(cors) {
+  header Access-Control-Allow-Origin *
+  header Access-Control-Allow-Methods GET,POST,PUT,PATCH,HEAD,OPTIONS,DELETE
+  header Access-Control-Allow-Headers Authorization,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+
+  @options method OPTIONS
+
+  handle @options {
+    header Access-Control-Max-Age 1728000
+    header Content-Type text/plain; charset=utf-8
+    header Content-Length 0
+
+    respond 204
+  }
+}
+
+(authorize) {
+  @noauth not header Authorization Bearer*
+  handle @noauth {
+    respond "Unauthorized" 401
+    abort
+  }
+
+  forward_auth headscale:8080 {
+    uri /api/v1/user
+    copy_headers Authorization
+  }
+}
+
+http://localhost:3080 {
+  reverse_proxy headscale-web:80 {
+    header_up Host {host}
+  }
+}
+
+http://localhost:3081 {
+  import cors
+
+  handle /metrics {
+    import authorize
+
+    reverse_proxy headscale:9090 {
+      header_up Host {host}
+    }
+  }
+
+  reverse_proxy headscale:8080 {
+    header_up Host {host}
+  }
+}
