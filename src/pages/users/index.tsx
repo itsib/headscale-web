@@ -8,13 +8,12 @@ import { ModalUserCreate } from '@app-components/modals/modal-user-create/modal-
 import { ModalUserRename } from '@app-components/modals/modal-user-rename/modal-user-rename';
 import { ModalUserDelete } from '@app-components/modals/modal-user-delete/modal-user-delete';
 import { fetchWithContext } from '@app-utils/query-fn';
-import { REFRESH_INTERVAL } from '@app-config';
 import { useStorage } from '@app-hooks/use-storage';
 import { UserInfo } from '@app-components/user-info/user-info';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { ContextMenu } from '@app-components/popups/context-menu';
 import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
-import { UsersContextMenuAction, UsersContextMenu } from '@app-components/user-context-menu/user-context-menu';
+import { UsersContextMenu, UsersContextMenuAction } from '@app-components/user-context-menu/user-context-menu';
 
 export function Users() {
   const { t } = useTranslation();
@@ -33,8 +32,9 @@ export function Users() {
       );
       return data.users;
     },
-    staleTime: REFRESH_INTERVAL,
-    refetchInterval: REFRESH_INTERVAL,
+    staleTime: 20_000,
+    refetchOnMount: true,
+    refetchInterval: 30_000,
   });
 
   useEffect(() => {

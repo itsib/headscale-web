@@ -3,20 +3,21 @@ import { Trans } from 'react-i18next';
 import { formatError } from '@app-utils/errors';
 import { FunctionComponent } from 'preact';
 import { useStorage } from '@app-hooks/use-storage.ts';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchWithContext } from '@app-utils/query-fn.ts';
 import { AclPolicy } from '@app-types';
 import { JsonEditor } from '@app-components/json-editor/json-editor';
 
-export const EditFile: FunctionComponent<{ policy: string, refetch: () => Promise<any> }> = ({ policy, refetch })=>  {
+export const EditFile: FunctionComponent<{ policy: string }> = ({ policy })=>  {
   const storage = useStorage();
+  const client = useQueryClient();
   const [policyTyped, setPolicyTyped] = useState<string>(policy || '');
   const isChanged = policy !== policyTyped;
 
   const { mutate, isPending, error, reset } = useMutation({
-    mutationKey: ['/api/v1/policy'],
-    async mutationFn(policy: string) {
-      const result = await fetchWithContext<AclPolicy>(
+    mutationKey: ['/api/v1/policy', 'PUT'],
+    mutationFn(policy: string) {
+      return fetchWithContext<AclPolicy>(
         '/api/v1/policy',
         {
           method: 'PUT',
@@ -24,10 +25,10 @@ export const EditFile: FunctionComponent<{ policy: string, refetch: () => Promis
         },
         storage,
       );
-      await refetch();
-
-      return result;
     },
+    onSuccess: () => {
+      client.setQueryData(['/api/v1/policy', 'GET'], policyTyped);
+    }
   });
 
   return (

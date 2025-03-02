@@ -31,7 +31,7 @@ export function Nodes() {
   const [selected, setSelected] = useState<Node | null>(null);
 
   const { data: nodes, isLoading, refetch } = useQuery({
-    queryKey: ['/api/v1/node'],
+    queryKey: ['/api/v1/node', 'GET'],
     queryFn: async ({ queryKey, signal }) => {
       const data = await fetchWithContext<{ nodes: Node[] }>(
         queryKey[0] as string,
@@ -40,8 +40,8 @@ export function Nodes() {
       );
       return data.nodes;
     },
-    staleTime: REFRESH_INTERVAL,
-    refetchInterval: REFRESH_INTERVAL,
+    staleTime: 60_000 * 60,
+    refetchInterval: 10_000,
   });
 
   return (
