@@ -14,7 +14,6 @@ import { ModalNodeTags } from '@app-components/modals/modal-node-tags/modal-node
 import { ModalNodeExpire } from '@app-components/modals/modal-node-expire/modal-node-expire';
 import { useQuery } from '@tanstack/react-query';
 import { useStorage } from '@app-hooks/use-storage';
-import { REFRESH_INTERVAL } from '@app-config';
 import { FormattedDuration } from '@app-components/formatters/formatted-duration';
 import { UserInfo } from '@app-components/user-info/user-info';
 import { AclTag } from '@app-components/acl-tag/acl-tag';
