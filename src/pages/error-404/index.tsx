@@ -7,7 +7,7 @@ export const Error404 = () => {
   return (
     <main className="w-full flex flex-col items-center justify-center min-h-[var(--content-height)]">
       <div className="aspect-square">
-        <LottiePlayer src="/animations/page-not-found.json" loop speed={1} height={400} width={400} />
+        <LottiePlayer src="/animations/404.json" loop speed={1} height={400} width={400} />
       </div>
 
       <div className="btn text-3xl mb-6">

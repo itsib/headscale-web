@@ -1,13 +1,13 @@
 import { useQueries } from '@tanstack/react-query';
 import { AuthKey, AuthKeyWithUser, QueryResult } from '@app-types';
 import { useUsers } from './use-users.ts';
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { fetchWithContext } from '@app-utils/query-fn';
-import { ApplicationContext } from '@app-context/application';
+import { useStorage } from '@app-hooks/use-storage.ts';
 
 export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () => void } {
   const { data: users } = useUsers();
-  const { storage } = useContext(ApplicationContext);
+  const storage = useStorage();
 
   const queries = useMemo(() => {
     if (!users) {

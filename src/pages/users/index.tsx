@@ -34,7 +34,8 @@ export function Users() {
     },
     staleTime: 20_000,
     refetchOnMount: true,
-    refetchInterval: 30_000,
+    refetchIntervalInBackground: true,
+    refetchInterval: 15_000,
   });
 
   useEffect(() => {
