@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { BrandLogo } from '@app-components/brand-logo/brand-logo';
 import { ContextMenu } from '@app-components/popups/context-menu';
 import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
 import { HeaderMenu } from './_header-menu';
 import { useLocation } from 'preact-iso/router';
 import { cn } from 'react-just-ui/utils/cn';
+import { BrandLogo } from '@app-components/brand-logo/brand-logo';
 import './header.css';
 
 export const Header = () => {
@@ -15,7 +15,7 @@ export const Header = () => {
     <header className="header fixed inset-0 bottom-auto z-20 bg-primary">
       <div className="container flex items-center justify-between h-[var(--header-height)]">
         <a href="/" className="flex items-center text-neutral-500 dark:text-gray-300">
-          <BrandLogo size={34}/>
+          <BrandLogo />
         </a>
 
         <nav className="main-menu ml-6 mr-auto">

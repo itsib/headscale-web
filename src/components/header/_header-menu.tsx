@@ -76,7 +76,7 @@ export const HeaderMenu: FunctionComponent = () => {
           className="btn-context-menu flex items-center"
           onClick={logout}>
           <i className="icon icon-logout"/>
-          <span><Trans i18nKey="logout"/></span>
+          <span><Trans i18nKey="disconnect"/></span>
         </button>
       </div>
     </>

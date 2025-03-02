@@ -106,7 +106,7 @@
   "key_id": "Key ID",
   "last_seen": "Last Seen",
   "light": "Light",
-  "logout": "Logout",
+  "disconnect": "Disconnect",
   "machine": "Machine",
   "machines": "Machines",
   "machines_page_subtitle": "Manage the devices connected to your tailnet.",

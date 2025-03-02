@@ -5,9 +5,9 @@ export const Error404 = () => {
   const { t } = useTranslation();
 
   return (
-    <main className="w-full flex flex-col items-center justify-center min-h-[var(--content-height)]">
+    <main className="w-full flex flex-col items-center justify-center max-h-[var(--content-height)]">
       <div className="aspect-square">
-        <LottiePlayer src="/animations/404.json" loop speed={1} height={400} width={400} />
+        <LottiePlayer src="/animations/404.json" loop speed={1} height={500} width={500} />
       </div>
 
       <div className="btn text-3xl mb-6">
