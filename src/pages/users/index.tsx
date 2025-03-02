@@ -23,18 +23,16 @@ export function Users() {
   const [selected, setSelected] = useState<User | null>(null);
 
   const { data: users, refetch, isLoading } = useQuery({
-    queryKey: ['/api/v1/user'],
+    queryKey: ['/api/v1/user', 'GET'],
     queryFn: async ({ queryKey, signal }) => {
       const data = await fetchWithContext<{ users: UserWithProvider[] }>(
         queryKey[0] as string,
-        { signal },
+        { signal, method: queryKey[1] },
         storage,
       );
       return data.users;
     },
     staleTime: 20_000,
-    refetchOnMount: true,
-    refetchIntervalInBackground: true,
     refetchInterval: 15_000,
   });
 

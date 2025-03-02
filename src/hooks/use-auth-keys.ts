@@ -6,7 +6,7 @@ import { fetchWithContext } from '@app-utils/query-fn';
 import { useStorage } from '@app-hooks/use-storage.ts';
 
 export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () => void } {
-  const { data: users } = useUsers();
+  const { data: users, isLoading: isLoading0, error: error0 } = useUsers();
   const storage = useStorage();
 
   const queries = useMemo(() => {
@@ -14,11 +14,11 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () =>
       return [];
     }
     return users.map(user => ({
-      queryKey: ['/api/v1/preauthkey', user.name],
+      queryKey: ['/api/v1/preauthkey', 'GET', user.name],
       queryFn: async ({ queryKey, signal }: any) => {
         try {
-          const url = queryKey[0] + '?user=' + queryKey[1];
-          const result = await fetchWithContext<{ preAuthKeys: AuthKey[] }>(url, { signal }, storage);
+          const url = queryKey[0] + '?user=' + queryKey[2];
+          const result = await fetchWithContext<{ preAuthKeys: AuthKey[] }>(url, { signal, method: queryKey[1] }, storage);
           return result.preAuthKeys;
         } catch(error: any) {
           if (error.code === 500) {
@@ -33,7 +33,7 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () =>
     }))
   }, [users])
 
-  const { data, isLoading, error, refetch: _refetch } = useQueries({
+  const { data, isLoading: isLoading1, error: error1, refetch: _refetch } = useQueries({
     queries,
     combine: (results) => {
       return {
@@ -51,5 +51,10 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () =>
     _refetch().catch(console.error);
   }, []);
 
-  return { data, isLoading, error, refetch };
+  return {
+    data,
+    isLoading: isLoading0 || isLoading1,
+    error: error0 || error1,
+    refetch,
+  };
 }
