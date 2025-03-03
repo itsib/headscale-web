@@ -14,16 +14,17 @@ interface FormFields {
 }
 
 export interface AuthFormProps {
+  base?: string;
   submit: (fields: FormFields) => Promise<void>;
 }
 
-export const AuthForm: FunctionComponent<AuthFormProps> = ({ submit }) => {
+export const AuthForm: FunctionComponent<AuthFormProps> = ({ base, submit }) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(false);
 
   const { handleSubmit, register, formState, setError, reset } = useForm<FormFields>({
     defaultValues: {
-      base: '',
+      base: base || '',
       token: '',
       tokenType: 'Bearer',
     }

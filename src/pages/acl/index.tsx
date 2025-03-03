@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { ListLoading } from '@app-components/skeleton/list-loading';
-import { DEFAULT_ACL_POLICY } from '@app-config';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from 'react-just-ui/utils/cn';
 import { useLocation } from 'preact-iso/router';
@@ -28,7 +27,10 @@ export default function Acl() {
         return data.policy;
       } catch (error: any) {
         if (error.code === 500 && error.message.includes('acl policy not found')) {
-          return DEFAULT_ACL_POLICY;
+          return null;
+        }
+        if (error.code === 401) {
+          await storage.deleteAppStore('main-token');
         }
         throw error;
       }
@@ -65,10 +67,8 @@ export default function Acl() {
 
       {isLoading ? (
         <ListLoading/>
-      ) : !policy ? (
-        <></>
       ) : path === '/acl/edit-file' ? (
-        <EditFile policy={policy} isDefault={policy === DEFAULT_ACL_POLICY} />
+        <EditFile policy={policy} />
       ) : path === '/acl/preview' ? (
         <Preview policy={policy} />
       ) : (

@@ -1,9 +1,9 @@
 import { FunctionComponent } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import { AuthContext } from '@app-context/auth/auth.context';
 import { useStorage } from '@app-hooks/use-storage.ts';
 import { Credentials, TokenType } from '@app-types';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { AuthForm } from '@app-components/auth-form/auth-form.tsx';
 import { fetchFn } from '@app-utils/query-fn.ts';
 import { joinUrl } from '@app-utils/join-url.ts';
@@ -48,12 +48,28 @@ export const AuthProvider: FunctionComponent = ({ children }) =>  {
     init().catch(console.error);
   }, [storage]);
 
+  // Show login form if no access token
+  useEffect(() => {
+    return storage.subscribe('delete', (tableName: string, key: string) => {
+      if (tableName === 'appStore' && (key === 'main-token' || key === 'main-url')) {
+        setIsAuthorized(false);
+
+        if (key === 'main-url') {
+          setBase(undefined);
+        }
+        if (key === 'main-token') {
+          setPrefix(undefined);
+        }
+      }
+    });
+  }, [storage]);
+
   return (
     <AuthContext.Provider value={{ isAuthorized: !!isAuthorized, logout, prefix, base }}>
       {isAuthorized === null ? null : isAuthorized ? children : (
         <div className="container">
           <div className="w-full h-[80vh] min-h-[max(80vh, 700px)] flex items-start justify-center">
-            <AuthForm submit={submit} />
+            <AuthForm submit={submit} base={base} />
           </div>
         </div>
       )}

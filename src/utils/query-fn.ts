@@ -90,6 +90,13 @@ export function getDefaultQueryFn(storage: IDBStorageInstance<StorageTables>) {
       url = `${base}${url}`;
     }
 
-    return await fetchFn(url, { method, signal }, token, tokenType);
+    try {
+      return await fetchFn(url, { method, signal }, token, tokenType);
+    } catch (error: any) {
+      if (error.code === 401) {
+        await storage.deleteAppStore('main-token');
+      }
+      throw error;
+    }
   }
 }

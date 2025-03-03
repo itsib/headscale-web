@@ -46,5 +46,11 @@ http://localhost:3081 {
 
   reverse_proxy headscale:8080 {
     header_up Host {host}
+    @unauthorized {
+        status 500
+        header content-length 12
+    }
+
+    replace_status @unauthorized 401
   }
 }

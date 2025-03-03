@@ -1,3 +1,6 @@
+export type IDBEventName = 'read' | 'write' | 'delete';
+export type IDBEventCallback = (tableName: string, key: string) => void;
+
 export interface IDBIndexConfig {
   name: string,
   keyPath: string | string[],
@@ -18,7 +21,11 @@ type IDBDeleteInterface<Tables extends IDBTablesConfig> = {
   [Name in keyof Tables as `delete${Capitalize<string & Name>}`]: (key: string) => Promise<void>;
 }
 
-export type IDBStorageInstance<Tables extends IDBTablesConfig> = { new(): IDBStorage<IDBTablesConfig> } & IDBReadInterface<Tables> & IDBWriteInterface<Tables> & IDBDeleteInterface<Tables>;
+type IDBEventListener = {
+  subscribe(eventName: IDBEventName, callback: IDBEventCallback): () => void;
+}
+
+export type IDBStorageInstance<Tables extends IDBTablesConfig> = { new(): IDBStorage<IDBTablesConfig> } & IDBReadInterface<Tables> & IDBWriteInterface<Tables> & IDBDeleteInterface<Tables> & IDBEventListener;
 
 export class IDBStorage<Tables extends IDBTablesConfig> {
   /**
@@ -36,6 +43,8 @@ export class IDBStorage<Tables extends IDBTablesConfig> {
 
   private readonly _indexes: Map<string, IDBIndex>;
 
+  private readonly _listeners: Map<IDBEventName, IDBEventCallback[]>;
+
   private _db?: Promise<IDBDatabase>;
 
   private static _INSTANCE?: IDBStorageInstance<IDBTablesConfig>;
@@ -52,6 +61,7 @@ export class IDBStorage<Tables extends IDBTablesConfig> {
     this._version = version;
     this._tables = new Map();
     this._indexes = new Map<string, IDBIndex>();
+    this._listeners = new Map<IDBEventName, IDBEventCallback[]>();
 
     const names = Object.keys(tables);
     for (let i = 0; i < names.length; i++) {
@@ -137,6 +147,7 @@ export class IDBStorage<Tables extends IDBTablesConfig> {
   }
 
   private async _read<T = any>(tableName: string, key: string): Promise<T> {
+    this._emit('read', tableName, key);
     const store = await this._store(tableName, 'readonly');
 
     return new Promise<T>((resolve, reject) => {
@@ -149,6 +160,7 @@ export class IDBStorage<Tables extends IDBTablesConfig> {
   }
 
   private async _write<T = any>(tableName: string, key: string, value: T): Promise<void> {
+    this._emit('write', tableName, key);
     const store = await this._store(tableName, 'readwrite');
 
     return new Promise<void>((resolve, reject) => {
@@ -164,6 +176,7 @@ export class IDBStorage<Tables extends IDBTablesConfig> {
   }
 
   private async _delete(tableName: string, key: string): Promise<void> {
+    this._emit('delete', tableName, key);
     const store = await this._store(tableName, 'readwrite');
 
     return new Promise<void>((resolve, reject) => {
@@ -176,6 +189,26 @@ export class IDBStorage<Tables extends IDBTablesConfig> {
 
       request.transaction.onabort = () => reject(this._formatError(request.error));
     })
+  }
+
+  private _emit(eventName: IDBEventName, tableName: string, key: string) {
+    const listeners = this._listeners.get(eventName);
+    if (!listeners) return;
+
+    for (let i = 0; i < listeners.length; i++) {
+      listeners[i](tableName, key);
+    }
+  }
+
+  subscribe(eventName: IDBEventName, callback: IDBEventCallback): () => void {
+    const listeners = this._listeners.get(eventName) || [];
+    listeners.push(callback);
+    this._listeners.set(eventName, listeners);
+
+    return () => {
+      const listeners = this._listeners.get(eventName)!;
+      this._listeners.set(eventName, listeners.filter(_cb => _cb !== callback));
+    }
   }
 
   async get<T = any>(key: IDBValidKey): Promise<T | undefined> {

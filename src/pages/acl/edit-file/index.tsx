@@ -7,12 +7,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchWithContext } from '@app-utils/query-fn.ts';
 import { AclPolicy } from '@app-types';
 import { JsonEditor } from '@app-components/json-editor/json-editor';
+import { DEFAULT_ACL_POLICY } from '@app-config';
 
-export const EditFile: FunctionComponent<{ policy: string, isDefault?: boolean }> = ({ policy, isDefault })=>  {
+export const EditFile: FunctionComponent<{ policy?: string | null }> = ({ policy })=>  {
   const storage = useStorage();
   const client = useQueryClient();
-  const [policyTyped, setPolicyTyped] = useState<string>(policy || '');
-  const isChanged = !!isDefault || policy !== policyTyped;
+  const [policyTyped, setPolicyTyped] = useState<string>(policy || DEFAULT_ACL_POLICY);
+  const isChanged = policy !== policyTyped;
 
   const { mutate, isPending, error, reset } = useMutation({
     mutationKey: ['/api/v1/policy', 'PUT'],
@@ -55,9 +56,9 @@ export const EditFile: FunctionComponent<{ policy: string, isDefault?: boolean }
       <div className="mt-4 flex gap-4 justify-end">
         <button
           className="btn btn-outline-secondary min-w-[180px]"
-          disabled={(!isChanged || isPending) && !error}
+          disabled={(!isChanged || isPending || policy === null) && !error}
           onClick={() => {
-            setPolicyTyped(policy);
+            setPolicyTyped(policy || DEFAULT_ACL_POLICY);
             reset();
           }}
         >
@@ -68,7 +69,7 @@ export const EditFile: FunctionComponent<{ policy: string, isDefault?: boolean }
 
         <button
           className="btn btn-accent min-w-[120px]"
-          disabled={!isChanged}
+          disabled={!isChanged && policy !== null}
           data-loading={isPending}
           onClick={() => {
             if (isChanged && !isPending) {

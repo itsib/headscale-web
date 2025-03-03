@@ -35,7 +35,9 @@ const persister: Persister = {
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 4,
+      retry(failureCount: number, error: any) {
+        return failureCount <= 4 && error.code !== 401;
+      },
       staleTime: 20_000,
       gcTime: 60_000,
       networkMode: 'offlineFirst',

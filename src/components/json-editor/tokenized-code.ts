@@ -144,6 +144,7 @@ export class TokenizedCode {
     let tabSize: number | null = null;
     for (let i = 0; i < this._tokenLines.length; i++) {
       if (i > 5) break;
+      if (!this._tokenLines[i][0]) continue;
 
       const [spaces, spanTag] = this._tokenLines[i][0];
       if (spanTag === '<span class="cm-space">') {

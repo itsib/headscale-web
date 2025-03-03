@@ -2,7 +2,22 @@
 
 set -e
 
-sleep 2
-APIKEY=$(headscale apikey create --expiration 9999d)
+APIKEY_FILE="/var/lib/headscale/apikey.txt"
 
-echo "DEVELOPMENT API KEY $APIKEY"
+show_apikey() {
+  APIKEY=$(cat "$APIKEY_FILE")
+  echo -e "\x1b[0;93mAPI KEY:\x1b[0m \x1b[1;92m$APIKEY\x1b[0m"
+}
+
+for (( ; ; ))
+do
+  sleep 2
+
+  if [ -f "$APIKEY_FILE" ]; then
+    show_apikey
+    exit 0
+  fi
+
+  headscale apikey create --expiration 9999d > "$APIKEY_FILE"
+
+done
