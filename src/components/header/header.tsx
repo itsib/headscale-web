@@ -19,7 +19,7 @@ export const Header = () => {
         </a>
 
         <nav className="main-menu ml-6 mr-auto">
-          <a href="/nodes" className={cn('nav-link', { active: path.startsWith('/nodes') })}>
+          <a href="/devices" className={cn('nav-link', { active: path.startsWith('/devices') })}>
             <i className="icon icon-connection mr-2"/>
             {t('devises')}
           </a>

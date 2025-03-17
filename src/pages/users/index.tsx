@@ -14,6 +14,7 @@ import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { ContextMenu } from '@app-components/popups/context-menu';
 import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
 import { UsersContextMenu, UsersContextMenuAction } from '@app-components/user-context-menu/user-context-menu';
+import { BtnRefresh } from '@app-components/btn-refresh/btn-refresh.tsx';
 
 export function Users() {
   const { t } = useTranslation();
@@ -54,16 +55,20 @@ export function Users() {
           </p>
         </div>
 
-        <button
-          type="button"
-          className="btn btn-accent flex items-center gap-2"
-          onClick={() => setOpened('create')}
-        >
-          <i className="icon icon-user-plus text-lg text-white" />
-          <span className="font-semibold text-white">
+        <div className="flex items-center">
+          <BtnRefresh onRefresh={refetch} />
+
+          <button
+            type="button"
+            className="btn btn-accent flex items-center gap-2"
+            onClick={() => setOpened('create')}
+          >
+            <i className="icon icon-user-plus text-lg text-white" />
+            <span className="font-semibold text-white">
             <Trans i18nKey="create_user" />
           </span>
-        </button>
+          </button>
+        </div>
       </div>
 
       {isLoading ? (

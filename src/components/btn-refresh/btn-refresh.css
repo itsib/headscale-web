@@ -1,0 +1,16 @@
+.btn-refresh {
+    --icon-animation-duration: 1s;
+    --icon-animation-iteration-count: infinite;
+    --icon-animation-timing: linear;
+
+    transition: opacity .2s ease-in-out;
+    opacity: .6;
+
+    .icon {
+        animation-fill-mode: forwards;
+    }
+
+    &:hover {
+        opacity: 1;
+    }
+}

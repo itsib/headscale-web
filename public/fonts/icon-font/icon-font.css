@@ -53,33 +53,21 @@
 }
 .icon-2xs {
   font-size: .625em;
-  line-height: .1em;
-  vertical-align: .225em
 }
 .icon-xs {
   font-size: .75em;
-  line-height: .08333em;
-  vertical-align: .125em
 }
 .icon-sm {
   font-size: .875em;
-  line-height: .07143em;
-  vertical-align: .05357em
 }
 .icon-lg {
   font-size: 1.25em;
-  line-height: .05em;
-  vertical-align: -.075em
 }
 .icon-xl {
   font-size: 1.5em;
-  line-height: .04167em;
-  vertical-align: -.125em
 }
 .icon-2xl {
   font-size: 2em;
-  line-height: .03125em;
-  vertical-align: -.1875em
 }
 .icon-fw {
   text-align: center;
@@ -471,47 +459,51 @@ i.icon-random:before {
   content: "\ea2b";
 }
 
-i.icon-search:before {
+i.icon-refresh:before {
   content: "\ea2c";
 }
 
-i.icon-server:before {
+i.icon-search:before {
   content: "\ea2d";
 }
 
-i.icon-settings:before {
+i.icon-server:before {
   content: "\ea2e";
 }
 
-i.icon-spinner:before {
+i.icon-settings:before {
   content: "\ea2f";
 }
 
-i.icon-star:before {
+i.icon-spinner:before {
   content: "\ea30";
 }
 
-i.icon-star-o:before {
+i.icon-star:before {
   content: "\ea31";
 }
 
-i.icon-sun:before {
+i.icon-star-o:before {
   content: "\ea32";
 }
 
-i.icon-sun-moon:before {
+i.icon-sun:before {
   content: "\ea33";
 }
 
-i.icon-tag-add:before {
+i.icon-sun-moon:before {
   content: "\ea34";
 }
 
-i.icon-user-plus:before {
+i.icon-tag-add:before {
   content: "\ea35";
 }
 
-i.icon-users:before {
+i.icon-user-plus:before {
   content: "\ea36";
+}
+
+i.icon-users:before {
+  content: "\ea37";
 }
 

@@ -3,7 +3,7 @@ import { Router, Route, lazy, ErrorBoundary } from 'preact-iso';
 import { Footer } from '@app-components/footer/footer';
 import { Header } from '@app-components/header/header';
 import { Home } from './home';
-import { Nodes } from './nodes';
+import { Devices } from './devices';
 import { Users } from './users';
 import { Tokens } from './tokens';
 import { Error404 } from './error-404';
@@ -22,7 +22,7 @@ export class Application extends Component<any, any> {
           <ErrorBoundary>
             <Router>
               <Route path='/' component={Home} />
-              <Route path='/nodes' component={Nodes} />
+              <Route path='/devices' component={Devices} />
               <Route path='/users' component={Users} />
               <Route path='/tokens' component={Tokens} />
               <Route path='/acl/:tab*' component={Acl} />

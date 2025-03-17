@@ -21,8 +21,9 @@ import { IpAddresses } from '@app-components/ip-addresses/ip-addresses';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { ContextMenu } from '@app-components/popups/context-menu';
 import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
+import { BtnRefresh } from '@app-components/btn-refresh/btn-refresh.tsx';
 
-export function Nodes() {
+export function Devices() {
   const { t } = useTranslation();
   const storage = useStorage();
 
@@ -55,16 +56,20 @@ export function Nodes() {
           </p>
         </div>
 
-        <button
-          type="button"
-          className="btn btn-accent flex items-center gap-2"
-          onClick={() => setOpened('create')}
-        >
-          <i className="icon icon-devices text-lg text-white" />
-          <span className="font-medium text-white">
+        <div className="flex items-center">
+          <BtnRefresh onRefresh={refetch} />
+
+          <button
+            type="button"
+            className="btn btn-accent flex items-center gap-2"
+            onClick={() => setOpened('create')}
+          >
+            <i className="icon icon-devices text-lg text-white" />
+            <span className="font-medium text-white">
             <Trans i18nKey="register_device" />
           </span>
-        </button>
+          </button>
+        </div>
       </div>
 
       {isLoading ? (
