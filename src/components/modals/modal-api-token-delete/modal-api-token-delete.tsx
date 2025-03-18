@@ -3,7 +3,7 @@ import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
-import { ApiToken, Node } from '../../../types';
+import { ApiToken, Device } from '../../../types';
 import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { ApplicationContext } from '@app-context/application';
 
@@ -26,7 +26,7 @@ const ModalContent: FC<Omit<ModalApiTokenDeleteProps, 'isOpen' | 'node'> & { api
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(prefix: string) {
-      const data = await fetchWithContext<{ node: Node }>(`/api/v1/apikey/${prefix}`, {
+      const data = await fetchWithContext<{ node: Device }>(`/api/v1/apikey/${prefix}`, {
         method: 'DELETE',
       }, storage);
       return data.node;

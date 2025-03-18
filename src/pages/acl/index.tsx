@@ -30,7 +30,7 @@ export default function Acl() {
           return null;
         }
         if (error.code === 401) {
-          await storage.deleteAppStore('main-token');
+          await storage.removeItem('main-token');
         }
         throw error;
       }

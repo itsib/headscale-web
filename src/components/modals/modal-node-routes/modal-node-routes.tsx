@@ -1,5 +1,5 @@
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { Node } from '../../../types';
+import { Device } from '../../../types';
 import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { ModalNodeExpireProps } from '../modal-node-expire/modal-node-expire.tsx';
 import { Trans, useTranslation } from 'react-i18next';
@@ -12,7 +12,7 @@ import { ApplicationContext } from '@app-context/application';
 import './modal-node-routes.css';
 
 export interface ModalNodeRoutesProps extends ModalProps {
-  node?: Node | null;
+  node?: Device | null;
   onSuccess: () => void;
 }
 
@@ -29,7 +29,7 @@ export const ModalNodeRoutes: FC<ModalNodeRoutesProps> = ({ isOpen, onDismiss, n
   );
 };
 
-const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: Node }> = props => {
+const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: Device }> = props => {
   const { t } = useTranslation();
   const [checkboxes, setCheckboxes] = useState<{ [routeId: string]: boolean }>({});
   const [exitNode, setExitNode] = useState(false);

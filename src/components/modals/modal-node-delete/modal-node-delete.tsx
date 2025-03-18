@@ -3,12 +3,12 @@ import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
-import { Node } from '../../../types';
+import { Device } from '../../../types';
 import { fetchWithContext } from '../../../utils/query-fn.ts';
 import { ApplicationContext } from '@app-context/application';
 
 export interface ModalNodeDeleteProps extends ModalProps {
-  node?: Node | null;
+  node?: Device | null;
   onSuccess: () => void;
 }
 
@@ -20,13 +20,13 @@ export const ModalNodeDelete: FC<ModalNodeDeleteProps> = ({ isOpen, onDismiss, n
   );
 };
 
-const ModalContent: FC<Omit<ModalNodeDeleteProps, 'isOpen' | 'node'> & { node: Node }> = ({ onDismiss, onSuccess, node }) => {
+const ModalContent: FC<Omit<ModalNodeDeleteProps, 'isOpen' | 'node'> & { node: Device }> = ({ onDismiss, onSuccess, node }) => {
   const { t } = useTranslation();
   const { storage } = useContext(ApplicationContext);
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(nodeId: string) {
-      const data = await fetchWithContext<{ node: Node }>(`/api/v1/node/${nodeId}`, {
+      const data = await fetchWithContext<{ node: Device }>(`/api/v1/node/${nodeId}`, {
         method: 'DELETE',
       }, storage);
       return data.node;

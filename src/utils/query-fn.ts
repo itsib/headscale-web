@@ -1,7 +1,7 @@
 import { QueryFunctionContext, QueryKey } from '@tanstack/react-query';
+import { StorageAsync } from '@app-utils/storage';
 import { ConnectionError, HttpError, UnauthorizedError } from './errors';
-import { StorageTables, TokenType } from '../types';
-import { IDBStorageInstance } from './idb-storage.ts';
+import { TokenType } from '../types';
 import { getCredentials } from './credentials.ts';
 import { joinUrl } from './join-url.ts';
 
@@ -73,12 +73,12 @@ export async function fetchFn<T = unknown>(url: string, init: RequestInit = {}, 
   }
 }
 
-export async function fetchWithContext<T = unknown>(url: string, init: RequestInit = {}, storage: IDBStorageInstance<StorageTables>): Promise<T> {
+export async function fetchWithContext<T = unknown>(url: string, init: RequestInit = {}, storage: StorageAsync): Promise<T> {
   const { base, token, tokenType } = await getCredentials(storage);
   return await fetchFn(joinUrl(base, url), init, token, tokenType);
 }
 
-export function getDefaultQueryFn(storage: IDBStorageInstance<StorageTables>) {
+export function getDefaultQueryFn(storage: StorageAsync) {
   return async function defaultQueryFn<T = unknown, TQueryKey extends QueryKey = QueryKey, TPageParam = never>(context: QueryFunctionContext<TQueryKey, TPageParam>): Promise<T> {
     const { queryKey, signal } = context;
     let url = queryKey[0] as string;
@@ -94,7 +94,7 @@ export function getDefaultQueryFn(storage: IDBStorageInstance<StorageTables>) {
       return await fetchFn(url, { method, signal }, token, tokenType);
     } catch (error: any) {
       if (error.code === 401) {
-        await storage.deleteAppStore('main-token');
+        await storage.removeItem('main-token');
       }
       throw error;
     }

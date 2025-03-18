@@ -5,7 +5,7 @@ import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchWithContext } from '@app-utils/query-fn';
-import { Node } from '@app-types';
+import { Device } from '@app-types';
 import { AclTag } from '@app-components/acl-tag/acl-tag';
 import { ApplicationContext } from '@app-context/application';
 
@@ -14,7 +14,7 @@ interface FormFields {
 }
 
 export interface ModalNodeTagsProps extends ModalProps {
-  node?: Node | null;
+  node?: Device | null;
   onSuccess: () => void;
 }
 
@@ -26,7 +26,7 @@ export const ModalNodeTags: FC<ModalNodeTagsProps> = ({ isOpen, onDismiss, node,
   );
 };
 
-const ModalContent: FC<Omit<ModalNodeTagsProps, 'isOpen' | 'node'> & { node: Node }> = ({ onDismiss, onSuccess, node }) => {
+const ModalContent: FC<Omit<ModalNodeTagsProps, 'isOpen' | 'node'> & { node: Device }> = ({ onDismiss, onSuccess, node }) => {
   const { t } = useTranslation();
   const { storage } = useContext(ApplicationContext);
   const [tags, setTags] = useState<string[]>(node.forcedTags);
@@ -51,7 +51,7 @@ const ModalContent: FC<Omit<ModalNodeTagsProps, 'isOpen' | 'node'> & { node: Nod
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn({ id, tags }: { id: string, tags: string[] }) {
-      const data = await fetchWithContext<{ node: Node }>(`/api/v1/node/${id}/tags`, {
+      const data = await fetchWithContext<{ node: Device }>(`/api/v1/node/${id}/tags`, {
         method: 'POST',
         body: JSON.stringify({ tags })
       }, storage);

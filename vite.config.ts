@@ -1,7 +1,6 @@
 import { defineConfig, UserConfig } from 'vite';
 import preact from '@preact/preset-vite';
 import { join, resolve } from 'node:path';
-import compression from 'vite-plugin-compression2';
 import pluginCp from 'vite-plugin-cp';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import tailwindcss from 'tailwindcss';
@@ -63,43 +62,9 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
       minify: mode === 'production' ? 'esbuild' : false,
       copyPublicDir: true,
       emptyOutDir: true,
-      cssCodeSplit: true,
-      rollupOptions: {
-        output: {
-          // manualChunks: {
-          //   '@react': [
-          //     'react',
-          //     'react-dom',
-          //     'node_modules/react-dom/client.js',
-          //     'react-just-ui',
-          //     'react-hook-form',
-          //     'react/jsx-runtime',
-          //     'scheduler',
-          //   ],
-          //   '@tanstack': [
-          //     '@tanstack/query-core',
-          //     '@tanstack/react-query',
-          //     '@tanstack/react-query-persist-client',
-          //   ],
-          //   '@i18n': [
-          //     'i18next',
-          //     'react-i18next',
-          //     'i18next-http-backend',
-          //     'i18next-browser-languagedetector',
-          //   ],
-          //   '@acl-page': [
-          //     '@codemirror/commands',
-          //     '@codemirror/language',
-          //     '@codemirror/state',
-          //     '@codemirror/view',
-          //     '@lezer/highlight',
-          //     '@lezer/lr',
-          //   ],
-          // },
-        },
-      },
+      cssCodeSplit: false,
       modulePreload: false,
-      // chunkSizeWarningLimit: 1500,
+      chunkSizeWarningLimit: 200,
       assetsInlineLimit: 0,
     },
     plugins: [
@@ -133,8 +98,6 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
         registerType: 'autoUpdate',
         injectRegister: 'auto',
         strategies: 'generateSW', //'generateSW',
-        // srcDir: 'src',
-        // filename: 'sw.ts',
         devOptions: {
           enabled: false,
           type: 'module',
@@ -143,8 +106,11 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
         },
         manifest: {
           ...webmanifest,
-          name: pkg.name,
+          name: pkg.config.name,
+          short_name: pkg.config['short-name'],
           description: pkg.description,
+          theme_color: pkg.config['theme-color'],
+          background_color: pkg.config['background-color'],
         },
         workbox: {
           globDirectory: join(process.cwd(), 'dist'),
@@ -194,28 +160,6 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
                 },
               },
             },
-            // {
-            //   urlPattern: /\.js$/i,
-            //   handler: 'StaleWhileRevalidate',
-            //   options: {
-            //     cacheName: 'static-js-assets',
-            //     expiration: {
-            //       maxEntries: 32,
-            //       maxAgeSeconds: 24 * 60 * 60, // 24 hours
-            //     },
-            //   },
-            // },
-            // {
-            //   urlPattern: /\.css$/i,
-            //   handler: 'StaleWhileRevalidate',
-            //   options: {
-            //     cacheName: 'static-style-assets',
-            //     expiration: {
-            //       maxEntries: 32,
-            //       maxAgeSeconds: 24 * 60 * 60, // 24 hours
-            //     },
-            //   },
-            // },
             {
               handler: 'NetworkOnly',
               urlPattern: /\/api\/.*$/,
@@ -231,11 +175,6 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
             },
           ],
         },
-      }),
-      compression({
-        include: [/\.(js)$/, /\.(css)$/],
-        deleteOriginalAssets: false,
-        algorithm: 'gzip',
       }),
       pluginCp({
         targets: [

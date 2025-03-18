@@ -35,9 +35,9 @@ export const AuthProvider: FunctionComponent = ({ children }) =>  {
   useEffect(() => {
     async function init() {
       const [base, token, tokenType] = await Promise.all([
-        storage.readAppStore<string>('main-url'),
-        storage.readAppStore<string>('main-token'),
-        storage.readAppStore<TokenType>('main-token-type'),
+        storage.getItem<string>('main-url'),
+        storage.getItem<string>('main-token'),
+        storage.getItem<TokenType>('main-token-type'),
       ]);
       setIsAuthorized(!!base && !!token && !!tokenType);
 
@@ -50,8 +50,8 @@ export const AuthProvider: FunctionComponent = ({ children }) =>  {
 
   // Show login form if no access token
   useEffect(() => {
-    return storage.subscribe('delete', (tableName: string, key: string) => {
-      if (tableName === 'appStore' && (key === 'main-token' || key === 'main-url')) {
+    return storage.subscribe('remove', (key: string) => {
+      if (key === 'main-token' || key === 'main-url') {
         setIsAuthorized(false);
 
         if (key === 'main-url') {

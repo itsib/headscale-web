@@ -5,12 +5,12 @@ import { Select, SelectOption } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchWithContext } from '../../../utils/query-fn.ts';
-import { Node } from '../../../types';
+import { Device } from '../../../types';
 import { useUsers } from '../../../hooks/use-users.ts';
 import { ApplicationContext } from '@app-context/application';
 
 export interface ModalNodeChownProps extends ModalProps {
-  node?: Node | null;
+  node?: Device | null;
   onSuccess: () => void;
 }
 
@@ -22,7 +22,7 @@ export const ModalNodeChown: FC<ModalNodeChownProps> = ({ isOpen, onDismiss, nod
   );
 };
 
-const ModalContent: FC<Omit<ModalNodeChownProps, 'isOpen' | 'node'> & { node: Node }> = ({ onDismiss, onSuccess, node }) => {
+const ModalContent: FC<Omit<ModalNodeChownProps, 'isOpen' | 'node'> & { node: Device }> = ({ onDismiss, onSuccess, node }) => {
   const { t } = useTranslation();
   const { storage } = useContext(ApplicationContext);
   const { data: users } = useUsers();
@@ -47,7 +47,7 @@ const ModalContent: FC<Omit<ModalNodeChownProps, 'isOpen' | 'node'> & { node: No
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn({ id, userName }: { id: string, userName: string }) {
-      const data = await fetchWithContext<{ node: Node }>(`/api/v1/node/${id}/user?user=${userName}`, {
+      const data = await fetchWithContext<{ node: Device }>(`/api/v1/node/${id}/user?user=${userName}`, {
         method: 'POST',
       }, storage);
       return data.node;

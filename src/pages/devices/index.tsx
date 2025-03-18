@@ -4,7 +4,7 @@ import { memo } from 'preact/compat';
 import { ModalNodeCreate } from '@app-components/modals/modal-node-create/modal-node-create';
 import { fetchWithContext } from '@app-utils/query-fn';
 import { ListLoading } from '@app-components/skeleton/list-loading';
-import { Node } from '@app-types';
+import { Device } from '@app-types';
 import { NodesContextMenu, NodesContextMenuAction } from '@app-components/nodes-context-menu/nodes-context-menu';
 import { ModalNodeRename } from '@app-components/modals/modal-node-rename/modal-node-rename';
 import { ModalNodeChown } from '@app-components/modals/modal-node-chown/modal-node-chown';
@@ -28,12 +28,12 @@ export function Devices() {
   const storage = useStorage();
 
   const [opened, setOpened] = useState<NodesContextMenuAction | null>(null);
-  const [selected, setSelected] = useState<Node | null>(null);
+  const [selected, setSelected] = useState<Device | null>(null);
 
   const { data: nodes, isLoading, refetch } = useQuery({
     queryKey: ['/api/v1/node', 'GET'],
     queryFn: async ({ queryKey, signal }) => {
-      const data = await fetchWithContext<{ nodes: Node[] }>(
+      const data = await fetchWithContext<{ nodes: Device[] }>(
         queryKey[0] as string,
         { signal },
         storage,
@@ -151,7 +151,7 @@ export function Devices() {
   );
 }
 
-interface NodeRowProps extends Node {
+interface NodeRowProps extends Device {
   onAction: (name: NodesContextMenuAction) => void;
 }
 

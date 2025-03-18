@@ -1,12 +1,10 @@
 export * from './common/query-result';
-export * from './common/storage-tables';
-export * from './common/router-context';
 
 export * from './tokens/auth-key';
 export * from './tokens/api-token';
 
-export * from './nodes/nodes';
-export * from './nodes/node-route';
+export * from './devices/device.ts';
+export * from './devices/device-route.ts';
 
 export * from './users/users';
 

@@ -1,8 +1,8 @@
 import { User } from '../users/users.ts';
 
-export type NodeRegisterMethod = 'REGISTER_METHOD_CLI' | 'REGISTER_METHOD_OIDC';
+export type DeviceRegisterMethod = 'REGISTER_METHOD_CLI' | 'REGISTER_METHOD_OIDC';
 
-export interface Node {
+export interface Device {
   id: string;
   name: string;
   givenName: string;
@@ -11,7 +11,7 @@ export interface Node {
   forcedTags: string[];
   invalidTags: string[];
   online: boolean;
-  registerMethod: NodeRegisterMethod;
+  registerMethod: DeviceRegisterMethod;
   nodeKey: string;
   discoKey: string;
   machineKey: string;

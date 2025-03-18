@@ -6,11 +6,10 @@ import { Trans } from 'react-i18next';
 import { getActiveTheme, Theme } from '@app-utils/theme';
 import { AnimatedShow } from '@app-components/animated-show/animated-show';
 import { ImgCompass } from '@app-components/img-compass/img-compass';
-import { IDBStorageInstance } from '@app-utils/idb-storage';
-import { StorageTables } from '@app-types';
+import { StorageAsync } from '@app-utils/storage.ts';
 
 export interface ApplicationProviderProps {
-  storage: IDBStorageInstance<StorageTables>;
+  storage: StorageAsync;
 }
 
 export const ApplicationProvider: FunctionComponent<ApplicationProviderProps> = ({ children, storage }) => {

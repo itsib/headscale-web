@@ -1,12 +1,12 @@
-import { Node } from './nodes'
+import { Device } from './device.ts'
 
-export interface NodeRoute {
+export interface DeviceRoute {
   id: string;
   isPrimary: boolean;
   advertised: boolean;
   enabled: boolean;
   prefix: string;
-  node: Node;
+  node: Device;
   updatedAt: string;
   createdAt: string;
   deletedAt?: string | null;

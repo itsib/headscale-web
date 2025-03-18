@@ -1,10 +1,29 @@
-import { Trans, useTranslation } from 'react-i18next';
-import { useTheme } from '@app-hooks/use-theme';
-import { Theme } from '@app-utils/theme';
-import { useCredentials } from '@app-hooks/use-credentials.ts';
 import { FunctionComponent } from 'preact';
+import { PopupPlacement } from '@app-components/popups/base-popup/base-popup.tsx';
+import { ContextMenu } from '@app-components/popups/context-menu.tsx';
+import { Trans, useTranslation } from 'react-i18next';
+import { useTheme } from '@app-hooks/use-theme.ts';
+import { useCredentials } from '@app-hooks/use-credentials.ts';
+import { Theme } from '@app-utils/theme.ts';
+import './btn-config.css';
 
-export const HeaderMenu: FunctionComponent = () => {
+export const BtnConfig: FunctionComponent = () => {
+
+  return (
+    <div className="btn-config-wrapper">
+      <ContextMenu
+        placement={PopupPlacement.BOTTOM}
+        Menu={BtnConfigMenu}
+      >
+        <button aria-label="Open site settinds" role="button" type="button" className="btn btn-config">
+          <i className="icon icon-settings text-[26px] leading-[26px] block"/>
+        </button>
+      </ContextMenu>
+    </div>
+  )
+}
+
+function BtnConfigMenu() {
   const { i18n } = useTranslation();
   const [ theme, setTheme ] = useTheme();
   const { logout, prefix, base: baseUrl } = useCredentials();
@@ -20,11 +39,16 @@ export const HeaderMenu: FunctionComponent = () => {
         </div>
       </div>
 
-      <hr className="context-menu-divider"/>
+      <hr role="separator" className="context-menu-divider"/>
 
       <div className="context-menu-item">
-        <button type="button" className="btn-context-menu flex items-center"
-                onClick={() => setTheme(Theme.Light)}>
+        <button
+          aria-label="Choose the light theme"
+          role="menuitem"
+          type="button"
+          className="btn-context-menu flex items-center"
+          onClick={() => setTheme(Theme.Light)}
+        >
           <i className="icon icon-sun"/>
           <Trans i18nKey="light"/>
 
@@ -32,16 +56,26 @@ export const HeaderMenu: FunctionComponent = () => {
         </button>
       </div>
       <div className="context-menu-item">
-        <button type="button" className="btn-context-menu flex items-center"
-                onClick={() => setTheme(Theme.Dark)}>
+        <button
+          aria-label="Choose the dark theme"
+          role="menuitem"
+          type="button"
+          className="btn-context-menu flex items-center"
+          onClick={() => setTheme(Theme.Dark)}
+        >
           <i className="icon icon-moon"/>
           <Trans i18nKey="dark"/>
           {theme === Theme.Dark ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
         </button>
       </div>
       <div className="context-menu-item">
-        <button type="button" className="btn-context-menu flex items-center"
-                onClick={() => setTheme(Theme.System)}>
+        <button
+          aria-label="Choose the system theme"
+          role="menuitem"
+          type="button"
+          className="btn-context-menu flex items-center"
+          onClick={() => setTheme(Theme.System)}
+        >
           <i className="icon icon-sun-moon"/>
           <Trans i18nKey="system"/>
           {theme === Theme.System ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
@@ -51,8 +85,13 @@ export const HeaderMenu: FunctionComponent = () => {
       <hr className="context-menu-divider"/>
 
       <div className="context-menu-item">
-        <button type="button" className="btn-context-menu flex items-center"
-                onClick={() => i18n.changeLanguage('en')}>
+        <button
+          aria-label="Choose English"
+          role="menuitem"
+          type="button"
+          className="btn-context-menu flex items-center"
+          onClick={() => i18n.changeLanguage('en')}
+        >
           <img className="icon" src="/locales/en/_icon.svg" alt="en-EN" width={16} height={16}/>
           <>English</>
           {i18n.language === 'en' ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
@@ -60,18 +99,25 @@ export const HeaderMenu: FunctionComponent = () => {
       </div>
 
       <div className="context-menu-item">
-        <button type="button" className="btn-context-menu flex items-center"
-                onClick={() => i18n.changeLanguage('ru')}>
+        <button
+          aria-label="Choose Russian"
+          role="menuitem"
+          type="button"
+          className="btn-context-menu flex items-center"
+          onClick={() => i18n.changeLanguage('ru')}
+        >
           <img className="icon" src="/locales/ru/_icon.svg" alt="en-EN" width={16} height={16}/>
           <>Русский</>
           {i18n.language === 'ru' ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
         </button>
       </div>
 
-      <hr className="context-menu-divider"/>
+      <hr role="separator" className="context-menu-divider"/>
 
       <div className="context-menu-item">
         <button
+          aria-label="Logout"
+          role="menuitem"
           type="button"
           className="btn-context-menu flex items-center"
           onClick={logout}>
@@ -81,5 +127,4 @@ export const HeaderMenu: FunctionComponent = () => {
       </div>
     </>
   )
-
 }

@@ -78,7 +78,7 @@ export const ContextMenu = (props: RenderableProps<ContextMenuProps>) => {
     <>
       <div ref={childWrapperRef}>{props.children}</div>
       <BasePopup rect={rect} open={isOpen} placement={props.placement}>
-        <menu className="popup context-menu" ref={contextMenuRef} onClick={e => e.stopPropagation()}>
+        <menu role="menu" className="popup context-menu" ref={contextMenuRef} onClick={e => e.stopPropagation()}>
           <Menu />
         </menu>
       </BasePopup>

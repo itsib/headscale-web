@@ -1,0 +1,13 @@
+.btn-config-wrapper {
+
+  .btn-config {
+    height: auto;
+    padding: .25rem;
+    color: rgb(var(--text-secondary));
+    display: block;
+
+    &:hover {
+      color: rgb(var(--text-primary));
+    }
+  }
+}
