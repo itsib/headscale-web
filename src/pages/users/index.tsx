@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Trans, useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import { memo } from 'preact/compat';
 import { User, UserWithProvider } from '@app-types';
 import { ListLoading } from '@app-components/skeleton/list-loading';
@@ -14,7 +14,7 @@ import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { ContextMenu } from '@app-components/popups/context-menu';
 import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
 import { UsersContextMenu, UsersContextMenuAction } from '@app-components/user-context-menu/user-context-menu';
-import { BtnRefresh } from '@app-components/btn-refresh/btn-refresh.tsx';
+import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group';
 
 export function Users() {
   const { t } = useTranslation();
@@ -37,6 +37,32 @@ export function Users() {
     refetchInterval: 15_000,
   });
 
+  const buttons: ButtonConfig[] = useMemo(() => {
+    return [
+      {
+        id: 'refresh-devices',
+        icon: 'icon-refresh',
+        tooltip: t('refresh_devices'),
+        effect: 'icon-spin',
+      },
+      {
+        id: 'create-user',
+        icon: 'icon-user-plus',
+        tooltip: t('create_user'),
+        effect: 'icon-shake',
+      },
+    ];
+  }, [t]);
+
+  async function onClick(id: string) {
+    switch (id) {
+      case 'create-user':
+        return setOpened('create');
+      case 'refresh-users':
+        return refetch();
+    }
+  }
+
   useEffect(() => {
     if (selected && !opened) {
       setSelected(null);
@@ -55,20 +81,7 @@ export function Users() {
           </p>
         </div>
 
-        <div className="flex items-center">
-          <BtnRefresh onRefresh={refetch} />
-
-          <button
-            type="button"
-            className="btn btn-accent flex items-center gap-2"
-            onClick={() => setOpened('create')}
-          >
-            <i className="icon icon-user-plus text-lg text-white" />
-            <span className="font-semibold text-white">
-            <Trans i18nKey="create_user" />
-          </span>
-          </button>
-        </div>
+        <ButtonGroup buttons={buttons} onClick={onClick} />
       </div>
 
       {isLoading ? (

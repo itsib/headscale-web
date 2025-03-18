@@ -21,7 +21,7 @@ import { IpAddresses } from '@app-components/ip-addresses/ip-addresses';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { ContextMenu } from '@app-components/popups/context-menu';
 import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
-import { BtnRefresh } from '@app-components/btn-refresh/btn-refresh.tsx';
+import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group';
 
 export function Devices() {
   const { t } = useTranslation();
@@ -32,10 +32,10 @@ export function Devices() {
 
   const { data: nodes, isLoading, refetch } = useQuery({
     queryKey: ['/api/v1/node', 'GET'],
-    queryFn: async ({ queryKey, signal }) => {
+    queryFn: async ({queryKey, signal}) => {
       const data = await fetchWithContext<{ nodes: Device[] }>(
         queryKey[0] as string,
-        { signal },
+        {signal},
         storage,
       );
       return data.nodes;
@@ -44,65 +44,78 @@ export function Devices() {
     refetchInterval: 10_000,
   });
 
+  const buttons: ButtonConfig[] = useMemo(() => {
+    return [
+      {
+        id: 'refresh-devices',
+        icon: 'icon-refresh',
+        tooltip: t('refresh_devices'),
+        effect: 'icon-spin',
+      },
+      {
+        id: 'register-device',
+        icon: 'icon-add-device',
+        tooltip: t('register_device'),
+        effect: 'icon-shake',
+      },
+    ];
+  }, [t]);
+
+  async function onClick(id: string) {
+    switch (id) {
+      case 'register-device':
+        return setOpened('create');
+      case 'refresh-devices':
+        return refetch();
+    }
+  }
+
   return (
     <div className="pt-6">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="mb-2">
-            <Trans i18nKey="devices" />
+            <Trans i18nKey="devices"/>
           </h1>
           <p className="text-secondary">
-            <Trans i18nKey="machines_page_subtitle" />
+            <Trans i18nKey="machines_page_subtitle"/>
           </p>
         </div>
 
-        <div className="flex items-center">
-          <BtnRefresh onRefresh={refetch} />
-
-          <button
-            type="button"
-            className="btn btn-accent flex items-center gap-2"
-            onClick={() => setOpened('create')}
-          >
-            <i className="icon icon-devices text-lg text-white" />
-            <span className="font-medium text-white">
-            <Trans i18nKey="register_device" />
-          </span>
-          </button>
-        </div>
+        <ButtonGroup buttons={buttons} onClick={onClick} />
       </div>
 
       {isLoading ? (
-        <ListLoading />
+        <ListLoading/>
       ) : nodes?.length ? (
         <table className="w-full table-auto border-spacing-px">
           <thead>
-            <tr className="border-b border-b-primary h-[30px] text-xs font-medium text-secondary uppercase">
-              <th />
-              <th className="text-left ">{t('machine')}</th>
-              <th className="text-left">{t('user')}</th>
-              <th className="text-center ">{t('tags')}</th>
-              <th className="text-center pr-8">{t('address')}</th>
-              <th className="text-right">{t('last_seen')}</th>
-              <th />
-            </tr>
+          <tr className="border-b border-b-primary h-[30px] text-xs font-medium text-secondary uppercase">
+            <th/>
+            <th className="text-left ">{t('machine')}</th>
+            <th className="text-left">{t('user')}</th>
+            <th className="text-center ">{t('tags')}</th>
+            <th className="text-center pr-8">{t('address')}</th>
+            <th className="text-right">{t('last_seen')}</th>
+            <th/>
+          </tr>
           </thead>
           <tbody>
-            {nodes?.map((node) => (
-              <NodeItem
-                key={node.id}
-                onAction={(action) => {
-                  setSelected(node);
-                  setOpened(action);
-                }}
-                {...node}
-              />
-            ))}
+          {nodes?.map((node) => (
+            <NodeItem
+              key={node.id}
+              onAction={(action) => {
+                setSelected(node);
+                setOpened(action);
+              }}
+              {...node}
+            />
+          ))}
           </tbody>
         </table>
       ) : (
         <div className="border-primary border rounded-md p-8 text-center">
-          <Trans i18nKey="empty_list" />
+          <Trans i18nKey="empty_list"/>
         </div>
       )}
 
@@ -155,8 +168,8 @@ interface NodeRowProps extends Device {
   onAction: (name: NodesContextMenuAction) => void;
 }
 
-const NodeItem = memo(function NodeRow({ onAction, ...node }: NodeRowProps) {
-  const { name, givenName, expiry, ipAddresses, forcedTags, lastSeen, online, user } = node;
+const NodeItem = memo(function NodeRow({onAction, ...node}: NodeRowProps) {
+  const {name, givenName, expiry, ipAddresses, forcedTags, lastSeen, online, user} = node;
 
   const expiryDate = useMemo(() => new Date(expiry), [expiry]);
   const expiryDisabled = expiryDate.getFullYear() <= 1970;
@@ -183,7 +196,8 @@ const NodeItem = memo(function NodeRow({ onAction, ...node }: NodeRowProps) {
         </div>
       </td>
       <td className="text-center">
-        <UserInfo id={user.id}  name={user.name} displayName={user.displayName} pictureUrl={user.profilePicUrl} size={30}  />
+        <UserInfo id={user.id} name={user.name} displayName={user.displayName} pictureUrl={user.profilePicUrl}
+                  size={30}/>
       </td>
       <td className="text-center">
         {forcedTags.length ? (
@@ -205,9 +219,10 @@ const NodeItem = memo(function NodeRow({ onAction, ...node }: NodeRowProps) {
       <td className="text-right w-[52px]">
         <ContextMenu
           placement={PopupPlacement.BOTTOM}
-          Menu={()=> <NodesContextMenu onAction={onAction} />}
+          Menu={() => <NodesContextMenu onAction={onAction}/>}
         >
-          <button type="button" className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90">
+          <button type="button"
+                  className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90">
             <i className="icon icon-context-menu text-[24px]"/>
           </button>
         </ContextMenu>

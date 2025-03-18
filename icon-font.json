@@ -2,5 +2,18 @@
   "name": "IconFont",
   "input": "icons",
   "output": "public/fonts/icon-font",
-  "fontUrl": "/fonts/icon-font"
+  "fontUrl": "/fonts/icon-font",
+  "iconsTune": {
+    "add-device": {
+      "y": -0.07
+    },
+    "refresh": {
+      "y": 0.02,
+      "size": 0.85
+    },
+    "user-plus": {
+      "x": 0.08,
+      "size": 1.05
+    }
+  }
 }

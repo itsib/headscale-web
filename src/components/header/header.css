@@ -4,6 +4,8 @@
   right: 0;
   height: var(--header-height);
   background-color: rgb(var(--bg-primary));
+  border-bottom: 1px solid color-mix(in srgb, rgb(var(--bg-primary)) 90%, rgb(var(--text-primary)) 10%);
+  box-shadow: 0 1px 0 0 rgb(var(--text-primary) / .02);
   position: fixed;
   z-index: 20;
 

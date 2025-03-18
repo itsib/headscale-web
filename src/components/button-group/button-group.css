@@ -1,0 +1,33 @@
+.button-group {
+  display: flex;
+
+  .btn-icon {
+    --icon-animation-duration: 1s;
+    --icon-animation-iteration-count: infinite;
+    --icon-animation-timing: linear;
+
+    height: 40px;
+    width: 40px;
+    padding: 0;
+    margin: 0 .25rem;
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: color-mix(in srgb, rgb(var(--bg-primary)) 96%, rgb(var(--text-primary)) 4%);
+    border: 1px solid color-mix(in srgb, rgb(var(--bg-primary)) 90%, rgb(var(--text-primary)) 10%);
+    box-shadow: 0 1px 0 0 rgb(var(--text-primary) / .02), 1px 0 0 0  rgb(var(--text-primary) / .03);
+    border-radius: .375rem;
+    /*color: rgb(var(--accent));*/
+    color: rgb(var(--text-primary));
+
+    .icon {
+      pointer-events: none;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
