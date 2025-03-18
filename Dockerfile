@@ -1,4 +1,4 @@
-ARG VERSION=0.8.13
+ARG VERSION=0.8.14
 FROM node:20.17-slim AS builder
 
 COPY package.json \
