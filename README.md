@@ -10,7 +10,7 @@ A web frontend for the [headscale](https://github.com/juanfont/headscale) coordi
 [![Release](https://github.com/itsib/headscale-web/actions/workflows/main.yaml/badge.svg)](https://github.com/itsib/headscale-web/actions/workflows/main.yaml)
 
 
-![Screenshot Home Page](public/screenshot.png)
+![Screenshot Home Page](public/screenshots/devices-1280x720.webp)
 
 ---
 
