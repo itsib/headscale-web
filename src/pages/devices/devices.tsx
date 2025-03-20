@@ -16,6 +16,7 @@ import { ListLoading } from '@app-components/skeleton/list-loading.tsx';
 import { DevicesTable } from '@app-components/devices-table';
 import { useBreakPoint } from '@app-hooks/use-break-point.ts';
 import { DevicesCards } from '@app-components/devices-cards';
+import './devices.css';
 
 export function Devices() {
   const storage = useStorage();
@@ -80,9 +81,9 @@ export function Devices() {
   }
 
   return (
-    <div className="pt-6">
-      <div className="flex justify-between items-center mb-8">
-        <div>
+    <div className="devices-page">
+      <div className="caption">
+        <div className="">
           <h1 className="mb-2">
             <Trans i18nKey="devices"/>
           </h1>
@@ -91,7 +92,9 @@ export function Devices() {
           </p>
         </div>
 
-        <ButtonGroup buttons={buttons} onClick={onClick}/>
+        <div className="actions">
+          <ButtonGroup buttons={buttons} onClick={onClick}/>
+        </div>
       </div>
 
       {isLoading ? (

@@ -9,6 +9,7 @@ export * from './devices/device-route';
 export * from './devices/device-action';
 
 export * from './users/users';
+export * from './users/user-action';
 
 export * from './acl-policy/acl-policy';
 

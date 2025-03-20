@@ -1,0 +1,52 @@
+.users-table {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  text-align: left;
+
+  thead {
+    color: rgb(var(--text-secondary));
+    text-transform: uppercase;
+    font-size: 0.75rem;
+
+    tr {
+      height: 26px;
+      border-bottom: 1px solid rgb(var(--border-primary));
+
+      > :nth-child(1) {
+        padding-left: 46px;
+      }
+    }
+  }
+
+  tbody {
+
+    tr {
+      height: 80px;
+      border-bottom: 1px solid rgb(var(--border-primary));
+    }
+  }
+
+  tr {
+    /* User info */
+    > :nth-child(1) {
+
+    }
+
+    /* Provider */
+    > :nth-child(3) {
+      text-align: center;
+    }
+
+    /* Joined */
+    > :nth-child(4) {
+      text-align: right;
+    }
+
+    /* Context */
+    > :nth-child(5) {
+      width: 52px;
+      text-align: right;
+    }
+  }
+}
