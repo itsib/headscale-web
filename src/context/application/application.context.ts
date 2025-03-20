@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 import { getActiveTheme, Theme } from '@app-utils/theme';
-import { StorageAsync } from '@app-utils/storage.ts';
+import { StorageAsync } from '@app-utils/storage';
+import { NotImplementedError } from '@app-utils/errors';
 
 export interface IApplicationContext {
   isOffLine: boolean;
@@ -12,6 +13,6 @@ export interface IApplicationContext {
 export const ApplicationContext = createContext<IApplicationContext>({
   isOffLine: false,
   theme: getActiveTheme(),
-  updateTheme: () => {throw new Error('NOT_IMPLEMENTED')},
+  updateTheme: () => {throw new NotImplementedError()},
   storage: {} as StorageAsync,
 });

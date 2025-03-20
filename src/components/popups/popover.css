@@ -3,7 +3,7 @@
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / .3), 0 2px 4px -2px rgb(0 0 0 / .3);
   background-color: rgb(var(--bg-popover) / 1);
   border: 1px solid rgb(var(--border-popover));
-  border-radius: .5rem;
+  border-radius: .25rem;
 }
 
 .popup {

@@ -1,4 +1,4 @@
-import { AnyComponent, RenderableProps } from 'preact';
+import { FunctionComponent } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { BasePopup, PopupPlacement } from '@app-components/popups/base-popup/base-popup';
 import './context-menu.css';
@@ -8,30 +8,19 @@ export interface ContextMenuProps {
    * The position of the window relative to the anchor
    */
   placement?: PopupPlacement;
-  /**
-   * Menu component to render
-   */
-  Menu: AnyComponent;
 }
 
-export const ContextMenu = (props: RenderableProps<ContextMenuProps>) => {
-  const { Menu } = props;
-  const childWrapperRef = useRef<HTMLDivElement | null>(null);
-  const contextMenuRef = useRef<HTMLMenuElement | null>(null);
-  const [openBtnElement, setOpenBtnElement] = useState<HTMLElement>();
+export const ContextMenu: FunctionComponent<ContextMenuProps> = ({ placement, children }) => {
+  const menuRef = useRef<HTMLMenuElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const [isOpen, setIsOpen] = useState(false);
   const [rect, setRect] = useState<DOMRect>();
 
   // Context menu display stuff
   useEffect(() => {
-    const wrapper = childWrapperRef?.current;
-    const btn = wrapper?.firstChild as HTMLElement;
-    if (!btn) {
-      return setOpenBtnElement(undefined);
-    }
-
-    setOpenBtnElement(btn);
+    const btn = buttonRef.current as HTMLButtonElement;
+    if (!btn) return;
 
     const click = (e: MouseEvent) => {
       e.stopPropagation();
@@ -47,12 +36,14 @@ export const ContextMenu = (props: RenderableProps<ContextMenuProps>) => {
 
   // Context menu hide stuff
   useEffect(() => {
-    if (!openBtnElement || !isOpen) {
-      return;
-    }
+    if (!isOpen) return;
 
     const handleMousedown = (e: MouseEvent) => {
-      if (openBtnElement.contains(e.target as Node) || (contextMenuRef.current?.contains(e.target as Node) ?? false)) {
+      const btn = buttonRef.current as HTMLButtonElement;
+      const menu = menuRef.current as HTMLMenuElement;
+      if (!btn || !menu) return;
+
+      if (btn.contains(e.target as Node) || (menu.contains(e.target as Node))) {
         return;
       }
       setIsOpen(false);
@@ -72,14 +63,22 @@ export const ContextMenu = (props: RenderableProps<ContextMenuProps>) => {
       document.removeEventListener('mouseup', handleMouseup);
       document.removeEventListener('wheel', handleScroll);
     };
-  }, [openBtnElement, isOpen]);
+  }, [isOpen]);
 
   return (
     <>
-      <div ref={childWrapperRef}>{props.children}</div>
-      <BasePopup rect={rect} open={isOpen} placement={props.placement}>
-        <menu role="menu" className="popup context-menu" ref={contextMenuRef} onClick={e => e.stopPropagation()}>
-          <Menu />
+      <button
+        role="menu"
+        aria-label="Open context menu"
+        type="button"
+        className="inline-block text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
+        ref={buttonRef}
+      >
+        <i className="icon icon-context-menu text-[24px]"/>
+      </button>
+      <BasePopup rect={rect} open={isOpen} placement={placement}>
+        <menu role="menu" className="popup context-menu" ref={menuRef} onClick={e => e.stopPropagation()}>
+          {children}
         </menu>
       </BasePopup>
     </>

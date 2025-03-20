@@ -11,13 +11,8 @@ export const BtnConfig: FunctionComponent = () => {
 
   return (
     <div className="btn-config-wrapper">
-      <ContextMenu
-        placement={PopupPlacement.BOTTOM}
-        Menu={BtnConfigMenu}
-      >
-        <button aria-label="Open site settinds" role="button" type="button" className="btn btn-config">
-          <i className="icon icon-settings text-[26px] leading-[26px] block"/>
-        </button>
+      <ContextMenu placement={PopupPlacement.BOTTOM}>
+        <BtnConfigMenu />
       </ContextMenu>
     </div>
   )

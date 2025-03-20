@@ -1,3 +1,10 @@
+export class NotImplementedError extends Error {
+  name = 'NotImplementedError';
+  constructor() {
+    super('NOT_IMPLEMENTED');
+  }
+}
+
 export class HttpError extends Error {
   name = 'HttpError';
   readonly code: number;

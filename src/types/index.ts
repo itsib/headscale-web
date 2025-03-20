@@ -1,10 +1,12 @@
 export * from './common/query-result';
+export * from './common/context-menu-base';
 
 export * from './tokens/auth-key';
 export * from './tokens/api-token';
 
-export * from './devices/device.ts';
-export * from './devices/device-route.ts';
+export * from './devices/device';
+export * from './devices/device-route';
+export * from './devices/device-action';
 
 export * from './users/users';
 

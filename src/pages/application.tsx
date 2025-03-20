@@ -16,9 +16,9 @@ export class Application extends Component<any, any> {
 
   render() {
     return (
-      <div className="ui-scroll">
+      <div className="ui-scroll min-w-[320px]">
         <Header />
-        <div className="container mt-[var(--header-height)] min-h-[var(--content-height)]">
+        <div className="container mt-[var(--header-height)] min-h-[var(--content-height)] h-full">
           <ErrorBoundary>
             <Router>
               <Route path='/' component={Home} />
@@ -32,7 +32,6 @@ export class Application extends Component<any, any> {
               <Route default component={Error404} />
             </Router>
           </ErrorBoundary>
-          <div className="h-[20px]" />
         </div>
         <Footer />
       </div>

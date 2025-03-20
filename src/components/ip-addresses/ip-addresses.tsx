@@ -13,12 +13,12 @@ export const IpAddresses: FunctionComponent<IPAddressesProps> = ({ addresses }) 
     <Popover
       placement={PopupPlacement.BOTTOM}
       Content={() => (
-        <div className="py-1.5">
+        <div className="py-1.5" role="menu">
           {addresses.map(address => (<AddressRow key={address} address={address}/>))}
         </div>
       )}
     >
-      <button type="button" className="whitespace-nowrap">
+      <button type="button" role="button" aria-label="Open all IP addresses list" className="whitespace-nowrap">
         <span className="digits">{addresses[0]}</span>
         <i className="icon icon-dropdown text-secondary text-xs ml-2"/>
       </button>
@@ -33,6 +33,8 @@ const AddressRow: FunctionComponent<{ address: string }> = ({ address }) => {
   return (
     <button
       type="button"
+      role="menuitem"
+      aria-label={`IP address ${address}`}
       className="flex items-center justify-between w-full px-4 py-1.5 hover:bg-secondary hover:bg-opacity-70 "
       onClick={event => {
         event.stopPropagation();

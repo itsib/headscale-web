@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from 'preact/hooks';
 import { FunctionComponent } from 'preact';
 import { ApplicationContext } from './application.context';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { Trans } from 'react-i18next';
 import { getActiveTheme, Theme } from '@app-utils/theme';
-import { AnimatedShow } from '@app-components/animated-show/animated-show';
-import { ImgCompass } from '@app-components/img-compass/img-compass';
-import { StorageAsync } from '@app-utils/storage.ts';
+import { StorageAsync } from '@app-utils/storage';
+import { ToastOffline } from '@app-components/toast-offline/toast-offline';
+import { ToastIsFetching } from '@app-components/toast-is-fetching/toast-is-fetching.tsx';
+import { useIsFetching } from '@tanstack/react-query';
 
 export interface ApplicationProviderProps {
   storage: StorageAsync;
@@ -16,6 +16,7 @@ export const ApplicationProvider: FunctionComponent<ApplicationProviderProps> = 
   const [theme, setTheme] = useState<Theme>(getActiveTheme());
   const [isOffLine, setIsOffLine] = useState<boolean>(!navigator.onLine);
   const [, setNeedsRefresh] = useState<boolean>(false);
+  const isFetching = useIsFetching();
 
   const updateTheme = useCallback((theme: Theme) => setTheme(theme), []);
 
@@ -74,17 +75,8 @@ export const ApplicationProvider: FunctionComponent<ApplicationProviderProps> = 
 
   return (
     <ApplicationContext.Provider value={{ theme, updateTheme, isOffLine, storage }}>
-      <div className="fixed inset-0 bottom-auto h-0 z-30">
-        <AnimatedShow show={isOffLine}>
-          <div className="toast">
-            <ImgCompass className="wait" size={36} />
-            <div>
-              <Trans i18nKey="error_offline" />
-              <span>...</span>
-            </div>
-          </div>
-        </AnimatedShow>
-      </div>
+      <ToastOffline isShow={isOffLine} />
+      <ToastIsFetching isShow={!!isFetching} />
       {children}
     </ApplicationContext.Provider>
   )

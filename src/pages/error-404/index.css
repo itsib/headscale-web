@@ -1,0 +1,28 @@
+.error-404-page {
+  width: auto;
+  height: var(--content-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .animation {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .message {
+    margin: 1.25rem .25rem 0;
+    font-size: 1.75rem;
+    text-align: center;
+  }
+
+  .go-home {
+    margin: 1.25rem .5rem 0;
+    font-size: 1.75rem;
+    text-underline-offset: 0.375rem;
+    text-align: center;
+  }
+}

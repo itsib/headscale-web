@@ -1,0 +1,54 @@
+.devices-table {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  text-align: left;
+
+  thead {
+    color: rgb(var(--text-secondary));
+    text-transform: uppercase;
+    font-size: 0.75rem;
+
+    tr {
+      height: 26px;
+      border-bottom: 1px solid rgb(var(--border-primary));
+    }
+  }
+
+  tbody {
+
+    tr {
+      height: 80px;
+      border-bottom: 1px solid rgb(var(--border-primary));
+    }
+  }
+
+  tr {
+    /* Icon */
+    > :nth-child(1) {
+      width: 60px;
+    }
+
+    /* Tags */
+    > :nth-child(4) {
+      text-align: center;
+    }
+
+    /* Ip addresses */
+    > :nth-child(5) {
+      width: 140px;
+    }
+
+    /* Last seen */
+    > :nth-child(6) {
+      width: 220px;
+      text-align: right;
+    }
+
+    /* Context */
+    > :nth-child(7) {
+      width: 52px;
+      text-align: right;
+    }
+  }
+}

@@ -165,5 +165,9 @@
   "footer_api_url": "Connected with",
   "go_home": "Go Home",
   "devises": "Devises",
-  "not_found_page_text": "Uh oh. That page doesn't exist."
+  "not_found_page_text": "Uh oh. That page doesn't exist.",
+  "user": "User",
+  "layout_change": "Change layout mode",
+  "ip_addresses": "IP Addresses",
+  "user_login": "User Login"
 }

@@ -58,18 +58,6 @@ export class LottiePlayer extends Component<LottiePlayerProps> {
   }
 
   shouldComponentUpdate(nextProps: LottiePlayerProps) {
-    if ((nextProps.width != null || nextProps.height != null) && (nextProps.width !== this.width || nextProps.height !== this.height)) {
-      this.width = nextProps.width || this.width;
-      this.height = nextProps.height || this.height;
-
-      const canvas = this.canvas.current;
-      if (canvas) {
-        canvas.width = this.width;
-        canvas.height = this.height;
-      }
-      this.player?.resize();
-    }
-
     if (this.player) {
       if (nextProps.loop != null && this.player.loop !== nextProps.loop) {
         this.player.setLoop(nextProps.loop);
@@ -96,8 +84,12 @@ export class LottiePlayer extends Component<LottiePlayerProps> {
       }
 
       if (nextProps.src != null) {
+        let src = nextProps.src;
+        if (!src.startsWith('http')) {
+          src = location.origin + src;
+        }
         this.player.load({
-          src: nextProps.src,
+          src: src,
           autoplay: this.player.isPlaying,
           loop: this.player.loop,
           mode: this.player.mode,
@@ -116,7 +108,7 @@ export class LottiePlayer extends Component<LottiePlayerProps> {
   }
 
   render(props: LottiePlayerProps) {
-    const { width, height, ..._props } = props;
-    return <canvas ref={this.canvas} width={width || this.width} height={height || this.height} {..._props} />;
+    const { width: _width, height: _height, ..._props } = props;
+    return <canvas ref={this.canvas} width={this.width} height={this.height} {..._props} />;
   }
 }

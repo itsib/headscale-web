@@ -165,24 +165,14 @@ const UserItem = memo(function UserItem(props: UserItemProps) {
         <FormattedDate iso={createdAt}  hourCycle="h24" dateStyle="medium" timeStyle="medium" />
       </td>
       <td className="text-right w-[52px]">
-        <ContextMenu
-          placement={PopupPlacement.BOTTOM}
-          Menu={() => (
-            <UsersContextMenu onClick={action => {
-              if (action === 'rename') {
-                onRename({ id, name, displayName, profilePicUrl, email, createdAt });
-              } else if (action === 'delete') {
-                onDelete({ id, name, displayName, profilePicUrl, email, createdAt });
-              }
-            }} />
-          )}
-        >
-          <button
-            type="button"
-            className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
-          >
-            <i className="icon icon-context-menu text-[24px]"/>
-          </button>
+        <ContextMenu placement={PopupPlacement.BOTTOM}>
+          <UsersContextMenu onClick={action => {
+            if (action === 'rename') {
+              onRename({ id, name, displayName, profilePicUrl, email, createdAt });
+            } else if (action === 'delete') {
+              onDelete({ id, name, displayName, profilePicUrl, email, createdAt });
+            }
+          }} />
         </ContextMenu>
       </td>
     </tr>

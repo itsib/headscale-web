@@ -1,11 +1,8 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { useMemo, useState } from 'preact/hooks';
-import { memo } from 'preact/compat';
+import { Device, DeviceAction } from '@app-types';
 import { ModalNodeCreate } from '@app-components/modals/modal-node-create/modal-node-create';
 import { fetchWithContext } from '@app-utils/query-fn';
-import { ListLoading } from '@app-components/skeleton/list-loading';
-import { Device } from '@app-types';
-import { NodesContextMenu, NodesContextMenuAction } from '@app-components/nodes-context-menu/nodes-context-menu';
 import { ModalNodeRename } from '@app-components/modals/modal-node-rename/modal-node-rename';
 import { ModalNodeChown } from '@app-components/modals/modal-node-chown/modal-node-chown';
 import { ModalNodeDelete } from '@app-components/modals/modal-node-delete/modal-node-delete';
@@ -14,38 +11,48 @@ import { ModalNodeTags } from '@app-components/modals/modal-node-tags/modal-node
 import { ModalNodeExpire } from '@app-components/modals/modal-node-expire/modal-node-expire';
 import { useQuery } from '@tanstack/react-query';
 import { useStorage } from '@app-hooks/use-storage';
-import { FormattedDuration } from '@app-components/formatters/formatted-duration';
-import { UserInfo } from '@app-components/user-info/user-info';
-import { AclTag } from '@app-components/acl-tag/acl-tag';
-import { IpAddresses } from '@app-components/ip-addresses/ip-addresses';
-import { FormattedDate } from '@app-components/formatters/formatted-date';
-import { ContextMenu } from '@app-components/popups/context-menu';
-import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
 import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group';
+import { ListLoading } from '@app-components/skeleton/list-loading.tsx';
+import { DevicesTable } from '@app-components/devices-table';
+import { useBreakPoint } from '@app-hooks/use-break-point.ts';
+import { DevicesCards } from '@app-components/devices-cards';
 
 export function Devices() {
-  const { t } = useTranslation();
   const storage = useStorage();
-
-  const [opened, setOpened] = useState<NodesContextMenuAction | null>(null);
+  const { t } = useTranslation();
+  const [opened, setOpened] = useState<DeviceAction | null>(null);
   const [selected, setSelected] = useState<Device | null>(null);
 
-  const { data: nodes, isLoading, refetch } = useQuery({
+  const isMobile = useBreakPoint(992);
+  const [_isListLayout, setIsListLayout] = useState(true);
+  const isListLayout = !isMobile && _isListLayout;
+
+  const { data: devices, isLoading, refetch } = useQuery({
     queryKey: ['/api/v1/node', 'GET'],
-    queryFn: async ({queryKey, signal}) => {
+    queryFn: async ({ queryKey, signal }) => {
       const data = await fetchWithContext<{ nodes: Device[] }>(
         queryKey[0] as string,
-        {signal},
+        { signal },
         storage,
       );
       return data.nodes;
     },
     staleTime: 60_000 * 60,
-    refetchInterval: 10_000,
+    refetchInterval: 30_000,
   });
 
   const buttons: ButtonConfig[] = useMemo(() => {
+    const buttons = isMobile ? [] : [
+      {
+        id: 'set-layout',
+        icon: isListLayout ? 'icon-layout-cards' : 'icon-layout-list',
+        tooltip: t('layout_change'),
+        effect: 'icon-flip', //'',
+      },
+    ];
+
     return [
+      ...buttons,
       {
         id: 'refresh-devices',
         icon: 'icon-refresh',
@@ -59,7 +66,7 @@ export function Devices() {
         effect: 'icon-shake',
       },
     ];
-  }, [t]);
+  }, [t, isMobile, isListLayout]);
 
   async function onClick(id: string) {
     switch (id) {
@@ -67,6 +74,8 @@ export function Devices() {
         return setOpened('create');
       case 'refresh-devices':
         return refetch();
+      case 'set-layout':
+        return setIsListLayout(value => !value);
     }
   }
 
@@ -82,42 +91,26 @@ export function Devices() {
           </p>
         </div>
 
-        <ButtonGroup buttons={buttons} onClick={onClick} />
+        <ButtonGroup buttons={buttons} onClick={onClick}/>
       </div>
 
       {isLoading ? (
         <ListLoading/>
-      ) : nodes?.length ? (
-        <table className="w-full table-auto border-spacing-px">
-          <thead>
-          <tr className="border-b border-b-primary h-[30px] text-xs font-medium text-secondary uppercase">
-            <th/>
-            <th className="text-left ">{t('machine')}</th>
-            <th className="text-left">{t('user')}</th>
-            <th className="text-center ">{t('tags')}</th>
-            <th className="text-center pr-8">{t('address')}</th>
-            <th className="text-right">{t('last_seen')}</th>
-            <th/>
-          </tr>
-          </thead>
-          <tbody>
-          {nodes?.map((node) => (
-            <NodeItem
-              key={node.id}
-              onAction={(action) => {
-                setSelected(node);
-                setOpened(action);
-              }}
-              {...node}
-            />
-          ))}
-          </tbody>
-        </table>
+      ) : devices && devices?.length ? (
+        <>
+          {isListLayout ? (
+            <DevicesTable devices={devices} onDevicesChange={setSelected} onAction={setOpened} />
+          ) : (
+            <DevicesCards devices={devices} onDevicesChange={setSelected} onAction={setOpened} />
+          )}
+        </>
       ) : (
         <div className="border-primary border rounded-md p-8 text-center">
           <Trans i18nKey="empty_list"/>
         </div>
       )}
+
+      <div className="h-[40px]" />
 
       <ModalNodeCreate
         isOpen={opened === 'create'}
@@ -164,69 +157,3 @@ export function Devices() {
   );
 }
 
-interface NodeRowProps extends Device {
-  onAction: (name: NodesContextMenuAction) => void;
-}
-
-const NodeItem = memo(function NodeRow({onAction, ...node}: NodeRowProps) {
-  const {name, givenName, expiry, ipAddresses, forcedTags, lastSeen, online, user} = node;
-
-  const expiryDate = useMemo(() => new Date(expiry), [expiry]);
-  const expiryDisabled = expiryDate.getFullYear() <= 1970;
-
-  return (
-    <tr className="h-[80px] border-b border-b-primary">
-      <td className="w-[60px]">
-        <div className="w-[36px] h-[36px] rounded-full bg-blue-700 bg-opacity-70 text-center text-white">
-          <i className="icon icon-connection text-[18px] leading-[36px]"/>
-        </div>
-      </td>
-      <td className="">
-        <div className="text-primary font-medium text-lg">{givenName || name}</div>
-        <div className="flex justify-start">
-          {expiryDisabled ? (
-            <div className="text-secondary text-xs font-normal">
-              <Trans i18nKey="expiry_disabled"/>
-            </div>
-          ) : (
-            <div className="text-secondary text-xs font-normal">
-              <FormattedDuration timestamp={expiryDate.getTime()}/>
-            </div>
-          )}
-        </div>
-      </td>
-      <td className="text-center">
-        <UserInfo id={user.id} name={user.name} displayName={user.displayName} pictureUrl={user.profilePicUrl}
-                  size={30}/>
-      </td>
-      <td className="text-center">
-        {forcedTags.length ? (
-          <div className="flex justify-center gap-2 flex-wrap">
-            {forcedTags.map(tag => <AclTag key={tag} tag={tag}/>)}
-          </div>
-        ) : <>-</>}
-      </td>
-      <td className="text-center">
-        <IpAddresses addresses={ipAddresses}/>
-      </td>
-      <td className="text-right">
-        <div>
-          <span
-            className={`h-2 w-2 mr-3 mb-[1px] rounded-full inline-block ${online ? 'bg-green-500' : 'bg-gray-500'}`}/>
-          <FormattedDate iso={lastSeen} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
-        </div>
-      </td>
-      <td className="text-right w-[52px]">
-        <ContextMenu
-          placement={PopupPlacement.BOTTOM}
-          Menu={() => <NodesContextMenu onAction={onAction}/>}
-        >
-          <button type="button"
-                  className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90">
-            <i className="icon icon-context-menu text-[24px]"/>
-          </button>
-        </ContextMenu>
-      </td>
-    </tr>
-  );
-});

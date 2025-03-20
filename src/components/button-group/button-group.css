@@ -3,7 +3,7 @@
 
   .btn-icon {
     --icon-animation-duration: 1s;
-    --icon-animation-iteration-count: infinite;
+    --icon-animation-iteration-count: 1;
     --icon-animation-timing: linear;
 
     height: 40px;
@@ -19,11 +19,13 @@
     border: 1px solid color-mix(in srgb, rgb(var(--bg-primary)) 90%, rgb(var(--text-primary)) 10%);
     box-shadow: 0 1px 0 0 rgb(var(--text-primary) / .02), 1px 0 0 0  rgb(var(--text-primary) / .03);
     border-radius: .375rem;
-    /*color: rgb(var(--accent));*/
     color: rgb(var(--text-primary));
 
     .icon {
       pointer-events: none;
+      animation-play-state: revert;
+      animation-fill-mode: forwards;
+      animation-direction: alternate;
     }
 
     &:hover {

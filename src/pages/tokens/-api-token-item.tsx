@@ -54,32 +54,20 @@ export const ApiTokenItem = memo(function ApiTokenItem(props: ApiTokenItemProps)
         )}
       </td>
       <td className="text-right w-[52px]">
-        <ContextMenu
-          placement={PopupPlacement.BOTTOM}
-          Menu={() => (
-            <>
-              <div className="context-menu-item">
-                <button type="button" className="btn-context-menu" onClick={() => onAction('expire')}>
-                  <Trans i18nKey="expire"/>
-                </button>
-              </div>
+        <ContextMenu placement={PopupPlacement.BOTTOM}>
+          <div className="context-menu-item">
+            <button type="button" className="btn-context-menu" onClick={() => onAction('expire')}>
+              <Trans i18nKey="expire"/>
+            </button>
+          </div>
 
-              <hr className="context-menu-divider"/>
+          <hr className="context-menu-divider"/>
 
-              <div className="context-menu-item" onClick={() => onAction('delete')}>
-                <button type="button" className="btn-context-menu text-red-600">
-                  <Trans i18nKey="delete"/>
-                </button>
-              </div>
-            </>
-          )}
-        >
-          <button
-            type="button"
-            className="text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
-          >
-            <i className="icon icon-context-menu text-[24px]"/>
-          </button>
+          <div className="context-menu-item" onClick={() => onAction('delete')}>
+            <button type="button" className="btn-context-menu text-red-600">
+              <Trans i18nKey="delete"/>
+            </button>
+          </div>
         </ContextMenu>
       </td>
     </tr>

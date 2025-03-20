@@ -11,7 +11,7 @@ export interface ButtonConfig {
 
 export interface ButtonGroupProps {
   buttons: ButtonConfig[];
-  onClick?: (id: string) => Promise<any>;
+  onClick?: (id: string) => void;
 }
 
 export class ButtonGroup extends Component<ButtonGroupProps> {
@@ -31,7 +31,7 @@ export class ButtonGroup extends Component<ButtonGroupProps> {
     });
   }
 
-  async onClick(event: MouseEvent) {
+  onClick(event: MouseEvent) {
     const button = event.target as HTMLButtonElement;
     const icon = button?.firstChild as HTMLElement;
     const config = this.props.buttons.find(({ id }) => id === button.id);
@@ -40,14 +40,11 @@ export class ButtonGroup extends Component<ButtonGroupProps> {
 
     if (config.effect) {
       icon.classList.add(config.effect);
+      const [animation] = icon.getAnimations();
+      animation.play();
     }
 
-
-    await this.props.onClick(config.id);
-
-    if (config.effect) {
-      icon.addEventListener('animationiteration', () => icon.classList.remove(config.effect!), { once: true });
-    }
+    this.props.onClick(config.id);
   }
 
   render({ buttons }: ButtonGroupProps) {
