@@ -1,6 +1,6 @@
 import { useLocation } from 'preact-iso/router';
 import { RenderableProps } from 'preact';
-import { useEffect } from 'react';
+import { useEffect } from 'preact/hooks';
 
 export const Redirect = (props: RenderableProps<{ to: string }>) => {
   const { path, route } = useLocation();

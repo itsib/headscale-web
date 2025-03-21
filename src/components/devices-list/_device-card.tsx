@@ -4,13 +4,13 @@ import { ContextMenuBase, Device, DeviceAction } from '@app-types';
 import { Trans, useTranslation } from 'react-i18next';
 import { FormattedDuration } from '@app-components/formatters/formatted-duration';
 import { Marker } from '@app-components/marker/marker';
-import { DeviceContextMenu } from '@app-components/device-context-menu/device-context-menu';
 import { AclTag } from '@app-components/acl-tag/acl-tag';
-import './_device-item.css';
+import { DeviceContextMenu } from './_device-context-menu';
+import './_device-card.css';
 
-type DeviceItemProps = ContextMenuBase<DeviceAction> & Device;
+type DeviceCardProps = ContextMenuBase<DeviceAction> & Device;
 
-export const DeviceItem = memo(function DeviceItem(props: DeviceItemProps) {
+export const DeviceCard = memo(function DeviceItem(props: DeviceCardProps) {
   const { name, givenName, expiry, ipAddresses, forcedTags, online, user, onAction } = props;
   const { t } = useTranslation();
 
@@ -18,7 +18,7 @@ export const DeviceItem = memo(function DeviceItem(props: DeviceItemProps) {
   const expiryDisabled = expiryDate.getFullYear() <= 1970;
 
   return (
-    <div className="device-item-card">
+    <div className="device-card">
       <div className="main-info">
         <div className="icon-wrapper">
           {online ? (

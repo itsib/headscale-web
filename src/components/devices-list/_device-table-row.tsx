@@ -8,12 +8,11 @@ import { AclTag } from '@app-components/acl-tag/acl-tag';
 import { IpAddresses } from '@app-components/ip-addresses/ip-addresses';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { Marker } from '@app-components/marker/marker';
-import { DeviceContextMenu } from '@app-components/device-context-menu/device-context-menu';
-import './_device-item.css';
+import { DeviceContextMenu } from './_device-context-menu';
 
-type DeviceItemProps = ContextMenuBase<DeviceAction> & Device;
+type DeviceTableRowProps = ContextMenuBase<DeviceAction> & Device;
 
-export const DeviceItem = memo(function NodeRow(props: DeviceItemProps) {
+export const DeviceTableRow = memo(function DeviceTableRow(props: DeviceTableRowProps) {
   const { name, givenName, expiry, ipAddresses, forcedTags, lastSeen, online, user, onAction } = props;
 
   const expiryDate = useMemo(() => new Date(expiry), [expiry]);

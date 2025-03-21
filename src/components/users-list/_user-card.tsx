@@ -2,14 +2,14 @@ import { memo } from 'preact/compat';
 import { useMemo } from 'preact/hooks';
 import { ContextMenuBase, UserAction, UserWithProvider } from '@app-types';
 import { useTranslation } from 'react-i18next';
-import { UsersContextMenu } from '@app-components/user-context-menu/user-context-menu';
+import { UsersContextMenu } from './_user-context-menu';
 import { UserInfo } from '@app-components/user-info/user-info';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
-import './_user-item.css';
+import './_user-card.css';
 
-type UserItemProps = ContextMenuBase<UserAction> & UserWithProvider;
+type UserCardProps = ContextMenuBase<UserAction> & UserWithProvider;
 
-export const UserItem = memo(function UserItem(props: UserItemProps) {
+export const UserCard = memo(function UserItem(props: UserCardProps) {
   const { id, name, displayName, email, provider, providerId, profilePicUrl, createdAt, onAction } = props;
   const { t } = useTranslation();
 
@@ -24,7 +24,7 @@ export const UserItem = memo(function UserItem(props: UserItemProps) {
   }, [provider, providerId]);
 
   return (
-    <div className="user-item-card">
+    <div className="user-card">
       <div className="main-info">
         <UserInfo id={id} className="font-medium text-lg" name={name} displayName={displayName} pictureUrl={profilePicUrl} size={30} />
 

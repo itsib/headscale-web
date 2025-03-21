@@ -9,10 +9,10 @@ import { ModalUserDelete } from '@app-components/modals/modal-user-delete/modal-
 import { fetchWithContext } from '@app-utils/query-fn';
 import { useStorage } from '@app-hooks/use-storage';
 import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group';
-import { UsersTable } from '@app-components/users-table';
 import { useBreakPoint } from '@app-hooks/use-break-point';
+import { UsersList } from '@app-components/users-list';
+import { EmptyList } from '@app-components/empty-list/empty-list.tsx';
 import './users.css';
-import { UsersCards } from '@app-components/users-cards/users-cards.tsx';
 
 export function Users() {
   const { t } = useTranslation();
@@ -35,8 +35,8 @@ export function Users() {
       );
       return data.users;
     },
-    staleTime: 20_000,
-    refetchInterval: 15_000,
+    staleTime: 60_000 * 60,
+    refetchInterval: 30_000,
   });
 
   const buttons: ButtonConfig[] = useMemo(() => {
@@ -103,17 +103,9 @@ export function Users() {
       {isLoading ? (
         <ListLoading />
       ) : users?.length ? (
-        <>
-          {isListLayout ? (
-            <UsersTable users={users} onAction={setOpened} onUserChange={setSelected} />
-          ) : (
-            <UsersCards users={users} onAction={setOpened} onUserChange={setSelected} />
-          )}
-        </>
+        <UsersList layout={isListLayout ? 'table' : 'cards'} users={users} onAction={setOpened} onChange={setSelected} />
       ) : (
-        <div className="border-primary border rounded-md p-8 text-center">
-          <Trans i18nKey="empty_list" />
-        </div>
+        <EmptyList />
       )}
 
       <ModalUserCreate

@@ -1,13 +1,36 @@
 import type { FunctionComponent } from 'preact';
 
-export const ListLoading: FunctionComponent<{ count?: number }> = ({ count = 5 }) => {
+export const ListLoading: FunctionComponent = () => {
   return (
     <div className="">
-      {count >= 5 ? <div className="h-[40px] w-full bg-skeleton rounded-lg bg-opacity-50 animate-pulse mb-5"/> : null}
-      {count >= 4 ? <div className="h-[40px] w-full bg-skeleton rounded-lg bg-opacity-50 animate-pulse mb-5"/> : null}
-      {count >= 3 ? <div className="h-[40px] w-[80%] bg-skeleton rounded-lg bg-opacity-50 animate-pulse mb-5"/> : null}
-      {count >= 2 ? <div className="h-[40px] w-[80%] bg-skeleton rounded-lg bg-opacity-50 animate-pulse mb-5"/> : null}
-      {count >= 1 ? <div className="h-[40px] w-[80%] bg-skeleton rounded-lg bg-opacity-50 animate-pulse mb-5"/> : null}
+      <div className="flex mb-4">
+        <div className="h-[50px] min-w-[50px] rounded-full bg-skeleton bg-opacity-50 animate-pulse mb-5 me-5 row-span-2"/>
+        <div className="w-full">
+          <div className="h-[18px] w-full bg-skeleton rounded bg-opacity-50 animate-pulse mb-[14px]"/>
+          <div className="h-[18px] w-2/3 bg-skeleton rounded bg-opacity-50 animate-pulse"/>
+        </div>
+      </div>
+      <div className="flex mb-4">
+        <div className="h-[50px] min-w-[50px] rounded-full bg-skeleton bg-opacity-50 animate-pulse mb-5 me-5 row-span-2"/>
+        <div className="w-full">
+          <div className="h-[18px] w-full bg-skeleton rounded bg-opacity-50 animate-pulse mb-[14px]"/>
+          <div className="h-[18px] w-2/3 bg-skeleton rounded bg-opacity-50 animate-pulse"/>
+        </div>
+      </div>
+      <div className="flex mb-4">
+        <div className="h-[50px] min-w-[50px] rounded-full bg-skeleton bg-opacity-50 animate-pulse mb-5 me-5 row-span-2"/>
+        <div className="w-full">
+          <div className="h-[18px] w-full bg-skeleton rounded bg-opacity-50 animate-pulse mb-[14px]"/>
+          <div className="h-[18px] w-2/3 bg-skeleton rounded bg-opacity-50 animate-pulse"/>
+        </div>
+      </div>
+      <div className="flex mb-4">
+        <div className="h-[50px] min-w-[50px] rounded-full bg-skeleton bg-opacity-50 animate-pulse mb-5 me-5 row-span-2"/>
+        <div className="w-full">
+          <div className="h-[18px] w-full bg-skeleton rounded bg-opacity-50 animate-pulse mb-[14px]"/>
+          <div className="h-[18px] w-2/3 bg-skeleton rounded bg-opacity-50 animate-pulse"/>
+        </div>
+      </div>
     </div>
   );
 };

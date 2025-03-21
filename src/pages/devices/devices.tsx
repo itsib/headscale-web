@@ -12,10 +12,10 @@ import { ModalNodeExpire } from '@app-components/modals/modal-node-expire/modal-
 import { useQuery } from '@tanstack/react-query';
 import { useStorage } from '@app-hooks/use-storage';
 import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group';
-import { ListLoading } from '@app-components/skeleton/list-loading.tsx';
-import { DevicesTable } from '@app-components/devices-table';
+import { ListLoading } from '@app-components/skeleton/list-loading';
 import { useBreakPoint } from '@app-hooks/use-break-point.ts';
-import { DevicesCards } from '@app-components/devices-cards';
+import { EmptyList } from '@app-components/empty-list/empty-list';
+import { DevicesList } from '@app-components/devices-list';
 import './devices.css';
 
 export function Devices() {
@@ -48,7 +48,7 @@ export function Devices() {
         id: 'set-layout',
         icon: isListLayout ? 'icon-layout-cards' : 'icon-layout-list',
         tooltip: t('layout_change'),
-        effect: 'icon-flip', //'',
+        effect: 'icon-flip',
       },
     ];
 
@@ -98,19 +98,11 @@ export function Devices() {
       </div>
 
       {isLoading ? (
-        <ListLoading/>
+        <ListLoading />
       ) : devices && devices?.length ? (
-        <>
-          {isListLayout ? (
-            <DevicesTable devices={devices} onDevicesChange={setSelected} onAction={setOpened} />
-          ) : (
-            <DevicesCards devices={devices} onDevicesChange={setSelected} onAction={setOpened} />
-          )}
-        </>
+        <DevicesList layout={isListLayout ? 'table' : 'cards'} devices={devices} onChange={setSelected} onAction={setOpened} />
       ) : (
-        <div className="border-primary border rounded-md p-8 text-center">
-          <Trans i18nKey="empty_list"/>
-        </div>
+        <EmptyList />
       )}
 
       <div className="h-[40px]" />

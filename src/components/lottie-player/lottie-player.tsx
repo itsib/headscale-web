@@ -15,13 +15,19 @@ export interface LottiePlayerProps {
 }
 
 export class LottiePlayer extends Component<LottiePlayerProps> {
-  width = 300;
+  width: number;
 
-  height = 300;
+  height: number;
 
   canvas = createRef<HTMLCanvasElement>();
 
   player: DotLottie | null = null;
+
+  constructor(props: LottiePlayerProps) {
+    super(props);
+    this.width = props.width ?? 300;
+    this.height = props.height ?? 300;
+  }
 
   async createDotLottie(config: Config) {
     try {
