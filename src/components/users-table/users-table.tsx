@@ -4,12 +4,12 @@ import { ContextMenuBase, UserAction, UserWithProvider } from '@app-types';
 import { UserItem } from './_user-item';
 import './users-table.css';
 
-export interface DevicesTableProps extends ContextMenuBase<UserAction> {
+export interface UsersTableProps extends ContextMenuBase<UserAction> {
   users: UserWithProvider[];
   onUserChange: (device: UserWithProvider) => void;
 }
 
-export const UsersTable: FunctionComponent<DevicesTableProps> = ({ users, onUserChange, onAction }) => {
+export const UsersTable: FunctionComponent<UsersTableProps> = ({ users, onUserChange, onAction }) => {
   const { t } = useTranslation();
 
   return (

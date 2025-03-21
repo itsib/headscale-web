@@ -1,0 +1,54 @@
+import { memo } from 'preact/compat';
+import { useMemo } from 'preact/hooks';
+import { ContextMenuBase, UserAction, UserWithProvider } from '@app-types';
+import { useTranslation } from 'react-i18next';
+import { UsersContextMenu } from '@app-components/user-context-menu/user-context-menu';
+import { UserInfo } from '@app-components/user-info/user-info';
+import { FormattedDate } from '@app-components/formatters/formatted-date';
+import './_user-item.css';
+
+type UserItemProps = ContextMenuBase<UserAction> & UserWithProvider;
+
+export const UserItem = memo(function UserItem(props: UserItemProps) {
+  const { id, name, displayName, email, provider, providerId, profilePicUrl, createdAt, onAction } = props;
+  const { t } = useTranslation();
+
+  const account = useMemo(() => {
+    if (provider !== 'oidc') {
+      return null;
+    }
+    if (providerId.includes('google')) {
+      return 'Google';
+    }
+    return 'Other'
+  }, [provider, providerId]);
+
+  return (
+    <div className="user-item-card">
+      <div className="main-info">
+        <UserInfo id={id} className="font-medium text-lg" name={name} displayName={displayName} pictureUrl={profilePicUrl} size={30} />
+
+        <UsersContextMenu onAction={onAction} />
+      </div>
+
+      <div className="info-row">
+        <div className="label">{t('email')}:</div>
+        <div className="value">{email}</div>
+      </div>
+
+      {provider === 'oidc' ? (
+        <div className="info-row">
+          <div className="label">{t('account')}:</div>
+          <div className="value">{account}</div>
+        </div>
+      ) : null}
+
+      <div className="info-row">
+        <div className="label">{t('joined')}:</div>
+        <div className="value">
+          <FormattedDate iso={createdAt}  hourCycle="h24" dateStyle="medium" timeStyle="medium" />
+        </div>
+      </div>
+    </div>
+  );
+});

@@ -9,8 +9,10 @@ import { ModalUserDelete } from '@app-components/modals/modal-user-delete/modal-
 import { fetchWithContext } from '@app-utils/query-fn';
 import { useStorage } from '@app-hooks/use-storage';
 import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group';
-import { UsersTable } from '@app-components/users-table/users-table';
+import { UsersTable } from '@app-components/users-table';
+import { useBreakPoint } from '@app-hooks/use-break-point';
 import './users.css';
+import { UsersCards } from '@app-components/users-cards/users-cards.tsx';
 
 export function Users() {
   const { t } = useTranslation();
@@ -18,6 +20,10 @@ export function Users() {
 
   const [opened, setOpened] = useState<UserAction | null>(null);
   const [selected, setSelected] = useState<User | null>(null);
+
+  const isMobile = useBreakPoint(992);
+  const [_isListLayout, setIsListLayout] = useState(true);
+  const isListLayout = !isMobile && _isListLayout;
 
   const { data: users, refetch, isLoading } = useQuery({
     queryKey: ['/api/v1/user', 'GET'],
@@ -34,7 +40,17 @@ export function Users() {
   });
 
   const buttons: ButtonConfig[] = useMemo(() => {
+    const buttons = isMobile ? [] : [
+      {
+        id: 'set-layout',
+        icon: isListLayout ? 'icon-layout-cards' : 'icon-layout-list',
+        tooltip: t('layout_change'),
+        effect: 'icon-flip',
+      },
+    ];
+
     return [
+      ...buttons,
       {
         id: 'refresh-users',
         icon: 'icon-refresh',
@@ -43,12 +59,12 @@ export function Users() {
       },
       {
         id: 'create-user',
-        icon: 'icon-user-plus',
+        icon: 'icon-add-user',
         tooltip: t('create_user'),
         effect: 'icon-shake',
       },
     ];
-  }, [t]);
+  }, [t, isMobile, isListLayout]);
 
   async function onClick(id: string) {
     switch (id) {
@@ -56,6 +72,8 @@ export function Users() {
         return setOpened('create');
       case 'refresh-users':
         return refetch();
+      case 'set-layout':
+        return setIsListLayout(value => !value);
     }
   }
 
@@ -85,7 +103,13 @@ export function Users() {
       {isLoading ? (
         <ListLoading />
       ) : users?.length ? (
-        <UsersTable users={users} onAction={setOpened} onUserChange={setSelected} />
+        <>
+          {isListLayout ? (
+            <UsersTable users={users} onAction={setOpened} onUserChange={setSelected} />
+          ) : (
+            <UsersCards users={users} onAction={setOpened} onUserChange={setSelected} />
+          )}
+        </>
       ) : (
         <div className="border-primary border rounded-md p-8 text-center">
           <Trans i18nKey="empty_list" />
