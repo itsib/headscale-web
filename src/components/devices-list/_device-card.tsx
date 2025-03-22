@@ -5,7 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { FormattedDuration } from '@app-components/formatters/formatted-duration';
 import { Marker } from '@app-components/marker/marker';
 import { AclTag } from '@app-components/acl-tag/acl-tag';
-import { DeviceContextMenu } from './_device-context-menu';
+import { ContextMenu } from './_context-menu';
 import './_device-card.css';
 
 type DeviceCardProps = ContextMenuBase<DeviceAction> & Device;
@@ -38,7 +38,7 @@ export const DeviceCard = memo(function DeviceItem(props: DeviceCardProps) {
           </div>
         </div>
 
-        <DeviceContextMenu onAction={onAction} />
+        <ContextMenu onAction={onAction} />
       </div>
 
       {user.name ? (

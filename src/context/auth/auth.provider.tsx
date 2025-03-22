@@ -6,8 +6,8 @@ import { Credentials, TokenType } from '@app-types';
 import { useCallback, useEffect } from 'react';
 import { AuthForm } from '@app-components/auth-form/auth-form.tsx';
 import { fetchFn } from '@app-utils/query-fn.ts';
-import { joinUrl } from '@app-utils/join-url.ts';
 import { removeCredentials, setCredentials } from '@app-utils/credentials.ts';
+import { joinUrl } from '@app-utils/join-url.ts';
 
 export const AuthProvider: FunctionComponent = ({ children }) =>  {
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
@@ -23,7 +23,9 @@ export const AuthProvider: FunctionComponent = ({ children }) =>  {
   }, [storage]);
 
   async function submit(values: Credentials) {
-    await fetchFn(joinUrl(values.base, '/api/v1/node'), { method: 'GET' }, values.token, values.tokenType);
+    const url = joinUrl(values.base, '/api/v1/node');
+
+    await fetchFn(url, { method: 'GET' }, values.token, values.tokenType);
 
     await setCredentials(storage, { ...values });
     setPrefix(values.token.split('.')[0]);

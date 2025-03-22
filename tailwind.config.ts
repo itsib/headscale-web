@@ -10,21 +10,25 @@ export default {
       primary: 'rgb(var(--bg-primary) / <alpha-value>)',
       secondary: 'rgb(var(--bg-secondary) / <alpha-value>)',
       skeleton: 'rgb(var(--bg-skeleton) / <alpha-value>)',
+      error: 'rgb(var(--error) / <alpha-value>)',
     }),
     borderColor: ({ theme }) => ({
       ...theme('colors'),
       accent: 'rgb(var(--accent) / <alpha-value>)',
       primary: 'rgb(var(--border-primary) / <alpha-value>)',
       secondary: 'rgb(var(--border-secondary) / <alpha-value>)',
+      error: 'rgb(var(--error) / <alpha-value>)',
     }),
     textColor: ({ theme }) => ({
       ...theme('colors'),
       accent: 'rgb(var(--accent) / <alpha-value>)',
       primary: 'rgb(var(--text-primary) / <alpha-value>)',
       secondary: 'rgb(var(--text-secondary) / <alpha-value>)',
+      error: 'rgb(var(--error) / <alpha-value>)',
     }),
     extend: {
       colors: {
+        error: 'rgb(var(--error) / <alpha-value>)',
         blue: {
           '50': 'rgb(var(--blue-50) / <alpha-value>)',
           '100': 'rgb(var(--blue-100) / <alpha-value>)',
@@ -68,6 +72,7 @@ export default {
       container: {
         center: true,
         screens: {
+          default: '96vw',
           'sm': '100%',
           'md': '100%',
           'lg': '96%',
@@ -75,7 +80,7 @@ export default {
           '2xl': '1536px',
         },
         padding: {
-          DEFAULT: '1rem',
+          DEFAULT: '0.5rem',
           sm: '2rem',
           lg: '4rem',
           xl: '5rem',

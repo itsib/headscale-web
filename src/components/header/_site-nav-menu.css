@@ -18,7 +18,6 @@
       height: 3px;
       background-color: rgb(var(--accent));
       position: absolute;
-      transition: width .15s ease-in;
     }
 
     &:hover {
@@ -46,6 +45,7 @@
       &:after {
         bottom: -18px;
         left: -4px;
+        transition: width .15s ease-in;
       }
 
       &.active:after {
@@ -55,15 +55,14 @@
   }
 
   &.mobile {
-    height: 28px;
     padding: 1rem 0;
     flex-direction: column;
-    gap: 1.2rem;
 
     .nav-link {
-      margin: 4px 0;
-      padding: 0 20px;
+      margin: 0;
+      padding: 12px 20px;
       font-size: 18px;
+      position: relative;
 
       .icon {
         width: 20px;
@@ -73,12 +72,19 @@
       }
 
       &:after {
-        bottom: -12px;
+        bottom: 0;
         left: 0;
+        width: 3px;
+        height: 0;
       }
 
-      &.active:after {
-        width: 100%;
+      &.active {
+        background-color: rgb(var(--accent) / .1);
+        color: rgb(var(--text-primary));
+
+        &:after {
+          height: 100%;
+        }
       }
     }
   }

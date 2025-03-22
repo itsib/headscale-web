@@ -4,7 +4,7 @@
   "address": "Адрес",
   "api_access_tokens": "Токены Доступа к API",
   "api_access_tokens_subtitle": "Токены доступа дают возможность управлять Headscale по специалному API интерфейсу.",
-  "api_key": "API Ключ",
+  "keys_and_tokens": "Ключи и Токены",
   "api_key_subtitle": "Просмотр и управление вашими ключами авторизации и токенами доступа.",
   "api_token": "API Токен",
   "api_token_token_created_about_copy": "Be sure to copy your new API token below. It won’t be shown in full again.",

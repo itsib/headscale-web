@@ -16,7 +16,7 @@ export const METRICS_TOKEN_TYPES: SelectOption[] = [
   {
     value: 'Bearer',
     label: 'Bearer/JWT Token',
-    icon: 'icon icon-jwt',
+    icon: 'icon icon-key',
   },
   {
     value: 'apiKey',

@@ -1,12 +1,14 @@
-import { useState } from 'preact/hooks';
+import { useState, useMemo } from 'preact/hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApiTokenItem, ContextAction } from './-api-token-item';
 import { ApiToken } from '@app-types';
 import { useApiTokens } from '@app-hooks/use-api-tokens';
-import { ListLoading } from '@app-components/skeleton/list-loading';
 import { ModalApiTokenCreate } from '@app-components/modals/modal-api-token-create/modal-api-token-create';
 import { ModalApiTokenExpire } from '@app-components/modals/modal-api-token-expire/modal-api-token-expire';
 import { ModalApiTokenDelete } from '@app-components/modals/modal-api-token-delete/modal-api-token-delete';
+import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group';
+import { EmptyList } from '@app-components/empty-list/empty-list.tsx';
+import { KeysLoading } from '@app-components/skeleton/keys-loading.tsx';
 
 export const ApiTokens = () => {
   const { t } = useTranslation();
@@ -15,24 +17,41 @@ export const ApiTokens = () => {
   const [opened, setOpened] = useState<ContextAction | null>(null);
   const [selected, setSelected] = useState<ApiToken | null>(null);
 
+  const buttons: ButtonConfig[] = useMemo(() => {
+    return [
+      {
+        id: 'add-token',
+        icon: 'icon-key-plus',
+        tooltip: t('add_api_token'),
+        effect: 'icon-shake',
+      },
+    ];
+  }, [t]);
+
+  async function onClick(id: string) {
+    switch (id) {
+      case 'add-token':
+        return setOpened('create');
+    }
+  }
+
   return (
     <>
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h2 className="mb-2"><Trans i18nKey="api_access_tokens"/></h2>
-          <p className="text-secondary"><Trans i18nKey="api_access_tokens_subtitle"/></p>
+          <h2 className="mb-2">
+            <Trans i18nKey="api_access_tokens"/>
+          </h2>
+          <p className="text-secondary">
+            <Trans i18nKey="api_access_tokens_subtitle"/>
+          </p>
         </div>
 
-        <button type="button" className="btn btn-accent flex items-center gap-2" onClick={() => setOpened('create')}>
-          <i className="icon icon-key-plus text-lg text-white"/>
-          <span className="font-medium text-white">
-            <Trans i18nKey="generate_access_token"/>
-          </span>
-        </button>
+        <ButtonGroup buttons={buttons} onClick={onClick} />
       </div>
 
       {isLoading ? (
-        <ListLoading count={3} />
+        <KeysLoading />
       ) : apiTokens?.length ? (
         <div className="overflow-x-auto lg:overflow-x-hidden">
           <table className="w-full table-auto border-spacing-px">
@@ -60,9 +79,7 @@ export const ApiTokens = () => {
           </table>
         </div>
       ) : (
-        <div className="border-primary border rounded-md p-8 text-center">
-          <Trans i18nKey="no_api_tokens"/>
-        </div>
+        <EmptyList message="no_api_tokens" />
       )}
 
       <ModalApiTokenCreate

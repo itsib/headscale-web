@@ -1,10 +1,9 @@
 import { memo, useMemo } from 'react';
 import { ApiToken } from '@app-types';
 import { Trans } from 'react-i18next';
-import { ContextMenu } from '@app-components/popups/context-menu.tsx';
-import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
-import { FormattedDate } from '@app-components/formatters/formatted-date.tsx';
-import { FormattedDuration } from '@app-components/formatters/formatted-duration.tsx';
+import { FormattedDate } from '@app-components/formatters/formatted-date';
+import { FormattedDuration } from '@app-components/formatters/formatted-duration';
+import { BtnContextMenu, PopupPlacement } from '@app-components/btn-context-menu';
 
 export type ContextAction = 'expire' | 'delete' | 'create';
 
@@ -54,7 +53,7 @@ export const ApiTokenItem = memo(function ApiTokenItem(props: ApiTokenItemProps)
         )}
       </td>
       <td className="text-right w-[52px]">
-        <ContextMenu placement={PopupPlacement.BOTTOM}>
+        <BtnContextMenu placement={PopupPlacement.BOTTOM}>
           <div className="context-menu-item">
             <button type="button" className="btn-context-menu" onClick={() => onAction('expire')}>
               <Trans i18nKey="expire"/>
@@ -68,7 +67,7 @@ export const ApiTokenItem = memo(function ApiTokenItem(props: ApiTokenItemProps)
               <Trans i18nKey="delete"/>
             </button>
           </div>
-        </ContextMenu>
+        </BtnContextMenu>
       </td>
     </tr>
   );

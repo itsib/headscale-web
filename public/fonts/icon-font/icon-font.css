@@ -335,163 +335,111 @@ i.icon-avatar-9:before {
   content: "\ea0c";
 }
 
-i.icon-bearer:before {
+i.icon-check:before {
   content: "\ea0d";
 }
 
-i.icon-check:before {
+i.icon-close:before {
   content: "\ea0e";
 }
 
-i.icon-close:before {
+i.icon-context-menu:before {
   content: "\ea0f";
 }
 
-i.icon-context-menu:before {
+i.icon-copy:before {
   content: "\ea10";
 }
 
-i.icon-copy:before {
+i.icon-dropdown:before {
   content: "\ea11";
 }
 
-i.icon-dropdown:before {
+i.icon-edit-code:before {
   content: "\ea12";
 }
 
-i.icon-edit-code:before {
+i.icon-eye:before {
   content: "\ea13";
 }
 
-i.icon-edit-url:before {
+i.icon-key:before {
   content: "\ea14";
 }
 
-i.icon-expire:before {
+i.icon-key-plus:before {
   content: "\ea15";
 }
 
-i.icon-eye:before {
+i.icon-keys:before {
   content: "\ea16";
 }
 
-i.icon-gear:before {
+i.icon-laptop:before {
   content: "\ea17";
 }
 
-i.icon-info:before {
+i.icon-layout-cards:before {
   content: "\ea18";
 }
 
-i.icon-json:before {
+i.icon-layout-cards-copy:before {
   content: "\ea19";
 }
 
-i.icon-jwt:before {
+i.icon-layout-list:before {
   content: "\ea1a";
 }
 
-i.icon-key:before {
+i.icon-layout-list-copy:before {
   content: "\ea1b";
 }
 
-i.icon-key-plus:before {
+i.icon-lock:before {
   content: "\ea1c";
 }
 
-i.icon-keys:before {
+i.icon-logout:before {
   content: "\ea1d";
 }
 
-i.icon-laptop:before {
+i.icon-metrics:before {
   content: "\ea1e";
 }
 
-i.icon-layout-cards:before {
+i.icon-moon:before {
   content: "\ea1f";
 }
 
-i.icon-layout-list:before {
+i.icon-refresh:before {
   content: "\ea20";
 }
 
-i.icon-list-search:before {
+i.icon-settings:before {
   content: "\ea21";
 }
 
-i.icon-lock:before {
+i.icon-sun:before {
   content: "\ea22";
 }
 
-i.icon-logout:before {
+i.icon-sun-moon:before {
   content: "\ea23";
 }
 
-i.icon-machine:before {
+i.icon-tag-add:before {
   content: "\ea24";
 }
 
-i.icon-metrics:before {
+i.icon-timer:before {
   content: "\ea25";
 }
 
-i.icon-moon:before {
+i.icon-timer-cross:before {
   content: "\ea26";
 }
 
-i.icon-pc:before {
-  content: "\ea27";
-}
-
-i.icon-profile:before {
-  content: "\ea28";
-}
-
-i.icon-random:before {
-  content: "\ea29";
-}
-
-i.icon-refresh:before {
-  content: "\ea2a";
-}
-
-i.icon-search:before {
-  content: "\ea2b";
-}
-
-i.icon-server:before {
-  content: "\ea2c";
-}
-
-i.icon-settings:before {
-  content: "\ea2d";
-}
-
-i.icon-spinner:before {
-  content: "\ea2e";
-}
-
-i.icon-star:before {
-  content: "\ea2f";
-}
-
-i.icon-star-o:before {
-  content: "\ea30";
-}
-
-i.icon-sun:before {
-  content: "\ea31";
-}
-
-i.icon-sun-moon:before {
-  content: "\ea32";
-}
-
-i.icon-tag-add:before {
-  content: "\ea33";
-}
-
 i.icon-users:before {
-  content: "\ea34";
+  content: "\ea27";
 }
 

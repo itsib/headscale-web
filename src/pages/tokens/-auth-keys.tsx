@@ -1,13 +1,14 @@
 import { useMemo, useState } from 'preact/hooks';
-import { Checkbox } from 'react-just-ui/checkbox';
 import { AuthKeyWithUser } from '@app-types';
 import { Trans, useTranslation } from 'react-i18next';
 import { useAuthKeys } from '@app-hooks/use-auth-keys';
-import { ListLoading } from '@app-components/skeleton/list-loading';
 import { ModalAuthKeyCreate } from '@app-components/modals/modal-auth-key-create/modal-auth-key-create';
 import { ModalAuthKeyExpire } from '@app-components/modals/modal-auth-key-expire/modal-auth-key-expire';
 import { ContextAction } from './-api-token-item';
 import { AuthKeyItem } from './-auth-key-item';
+import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group.tsx';
+import { EmptyList } from '@app-components/empty-list/empty-list.tsx';
+import { KeysLoading } from '@app-components/skeleton/keys-loading.tsx';
 
 export const AuthKeys = () => {
   const { t } = useTranslation();
@@ -23,6 +24,36 @@ export const AuthKeys = () => {
 
   const list = isShowExpired ? authKeys : activeAuthKeys;
 
+  const enableIsShowExpired = authKeys && activeAuthKeys && authKeys.length !== activeAuthKeys.length;
+
+  const buttons: ButtonConfig[] = useMemo(() => {
+    const button = enableIsShowExpired ? [{
+      id: 'toggle-show-expired',
+      icon: isShowExpired ? 'icon-timer-cross' : 'icon-timer',
+      tooltip: t('show_expired_auth_keys'),
+      effect: 'icon-shake',
+    }] : [];
+
+    return [
+      ...button,
+      {
+        id: 'add-auth-key',
+        icon: 'icon-key-plus',
+        tooltip: t('generate_auth_key'),
+        effect: 'icon-shake',
+      },
+    ];
+  }, [t, isShowExpired, enableIsShowExpired]);
+
+  async function onClick(id: string) {
+    switch (id) {
+      case 'add-auth-key':
+        return setOpened('create');
+      case 'toggle-show-expired':
+        return setIsShowExpired(i => !i);
+    }
+  }
+
   return (
     <>
       <div className="flex justify-between items-center mb-4">
@@ -31,15 +62,10 @@ export const AuthKeys = () => {
           <p className="text-secondary"><Trans i18nKey="auth_keys_subtitle"/></p>
         </div>
 
-        <button type="button" className="btn btn-accent flex items-center gap-2" onClick={() => setOpened('create')}>
-          <i className="icon icon-key-plus text-lg text-white"/>
-          <span className="font-medium text-white">
-            <Trans i18nKey="generate_auth_key"/>
-          </span>
-        </button>
+        <ButtonGroup buttons={buttons} onClick={onClick} />
       </div>
       {isLoading ? (
-        <ListLoading count={3} />
+        <KeysLoading />
       ) : list?.length ? (
         <div className="overflow-x-auto lg:overflow-x-hidden">
           <table className="w-full min-w-[860px] table-auto border-spacing-px">
@@ -69,23 +95,8 @@ export const AuthKeys = () => {
           </table>
         </div>
       ) : (
-        <div className="border-primary border rounded-md p-8 text-center">
-          <Trans i18nKey="no_auth_keys"/>
-        </div>
+        <EmptyList message="no_auth_keys" />
       )}
-
-      {authKeys && activeAuthKeys && authKeys.length !== activeAuthKeys.length ? (
-        <div className="mt-6 -mr-2">
-          <Checkbox
-            id="show-expired-auth-keys"
-            label={t('show_expired_auth_keys')}
-            rowReverse
-            className="justify-end"
-            checked={isShowExpired}
-            onChange={() => setIsShowExpired(!isShowExpired)}
-          />
-        </div>
-      ) : null}
 
       <ModalAuthKeyCreate
         isOpen={opened === 'create'}

@@ -1,0 +1,58 @@
+.toast-fetching-spinner {
+  right: 0;
+  bottom: 0;
+  width: 100px;
+  height: 60px;
+  position: fixed;
+  overflow: hidden;
+
+  .vertical-transition {
+    top: 66px;
+    position: absolute;
+    transition: top .3s linear;
+    will-change: top;
+
+    .spinner {
+      color: rgb(var(--accent));
+      animation: toast-spin-animation .5s linear infinite;
+    }
+  }
+
+  &.show {
+
+    .vertical-transition {
+      top: 0;
+    }
+  }
+}
+
+.toast-fetching-line {
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  width: 0;
+  opacity: .8;
+  background-color: rgb(var(--accent));
+  will-change: width;
+  position: fixed;
+  transition: width 3s ease-out;
+
+  &.show-in {
+    width: 85%;
+  }
+
+  &.show-out {
+    transition: width .5s ease-in;
+    width: 100%;
+  }
+}
+
+@keyframes toast-spin-animation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

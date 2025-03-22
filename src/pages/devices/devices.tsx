@@ -1,6 +1,6 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { useMemo, useState } from 'preact/hooks';
-import { Device, DeviceAction } from '@app-types';
+import { Device, DeviceAction, ListLayout } from '@app-types';
 import { ModalNodeCreate } from '@app-components/modals/modal-node-create/modal-node-create';
 import { fetchWithContext } from '@app-utils/query-fn';
 import { ModalNodeRename } from '@app-components/modals/modal-node-rename/modal-node-rename';
@@ -25,8 +25,9 @@ export function Devices() {
   const [selected, setSelected] = useState<Device | null>(null);
 
   const isMobile = useBreakPoint(992);
-  const [_isListLayout, setIsListLayout] = useState(true);
-  const isListLayout = !isMobile && _isListLayout;
+  const [_isTableLayout, setIsTableLayout] = useState(true);
+  const isTableLayout = !isMobile && _isTableLayout;
+  const layout: ListLayout = isTableLayout ? 'table' : 'cards';
 
   const { data: devices, isLoading, refetch } = useQuery({
     queryKey: ['/api/v1/node', 'GET'],
@@ -46,9 +47,9 @@ export function Devices() {
     const buttons = isMobile ? [] : [
       {
         id: 'set-layout',
-        icon: isListLayout ? 'icon-layout-cards' : 'icon-layout-list',
+        icon: isTableLayout ? 'icon-layout-cards' : 'icon-layout-list',
         tooltip: t('layout_change'),
-        effect: 'icon-flip',
+        effect: 'icon-shake',
       },
     ];
 
@@ -67,7 +68,7 @@ export function Devices() {
         effect: 'icon-shake',
       },
     ];
-  }, [t, isMobile, isListLayout]);
+  }, [t, isMobile, isTableLayout]);
 
   async function onClick(id: string) {
     switch (id) {
@@ -76,7 +77,7 @@ export function Devices() {
       case 'refresh-devices':
         return refetch();
       case 'set-layout':
-        return setIsListLayout(value => !value);
+        return setIsTableLayout(value => !value);
     }
   }
 
@@ -100,7 +101,7 @@ export function Devices() {
       {isLoading ? (
         <ListLoading />
       ) : devices && devices?.length ? (
-        <DevicesList layout={isListLayout ? 'table' : 'cards'} devices={devices} onChange={setSelected} onAction={setOpened} />
+        <DevicesList layout={layout} devices={devices} onChange={setSelected} onAction={setOpened} />
       ) : (
         <EmptyList />
       )}

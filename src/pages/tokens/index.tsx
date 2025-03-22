@@ -8,7 +8,7 @@ export function Tokens() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="mb-2">
-            <Trans i18nKey="api_key" />
+            <Trans i18nKey="keys_and_tokens" />
           </h1>
           <p className="text-secondary">
             <Trans i18nKey="api_key_subtitle" />

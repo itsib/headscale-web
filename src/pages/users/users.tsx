@@ -45,7 +45,7 @@ export function Users() {
         id: 'set-layout',
         icon: isListLayout ? 'icon-layout-cards' : 'icon-layout-list',
         tooltip: t('layout_change'),
-        effect: 'icon-flip',
+        effect: 'icon-shake',
       },
     ];
 

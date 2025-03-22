@@ -11,7 +11,7 @@
   "config": {
     "name": "Headscale Web UI",
     "short-name": "Headscale Web",
-    "theme-color": "rgb(0 115 229)",
+    "theme-color": "rgb(31 30 30)",
     "background-color": "rgb(31 30 30)"
   },
   "private": false,

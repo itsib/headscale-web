@@ -8,7 +8,7 @@ import { AclTag } from '@app-components/acl-tag/acl-tag';
 import { IpAddresses } from '@app-components/ip-addresses/ip-addresses';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { Marker } from '@app-components/marker/marker';
-import { DeviceContextMenu } from './_device-context-menu';
+import { ContextMenu } from './_context-menu';
 
 type DeviceTableRowProps = ContextMenuBase<DeviceAction> & Device;
 
@@ -63,7 +63,7 @@ export const DeviceTableRow = memo(function DeviceTableRow(props: DeviceTableRow
         <FormattedDate iso={lastSeen} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
       </td>
       <td>
-        <DeviceContextMenu onAction={onAction} />
+        <ContextMenu onAction={onAction} />
       </td>
     </tr>
   );

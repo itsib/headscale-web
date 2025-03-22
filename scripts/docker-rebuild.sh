@@ -10,8 +10,8 @@ docker container stop "$NAME"
 docker container rm "$NAME"
 docker image rm "$IMAGE"
 
-docker build -f Dockerfile -t "$IMAGE" .
+docker build -f Dockerfile -t sergeyitsib/headscale-web .
 
 #docker run --detach --name "$NAME" --cap-add=NET_ADMIN -p 80:80 -p 443:443 -p 443:443/udp -e HOST="ui.itsib.su" "$IMAGE"
 
-#docker run --detach --name "$NAME" -p 8080:80 "$IMAGE"
+#docker run --detach --name headscale-web -p 8080:80 sergeyitsib/headscale-web

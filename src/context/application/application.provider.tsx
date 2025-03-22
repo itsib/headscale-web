@@ -5,8 +5,8 @@ import { useRegisterSW } from 'virtual:pwa-register/react';
 import { getActiveTheme, Theme } from '@app-utils/theme';
 import { StorageAsync } from '@app-utils/storage';
 import { ToastOffline } from '@app-components/toast-offline/toast-offline';
-import { ToastIsFetching } from '@app-components/toast-is-fetching/toast-is-fetching.tsx';
 import { useIsFetching } from '@tanstack/react-query';
+import { ToastFetching } from '@app-components/toast-fetching';
 
 export interface ApplicationProviderProps {
   storage: StorageAsync;
@@ -76,7 +76,8 @@ export const ApplicationProvider: FunctionComponent<ApplicationProviderProps> = 
   return (
     <ApplicationContext.Provider value={{ theme, updateTheme, isOffLine, storage }}>
       <ToastOffline isShow={isOffLine} />
-      <ToastIsFetching isShow={!!isFetching} />
+      <ToastFetching isShow={!!isFetching} />
+
       {children}
     </ApplicationContext.Provider>
   )

@@ -1,19 +1,23 @@
 import { FunctionComponent } from 'preact';
-import { useEffect, useRef, useState } from 'preact/hooks';
-import { BasePopup, PopupPlacement } from '@app-components/popups/base-popup/base-popup';
-import './context-menu.css';
 import { cn } from 'react-just-ui/utils/cn';
+import { BasePopup, PopupPlacement } from '@app-components/popups/base-popup/base-popup.tsx';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import './btn-context-menu.css';
 
-export interface ContextMenuProps {
+export { PopupPlacement };
+
+export interface BtnContextMenuProps {
   /**
    * The position of the window relative to the anchor
    */
   placement?: PopupPlacement;
 
   icon?: string;
+
+  btnClassName?: string;
 }
 
-export const ContextMenu: FunctionComponent<ContextMenuProps> = ({ placement, icon, children }) => {
+export const BtnContextMenu: FunctionComponent<BtnContextMenuProps> = ({ btnClassName, icon, placement, children }) => {
   const menuRef = useRef<HTMLMenuElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -74,10 +78,10 @@ export const ContextMenu: FunctionComponent<ContextMenuProps> = ({ placement, ic
         role="menu"
         aria-label="Open context menu"
         type="button"
-        className="inline-block text-neutral-300 dark:text-neutral-600 opacity-90 relative top-[2px] transition hover:opacity-60 hover:text-accent active:opacity-90"
+        className={cn('btn btn-open-context-menu', btnClassName)}
         ref={buttonRef}
       >
-        <i className={cn('icon text-[24px]', icon || 'icon-context-menu')} />
+        <i className={cn('icon', icon || 'icon-context-menu')} />
       </button>
       <BasePopup rect={rect} open={isOpen} placement={placement}>
         <menu role="menu" className="popup context-menu" ref={menuRef} onClick={e => e.stopPropagation()}>

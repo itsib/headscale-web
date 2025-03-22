@@ -1,10 +1,9 @@
 import { FunctionComponent } from 'preact';
-import { PopupPlacement } from '@app-components/popups/base-popup/base-popup.tsx';
-import { ContextMenu } from '@app-components/popups/context-menu.tsx';
 import { Trans, useTranslation } from 'react-i18next';
 import { useTheme } from '@app-hooks/use-theme.ts';
 import { useCredentials } from '@app-hooks/use-credentials.ts';
 import { Theme } from '@app-utils/theme.ts';
+import { BtnContextMenu, PopupPlacement } from '@app-components/btn-context-menu';
 import './btn-config.css';
 
 export const BtnConfig: FunctionComponent = () => {
@@ -14,7 +13,7 @@ export const BtnConfig: FunctionComponent = () => {
 
   return (
     <div className="btn-config-wrapper">
-      <ContextMenu placement={PopupPlacement.BOTTOM} icon="icon-settings">
+      <BtnContextMenu placement={PopupPlacement.BOTTOM} icon="icon-settings">
         <div className="context-menu-item">
           <div className="px-[16px] py-[6px]">
             <div className="text-sm text-primary font-medium cursor-pointer">
@@ -110,7 +109,7 @@ export const BtnConfig: FunctionComponent = () => {
             <span><Trans i18nKey="disconnect"/></span>
           </button>
         </div>
-      </ContextMenu>
+      </BtnContextMenu>
     </div>
   )
 }

@@ -16,7 +16,7 @@ export const SiteNavMenu: FunctionComponent<SiteNavMenuProps> = ({ onClick, layo
   return (
     <nav className={cn('site-nav-menu', layout)}>
       <a href="/devices" className={cn('nav-link', { active: path.startsWith('/devices') })} onClick={onClick}>
-        <i className="icon icon-connection"/>
+        <i className="icon icon-laptop"/>
         <span className="label">{t('devises')}</span>
       </a>
       <a href="/users" className={cn('nav-link', { active: path.startsWith('/users') })} onClick={onClick}>

@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { ListLoading } from '@app-components/skeleton/list-loading';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from 'react-just-ui/utils/cn';
 import { useLocation } from 'preact-iso/router';
@@ -8,6 +7,7 @@ import { EditFile } from './edit-file';
 import { Preview } from './preview';
 import { fetchWithContext } from '@app-utils/query-fn';
 import { useStorage } from '@app-hooks/use-storage';
+import { EditorLoading } from '@app-components/skeleton/editor-loading';
 import './index.css';
 
 export default function Acl() {
@@ -66,7 +66,7 @@ export default function Acl() {
       )}
 
       {isLoading ? (
-        <ListLoading/>
+        <EditorLoading />
       ) : path === '/acl/edit-file' ? (
         <EditFile policy={policy} />
       ) : path === '/acl/preview' ? (

@@ -72,6 +72,8 @@
   --bg-toast-danger: 147 3 3;
   --border-popover: 218 214 213;
 
+  --error: 220 38 38;
+
   /* JSON editor highlight */
   --code-highlight-number: #1c86c6;
   --code-highlight-string: #22782c;
@@ -103,7 +105,7 @@ html.dark {
 
   /** Text */
   --text-primary: 255 255 255;
-  --text-secondary: 180 180 180; /** #C8C8C8 */
+  --text-secondary: 126 129 131; /** #C8C8C8 */
 
   /** Context menu popover */
   --bg-popover: 31 30 30;
@@ -197,7 +199,7 @@ html.dark {
   }
 
   .monospace {
-    font-family: SFMono, monospace;
+    font-family: JetBrainsMono, monospace;
     font-optical-sizing: auto;
     text-rendering: optimizeLegibility;
     font-variation-settings: "wdth" 98;

@@ -1,9 +1,35 @@
+.btn-open-context-menu {
+  --context-btn-icon-size: 1.6rem;
+  --context-btn-padding: 0.2rem;
+  --context-btn-size: calc(var(--context-btn-icon-size) + (var(--context-btn-padding) * 2) + 2px);
+
+  height: var(--context-btn-size);
+  width: var(--context-btn-size);
+  aspect-ratio: 1/1;
+  padding: var(--context-btn-padding);
+  line-height: 1;
+  font-size: var(--context-btn-icon-size);
+  color: rgb(var(--text-secondary) / .8);
+  text-shadow: 0 0 0 rgb(var(--text-primary) / 0), 0 0 0 rgb(var(--bg-primary) / 0);
+  transition: text-shadow .2s ease, color .2s ease;
+
+  &:hover {
+    color: rgb(var(--text-primary) / .8);
+  }
+
+  &:active {
+    text-shadow: 0 0 4px rgb(var(--bg-primary) / .8), 0 0 3px rgb(var(--text-primary) / .8);
+  }
+}
+
 .context-menu {
   min-width: 180px;
   padding: 10px 0;
+  color: rgb(var(--text-primary));
   background-color: rgb(var(--bg-popover) / 1);
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / .3), 0 2px 4px -2px rgb(0 0 0 / .3), 0 -2px 4px -2px rgb(0 0 0 / .3);
   border-radius: .5rem;
+  border: 1px solid rgb(var(--border-primary) / 1);
   overflow: hidden;
 
   .context-menu-item {

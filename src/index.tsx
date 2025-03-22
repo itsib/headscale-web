@@ -50,14 +50,14 @@ function showAppVersion() {
 
 async function init() {
   const { Application } = await import('./pages/application.tsx');
-  const rootElement = document.getElementById('root')!
+  const rootElement = document.getElementById('root')!;
 
   render(
     <PersistQueryClientProvider client={queryClient} persistOptions={{ persister: createPersister(), buster: BUILD_ID }}>
       <ApplicationProvider storage={storage}>
         <AuthProvider>
           <LocationProvider>
-            <Application />
+            <Application/>
           </LocationProvider>
         </AuthProvider>
       </ApplicationProvider>
@@ -67,4 +67,5 @@ async function init() {
 }
 
 showAppVersion();
+
 init();
