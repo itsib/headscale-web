@@ -5,7 +5,7 @@ export interface ErrorBoundaryState {
   error: Error | string | null | any;
 }
 
-export class ErrorBoundary extends Component<{}, ErrorBoundaryState> {
+export class ErrorBoundary extends Component<unknown, ErrorBoundaryState> {
   state: ErrorBoundaryState = { error: null };
 
   static getDerivedStateFromError(error: any) {
