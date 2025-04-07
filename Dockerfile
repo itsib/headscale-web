@@ -11,6 +11,7 @@ RUN npm install -g npm@latest && npm ci
 COPY public/ /usr/web/public/
 COPY src/ /usr/web/src/
 COPY icons/ /usr/web/icons/
+COPY scripts/copy.mjs /usr/web/scripts/
 COPY tailwind.config.ts \
      tsconfig.* \
      vite.config.ts \
