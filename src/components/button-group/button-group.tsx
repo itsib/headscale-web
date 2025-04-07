@@ -1,5 +1,6 @@
-import { Component } from 'preact';
+import { memo } from 'preact/compat';
 import { cn } from 'react-just-ui/utils/cn';
+import { useCallback } from 'preact/hooks';
 import './button-group.css';
 
 export interface ButtonConfig {
@@ -14,56 +15,57 @@ export interface ButtonGroupProps {
   onClick?: (id: string) => void;
 }
 
-export class ButtonGroup extends Component<ButtonGroupProps> {
-
-  shouldComponentUpdate(nextProps: ButtonGroupProps) {
-    this.props.onClick = nextProps.onClick;
-
-    if (this.props.buttons.length !== nextProps.buttons.length) {
-      return true;
-    }
-
-    return this.props.buttons.some(({ id, effect, icon }, i) => {
-      const nextBtm = nextProps.buttons[i];
-      if (!nextBtm) return true;
-
-      return nextBtm.id !== id || nextBtm.effect !== effect || nextBtm.icon !== icon;
-    });
+function comparator(prev: ButtonGroupProps, next: ButtonGroupProps): boolean {
+  if (prev.buttons.length !== next.buttons.length) {
+    return false;
   }
 
-  onClick(event: MouseEvent) {
+  for (let i = 0; i < prev.buttons.length; i++) {
+    const prevBtn = prev.buttons[i];
+    const nextBtn = next.buttons[i];
+
+    if (prevBtn.id !== nextBtn.id || prevBtn.effect !== nextBtn.effect || prevBtn.icon !== nextBtn.icon) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export const ButtonGroup = memo(function ButtonGroup(props: ButtonGroupProps) {
+  const onClick = useCallback((event: MouseEvent) => {
     const button = event.target as HTMLButtonElement;
+    const id = button?.id;
     const icon = button?.firstChild as HTMLElement;
-    const config = this.props.buttons.find(({ id }) => id === button.id);
+    const effect = button?.dataset.effect;
 
-    if (!icon || !config || !this.props.onClick) return;
+    if (!id || !icon || !props.onClick) return;
 
-    if (config.effect) {
-      icon.classList.add(config.effect);
+    if (effect) {
+      icon.classList.add(effect);
       const [animation] = icon.getAnimations();
       animation.play();
     }
 
-    this.props.onClick(config.id);
-  }
+    props.onClick(id);
+  }, [props.onClick]);
 
-  render({ buttons }: ButtonGroupProps) {
-    return (
-      <div className="button-group">
-        {buttons.map(button => (
-          <button
-            key={button.id}
-            id={button.id}
-            type="button"
-            className="btn btn-icon"
-            aria-label={button.tooltip}
-            role="command"
-            onClick={this.onClick.bind(this)}
-          >
-            <i className={cn('icon', button.icon)} />
-          </button>
-        ))}
-      </div>
-    );
-  }
-}
+  return (
+    <div className="button-group">
+      {props.buttons.map(button => (
+        <button
+          key={button.id}
+          id={button.id}
+          type="button"
+          className="btn btn-icon"
+          aria-label={button.tooltip}
+          role="command"
+          data-effect={button.effect}
+          onClick={onClick}
+        >
+          <i className={cn('icon', button.icon)} />
+        </button>
+      ))}
+    </div>
+  );
+}, comparator);

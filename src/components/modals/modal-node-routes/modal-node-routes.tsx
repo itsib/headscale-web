@@ -1,14 +1,14 @@
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { Device } from '../../../types';
-import { FC, useContext, useEffect, useMemo, useState } from 'react';
+import { Device } from '@app-types';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import { ModalNodeExpireProps } from '../modal-node-expire/modal-node-expire.tsx';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNodeRoutes } from '@app-hooks/use-node-routes';
 import { Checkbox } from 'react-just-ui/checkbox';
 import { useMutation } from '@tanstack/react-query';
-import { fetchWithContext } from '@app-utils/query-fn.ts';
+import { fetchFn } from '@app-utils/query-fn.ts';
 import { isExitNodeRoute } from '@app-utils/is-exit-node-route';
-import { ApplicationContext } from '@app-context/application';
+import { FunctionComponent } from 'preact';
 import './modal-node-routes.css';
 
 export interface ModalNodeRoutesProps extends ModalProps {
@@ -21,7 +21,7 @@ interface RequestData {
   routeId: string;
 }
 
-export const ModalNodeRoutes: FC<ModalNodeRoutesProps> = ({ isOpen, onDismiss, node, ...props }) => {
+export const ModalNodeRoutes: FunctionComponent<ModalNodeRoutesProps> = ({ isOpen, onDismiss, node, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {node ? <ModalContent onDismiss={onDismiss} node={node} {...props} /> : null}
@@ -29,12 +29,11 @@ export const ModalNodeRoutes: FC<ModalNodeRoutesProps> = ({ isOpen, onDismiss, n
   );
 };
 
-const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: Device }> = props => {
+const ModalContent: FunctionComponent<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: Device }> = props => {
   const { t } = useTranslation();
   const [checkboxes, setCheckboxes] = useState<{ [routeId: string]: boolean }>({});
   const [exitNode, setExitNode] = useState(false);
   const [changed, setChanged] = useState(false);
-  const { storage } = useContext(ApplicationContext);
   const { onDismiss, onSuccess, node } = props;
 
   const { data: routes, isLoading } = useNodeRoutes(node.id);
@@ -49,9 +48,9 @@ const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: D
   const { mutate, isPending } = useMutation({
     mutationFn: async (variables: RequestData[]) => {
       return await Promise.all(variables.map(({ enable, routeId }) => {
-        return fetchWithContext(`/api/v1/routes/${routeId}/${enable ? 'enable' : 'disable'}`, {
+        return fetchFn(`/api/v1/routes/${routeId}/${enable ? 'enable' : 'disable'}`, {
           method: 'POST',
-        }, storage);
+        });
       }));
     },
     onSuccess: () => {

@@ -1,13 +1,13 @@
-import { FC, useContext, useMemo, useState } from 'react';
+import { useMemo, useState } from 'preact/hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { fetchWithContext } from '@app-utils/query-fn';
+import { fetchFn } from '@app-utils/query-fn';
 import { Device } from '@app-types';
 import { AclTag } from '@app-components/acl-tag/acl-tag';
-import { ApplicationContext } from '@app-context/application';
+import { FunctionComponent } from 'preact';
 
 interface FormFields {
   tagName: string;
@@ -18,7 +18,7 @@ export interface ModalNodeTagsProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalNodeTags: FC<ModalNodeTagsProps> = ({ isOpen, onDismiss, node, ...props }) => {
+export const ModalNodeTags: FunctionComponent<ModalNodeTagsProps> = ({ isOpen, onDismiss, node, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {node ? <ModalContent onDismiss={onDismiss} node={node} {...props} /> : null}
@@ -26,9 +26,9 @@ export const ModalNodeTags: FC<ModalNodeTagsProps> = ({ isOpen, onDismiss, node,
   );
 };
 
-const ModalContent: FC<Omit<ModalNodeTagsProps, 'isOpen' | 'node'> & { node: Device }> = ({ onDismiss, onSuccess, node }) => {
+const ModalContent: FunctionComponent<Omit<ModalNodeTagsProps, 'isOpen' | 'node'> & { node: Device }> = ({ onDismiss, onSuccess, node }) => {
   const { t } = useTranslation();
-  const { storage } = useContext(ApplicationContext);
+ 
   const [tags, setTags] = useState<string[]>(node.forcedTags);
   const isDifferent = useMemo(() => {
     if (tags.length !== node.forcedTags.length) {
@@ -51,10 +51,10 @@ const ModalContent: FC<Omit<ModalNodeTagsProps, 'isOpen' | 'node'> & { node: Dev
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn({ id, tags }: { id: string, tags: string[] }) {
-      const data = await fetchWithContext<{ node: Device }>(`/api/v1/node/${id}/tags`, {
+      const data = await fetchFn<{ node: Device }>(`/api/v1/node/${id}/tags`, {
         method: 'POST',
         body: JSON.stringify({ tags })
-      }, storage);
+      });
       return data.node;
     },
     onSuccess: () => {

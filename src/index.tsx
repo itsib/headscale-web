@@ -1,28 +1,30 @@
+import 'preact/debug';
+
 import './i18n';
 
 import { LocationProvider } from 'preact-iso';
 import { render } from 'preact';
-import { QueryClient } from '@tanstack/react-query';
-import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from '@tanstack/react-query';
 import { ApplicationProvider } from '@app-context/application';
 import { AuthProvider } from '@app-context/auth';
-import { getDefaultQueryFn } from '@app-utils/query-fn';
-import { createPersister, createStorage } from '@app-utils/storage.ts';
+import { defaultQueryFn } from '@app-utils/query-fn';
 
 import 'react-just-ui/theme/minimal.css';
 import './index.css';
 
-const BUILD_ID = import.meta.env.BUILD_ID;
 const VERSION = import.meta.env.VERSION;
 const NODE_ENV = import.meta.env.NODE_ENV;
 
-const storage = createStorage('app');
-
 const queryClient = new QueryClient({
+  queryCache: new QueryCache(),
+  mutationCache: new MutationCache(),
   defaultOptions: {
     queries: {
       retry(failureCount: number, error: any) {
-        return failureCount <= 4 && error.code !== 401;
+        if (error.code === -1 || error.code === 401) {
+          return false;
+        }
+        return failureCount <= 3;
       },
       staleTime: 20_000,
       gcTime: 60_000,
@@ -30,7 +32,7 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: true,
       refetchOnMount: true,
       retryDelay: 3_000,
-      queryFn: getDefaultQueryFn(storage) as any,
+      queryFn: defaultQueryFn as any,
     },
   },
 });
@@ -53,15 +55,15 @@ async function init() {
   const rootElement = document.getElementById('root')!;
 
   render(
-    <PersistQueryClientProvider client={queryClient} persistOptions={{ persister: createPersister(), buster: BUILD_ID }}>
-      <ApplicationProvider storage={storage}>
+    <QueryClientProvider client={queryClient}>
+      <ApplicationProvider>
         <AuthProvider>
           <LocationProvider>
             <Application/>
           </LocationProvider>
         </AuthProvider>
       </ApplicationProvider>
-    </PersistQueryClientProvider>,
+    </QueryClientProvider>,
     rootElement,
   );
 }

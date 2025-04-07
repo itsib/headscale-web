@@ -1,17 +1,16 @@
-import { FC, useContext } from 'react';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
-import { AuthKeyWithUser, User } from '../../../types';
-import { fetchWithContext } from '../../../utils/query-fn.ts';
-import { ApplicationContext } from '@app-context/application';
+import { AuthKeyWithUser, User } from '@app-types';
+import { fetchFn } from '@app-utils/query-fn.ts';
+import { FunctionComponent } from 'preact';
 
 export interface ModalAuthKeyExpireProps extends ModalProps {
   authKey?: AuthKeyWithUser | null;
   onSuccess: () => void;
 }
 
-export const ModalAuthKeyExpire: FC<ModalAuthKeyExpireProps> = ({ isOpen, onDismiss, authKey, ...props }) => {
+export const ModalAuthKeyExpire: FunctionComponent<ModalAuthKeyExpireProps> = ({ isOpen, onDismiss, authKey, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {authKey ? <ModalContent onDismiss={onDismiss} authKey={authKey} {...props} /> : null}
@@ -19,17 +18,16 @@ export const ModalAuthKeyExpire: FC<ModalAuthKeyExpireProps> = ({ isOpen, onDism
   );
 };
 
-const ModalContent: FC<Omit<ModalAuthKeyExpireProps, 'isOpen' | 'authKey'> & { authKey: AuthKeyWithUser }> = props => {
+const ModalContent: FunctionComponent<Omit<ModalAuthKeyExpireProps, 'isOpen' | 'authKey'> & { authKey: AuthKeyWithUser }> = props => {
   const { onDismiss, onSuccess, authKey } = props;
-  const { storage } = useContext(ApplicationContext);
   const { t } = useTranslation();
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(values: { user: string, key: string }) {
-      const data = await fetchWithContext<{ user: User }>(`/api/v1/preauthkey/expire`, {
+      const data = await fetchFn<{ user: User }>(`/api/v1/preauthkey/expire`, {
         method: 'POST',
         body: JSON.stringify(values)
-      }, storage);
+      });
       return data.user;
     },
     onSuccess: () => {

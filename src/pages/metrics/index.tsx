@@ -3,9 +3,7 @@ import { ListLoading } from '@app-components/skeleton/list-loading';
 import { useLocation } from 'preact-iso/router';
 import { cn } from 'react-just-ui/utils/cn';
 import { useQuery } from '@tanstack/react-query';
-import { fetchWithContext } from '@app-utils/query-fn';
 import { REFRESH_INTERVAL } from '@app-config';
-import { useStorage } from '@app-hooks/use-storage';
 import { Redirect } from '@app-components/redirect/redirect';
 import { Formatted } from './formatted';
 import { Raw } from './raw';
@@ -14,17 +12,8 @@ import './index.css';
 export default function Metrics() {
   const { path } = useLocation();
 
-  const storage = useStorage();
-
-  const { data: metrics, isLoading, refetch } = useQuery({
+  const { data: metrics, isLoading, refetch } = useQuery<string>({
     queryKey: ['/metrics'],
-    queryFn: async ({ queryKey, signal }) => {
-      return await fetchWithContext<string>(
-        queryKey[0] as string,
-        { signal },
-        storage,
-      );
-    },
     staleTime: REFRESH_INTERVAL,
     refetchInterval: REFRESH_INTERVAL,
   });

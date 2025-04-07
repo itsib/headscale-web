@@ -1,13 +1,13 @@
-import { FC, useContext, useState } from 'react';
+import { useState } from 'preact/hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { fetchWithContext } from '@app-utils/query-fn';
+import { fetchFn } from '@app-utils/query-fn';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { BtnCopy } from '@app-components/btn-copy/btn-copy';
-import { ApplicationContext } from '@app-context/application';
+import { FunctionComponent } from 'preact';
 
 interface FormFields {
   expiration: number;
@@ -17,7 +17,7 @@ export interface ModalApiTokenCreateProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalApiTokenCreate: FC<ModalApiTokenCreateProps> = ({ isOpen, onDismiss, ...props }) => {
+export const ModalApiTokenCreate: FunctionComponent<ModalApiTokenCreateProps> = ({ isOpen, onDismiss, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <ModalContent onDismiss={onDismiss} {...props} />
@@ -25,9 +25,8 @@ export const ModalApiTokenCreate: FC<ModalApiTokenCreateProps> = ({ isOpen, onDi
   );
 };
 
-const ModalContent: FC<Omit<ModalApiTokenCreateProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
+const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
   const { t } = useTranslation();
-  const { storage } = useContext(ApplicationContext);
   const [newApiToken, setNewApiToken] = useState<string | undefined>();
   const [newApiTokenExpiry, setNewApiTokenExpiry] = useState<string | undefined>();
 
@@ -41,10 +40,10 @@ const ModalContent: FC<Omit<ModalApiTokenCreateProps, 'isOpen'>> = ({ onDismiss,
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(values: { expiration: string }) {
-      return await fetchWithContext<{ apiKey: string }>(`/api/v1/apikey`, {
+      return await fetchFn<{ apiKey: string }>(`/api/v1/apikey`, {
         method: 'POST',
         body: JSON.stringify(values),
-      }, storage);
+      });
     },
     onSuccess: (result, values) => {
       setNewApiToken(result.apiKey);

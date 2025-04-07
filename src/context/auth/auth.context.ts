@@ -1,9 +1,9 @@
 import { createContext } from 'preact';
 
 export interface IAuthContext {
-  isAuthorized: boolean;
   prefix?: string;
   base?: string;
+  isAuthorized: boolean;
   logout: () => Promise<void>;
 }
 

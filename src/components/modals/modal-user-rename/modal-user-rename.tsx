@@ -1,19 +1,18 @@
-import { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { fetchWithContext } from '@app-utils/query-fn';
+import { fetchFn } from '@app-utils/query-fn';
 import { User } from '@app-types';
-import { ApplicationContext } from '@app-context/application';
+import { FunctionComponent } from 'preact';
 
 export interface ModalUserRenameProps extends ModalProps {
   user?: User | null;
   onSuccess: () => void;
 }
 
-export const ModalUserRename: FC<ModalUserRenameProps> = ({ isOpen, onDismiss, user, ...props }) => {
+export const ModalUserRename: FunctionComponent<ModalUserRenameProps> = ({ isOpen, onDismiss, user, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {user ? <ModalContent onDismiss={onDismiss} user={user} {...props} /> : null}
@@ -21,9 +20,8 @@ export const ModalUserRename: FC<ModalUserRenameProps> = ({ isOpen, onDismiss, u
   );
 };
 
-const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: User }> = ({ onDismiss, onSuccess, user }) => {
+const ModalContent: FunctionComponent<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: User }> = ({ onDismiss, onSuccess, user }) => {
   const { t } = useTranslation();
-  const { storage } = useContext(ApplicationContext);
 
   const { handleSubmit, register, formState } = useForm<{ name: string }>({
     defaultValues: {
@@ -34,9 +32,10 @@ const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: U
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn({ id, newName }: { id: string, newName: string }) {
-      const data = await fetchWithContext<{ user: User }>(`/api/v1/user/${id}/rename/${newName}`, {
+      const data = await fetchFn<{ user: User }>(`/api/v1/user/${id}/rename/${newName}`, {
         method: 'POST',
-      }, storage);
+        body: '{}',
+      });
       return data.user;
     },
     onSuccess: () => {

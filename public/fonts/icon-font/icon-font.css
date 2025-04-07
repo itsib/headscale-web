@@ -383,63 +383,55 @@ i.icon-layout-cards:before {
   content: "\ea18";
 }
 
-i.icon-layout-cards-copy:before {
+i.icon-layout-list:before {
   content: "\ea19";
 }
 
-i.icon-layout-list:before {
+i.icon-lock:before {
   content: "\ea1a";
 }
 
-i.icon-layout-list-copy:before {
+i.icon-logout:before {
   content: "\ea1b";
 }
 
-i.icon-lock:before {
+i.icon-metrics:before {
   content: "\ea1c";
 }
 
-i.icon-logout:before {
+i.icon-moon:before {
   content: "\ea1d";
 }
 
-i.icon-metrics:before {
+i.icon-refresh:before {
   content: "\ea1e";
 }
 
-i.icon-moon:before {
+i.icon-settings:before {
   content: "\ea1f";
 }
 
-i.icon-refresh:before {
+i.icon-sun:before {
   content: "\ea20";
 }
 
-i.icon-settings:before {
+i.icon-sun-moon:before {
   content: "\ea21";
 }
 
-i.icon-sun:before {
+i.icon-tag-add:before {
   content: "\ea22";
 }
 
-i.icon-sun-moon:before {
+i.icon-timer:before {
   content: "\ea23";
 }
 
-i.icon-tag-add:before {
+i.icon-timer-cross:before {
   content: "\ea24";
 }
 
-i.icon-timer:before {
-  content: "\ea25";
-}
-
-i.icon-timer-cross:before {
-  content: "\ea26";
-}
-
 i.icon-users:before {
-  content: "\ea27";
+  content: "\ea25";
 }
 

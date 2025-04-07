@@ -1,14 +1,14 @@
-import { FC } from 'react';
 import { MetricItem } from './-metric-row.tsx';
 import { useTranslation } from 'react-i18next';
 import { Metric } from '@app-types';
+import { FunctionComponent } from 'preact';
 
 export interface GroupBlockProps {
   group: string;
   metrics: Metric[];
 }
 
-export const GroupBlock: FC<GroupBlockProps> = ({ group, metrics }) => {
+export const GroupBlock: FunctionComponent<GroupBlockProps> = ({ group, metrics }) => {
   const { t } = useTranslation();
 
   return (

@@ -1,18 +1,17 @@
-import { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { email, Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
-import { fetchWithContext } from '@app-utils/query-fn';
+import { fetchFn } from '@app-utils/query-fn';
 import { User, UserIdentity } from '@app-types';
-import { ApplicationContext } from '@app-context/application';
+import { FunctionComponent } from 'preact';
 
 export interface ModalUserCreateProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalUserCreate: FC<ModalUserCreateProps> = ({ isOpen, onDismiss, ...props }) => {
+export const ModalUserCreate: FunctionComponent<ModalUserCreateProps> = ({ isOpen, onDismiss, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <ModalContent onDismiss={onDismiss} {...props} />
@@ -20,9 +19,8 @@ export const ModalUserCreate: FC<ModalUserCreateProps> = ({ isOpen, onDismiss, .
   );
 };
 
-const ModalContent: FC<Omit<ModalUserCreateProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
+const ModalContent: FunctionComponent<Omit<ModalUserCreateProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
   const { t } = useTranslation();
-  const { storage } = useContext(ApplicationContext);
 
   const { handleSubmit, register, formState } = useForm<UserIdentity>({
     defaultValues: {
@@ -35,10 +33,10 @@ const ModalContent: FC<Omit<ModalUserCreateProps, 'isOpen'>> = ({ onDismiss, onS
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(values: UserIdentity) {
-      const data = await fetchWithContext<{ user: User }>('/api/v1/user', {
+      const data = await fetchFn<{ user: User }>('/api/v1/user', {
         method: 'POST',
         body: JSON.stringify(values),
-      }, storage);
+      });
       return data.user;
     },
     onSuccess: () => {

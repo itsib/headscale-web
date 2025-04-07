@@ -1,17 +1,16 @@
-import { FC, useContext } from 'react';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
-import { ApiToken } from '../../../types';
-import { fetchWithContext } from '../../../utils/query-fn.ts';
-import { ApplicationContext } from '@app-context/application';
+import { ApiToken } from '@app-types';
+import { fetchFn } from '@app-utils/query-fn.ts';
+import { FunctionComponent } from 'preact';
 
 export interface ModalApiTokenExpireProps extends ModalProps {
   apiToken?: ApiToken | null;
   onSuccess: () => void;
 }
 
-export const ModalApiTokenExpire: FC<ModalApiTokenExpireProps> = ({ isOpen, onDismiss, apiToken, ...props }) => {
+export const ModalApiTokenExpire: FunctionComponent<ModalApiTokenExpireProps> = ({ isOpen, onDismiss, apiToken, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {apiToken ? <ModalContent onDismiss={onDismiss} apiToken={apiToken} {...props} /> : null}
@@ -19,17 +18,17 @@ export const ModalApiTokenExpire: FC<ModalApiTokenExpireProps> = ({ isOpen, onDi
   );
 };
 
-const ModalContent: FC<Omit<ModalApiTokenExpireProps, 'isOpen' | 'apiToken'> & { apiToken: ApiToken }> = props => {
+const ModalContent: FunctionComponent<Omit<ModalApiTokenExpireProps, 'isOpen' | 'apiToken'> & { apiToken: ApiToken }> = props => {
   const { onDismiss, onSuccess, apiToken } = props;
-  const { storage } = useContext(ApplicationContext);
+ 
   const { t } = useTranslation();
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(values: { prefix: string }) {
-      const data = await fetchWithContext<{ apiToken: ApiToken }>(`/api/v1/apikey/expire`, {
+      const data = await fetchFn<{ apiToken: ApiToken }>(`/api/v1/apikey/expire`, {
         method: 'POST',
         body: JSON.stringify(values)
-      }, storage);
+      });
       return data.apiToken;
     },
     onSuccess: () => {

@@ -216,3 +216,34 @@ html.dark {
 
   }
 }
+
+.toast-offline {
+  --toast-width: 340px;
+
+  top: 0;
+  width: var(--toast-width);
+  left: calc(var(--toast-width) / -2);
+  margin-left: 50%;
+  padding: 10px 10px;
+  background: rgb(var(--bg-toast-danger));
+  border-radius: 6px;
+  align-items: center;
+  justify-content: start;
+  transform: translateY(-105%);
+  transition: transform .2s ease-out;
+  box-shadow: 0 3px 6px 6px rgb(var(--black) / .15);
+  display: flex;
+  user-select: none;
+  cursor: default;
+  position: fixed;
+  z-index: 30;
+
+  .compass {
+    margin-right: 10px;
+  }
+
+  &.show {
+    transition: transform .2s ease-in;
+    transform: translateY(20px);
+  }
+}

@@ -1,8 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
-import { useMemo, useState } from 'preact/hooks';
+import { useMemo, useState, useCallback } from 'preact/hooks';
 import { Device, DeviceAction, ListLayout } from '@app-types';
 import { ModalNodeCreate } from '@app-components/modals/modal-node-create/modal-node-create';
-import { fetchWithContext } from '@app-utils/query-fn';
 import { ModalNodeRename } from '@app-components/modals/modal-node-rename/modal-node-rename';
 import { ModalNodeChown } from '@app-components/modals/modal-node-chown/modal-node-chown';
 import { ModalNodeDelete } from '@app-components/modals/modal-node-delete/modal-node-delete';
@@ -10,7 +9,6 @@ import { ModalNodeRoutes } from '@app-components/modals/modal-node-routes/modal-
 import { ModalNodeTags } from '@app-components/modals/modal-node-tags/modal-node-tags';
 import { ModalNodeExpire } from '@app-components/modals/modal-node-expire/modal-node-expire';
 import { useQuery } from '@tanstack/react-query';
-import { useStorage } from '@app-hooks/use-storage';
 import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group';
 import { ListLoading } from '@app-components/skeleton/list-loading';
 import { useBreakPoint } from '@app-hooks/use-break-point.ts';
@@ -19,7 +17,6 @@ import { DevicesList } from '@app-components/devices-list';
 import './devices.css';
 
 export function Devices() {
-  const storage = useStorage();
   const { t } = useTranslation();
   const [opened, setOpened] = useState<DeviceAction | null>(null);
   const [selected, setSelected] = useState<Device | null>(null);
@@ -29,18 +26,11 @@ export function Devices() {
   const isTableLayout = !isMobile && _isTableLayout;
   const layout: ListLayout = isTableLayout ? 'table' : 'cards';
 
-  const { data: devices, isLoading, refetch } = useQuery({
+  const { data: devices, isLoading, refetch } = useQuery<{ nodes: Device[] }, Error, Device[]>({
     queryKey: ['/api/v1/node', 'GET'],
-    queryFn: async ({ queryKey, signal }) => {
-      const data = await fetchWithContext<{ nodes: Device[] }>(
-        queryKey[0] as string,
-        { signal },
-        storage,
-      );
-      return data.nodes;
-    },
+    select: data => data.nodes,
     staleTime: 60_000 * 60,
-    refetchInterval: 30_000,
+    refetchInterval: 30_001,
   });
 
   const buttons: ButtonConfig[] = useMemo(() => {
@@ -70,16 +60,16 @@ export function Devices() {
     ];
   }, [t, isMobile, isTableLayout]);
 
-  async function onClick(id: string) {
+  const onClick = useCallback((id: string) => {
     switch (id) {
       case 'register-device':
         return setOpened('create');
       case 'refresh-devices':
-        return refetch();
+        return refetch({ cancelRefetch: true });
       case 'set-layout':
         return setIsTableLayout(value => !value);
     }
-  }
+  }, []);
 
   return (
     <div className="devices-page">

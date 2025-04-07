@@ -1,18 +1,17 @@
-import { FC, useContext } from 'react';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
-import { User } from '../../../types';
-import { fetchWithContext } from '../../../utils/query-fn.ts';
-import { ApplicationContext } from '@app-context/application';
+import { User } from '@app-types';
+import { fetchFn } from '@app-utils/query-fn.ts';
+import { FunctionComponent } from 'preact';
 
 export interface ModalUserDeleteProps extends ModalProps {
   user?: User | null;
   onSuccess: () => void;
 }
 
-export const ModalUserDelete: FC<ModalUserDeleteProps> = ({ isOpen, onDismiss, user, ...props }) => {
+export const ModalUserDelete: FunctionComponent<ModalUserDeleteProps> = ({ isOpen, onDismiss, user, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {user ? <ModalContent onDismiss={onDismiss} user={user} {...props} /> : null}
@@ -20,15 +19,15 @@ export const ModalUserDelete: FC<ModalUserDeleteProps> = ({ isOpen, onDismiss, u
   );
 };
 
-const ModalContent: FC<Omit<ModalUserDeleteProps, 'isOpen' | 'user'> & { user: User }> = ({ onDismiss, onSuccess, user }) => {
+const ModalContent: FunctionComponent<Omit<ModalUserDeleteProps, 'isOpen' | 'user'> & { user: User }> = ({ onDismiss, onSuccess, user }) => {
   const { t } = useTranslation();
-  const { storage } = useContext(ApplicationContext);
+ 
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(name: string) {
-      const data = await fetchWithContext<{ user: User }>(`/api/v1/user/${name}`, {
+      const data = await fetchFn<{ user: User }>(`/api/v1/user/${name}`, {
         method: 'DELETE',
-      }, storage);
+      });
       return data.user;
     },
     onSuccess: () => {

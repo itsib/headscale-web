@@ -1,6 +1,6 @@
 type Listener = (value: string) => void;
 
-interface Commit {
+interface Command {
   cursor: number;
   adds: string;
   removes: string;
@@ -13,7 +13,7 @@ export interface HistoryConfig {
 
 export class HistoryControl {
 
-  private readonly _history: Commit[] = [];
+  private readonly _history: Command[] = [];
 
   private readonly _listeners: Set<Listener>;
 
@@ -76,7 +76,7 @@ export class HistoryControl {
     }
   }
 
-  insert(start: number, end: number, text = '') {
+  insert(start: number, end: number, text = '', isSkipMerge?: boolean) {
     this._beforePush();
 
     if (start === end && !text) return;
@@ -85,7 +85,7 @@ export class HistoryControl {
     }
 
     // Merging changes of the same type into one commit.
-    const last = this._history[this._index];
+    const last = isSkipMerge ? undefined : this._history[this._index];
     if (last) {
       // Delete
       if (!text && last.adds.length === 0 && start === last.cursor && end - start === 1) {
@@ -109,7 +109,7 @@ export class HistoryControl {
     }
 
     const removes = this._replaceByRange(start, end, text);
-    const commit: Commit = {
+    const commit: Command = {
       cursor: start,
       adds: text,
       removes,

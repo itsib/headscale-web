@@ -1,7 +1,7 @@
 
 export type TokenType = 'Bearer' | 'apiKey';
 
-export interface Credentials {
+export interface ICredentials {
   base: string;
   token: string;
   tokenType: TokenType;

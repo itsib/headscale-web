@@ -63,6 +63,7 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
   }
 
   onBeforeInput(event: InputEvent) {
+    console.log(event.getTargetRanges());
     if (this.isLocked) return;
     event.preventDefault();
     const data = event.data;
@@ -109,6 +110,17 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
         this.updateCursor(selectionStart + 1);
         break;
       }
+      case 'deleteByDrag': {
+        this.history.insert(selectionStart, selectionEnd);
+        console.log('deleteByDrag', selectionStart, selectionEnd, event);
+        break;
+      }
+      case 'insertFromDrop': {
+        // const text2 = data || '';
+        console.log('insertFromDrop', selectionStart, selectionEnd, event);
+        break;
+      }
+
       default:
         console.log(event.inputType);
     }

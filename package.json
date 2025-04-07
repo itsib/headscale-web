@@ -26,9 +26,10 @@
   ],
   "scripts": {
     "start": "vite",
-    "build": "npm run build:icons && tsc -b && NODE_ENV=production vite build --mode production",
-    "build:dev": "tsc -b && NODE_ENV=development vite build --mode development",
+    "build": "npm run build:icons && tsc -b && NODE_ENV=production vite build --mode production && npm run build:copy",
+    "build:dev": "tsc -b && NODE_ENV=development vite build --mode development && npm run build:copy",
     "build:icons": "icon-font g",
+    "build:copy": "node ./scripts/copy.mjs",
     "lint": "eslint .",
     "test": "vitest",
     "preview": "vite preview",
@@ -81,9 +82,8 @@
     "typescript": "~5.6.0",
     "typescript-eslint": "^8.18.1",
     "vite": "^6.0.5",
-    "vite-plugin-cp": "^4.0.8",
     "vite-plugin-html": "^3.2.2",
-    "vite-plugin-pwa": "^0.21.1",
+    "vite-plugin-pwa": "^1.0.0",
     "vitest": "^3.0.6"
   },
   "overrides": {

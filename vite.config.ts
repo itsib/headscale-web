@@ -1,13 +1,13 @@
 import { defineConfig, UserConfig } from 'vite';
 import preact from '@preact/preset-vite';
 import { join, resolve } from 'node:path';
-import pluginCp from 'vite-plugin-cp';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 import { VitePWA } from 'vite-plugin-pwa';
 import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { randomBytes } from 'crypto';
 
 /**
  * Vite
@@ -26,13 +26,13 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
     define: {
       'import.meta.env.NODE_ENV': JSON.stringify(mode),
       'import.meta.env.VERSION': JSON.stringify(pkg.version),
-      'import.meta.env.BUILD_ID': JSON.stringify(Math.floor(Math.random() * 10000000).toString(16).toUpperCase()),
+      'import.meta.env.BUILD_ID': JSON.stringify(randomBytes(32).toString('hex')),
     },
     resolve: {
       alias: {
         react: 'preact/compat',
         'react-dom/test-utils': 'preact/test-utils',
-        'react-dom': 'preact/compat', // Должно быть ниже test-utils
+        'react-dom': 'preact/compat',
         'react/jsx-runtime': 'preact/jsx-runtime',
         $fonts: resolve(__dirname, 'public/fonts'),
         '@app-types': resolve(__dirname, 'src/types/index.ts'),
@@ -175,13 +175,6 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
             },
           ],
         },
-      }),
-      pluginCp({
-        targets: [
-          { src: 'package.json', dest: 'dist' },
-          { src: 'LICENSE', dest: 'dist' },
-          { src: 'README.md', dest: 'dist' },
-        ],
       }),
     ],
     test: {

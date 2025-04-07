@@ -2,12 +2,9 @@ import { useQueries } from '@tanstack/react-query';
 import { AuthKey, AuthKeyWithUser, QueryResult } from '@app-types';
 import { useUsers } from './use-users.ts';
 import { useCallback, useMemo } from 'react';
-import { fetchWithContext } from '@app-utils/query-fn';
-import { useStorage } from '@app-hooks/use-storage.ts';
 
 export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () => void } {
   const { data: users, isLoading: isLoading0, error: error0 } = useUsers();
-  const storage = useStorage();
 
   const queries = useMemo(() => {
     if (!users) {
@@ -15,21 +12,8 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () =>
     }
     return users.map(user => ({
       queryKey: ['/api/v1/preauthkey', 'GET', user.name],
-      queryFn: async ({ queryKey, signal }: any) => {
-        try {
-          const url = queryKey[0] + '?user=' + queryKey[2];
-          const result = await fetchWithContext<{ preAuthKeys: AuthKey[] }>(url, { signal, method: queryKey[1] }, storage);
-          return result.preAuthKeys;
-        } catch(error: any) {
-          if (error.code === 500) {
-            return [];
-          }
-          throw error;
-        }
-
-      },
       staleTime: 30_000,
-      select: (preAuthKeys: AuthKey[]) => preAuthKeys.map(key => ({ ...key, user, })),
+      select: (data: { preAuthKeys: AuthKey[] }) => data?.preAuthKeys?.map(key => ({ ...key, user, })),
     }))
   }, [users])
 

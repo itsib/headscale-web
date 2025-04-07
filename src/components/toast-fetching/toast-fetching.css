@@ -28,14 +28,15 @@
 
 .toast-fetching-line {
   left: 0;
-  bottom: 0;
-  height: 4px;
+  top: 0;
+  height: 2px;
   width: 0;
   opacity: .8;
   background-color: rgb(var(--accent));
   will-change: width;
   position: fixed;
   transition: width 3s ease-out;
+  z-index: 99999;
 
   &.show-in {
     width: 85%;

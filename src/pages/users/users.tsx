@@ -6,8 +6,6 @@ import { ListLoading } from '@app-components/skeleton/list-loading';
 import { ModalUserCreate } from '@app-components/modals/modal-user-create/modal-user-create';
 import { ModalUserRename } from '@app-components/modals/modal-user-rename/modal-user-rename';
 import { ModalUserDelete } from '@app-components/modals/modal-user-delete/modal-user-delete';
-import { fetchWithContext } from '@app-utils/query-fn';
-import { useStorage } from '@app-hooks/use-storage';
 import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group';
 import { useBreakPoint } from '@app-hooks/use-break-point';
 import { UsersList } from '@app-components/users-list';
@@ -16,7 +14,6 @@ import './users.css';
 
 export function Users() {
   const { t } = useTranslation();
-  const storage = useStorage();
 
   const [opened, setOpened] = useState<UserAction | null>(null);
   const [selected, setSelected] = useState<User | null>(null);
@@ -25,16 +22,9 @@ export function Users() {
   const [_isListLayout, setIsListLayout] = useState(true);
   const isListLayout = !isMobile && _isListLayout;
 
-  const { data: users, refetch, isLoading } = useQuery({
+  const { data: users, refetch, isLoading } = useQuery<{ users: UserWithProvider[] }, Error, UserWithProvider[]>({
     queryKey: ['/api/v1/user', 'GET'],
-    queryFn: async ({ queryKey, signal }) => {
-      const data = await fetchWithContext<{ users: UserWithProvider[] }>(
-        queryKey[0] as string,
-        { signal, method: queryKey[1] },
-        storage,
-      );
-      return data.users;
-    },
+    select: data => data.users,
     staleTime: 60_000 * 60,
     refetchInterval: 30_000,
   });

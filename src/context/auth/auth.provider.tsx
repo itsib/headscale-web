@@ -1,80 +1,82 @@
-import { FunctionComponent } from 'preact';
-import { useState } from 'preact/hooks';
+import { ComponentChildren } from 'preact';
+import { useCallback, useEffect, useState } from 'preact/hooks';
 import { AuthContext } from '@app-context/auth/auth.context';
-import { useStorage } from '@app-hooks/use-storage.ts';
-import { Credentials, TokenType } from '@app-types';
-import { useCallback, useEffect } from 'react';
-import { AuthForm } from '@app-components/auth-form/auth-form.tsx';
-import { fetchFn } from '@app-utils/query-fn.ts';
-import { removeCredentials, setCredentials } from '@app-utils/credentials.ts';
-import { joinUrl } from '@app-utils/join-url.ts';
+import { ICredentials } from '@app-types';
+import { AuthForm } from '@app-components/auth-form/auth-form';
+import { useQueryClient } from '@tanstack/react-query';
+import { AuthState } from '@app-utils/auth-state.ts';
+import { useTranslation } from 'react-i18next';
+import { ToastOfflineManager } from '@app-utils/toast-offline-manager.ts';
 
-export const AuthProvider: FunctionComponent = ({ children }) =>  {
-  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
+export function AuthProvider({ children }: { children?: ComponentChildren }) {
+  const { t } = useTranslation();
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [prefix, setPrefix] = useState<string>();
   const [base, setBase] = useState<string>();
-  const storage = useStorage();
+  const client = useQueryClient();
 
   const logout = useCallback(async () => {
-    await removeCredentials(storage);
+    AuthState.remove();
+
     setPrefix(undefined);
     setBase(undefined);
     setIsAuthorized(false);
-  }, [storage]);
+  }, []);
 
-  async function submit(values: Credentials) {
-    const url = joinUrl(values.base, '/api/v1/node');
+  const onSuccess = useCallback((values: ICredentials) => {
+    AuthState.set(values);
 
-    await fetchFn(url, { method: 'GET' }, values.token, values.tokenType);
-
-    await setCredentials(storage, { ...values });
     setPrefix(values.token.split('.')[0]);
     setBase(values.base);
     setIsAuthorized(true);
-  }
+  }, []);
 
   // Init authorization
   useEffect(() => {
-    async function init() {
-      const [base, token, tokenType] = await Promise.all([
-        storage.getItem<string>('main-url'),
-        storage.getItem<string>('main-token'),
-        storage.getItem<TokenType>('main-token-type'),
-      ]);
-      setIsAuthorized(!!base && !!token && !!tokenType);
+    const credentials = AuthState.get();
+    if (!credentials) return;
 
-      if (token) setPrefix(token.split('.')[0]);
-      if (base) setBase(base);
-    }
+    setPrefix(credentials.token.split('.')[0]);
+    setBase(credentials.base);
+    setIsAuthorized(true);
+  }, []);
 
-    init().catch(console.error);
-  }, [storage]);
-
-  // Show login form if no access token
+  // Handle any query error
   useEffect(() => {
-    return storage.subscribe('remove', (key: string) => {
-      if (key === 'main-token' || key === 'main-url') {
-        setIsAuthorized(false);
+    const toastManager = new ToastOfflineManager(document.body, t);
+    const queryCache = client.getQueryCache();
 
-        if (key === 'main-url') {
-          setBase(undefined);
-        }
-        if (key === 'main-token') {
-          setPrefix(undefined);
+    const unsubscribe = queryCache.subscribe((event) => {
+      if (event.type === 'updated' && event.action.type === 'error') {
+        if (event.action.error.code === 401 || event.action.error.code === -1) {
+          setIsAuthorized(false);
         }
       }
     });
-  }, [storage]);
+
+    const hidde = toastManager.hidde.bind(toastManager);
+    const show = toastManager.show.bind(toastManager);
+    window.addEventListener('online', hidde);
+    window.addEventListener('offline', show);
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener('online', hidde);
+      window.removeEventListener('offline', show);
+    }
+  }, [t]);
 
   return (
-    <AuthContext.Provider value={{ isAuthorized: !!isAuthorized, logout, prefix, base }}>
-      {isAuthorized === null ? null : isAuthorized ? children : (
-        <div className="container">
-          <div className="w-full h-[80vh] min-h-[max(80vh, 700px)] flex items-start justify-center">
-            <AuthForm submit={submit} base={base} />
-          </div>
+    <AuthContext.Provider value={{ isAuthorized: true, logout, prefix, base }}>
+      {isAuthorized ? (
+        <div className="hidden"/>
+      ) : (
+        <div className="w-[100vw] h-[100vh] flex items-start justify-center fixed inset-0 bg-secondary z-40">
+          <AuthForm onSuccess={onSuccess}/>
         </div>
       )}
+
+      <>{children}</>
     </AuthContext.Provider>
   );
-};
+}

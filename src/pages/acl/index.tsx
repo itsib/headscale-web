@@ -5,36 +5,16 @@ import { useLocation } from 'preact-iso/router';
 import { Redirect } from '@app-components/redirect/redirect';
 import { EditFile } from './edit-file';
 import { Preview } from './preview';
-import { fetchWithContext } from '@app-utils/query-fn';
-import { useStorage } from '@app-hooks/use-storage';
 import { EditorLoading } from '@app-components/skeleton/editor-loading';
 import './index.css';
 
 export default function Acl() {
   const { t } = useTranslation();
-  const storage = useStorage();
   const { path } = useLocation();
 
-  const { data: policy, isLoading } = useQuery({
+  const { data: policy, isLoading } = useQuery<{ policy: string }, Error, string>({
     queryKey: ['/api/v1/policy', 'GET'],
-    queryFn: async ({  queryKey, signal }) => {
-      try {
-        const data = await fetchWithContext<{ policy: string }>(
-          queryKey[0] as string,
-          { signal },
-          storage,
-        );
-        return data.policy;
-      } catch (error: any) {
-        if (error.code === 500 && error.message.includes('acl policy not found')) {
-          return null;
-        }
-        if (error.code === 401) {
-          await storage.removeItem('main-token');
-        }
-        throw error;
-      }
-    },
+    select: data => data.policy,
     staleTime: 0,
     refetchInterval: false,
   });

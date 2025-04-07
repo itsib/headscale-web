@@ -1,18 +1,17 @@
-import { FC, useContext } from 'react';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
-import { Device } from '../../../types';
-import { fetchWithContext } from '../../../utils/query-fn.ts';
-import { ApplicationContext } from '@app-context/application';
+import { Device } from '@app-types';
+import { fetchFn } from '@app-utils/query-fn';
+import { FunctionComponent } from 'preact';
 
 export interface ModalNodeDeleteProps extends ModalProps {
   node?: Device | null;
   onSuccess: () => void;
 }
 
-export const ModalNodeDelete: FC<ModalNodeDeleteProps> = ({ isOpen, onDismiss, node, ...props }) => {
+export const ModalNodeDelete: FunctionComponent<ModalNodeDeleteProps> = ({ isOpen, onDismiss, node, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {node ? <ModalContent onDismiss={onDismiss} node={node} {...props} /> : null}
@@ -20,15 +19,14 @@ export const ModalNodeDelete: FC<ModalNodeDeleteProps> = ({ isOpen, onDismiss, n
   );
 };
 
-const ModalContent: FC<Omit<ModalNodeDeleteProps, 'isOpen' | 'node'> & { node: Device }> = ({ onDismiss, onSuccess, node }) => {
+const ModalContent: FunctionComponent<Omit<ModalNodeDeleteProps, 'isOpen' | 'node'> & { node: Device }> = ({ onDismiss, onSuccess, node }) => {
   const { t } = useTranslation();
-  const { storage } = useContext(ApplicationContext);
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(nodeId: string) {
-      const data = await fetchWithContext<{ node: Device }>(`/api/v1/node/${nodeId}`, {
+      const data = await fetchFn<{ node: Device }>(`/api/v1/node/${nodeId}`, {
         method: 'DELETE',
-      }, storage);
+      });
       return data.node;
     },
     onSuccess: () => {

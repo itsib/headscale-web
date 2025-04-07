@@ -60,7 +60,7 @@
   "enabled": "Enabled",
   "ephemeral": "Ephemeral",
   "error_bad_request": "Bad Request",
-  "error_connection_error": "Failed to connect to the server",
+  "error_connection_error": "Error connecting to the server",
   "error_expiry_max": "The maximum validity period of the token is {{value}} days",
   "error_expiry_min": "The validity period of the token is at least {{value}} day",
   "error_forbidden": "Forbidden",
@@ -171,5 +171,7 @@
   "ip_addresses": "IP Addresses",
   "user_login": "User Login",
   "account": "Account",
-  "something_went_wrong": "Something Went Wrong"
+  "something_went_wrong": "Something Went Wrong",
+  "api_key_prefix": "API key prefix",
+  "err_connection_refused": "Error connecting to the server. Check URL."
 }

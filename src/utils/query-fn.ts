@@ -1,9 +1,8 @@
 import { QueryFunctionContext, QueryKey } from '@tanstack/react-query';
-import { StorageAsync } from '@app-utils/storage';
+import { Storage } from '@app-utils/storage';
 import { ConnectionError, HttpError, UnauthorizedError } from './errors';
 import { TokenType } from '../types';
-import { getCredentials } from './credentials.ts';
-import { joinUrl } from './join-url.ts';
+import { joinUrl } from './join-url';
 
 function getStatusText(code: number): string {
   switch (code) {
@@ -36,6 +35,17 @@ async function resolveFailureRes(res: Response): Promise<never> {
 
 export async function fetchFn<T = unknown>(url: string, init: RequestInit = {}, token?: string, tokenType?: TokenType): Promise<T> {
   const headers: Record<string, string> = (init.headers || {}) as Record<string, string>;
+  const storage = Storage.get();
+  token = token || storage.getItem<string>('main-token');
+  tokenType = tokenType || storage.getItem<TokenType>('main-token-type');
+
+  if (!/^http/.test(url)) {
+    const base = storage.getItem<string>('main-url');
+    if (base) {
+      url = joinUrl(base, url);
+    }
+  }
+
   if (token && (tokenType === 'Bearer')) {
     headers['Authorization'] = 'Bearer ' + token;
   }
@@ -54,12 +64,12 @@ export async function fetchFn<T = unknown>(url: string, init: RequestInit = {}, 
   try {
     res = await fetch(url, { ...init, headers: headers });
   } catch {
-    return Promise.reject(new ConnectionError());
+    throw new ConnectionError();
   }
 
   if (!res.ok) {
     if (res.status === 401) {
-      return Promise.reject(new UnauthorizedError());
+      throw new UnauthorizedError();
     } else {
       await resolveFailureRes(res);
     }
@@ -73,30 +83,10 @@ export async function fetchFn<T = unknown>(url: string, init: RequestInit = {}, 
   }
 }
 
-export async function fetchWithContext<T = unknown>(url: string, init: RequestInit = {}, storage: StorageAsync): Promise<T> {
-  const { base, token, tokenType } = await getCredentials(storage);
-  return await fetchFn(joinUrl(base, url), init, token, tokenType);
-}
+export async function defaultQueryFn<T = unknown, TQueryKey extends QueryKey = QueryKey, TPageParam = never>(context: QueryFunctionContext<TQueryKey, TPageParam>): Promise<T> {
+  const { queryKey, signal } = context;
+  const url = queryKey[0] as string;
+  const method = (queryKey[1] as string) || 'GET';
 
-export function getDefaultQueryFn(storage: StorageAsync) {
-  return async function defaultQueryFn<T = unknown, TQueryKey extends QueryKey = QueryKey, TPageParam = never>(context: QueryFunctionContext<TQueryKey, TPageParam>): Promise<T> {
-    const { queryKey, signal } = context;
-    let url = queryKey[0] as string;
-    const method = (queryKey[1] as string) || 'GET';
-
-    const { base, token, tokenType } = await getCredentials(storage);
-
-    if (!url.startsWith('http') && base) {
-      url = `${base}${url}`;
-    }
-
-    try {
-      return await fetchFn(url, { method, signal }, token, tokenType);
-    } catch (error: any) {
-      if (error.code === 401) {
-        await storage.removeItem('main-token');
-      }
-      throw error;
-    }
-  }
+  return await fetchFn(url, { method, signal });
 }

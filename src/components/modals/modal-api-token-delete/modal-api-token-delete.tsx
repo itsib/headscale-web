@@ -1,18 +1,17 @@
-import { FC, useContext } from 'react';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
-import { ApiToken, Device } from '../../../types';
-import { fetchWithContext } from '../../../utils/query-fn.ts';
-import { ApplicationContext } from '@app-context/application';
+import { ApiToken, Device } from '@app-types';
+import { fetchFn } from '@app-utils/query-fn';
+import { FunctionComponent } from 'preact';
 
 export interface ModalApiTokenDeleteProps extends ModalProps {
   apiToken?: ApiToken | null;
   onSuccess: () => void;
 }
 
-export const ModalApiTokenDelete: FC<ModalApiTokenDeleteProps> = ({ isOpen, onDismiss, apiToken, ...props }) => {
+export const ModalApiTokenDelete: FunctionComponent<ModalApiTokenDeleteProps> = ({ isOpen, onDismiss, apiToken, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {apiToken ? <ModalContent onDismiss={onDismiss} apiToken={apiToken} {...props} /> : null}
@@ -20,15 +19,14 @@ export const ModalApiTokenDelete: FC<ModalApiTokenDeleteProps> = ({ isOpen, onDi
   );
 };
 
-const ModalContent: FC<Omit<ModalApiTokenDeleteProps, 'isOpen' | 'node'> & { apiToken: ApiToken }> = ({ onDismiss, onSuccess, apiToken }) => {
+const ModalContent: FunctionComponent<Omit<ModalApiTokenDeleteProps, 'isOpen' | 'node'> & { apiToken: ApiToken }> = ({ onDismiss, onSuccess, apiToken }) => {
   const { t } = useTranslation();
-  const { storage } = useContext(ApplicationContext);
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(prefix: string) {
-      const data = await fetchWithContext<{ node: Device }>(`/api/v1/apikey/${prefix}`, {
+      const data = await fetchFn<{ node: Device }>(`/api/v1/apikey/${prefix}`, {
         method: 'DELETE',
-      }, storage);
+      });
       return data.node;
     },
     onSuccess: () => {

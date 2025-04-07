@@ -9,22 +9,11 @@ import './btn-config.css';
 export const BtnConfig: FunctionComponent = () => {
   const { i18n } = useTranslation();
   const [ theme, setTheme ] = useTheme();
-  const { logout, prefix, base: baseUrl } = useCredentials();
+  const { logout } = useCredentials();
 
   return (
     <div className="btn-config-wrapper">
       <BtnContextMenu placement={PopupPlacement.BOTTOM} icon="icon-settings">
-        <div className="context-menu-item">
-          <div className="px-[16px] py-[6px]">
-            <div className="text-sm text-primary font-medium cursor-pointer">
-              <span>{prefix}</span>
-            </div>
-            <div className="text-xs text-secondary">{baseUrl}</div>
-          </div>
-        </div>
-
-        <hr role="separator" className="context-menu-divider"/>
-
         <div className="context-menu-item">
           <button
             aria-label="Choose the light theme"
