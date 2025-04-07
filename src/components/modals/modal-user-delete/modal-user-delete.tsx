@@ -19,9 +19,13 @@ export const ModalUserDelete: FunctionComponent<ModalUserDeleteProps> = ({ isOpe
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalUserDeleteProps, 'isOpen' | 'user'> & { user: User }> = ({ onDismiss, onSuccess, user }) => {
+const ModalContent: FunctionComponent<Omit<ModalUserDeleteProps, 'isOpen' | 'user'> & { user: User }> = ({
+                                                                                                           onDismiss,
+                                                                                                           onSuccess,
+                                                                                                           user,
+                                                                                                         }) => {
   const { t } = useTranslation();
- 
+
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(name: string) {
@@ -42,7 +46,7 @@ const ModalContent: FunctionComponent<Omit<ModalUserDeleteProps, 'isOpen' | 'use
         <div className="title">
           <span>{t('deleting_user_modal_title')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()}/>
       </div>
       <div className="modal-content">
         <div className="pt-2 pb-4">
@@ -69,7 +73,8 @@ const ModalContent: FunctionComponent<Omit<ModalUserDeleteProps, 'isOpen' | 'use
         <div>
           <button
             type="button"
-            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
+            className="btn btn-accent w-full"
+            data-loading={isPending}
             onClick={() => mutate(user.id)}
           >
             <span>{t('delete')}</span>

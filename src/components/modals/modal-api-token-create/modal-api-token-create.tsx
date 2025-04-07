@@ -133,7 +133,7 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> 
             </div>
 
             <div>
-              <button type="submit" className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}>
+              <button type="submit" className="btn btn-accent w-full" data-loading={isPending}>
                 <span>{t('create')}</span>
               </button>
               {error ? (

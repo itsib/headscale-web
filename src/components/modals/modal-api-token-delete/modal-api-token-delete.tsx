@@ -11,7 +11,12 @@ export interface ModalApiTokenDeleteProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalApiTokenDelete: FunctionComponent<ModalApiTokenDeleteProps> = ({ isOpen, onDismiss, apiToken, ...props }) => {
+export const ModalApiTokenDelete: FunctionComponent<ModalApiTokenDeleteProps> = ({
+                                                                                   isOpen,
+                                                                                   onDismiss,
+                                                                                   apiToken,
+                                                                                   ...props
+                                                                                 }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {apiToken ? <ModalContent onDismiss={onDismiss} apiToken={apiToken} {...props} /> : null}
@@ -19,7 +24,9 @@ export const ModalApiTokenDelete: FunctionComponent<ModalApiTokenDeleteProps> = 
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalApiTokenDeleteProps, 'isOpen' | 'node'> & { apiToken: ApiToken }> = ({ onDismiss, onSuccess, apiToken }) => {
+const ModalContent: FunctionComponent<Omit<ModalApiTokenDeleteProps, 'isOpen' | 'node'> & {
+  apiToken: ApiToken
+}> = ({ onDismiss, onSuccess, apiToken }) => {
   const { t } = useTranslation();
 
   const { mutate, isPending, error } = useMutation({
@@ -41,7 +48,7 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenDeleteProps, 'isOpen' | 
         <div className="title">
           <span>{t('deleting_api_token_modal_title')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()}/>
       </div>
       <div className="modal-content">
         <div className="pt-2 pb-4">
@@ -75,13 +82,14 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenDeleteProps, 'isOpen' | 
           <hr className="border-t-primary mb-3"/>
 
           <div className="text-start text-secondary">
-            <Trans i18nKey="deleting_api_token_modal_summary" values={{ prefix: apiToken.prefix }} />
+            <Trans i18nKey="deleting_api_token_modal_summary" values={{ prefix: apiToken.prefix }}/>
           </div>
         </div>
         <div>
           <button
             type="button"
-            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
+            className="btn btn-accent w-full"
+            data-loading={isPending}
             onClick={() => mutate(apiToken.prefix)}
           >
             <span>{t('delete')}</span>

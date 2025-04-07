@@ -10,7 +10,12 @@ export interface ModalAuthKeyExpireProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalAuthKeyExpire: FunctionComponent<ModalAuthKeyExpireProps> = ({ isOpen, onDismiss, authKey, ...props }) => {
+export const ModalAuthKeyExpire: FunctionComponent<ModalAuthKeyExpireProps> = ({
+                                                                                 isOpen,
+                                                                                 onDismiss,
+                                                                                 authKey,
+                                                                                 ...props
+                                                                               }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {authKey ? <ModalContent onDismiss={onDismiss} authKey={authKey} {...props} /> : null}
@@ -18,7 +23,9 @@ export const ModalAuthKeyExpire: FunctionComponent<ModalAuthKeyExpireProps> = ({
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalAuthKeyExpireProps, 'isOpen' | 'authKey'> & { authKey: AuthKeyWithUser }> = props => {
+const ModalContent: FunctionComponent<Omit<ModalAuthKeyExpireProps, 'isOpen' | 'authKey'> & {
+  authKey: AuthKeyWithUser
+}> = props => {
   const { onDismiss, onSuccess, authKey } = props;
   const { t } = useTranslation();
 
@@ -26,7 +33,7 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyExpireProps, 'isOpen' | '
     async mutationFn(values: { user: string, key: string }) {
       const data = await fetchFn<{ user: User }>(`/api/v1/preauthkey/expire`, {
         method: 'POST',
-        body: JSON.stringify(values)
+        body: JSON.stringify(values),
       });
       return data.user;
     },
@@ -42,27 +49,30 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyExpireProps, 'isOpen' | '
         <div className="title">
           <span>{t('expire_auth_key_modal_title')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()}/>
       </div>
       <div className="modal-content">
         <div className="pt-2 pb-4">
           <div className="text-secondary mb-3">
-            <Trans i18nKey="expire_modal_message" />
+            <Trans i18nKey="expire_modal_message"/>
           </div>
 
           <hr className="border-t-primary mb-3"/>
 
           <div className="text-start grid grid-cols-[0.4fr,1fr] gap-y-2">
-            <div className="text-secondary text-sm self-center whitespace-nowrap"><Trans i18nKey="auth_key"/>:&nbsp;</div>
+            <div className="text-secondary text-sm self-center whitespace-nowrap"><Trans i18nKey="auth_key"/>:&nbsp;
+            </div>
             <div className="truncate text-primary self-center">{authKey.key}</div>
-            <div className="text-secondary text-sm self-center whitespace-nowrap"><Trans i18nKey="user_name"/>:&nbsp;</div>
+            <div className="text-secondary text-sm self-center whitespace-nowrap"><Trans i18nKey="user_name"/>:&nbsp;
+            </div>
             <div className="truncate text-primary self-center">{authKey.user.name}</div>
           </div>
         </div>
         <div>
           <button
             type="button"
-            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
+            className="btn btn-accent w-full"
+            data-loading={isPending}
             onClick={() => mutate({
               user: authKey.user.name,
               key: authKey.key,

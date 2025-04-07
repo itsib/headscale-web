@@ -84,7 +84,7 @@ const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: D
         <div>
           <button
             type="button"
-            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
+            className="btn btn-accent w-full" data-loading={isPending}
             onClick={() => mutate(node.id)}
           >
             <span>{t('expiry')}</span>

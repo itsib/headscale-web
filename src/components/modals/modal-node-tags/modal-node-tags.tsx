@@ -116,8 +116,9 @@ const ModalContent: FunctionComponent<Omit<ModalNodeTagsProps, 'isOpen' | 'node'
           ) : null}
           <button
             type="button"
-            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
+            className="btn btn-accent w-full"
             disabled={!isDifferent}
+            data-loading={isPending}
             onClick={() => mutate({ id: node.id, tags, })}
           >
             <span>{t('save')}</span>

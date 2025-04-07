@@ -19,7 +19,11 @@ export const ModalNodeDelete: FunctionComponent<ModalNodeDeleteProps> = ({ isOpe
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalNodeDeleteProps, 'isOpen' | 'node'> & { node: Device }> = ({ onDismiss, onSuccess, node }) => {
+const ModalContent: FunctionComponent<Omit<ModalNodeDeleteProps, 'isOpen' | 'node'> & { node: Device }> = ({
+                                                                                                             onDismiss,
+                                                                                                             onSuccess,
+                                                                                                             node,
+                                                                                                           }) => {
   const { t } = useTranslation();
 
   const { mutate, isPending, error } = useMutation({
@@ -41,7 +45,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeDeleteProps, 'isOpen' | 'nod
         <div className="title">
           <span>{t('deleting_node_modal_title')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()}/>
       </div>
       <div className="modal-content">
         <div className="pt-2 pb-4">
@@ -83,7 +87,8 @@ const ModalContent: FunctionComponent<Omit<ModalNodeDeleteProps, 'isOpen' | 'nod
         <div>
           <button
             type="button"
-            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
+            className="btn btn-accent w-full"
+            data-loading={isPending}
             onClick={() => mutate(node.id)}
           >
             <span>{t('delete')}</span>

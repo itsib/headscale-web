@@ -73,7 +73,7 @@ const ModalContent: FunctionComponent<Omit<ModalUserRenameProps, 'isOpen' | 'use
 
           <button
             type="submit"
-            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
+            className="btn btn-accent w-full" data-loading={isPending}
           >
             <span>{t('rename')}</span>
           </button>

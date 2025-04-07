@@ -55,7 +55,7 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
       ephemeral: false,
       expiration: 90,
       aclTags: [],
-    }
+    },
   });
   const { errors } = formState;
 
@@ -79,7 +79,7 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
       ephemeral: values.ephemeral,
       expiration: expiration.toISOString(),
       aclTags: [],
-    })
+    });
   }
 
   return (
@@ -92,7 +92,7 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
             <span>{t('generate_auth_key_modal')}</span>
           )}
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()}/>
       </div>
       <div className="modal-content">
         {newAuthKey ? (
@@ -111,7 +111,8 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
               <Trans
                 i18nKey="auth_key_created_about_expiry"
                 components={{
-                  date: <FormattedDate iso={newAuthKey.expiration} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>,
+                  date: <FormattedDate iso={newAuthKey.expiration} hourCycle="h24" dateStyle="medium"
+                                       timeStyle="medium"/>,
                 }}
               />
             </div>
@@ -179,7 +180,7 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
                   },
                   max: {
                     value: 90,
-                    message: t('error_expiry_max', { value: 90 })
+                    message: t('error_expiry_max', { value: 90 }),
                   },
                   // valueAsNumber: true,
                 })}
@@ -203,7 +204,7 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
             </div>
 
             <div>
-              <button type="submit" className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}>
+              <button type="submit" className="btn btn-accent w-full" data-loading={isPending}>
                 <span>{t('create')}</span>
               </button>
               {error ? (

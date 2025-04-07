@@ -61,7 +61,8 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenExpireProps, 'isOpen' | 
         <div>
           <button
             type="button"
-            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
+            className="btn btn-accent w-full"
+            data-loading={isPending}
             onClick={() => mutate({
               prefix: apiToken.prefix,
             })}

@@ -8,7 +8,7 @@ import { fetchFn } from '@app-utils/query-fn.ts';
 import { useUsers } from '@app-hooks/use-users';
 import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
 import { FunctionComponent } from 'preact';
-import { Storage } from '@app-utils/storage.ts'
+import { Storage } from '@app-utils/storage.ts';
 
 interface FormFields {
   nodekey: string;
@@ -47,7 +47,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
     defaultValues: {
       nodekey: '',
       user: options[0]?.value,
-    }
+    },
   });
   const { errors } = formState;
 
@@ -68,7 +68,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
         <div className="title">
           <span>{t('register_node_modal_title')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()}/>
       </div>
       <div className="modal-content">
         <form onSubmit={handleSubmit(mutate as any)}>
@@ -97,7 +97,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
             />
           </div>
           <div className="text-sm text-secondary mb-4">
-            <Trans i18nKey="tailscale_up_command_before" />
+            <Trans i18nKey="tailscale_up_command_before"/>
             <div className="border border-secondary rounded-md py-2 px-3 my-1 relative">
               <span>tailscale up --login-server {url}</span>
 
@@ -105,11 +105,11 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
                 <BtnCopy text={`tailscale up --login-server ${url}`} className=""/>
               </div>
             </div>
-            <Trans i18nKey="tailscale_up_command_after" />
+            <Trans i18nKey="tailscale_up_command_after"/>
           </div>
 
           <div>
-            <button type="submit" className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}>
+            <button type="submit" className="btn btn-accent w-full" data-loading={isPending}>
               <span>{t('create')}</span>
             </button>
             {error ? (

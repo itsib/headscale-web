@@ -185,7 +185,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeExpireProps, 'isOpen' | 'nod
         </div>
 
         <div className="mt-4">
-          <button type="button" className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`} disabled={!changed || !routes} onClick={onSave}>
+          <button type="button" className="btn btn-accent w-full" data-loading={isPending} disabled={!changed || !routes} onClick={onSave}>
             <span><Trans i18nKey="save" /></span>
           </button>
         </div>

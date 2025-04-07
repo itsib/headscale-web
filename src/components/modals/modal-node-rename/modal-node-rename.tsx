@@ -69,7 +69,8 @@ const ModalContent: FC<Omit<ModalNodeRenameProps, 'isOpen' | 'node'> & { node: D
 
           <button
             type="submit"
-            className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}
+            className="btn btn-accent w-full"
+            data-loading={isPending}
             disabled={currentName === watch('name')}
           >
             <span>{t('rename')}</span>

@@ -90,7 +90,7 @@ const ModalContent: FunctionComponent<Omit<ModalUserCreateProps, 'isOpen'>> = ({
             />
           </div>
 
-          <button type="submit" className={`btn btn-accent w-full ${isPending ? 'loading' : ''}`}>
+          <button type="submit" className="btn btn-accent w-full" data-loading={isPending}>
             <span>{t('create')}</span>
           </button>
           {error ? (
