@@ -1,5 +1,3 @@
-import 'preact/debug';
-
 import './i18n';
 
 import { LocationProvider } from 'preact-iso';
