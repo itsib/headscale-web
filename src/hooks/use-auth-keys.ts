@@ -1,4 +1,4 @@
-import { useQueries } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { AuthKey, AuthKeyWithUser, QueryResult } from '@app-types';
 import { useUsers } from './use-users.ts';
 import { useCallback, useMemo } from 'react';
@@ -11,8 +11,7 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () =>
       return [];
     }
     return users.map(user => ({
-      queryKey: ['/api/v1/preauthkey', 'GET', user.name],
-      staleTime: 30_000,
+      queryKey: [`/api/v1/preauthkey?user=${user.name}`],
       select: (data: { preAuthKeys: AuthKey[] }) => data?.preAuthKeys?.map(key => ({ ...key, user, })),
     }))
   }, [users])

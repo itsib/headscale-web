@@ -58,8 +58,12 @@ export const AuthKeys = () => {
     <>
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h2 className="mb-2"><Trans i18nKey="auth_keys"/></h2>
-          <p className="text-secondary"><Trans i18nKey="auth_keys_subtitle"/></p>
+          <h2 className="mb-2">
+            <Trans i18nKey="auth_keys"/>
+          </h2>
+          <p className="text-secondary">
+            <Trans i18nKey="auth_keys_subtitle"/>
+          </p>
         </div>
 
         <ButtonGroup buttons={buttons} onClick={onClick} />
