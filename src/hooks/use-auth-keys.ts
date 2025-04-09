@@ -1,4 +1,4 @@
-import { useQueries, useQuery } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 import { AuthKey, AuthKeyWithUser, QueryResult } from '@app-types';
 import { useUsers } from './use-users.ts';
 import { useCallback, useMemo } from 'react';
