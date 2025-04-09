@@ -78,7 +78,7 @@ function DataPointsBarChart({ dataPoints, unit }: { dataPoints: DataPoint[]; uni
 
   return (
     <div className="bar-chart">
-      <ChartBars bars={bars} unit={unit} />
+      {bars ? <ChartBars bars={bars} unit={unit} /> : null}
     </div>
   );
 }

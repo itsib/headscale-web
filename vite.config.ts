@@ -80,7 +80,8 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
       }),
       preact({
         reactAliasesEnabled: true,
-        devToolsEnabled: true,
+        devToolsEnabled: mode !== 'production',
+        prefreshEnabled: command === 'serve',
         babel: {
           plugins: [
             [
@@ -100,9 +101,6 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
         strategies: 'generateSW', //'generateSW',
         devOptions: {
           enabled: false,
-          type: 'module',
-          navigateFallback: 'index.html',
-          resolveTempFolder: () => join(process.cwd(), 'dist'),
         },
         manifest: {
           ...webmanifest,
@@ -120,7 +118,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
             'fonts/**/*.{woff2,woff,ttf}',
             'locales/**/*.{json,svg}',
             'images/*.svg',
-            '*.{png,ico,svg,html}',
+            '*.{png,ico,svg,html,webp}',
           ],
           modifyURLPrefix: { '': '/' },
           navigateFallback: 'index.html',
