@@ -8,7 +8,7 @@ import { ContextAction } from './-api-token-item';
 import { AuthKeyItem } from './-auth-key-item';
 import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group.tsx';
 import { EmptyList } from '@app-components/empty-list/empty-list.tsx';
-import { KeysLoading } from '@app-components/skeleton/keys-loading.tsx';
+import { KeysLoading } from '@app-components/skeleton';
 
 export const AuthKeys = () => {
   const { t } = useTranslation();

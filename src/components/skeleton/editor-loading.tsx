@@ -1,24 +1,24 @@
 import { FunctionComponent } from 'preact';
+import './editor-loading.css';
 
 export const EditorLoading: FunctionComponent = () => {
   return (
-    <div className="">
-      <div className="flex mb-4">
-        <div className="h-[30px] w-[80px] bg-skeleton rounded bg-opacity-50 animate-pulse me-[14px]"/>
-        <div className="h-[30px] w-[80px] bg-skeleton rounded bg-opacity-50 animate-pulse"/>
+    <div className="editor-loading">
+      <div className="skeleton-row">
+        <div className="skeleton-block w-10 h-lg"/>
+        <div className="skeleton-block w-10 h-lg"/>
       </div>
-      <div className="">
-        <div className="h-[14px] w-2/4 bg-skeleton rounded bg-opacity-50 animate-pulse mb-[12px]"/>
-        <div className="h-[14px] w-1/4 bg-skeleton rounded bg-opacity-50 animate-pulse mb-[12px]"/>
-        <div className="h-[14px] w-5/6 bg-skeleton rounded bg-opacity-50 animate-pulse mb-[12px]"/>
-        <div className="h-[14px] w-2/6 bg-skeleton rounded bg-opacity-50 animate-pulse mb-[12px]"/>
-        <div className="h-[14px] w-2/12 bg-skeleton rounded bg-opacity-50 animate-pulse mb-[12px]"/>
-        <div className="h-[14px] w-7/12 bg-skeleton rounded bg-opacity-50 animate-pulse mb-[12px]"/>
-        <div className="h-[14px] w-3/12 bg-skeleton rounded bg-opacity-50 animate-pulse mb-[12px]"/>
-        <div className="h-[14px] w-5/12 bg-skeleton rounded bg-opacity-50 animate-pulse mb-[12px]"/>
-        <div className="h-[14px] w-3/6 bg-skeleton rounded bg-opacity-50 animate-pulse mb-[12px]"/>
-        <div className="h-[14px] w-4/6 bg-skeleton rounded bg-opacity-50 animate-pulse mb-[12px]"/>
-        <div className="h-[14px] w-2/12 bg-skeleton rounded bg-opacity-50 animate-pulse mb-[12px]"/>
+      <div className="skeleton-col">
+        <div className="skeleton-block h-sm w-40"/>
+        <div className="skeleton-block h-sm w-30"/>
+        <div className="skeleton-block h-sm w-60"/>
+        <div className="skeleton-block h-sm w-30"/>
+        <div className="skeleton-block h-sm w-10"/>
+        <div className="skeleton-block h-sm w-70"/>
+        <div className="skeleton-block h-sm w-50"/>
+        <div className="skeleton-block h-sm w-30"/>
+        <div className="skeleton-block h-sm w-70"/>
+        <div className="skeleton-block h-sm w-10"/>
       </div>
     </div>
   );

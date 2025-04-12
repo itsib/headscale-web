@@ -1,0 +1,6 @@
+.list-loading {
+
+  > .skeleton-row {
+    margin-bottom: 1.5rem;
+  }
+}

@@ -1,34 +1,21 @@
 import type { FunctionComponent } from 'preact';
+import { useMemo } from 'preact/hooks';
+import './keys-loading.css';
 
-export const KeysLoading: FunctionComponent = () => {
+export const KeysLoading: FunctionComponent<{ rows?: number }> = ({ rows = 3 }) => {
+  const items = useMemo(() => new Array(rows).fill(0), [rows]);
   return (
-    <div className="">
-      <div className="flex mb-4">
-        <div className="h-[36px] w-[36px] min-w-[36px] rounded-full bg-skeleton bg-opacity-50 animate-pulse me-6"/>
-        <div className="h-[36px] w-full flex items-center justify-between">
-          <div className="h-[24px] w-6/12 bg-skeleton rounded bg-opacity-50 animate-pulse"/>
-          <div className="h-[24px] w-4/12 bg-skeleton rounded bg-opacity-50 animate-pulse"/>
-          <div className="h-[24px] w-1/12 bg-skeleton rounded bg-opacity-50 animate-pulse"/>
+    <div className="keys-loading">
+      {items.map((_, i) => (
+        <div className="skeleton-row" key={i}>
+          <div className="skeleton-circle" />
+          <div className="skeleton-row">
+            <div className="w-30 skeleton-block"/>
+            <div className="w-50 skeleton-block"/>
+            <div className="w-20 skeleton-block"/>
+          </div>
         </div>
-      </div>
-      <div className="flex mb-4">
-        <div className="h-[36px] w-[36px] min-w-[36px] rounded-full bg-skeleton bg-opacity-50 animate-pulse me-6"/>
-        <div className="h-[36px] w-full flex items-center justify-between">
-          <div className="h-[24px] w-6/12 bg-skeleton rounded bg-opacity-50 animate-pulse"/>
-          <div className="h-[24px] w-4/12 bg-skeleton rounded bg-opacity-50 animate-pulse"/>
-          <div className="h-[24px] w-1/12 bg-skeleton rounded bg-opacity-50 animate-pulse"/>
-        </div>
-      </div>
-      <div className="flex mb-4">
-        <div className="h-[36px] w-[36px] min-w-[36px] rounded-full bg-skeleton bg-opacity-50 animate-pulse me-6"/>
-        <div className="h-[36px] w-full flex items-center justify-between">
-          <div className="h-[24px] w-6/12 bg-skeleton rounded bg-opacity-50 animate-pulse"/>
-          <div className="h-[24px] w-4/12 bg-skeleton rounded bg-opacity-50 animate-pulse"/>
-          <div className="h-[24px] w-1/12 bg-skeleton rounded bg-opacity-50 animate-pulse"/>
-        </div>
-      </div>
-
-
+      ))}
     </div>
   );
 };
