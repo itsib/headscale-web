@@ -1,10 +1,13 @@
-import { useMemo } from 'react';
-import { RenderableProps } from 'preact';
+import { useMemo } from 'preact/hooks';
+import { FunctionComponent } from 'preact';
 
-export function Raw(props: RenderableProps<{ metrics?: string; refetch: () => void }>) {
-  const { metrics: raw } = props;
+export interface RawPageProps {
+  metrics: string;
+  refetch?: () => void;
+}
 
-  const strings = useMemo(() => raw ? raw.split('\n') : [], [raw]);
+export const RawPage: FunctionComponent<RawPageProps> = ({ metrics }) => {
+  const strings = useMemo(() => metrics.split('\n'), [metrics]);
 
   return (
     <div className="whitespace-pre-wrap">

@@ -1,4 +1,14 @@
 .metrics-page {
+  padding-top: 1.5rem;
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .sub-caption {
+    color: rgb(var(--text-secondary));
+  }
 
   .tabs-links {
     margin: 1rem 0 2rem;

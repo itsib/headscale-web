@@ -1,0 +1,68 @@
+.metrics-row {
+  margin-top: .75rem;
+  padding-top: .75rem;
+  border-top: solid 1px rgb(var(--border-primary));
+
+  h4 {
+    margin: 0.25rem 0;
+  }
+
+  .main-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+
+    .description {
+      max-width: 50%;
+      color: rgb(var(--text-secondary));
+      font-size: .85rem;
+    }
+
+    .single-data-point-view {
+      text-align: end;
+
+      .main-value {
+        font-size: .875rem;
+        white-space: nowrap;
+      }
+
+      .attributes {
+
+        .attr {
+          font-size: .75rem;
+          white-space: nowrap;
+          color: rgb(var(--text-secondary));
+        }
+      }
+    }
+
+    .bar-chart-data-point-view {
+
+      .totals {
+        width: min-content;
+        margin: .5rem 1rem 0 auto;
+        font-size: .875rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr min-content;
+        grid-auto-rows: auto;
+        column-gap: .5rem;
+        row-gap: .25rem;
+
+        .title {
+          padding-right: 1rem;
+        }
+
+        .total-label {
+          color: rgb(var(--text-secondary));
+          text-align: end;
+        }
+
+        .total-row {
+
+        }
+      }
+    }
+
+    .simple-rows-data-point-view {}
+  }
+}

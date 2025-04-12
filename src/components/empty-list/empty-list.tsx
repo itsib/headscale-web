@@ -1,14 +1,14 @@
-import { memo } from 'preact/compat';
-import { Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import './empty-list.css';
+import { FunctionComponent } from 'preact';
 
-export const EmptyList = memo(function EmptyList({ message }: { message?: string }) {
+export const EmptyList: FunctionComponent<{ message?: string }> = ({ message }) =>  {
+  const { t } = useTranslation();
+
   return (
     <div className="empty-list">
       <img src="/images/empty-box.svg" alt="empty" width="80" height="80" />
-      <div className="message">
-        <Trans i18nKey={message || 'empty_list'} />
-      </div>
+      <div className="message">{t(message || 'empty_list')}</div>
     </div>
   );
-})
+}

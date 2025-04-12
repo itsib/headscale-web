@@ -1,70 +1,116 @@
 import { memo } from 'preact/compat';
+import { useId } from '@app-hooks/use-id';
+import { getStringSize } from '@app-utils/get-string-size';
 
 export interface ChartBar {
-  value: number;
-  label?: string;
+  x: number;
+  y: number | string;
 }
 
 export interface ChartBarsProps {
   bars: ChartBar[];
-  unit?: string;
+  xAxis?: string;
+  yAxis?: string;
 }
 
-export const ChartBars = memo(function ChartBars({ bars, unit: _ }: ChartBarsProps) {
-  let maxLabelWidth = 0;
-  let maxValue = 0;
+export const ChartBars = memo(function ChartBars({ bars, xAxis, yAxis }: ChartBarsProps) {
+  const id = useId();
+  const fontConfig = {
+    size: 11,
+    weight: 400,
+    family: 'SFProText'
+  }
+
+  let lineHeight = 0;
+  let maxX = 0;
+  let maxYWidth = 0;
+  let maxXWidth = 0;
 
   for (let i = 0; i < bars.length; i++) {
     const bar = bars[i];
-    if (bar.value > maxValue) {
-      maxValue = bar.value;
+    maxX = Math.max(bar.x, maxX);
+
+    const xSize = getStringSize(bar.x, fontConfig);
+    if (xSize)  {
+      maxXWidth = Math.max(xSize.width, maxXWidth);
+      lineHeight = Math.max(xSize.height, lineHeight);
     }
-    const labelWidth = (bar.label?.length || 0) * 8;
-    if (maxLabelWidth < labelWidth) {
-      maxLabelWidth = labelWidth;
+
+    const labelSize = bar.y ? getStringSize(bar.y, fontConfig) : { width: 0, height: 0 };
+    if (labelSize)  {
+      maxYWidth = Math.max(labelSize.width, maxYWidth);
     }
   }
 
   const margin = { t: 0, r: 0, l: 0, b: 0 };
-  const innerWidth = 240;
-  const barHeight = 26;
-  const width = innerWidth + maxLabelWidth + margin.l + margin.r;
-  const innerHeight = bars.length * barHeight;
-  const height = innerHeight + margin.t + margin.b;
-  const fontSize = 12;
+  const space = 6;
+  const maxBarWidth = 240;
+  const barHeight = 22;
+  const maxBarsHeight = bars.length * (barHeight + space);
 
-  const scaleY = (index: number) => Math.round(margin.t + (innerHeight / bars.length * index));
+  const barsBaseXAxis = margin.l + maxXWidth + space + maxBarWidth;
+  const labelsBaseXAxis = barsBaseXAxis + space;
+  const width = labelsBaseXAxis + maxYWidth + space + lineHeight + margin.r;
 
-  const scaleX = (value: number) => Math.round(innerWidth / maxValue * value);
+  const height = margin.t + maxBarsHeight + space + lineHeight + margin.b;
+
+  const textPadding = (barHeight - (space / 2) - lineHeight) / 2;
+
+  const scaleY = (index: number) => margin.t + (index > 0 ? Math.round((maxBarsHeight / bars.length) * index) : 0);
+
+  const scaleX = (value: number) => Math.round(maxBarWidth / maxX * value);
 
   return (
-    <div className="bar-chart">
+    <div className="chart-bars">
       <svg
+        id={id}
         width={width}
         height={height}
         style={{ maxWidth: '100%', height: 'auto' }}
         viewBox={`0 0 ${width} ${height}`}
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g>
-          {bars.map((bar, index) => (
-            <g key={index}>
-              <rect
-                fill="none"
-                x={margin.l}
-                y={scaleY(index) + 3}
-                width={innerWidth + maxLabelWidth}
-                height={barHeight - 6}
-              />
+        {bars.map((bar, index) => {
+          const _y = scaleY(index);
+          const _x = barsBaseXAxis - scaleX(bar.x);
+          const _width = Math.max(scaleX(bar.x || 0), 1);
+
+          return (
+            <g class="data-segment" key={index}>
+              <g opacity="0" className="value">
+                <text
+                  className="bar-value"
+                  x={_x - space}
+                  y={_y + lineHeight + textPadding}
+                  text-anchor="end"
+                  font-family={fontConfig.family}
+                  font-size={fontConfig.size}
+                  font-weight={fontConfig.weight}
+                  fill="rgb(var(--text-primary))"
+                >
+                  {bar.x}
+                </text>
+
+                <animate
+                  attributeName="opacity"
+                  dur="0.15s"
+                  begin="0.6s"
+                  repeatCount="1"
+                  fill="freeze"
+                  from="0"
+                  to="0.8"
+                />
+              </g>
+
               <rect
                 class="bar"
-                fill="rgba(var(--text-secondary))"
-                x={width - scaleX(bar.value)}
-                y={scaleY(index) + 3}
-                width={scaleX(bar.value || 1)}
-                height={barHeight - 6}
+                x={_x}
+                y={_y}
+                width={_width}
+                height={barHeight}
                 transform="scale(0 1)"
-                transform-origin="center right"
+                transform-origin={`${barsBaseXAxis} center`}
+                fill={`var(--bar-color-${index + 1})`}
               >
                 <animateTransform
                   attributeName="transform"
@@ -80,35 +126,55 @@ export const ChartBars = memo(function ChartBars({ bars, unit: _ }: ChartBarsPro
                   keySplines="0.07 0.55 0.7 0.9"
                 />
               </rect>
-              <text
-                id={`textAnimation-${index}`}
-                fill="rgba(var(--text-primary) / 1)"
-                x={width - scaleX(bar.value) - 6}
-                y={scaleY(index) + fontSize + 6}
-                text-anchor="end"
-                font-size={fontSize}
-                font-weight={400}
-                transform="translate(0 0)"
-              >
-                {bar.label}
-              </text>
 
-              <animateTransform
-                attributeName="transform"
-                attributeType="xml"
-                type="translate"
-                dur="0.5s"
-                begin="0.1s"
-                repeatCount="1"
-                fill="freeze"
-                calcMode="spline"
-                values={`${scaleX(bar.value || 1)},0; 0,0`}
-                keyTimes="0; 1"
-                keySplines="0.07 0.55 0.7 0.9"
-                xlinkHref={`#textAnimation-${index}`}
-              />
+              <g className="label">
+                <text
+                  className="bar-label"
+                  x={labelsBaseXAxis}
+                  y={_y + lineHeight + textPadding}
+                  text-anchor="start"
+                  font-family={fontConfig.family}
+                  font-size={fontConfig.size}
+                  font-weight={fontConfig.weight}
+                  fill="rgb(var(--text-primary))"
+                >
+                  {bar.y}
+                </text>
+              </g>
             </g>
-          ))}
+          );
+        })}
+
+        <g fill="rgb(var(--text-secondary))">
+          {yAxis ? (
+            <text
+              className="y-axis-name"
+              x={labelsBaseXAxis + space + maxYWidth}
+              y={margin.t + (maxBarsHeight / 2)}
+              text-anchor="center center"
+              font-family={fontConfig.family}
+              font-size={fontConfig.size}
+              font-weight={fontConfig.weight}
+              transform-origin={`${labelsBaseXAxis + space + maxYWidth + space} ${margin.t + (maxBarsHeight / 2)}`}
+              transform="rotate(-90)"
+            >
+              {yAxis}
+            </text>
+          ) : null}
+
+          {xAxis ? (
+            <text
+              className="x-axis-name"
+              x={barsBaseXAxis - space}
+              y={maxBarsHeight + space}
+              text-anchor="end"
+              font-family={fontConfig.family}
+              font-size={fontConfig.size}
+              font-weight={fontConfig.weight}
+            >
+              {xAxis}
+            </text>
+          ) : null}
         </g>
       </svg>
     </div>
@@ -116,7 +182,7 @@ export const ChartBars = memo(function ChartBars({ bars, unit: _ }: ChartBarsPro
 }, comparator);
 
 function comparator(prev: ChartBarsProps, next: ChartBarsProps) {
-  if (prev.unit !== next.unit || prev.bars.length !== next.bars.length) {
+  if (prev.xAxis !== next.xAxis || prev.yAxis !== next.yAxis || prev.bars.length !== next.bars.length) {
     return false;
   }
   if (prev.bars === next.bars) {
@@ -124,7 +190,7 @@ function comparator(prev: ChartBarsProps, next: ChartBarsProps) {
   }
 
   for (let i = 0; i < prev.bars.length; i++) {
-    if (next.bars[i].label !== prev.bars[i].label || next.bars[i].value !== prev.bars[i].value) {
+    if (next.bars[i].y !== prev.bars[i].y || next.bars[i].x !== prev.bars[i].x) {
       return false;
     }
   }

@@ -74,6 +74,13 @@
 
   --error: 220 38 38;
 
+  --bar-color-1: #0073e5;
+  --bar-color-2: #22782c;
+  --bar-color-3: #c16841;
+  --bar-color-4: #aa2395;
+  --bar-color-5: #1e9898;
+  --bar-color-6: #F75464;
+
   /* JSON editor highlight */
   --code-highlight-number: #1c86c6;
   --code-highlight-string: #22782c;
