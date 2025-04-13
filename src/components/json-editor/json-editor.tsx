@@ -27,6 +27,8 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
 
   isOnChange: boolean = false;
 
+  private _unsubscribe?: () => void;
+
   constructor(props: JsonEditorProps, context?: any) {
     super(props, context);
     this.state = {
@@ -34,24 +36,28 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
     };
 
     this.history = new HistoryControl({ value: props.value });
+  }
 
-    this.history.onChange(value => {
+  componentDidMount() {
+    const sub0 = this.history.sub<{ value: string }>('change', ({ value }) => {
       this.setState({ code: value });
       this.isOnChange = true;
       this.props.value = value;
       this.props.onChange?.(value);
     });
-  }
 
-  componentDidMount() {
-    const editable = this.editable.current;
-    if (!editable) return;
+    const sub1 = this.history.sub<{ position: number }>('cursor', ({ position }) => {
+      this.updateCursor(position);
+    });
 
-
+    this._unsubscribe = () => {
+      sub0();
+      sub1();
+    };
   }
 
   componentWillUnmount() {
-
+    this._unsubscribe?.();
   }
 
   componentWillReceiveProps(nextProps: Readonly<JsonEditorProps>) {
@@ -63,64 +69,66 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
   }
 
   onBeforeInput(event: InputEvent) {
-    console.log(event.getTargetRanges());
     if (this.isLocked) return;
     event.preventDefault();
+
+    const range = event.getTargetRanges()[0];
     const data = event.data;
-    const selection: Selection | null = document.getSelection();
-
-    if (!selection) return;
-
-    const { selectionStart, selectionEnd } = this._getRangePosition(selection);
+    const { selectionStart, selectionEnd } = this._getSelection(range);
 
     switch (event.inputType) {
+      // Input text
       case 'insertText': {
-        const text = data || '';
-        this.history.insert(selectionStart, selectionEnd, text);
-
-        this.updateCursor(selectionStart + text.length);
+        this.history.insertText(selectionStart, selectionEnd, data || '');
         break;
       }
+      // Backspace key
       case 'deleteContentBackward': {
-        let cursorPosition = 0;
-
-        if (selectionStart === selectionEnd) {
-          this.history.insert(selectionStart - 1, selectionStart);
-          cursorPosition = selectionStart - 1;
-        } else {
-          this.history.insert(selectionStart, selectionEnd);
-          cursorPosition = selectionStart;
-        }
-
-        this.updateCursor(cursorPosition);
+        this.history.backspaceText(selectionStart, selectionEnd);
         break;
       }
+      // Delete key
       case 'deleteContentForward': {
-        if (selectionStart === selectionEnd) {
-          this.history.insert(selectionStart, selectionStart + 1);
-        } else {
-          this.history.insert(selectionStart, selectionEnd);
-        }
-        this.updateCursor(selectionStart);
+        this.history.deleteText(selectionStart, selectionEnd);
         break;
       }
+      // Enter key
       case 'insertParagraph': {
-        this.history.insert(selectionStart, selectionEnd, '\n');
-
-        this.updateCursor(selectionStart + 1);
+        this.history.insertText(selectionStart, selectionEnd, '\n');
+        break;
+      }
+      // Ctrl + X
+      case 'deleteByCut': {
+        this.history.deleteText(selectionStart, selectionEnd);
+        break;
+      }
+      // Ctrl + V
+      case 'insertFromPaste': {
+        const text = event.dataTransfer?.getData('text');
+        if (text) {
+          this.history.insertText(selectionStart, selectionEnd, text);
+        }
         break;
       }
       case 'deleteByDrag': {
-        this.history.insert(selectionStart, selectionEnd);
-        console.log('deleteByDrag', selectionStart, selectionEnd, event);
+        this.history.dragText(selectionStart, selectionEnd);
         break;
       }
       case 'insertFromDrop': {
-        // const text2 = data || '';
-        console.log('insertFromDrop', selectionStart, selectionEnd, event);
+        const text = event.dataTransfer?.getData('text');
+        if (text) {
+          const startCharCode = text.codePointAt(0);
+          if (startCharCode === 10) {
+            const begin = this.state.code.slice(0, selectionStart);
+            if (begin.codePointAt(begin.length - 1) === 10) {
+              this.history.dropText(selectionStart - 1, selectionEnd - 1, text);
+              break;
+            }
+          }
+          this.history.dropText(selectionStart, selectionEnd, text);
+        }
         break;
       }
-
       default:
         console.log(event.inputType);
     }
@@ -132,11 +140,15 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
     }
 
     if (event.code === 'KeyZ' && event.ctrlKey && !event.altKey && !event.shiftKey) {
-      return this.onUndo(event);
+      event.preventDefault();
+      this.history.undo();
+      return;
     }
 
     if (event.code === 'KeyZ' && event.ctrlKey && !event.altKey && event.shiftKey) {
-      return this.onRedo(event);
+      event.preventDefault();
+      this.history.redo();
+      return;
     }
 
     if (event.code === 'KeyS' && event.ctrlKey && !event.altKey && !event.shiftKey) {
@@ -152,36 +164,20 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
   onTabKeyDown(event: KeyboardEvent): void {
     event.preventDefault();
     const selection: Selection | null = document.getSelection();
-    if (!selection) return;
-    const { selectionStart, selectionEnd } = this._getRangePosition(selection);
+    const range = selection?.getRangeAt(0);
+    if (!range) return;
+    const { selectionStart, selectionEnd } = this._getSelection(range);
 
     const lastLine = this.state.code.slice(0, selectionStart).split('\n').pop() || '';
     const spaces = lastLine.length % this.tabSize || this.tabSize;
 
-    this.history.insert(selectionStart, selectionEnd, ' '.repeat(spaces));
-
-    this.updateCursor(selectionStart + spaces);
+    this.history.insertText(selectionStart, selectionEnd, ' '.repeat(spaces));
   }
 
-  onUndo(event: KeyboardEvent): void {
-    event.preventDefault();
-    const selection: Selection | null = document.getSelection();
-    if (!selection) return;
-    const { selectionStart } = this._getRangePosition(selection);
+  updateCursor(position: number) {
+    this.isLocked = true;
 
-    const newPos = this.history.undo();
-
-    this.updateCursor(newPos !== null ? newPos : selectionStart);
-  }
-
-  onRedo(event: KeyboardEvent): void {
-    event.preventDefault();
-    const selection: Selection | null = document.getSelection();
-    if (!selection) return;
-    const { selectionStart } = this._getRangePosition(selection);
-
-    const newPos = this.history.redo();
-    this.updateCursor(newPos !== null ? newPos : selectionStart);
+    queueMicrotask(() => this._setCursorPosition(position));
   }
 
   render(): VNode {
@@ -215,47 +211,109 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
     );
   }
 
-  updateCursor(position: number) {
-    this.isLocked = true;
+  private _getSelection(event: AbstractRange) {
+    const { startOffset, endOffset, startContainer, endContainer, collapsed } = event;
 
-    queueMicrotask(() => this._setCursorPosition(position));
-  }
-
-  private _getRangePosition(selection: Selection) {
-    const startNode = selection.anchorOffset < selection.focusOffset ? selection.anchorNode : selection.focusNode;
-    const startOffset = selection.anchorOffset < selection.focusOffset ? selection.anchorOffset : selection.focusOffset;
-
-    let lineElement = startNode as HTMLElement;
-    while (!(lineElement && lineElement.nodeType === Node.ELEMENT_NODE && (lineElement as any).classList.contains('cm-line'))) {
-      lineElement = lineElement!.parentElement as HTMLElement;
+    const isLine = (_node?: Node | null): boolean => {
+      return !!_node && _node.nodeType === Node.ELEMENT_NODE && (_node as HTMLElement).classList.contains('cm-line');
     }
-    const lineIndex = parseInt(lineElement.dataset!.line!);
 
-    let offset = 0;
-    for (const node of lineElement!.childNodes) {
-      if (node === startNode || node.childNodes[0] === startNode) {
-        offset += startOffset;
-        break;
-      } else {
-        offset += node.textContent?.length || 0;
+    const getPrevNode = (_node?: Node | null): Node | null => {
+      if (!_node) return null;
+
+      if (_node.previousSibling) {
+        return _node.previousSibling;
+      }
+
+      while (true) {
+        _node = _node?.parentNode;
+        if (!_node || _node === this.editable.current) return null;
+
+        if (_node.previousSibling) {
+          return _node.previousSibling;
+        }
       }
     }
 
-    let selectionStart = 0;
-    const lines = this.state.code.split('\n');
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      if (i === lineIndex) {
-        selectionStart += offset;
-        break;
-      } else {
-        selectionStart += line.length + 1;
+    const getNextNode = (_node?: Node | null): Node | null => {
+      if (!_node) return null;
+
+      if (_node.nextSibling) {
+        return _node.nextSibling;
+      }
+
+      while (true) {
+        _node = _node?.parentNode;
+        if (!_node || _node === this.editable.current) return null;
+
+        if (_node.nextSibling) {
+          return _node.nextSibling;
+        }
       }
     }
 
-    const selectionEnd = selectionStart + selection.toString().length;
+    let lengthToStart = startOffset;
+    let element = getPrevNode(startContainer);
 
-    return { selectionStart, selectionEnd };
+    // Compute start of selection (string index)
+    while (element && element !== this.editable.current) {
+      lengthToStart += element.textContent?.length || 0;
+      if (isLine(element)) {
+        lengthToStart += 1;
+      }
+      element = getPrevNode(element);
+    }
+
+    // If not selected (selectionStart === selectionEnd)
+    if (collapsed) {
+      return {
+        selectionStart: lengthToStart,
+        selectionEnd: lengthToStart,
+      };
+    }
+
+    // Selection inside one container
+    if (startContainer === endContainer) {
+      return {
+        selectionStart: lengthToStart,
+        selectionEnd: lengthToStart + (endOffset - startOffset),
+      };
+    }
+
+    // Compute selection length
+    let selectionLength = (startContainer.textContent?.length || 0) - startOffset;
+    element = getNextNode(startContainer);
+
+    while (element && !element.contains(endContainer) && element !== this.editable.current) {
+      selectionLength += element.textContent?.length || 0;
+      if (isLine(element)) {
+        selectionLength += 1;
+      }
+      element = getNextNode(element);
+    }
+
+    if (isLine(element)) {
+      selectionLength += 1;
+    }
+
+    element = element?.firstChild || null;
+    while (element && element !== endContainer) {
+      selectionLength += element.textContent?.length || 0;
+
+      element = element.nextSibling;
+      if (element && element.contains(endContainer)) {
+        element = element.firstChild;
+      }
+    }
+
+    if (element && element.textContent) {
+      selectionLength += endOffset;
+    }
+
+    return {
+      selectionStart: lengthToStart,
+      selectionEnd: lengthToStart + selectionLength,
+    };
   }
 
   private _setCursorPosition(position: number): void {
@@ -306,4 +364,3 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
     this.isLocked = false;
   }
 }
-

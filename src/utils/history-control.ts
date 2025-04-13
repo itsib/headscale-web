@@ -1,32 +1,25 @@
-type Listener = (value: string) => void;
+import { HistoryConfig, HistoryMutation, HistoryMutationType } from '@app-types';
+import { Emitter } from 'react-just-ui/utils/emitter';
 
-interface Command {
-  cursor: number;
-  adds: string;
-  removes: string;
-}
-
-export interface HistoryConfig {
-  value?: string;
-  limit?: number;
-}
-
-export class HistoryControl {
-
-  private readonly _history: Command[] = [];
-
-  private readonly _listeners: Set<Listener>;
+export class HistoryControl extends Emitter {
+  /**
+   * Mutation store
+   * @private
+   */
+  private readonly _mutations = new Map<number, HistoryMutation>();
 
   private _value: string;
 
   private _limit: number;
 
+  private _indexFirst = 0;
+  private _indexLast = -1;
   private _index = -1;
 
   constructor(config: HistoryConfig = {}) {
+    super();
     this._value = config.value || '';
     this._limit = config.limit || 300;
-    this._listeners = new Set<Listener>();
   }
 
   get value() {
@@ -34,117 +27,290 @@ export class HistoryControl {
   }
 
   get history() {
-    return this._history;
+    const history: HistoryMutation[] = [];
+    for (let i = this._indexFirst; i <= this._index; i++) {
+      history.push(this._mutations.get(i)!);
+    }
+
+    return history;
   }
 
-  private _updateValue(newValue: string) {
-    this._value = newValue;
-    for (const cb of this._listeners.values()) {
-      cb(this._value);
+  private _rollback(mutation: HistoryMutation, skipCursor?: boolean): void {
+    let cursor: number | null = null;
+
+    switch (mutation.type) {
+      case HistoryMutationType.Insert:
+        this._removeFrom(mutation.cursor, mutation.cursor + mutation.text.length);
+
+        if (mutation.sub) {
+          this._rollback(mutation.sub);
+        }
+        break;
+      case HistoryMutationType.Delete:
+        this._insertTo(mutation.cursor, mutation.text);
+        cursor = mutation.cursor + mutation.text.length;
+        break;
+      case HistoryMutationType.Backspace:
+        this._insertTo(mutation.cursor, mutation.text);
+        cursor = mutation.cursor;
+        break;
+      case HistoryMutationType.Drag:
+        if (mutation.sub) {
+          this._rollback(mutation.sub);
+        }
+        this._insertTo(mutation.cursor, mutation.text);
+        cursor = mutation.cursor + mutation.text.length;
+        break;
+      case HistoryMutationType.Drop:
+        this._removeFrom(mutation.cursor, mutation.cursor + mutation.text.length);
+        break;
+    }
+
+    if (cursor && !skipCursor) {
+      this._emitCursor(cursor);
     }
   }
 
-  private _beforePush() {
-    const removedCount = this._history.length - (this._index + 1);
-    if (removedCount > 0) {
-      this._history.splice(this._index, removedCount);
+  private _rollup(mutation: HistoryMutation, skipCursor?: boolean) {
+    let cursor: number | null = null;
+
+    switch (mutation.type) {
+      case HistoryMutationType.Insert:
+        if (mutation.sub) {
+          this._rollup(mutation.sub, true);
+        }
+        this._insertTo(mutation.cursor, mutation.text);
+        cursor = mutation.cursor + mutation.text.length;
+        break;
+      case HistoryMutationType.Delete:
+        this._removeFrom(mutation.cursor, mutation.cursor + mutation.text.length);
+        cursor = mutation.cursor;
+        break;
+      case HistoryMutationType.Backspace:
+        this._removeFrom(mutation.cursor, mutation.cursor + mutation.text.length);
+        cursor = mutation.cursor;
+        break;
+      case HistoryMutationType.Drag:
+        this._removeFrom(mutation.cursor, mutation.cursor + mutation.text.length);
+        if (mutation.sub) {
+          this._rollup(mutation.sub);
+        }
+        break;
+      case HistoryMutationType.Drop:
+        this._insertTo(mutation.cursor, mutation.text);
+        cursor = mutation.cursor + mutation.text.length;
+    }
+
+    if (cursor && !skipCursor) {
+      this._emitCursor(cursor);
     }
   }
 
-  private _afterPush() {
-    if (this._history.length > this._limit) {
-      this._history.shift();
+  private _push(mutation: HistoryMutation): void {
+    if (this._index < this._indexLast) {
+      for (let i = this._index + 1; i <= this._indexLast; i++) {
+        this._mutations.delete(i);
+      }
+      this._indexLast = this._index;
+    }
+
+    this._index += 1;
+    this._indexLast = this._index;
+    this._mutations.set(this._index, mutation);
+
+    while (this._mutations.size > this._limit) {
+      this._mutations.delete(this._indexFirst);
+      this._indexFirst += 1;
     }
   }
 
-  private _replaceByRange(start: number, end: number, text = ''): string {
-    if (start > end) {
+  private _validateRange(start: number, end: number) {
+    if (start < 0 || start > end) {
       throw new Error('WRONG_RANGE');
     }
+  }
+
+  private _emitCursor(position: number): void {
+    this.emit('cursor', { position });
+  }
+
+  /**
+   * Insert string in other string to index
+   * @param index
+   * @param text
+   * @private
+   */
+  private _insertTo(index: number, text: string) {
+    const beginText = this._value.slice(0, index);
+    const endText = this._value.slice(index);
+
+    this._value = beginText + text + endText;
+
+    this.emit('change', { value: this._value });
+  }
+
+  /**
+   * Remove string part between start and end index.
+   * @param start
+   * @param end
+   * @return Returns substring to have been removed.
+   * @private
+   */
+  private _removeFrom(start: number, end: number): string {
     const removes = this._value.slice(start, end);
 
-    this._updateValue(this._value.slice(0, start) + text + this._value.slice(end));
+    this._value = this._value.slice(0, start) + this._value.slice(end);
+
+    this.emit('change', { value: this._value });
 
     return removes;
   }
 
-  onChange(callback: Listener): () => void {
-    this._listeners.add(callback);
-
-    return () => {
-      this._listeners.delete(callback);
-    }
-  }
-
-  insert(start: number, end: number, text = '', isSkipMerge?: boolean) {
-    this._beforePush();
-
-    if (start === end && !text) return;
-    if (start < 0 || start > end) {
-      throw new Error('WRONG_RANGE');
+  insertText(start: number, end: number, text: string): void {
+    this._validateRange(start, end);
+    if (!text) {
+      throw new Error('NO_TEXT');
     }
 
-    // Merging changes of the same type into one commit.
-    const last = isSkipMerge ? undefined : this._history[this._index];
-    if (last) {
-      // Delete
-      if (!text && last.adds.length === 0 && start === last.cursor && end - start === 1) {
-        const removes = this._replaceByRange(start, end);
-        last.removes = last.removes + removes;
-        return;
-      }
-      // Backspace
-      if (!text && last.adds.length === 0 && end - start === 1 && start === (last.cursor - 1)) {
-        const removes = this._replaceByRange(start, end);
-        last.removes = removes + last.removes;
-        last.cursor = start;
-        return;
-      }
-      // Input symbol
-      if (text?.length === 1 && start === end && last.removes.length === 0 && (start - last.adds.length) === last.cursor) {
-        this._replaceByRange(start, end, text);
-        last.adds = last.adds + text;
-        return;
+    let removeMutation: HistoryMutation | undefined = undefined;
+    if (start !== end) {
+      removeMutation = {
+        type: HistoryMutationType.Delete,
+        text: this._removeFrom(start, end),
+        cursor: start,
       }
     }
 
-    const removes = this._replaceByRange(start, end, text);
-    const commit: Command = {
+    const last = removeMutation || text.length !== 1 ? undefined : this._mutations.get(this._index);
+    if  (last && last.type === HistoryMutationType.Insert && last.cursor === (end - last.text.length)) {
+      this._insertTo(end, text);
+      last.text = last.text + text;
+
+      return this._emitCursor(end + 1);
+    }
+
+    this._insertTo(start, text);
+
+    const mutation: HistoryMutation = {
+      type: HistoryMutationType.Insert,
+      text: text,
       cursor: start,
-      adds: text,
-      removes,
+    }
+    if (removeMutation) {
+      mutation.sub = removeMutation;
+    }
+
+    this._push(mutation);
+    return this._emitCursor(start + text.length);
+  }
+
+  deleteText(start: number, end: number): void {
+    this._validateRange(start, end);
+
+    const last = (end - start) === 1 ? this._mutations.get(this._index) : undefined;
+    if (last && last.type === HistoryMutationType.Delete && start === last.cursor) {
+      const removes = this._removeFrom(start, end);
+      last.text = last.text + removes;
+
+      return this._emitCursor(start);
+    }
+
+    const removes = this._removeFrom(start, end);
+    const mutation: HistoryMutation = {
+      type: HistoryMutationType.Delete,
+      text: removes,
+      cursor: start,
+    }
+    this._push(mutation);
+
+    return this._emitCursor(start);
+  }
+
+  backspaceText(start: number, end: number): void {
+    this._validateRange(start, end);
+
+    const last = (end - start) === 1 ? this._mutations.get(this._index) : undefined;
+    if (last && last.type === HistoryMutationType.Backspace && start === (last.cursor - 1)) {
+      const removes = this._removeFrom(start, end);
+      last.text = removes + last.text;
+      last.cursor = start;
+
+      return this._emitCursor(start);
+    }
+
+    const removes = this._removeFrom(start, end);
+    const mutation: HistoryMutation = {
+      type: HistoryMutationType.Backspace,
+      text: removes,
+      cursor: start,
+    }
+    this._push(mutation);
+
+    return this._emitCursor(start);
+  }
+
+  dragText(start: number, end: number) {
+    this._validateRange(start, end);
+
+    const removes = this._removeFrom(start, end);
+    const mutation: HistoryMutation = {
+      type: HistoryMutationType.Drag,
+      text: removes,
+      cursor: start,
+    }
+    this._push(mutation);
+  }
+
+  dropText(start: number, end: number, text: string) {
+    this._validateRange(start, end);
+    if (start !== end) {
+      throw new Error('RANGE_NOT_SAME');
+    }
+
+    const last = this._mutations.get(this._index);
+    if (last && last.type === HistoryMutationType.Drag) {
+      this._insertTo(start, text);
+      last.sub = {
+        type: HistoryMutationType.Drop,
+        text: text,
+        cursor: start,
+      }
+
+      return this._emitCursor(start + text.length);
+    }
+
+    this._insertTo(start, text);
+    const mutation: HistoryMutation = {
+      type: HistoryMutationType.Insert,
+      text: text,
+      cursor: start,
     };
-
-    this._history.push(commit);
-    this._index++;
-    this._afterPush();
+    this._push(mutation);
+    this._emitCursor(start + text.length);
   }
 
-  undo(): number | null {
-    const commit = this._history[this._index];
-    if (!commit) return null;
+  undo(): void {
+    const mutation = this._mutations.get(this._index);
+    if (!mutation) return;
 
-    const newValue = this._value.slice(0, commit.cursor) + commit.removes + this._value.slice(commit.cursor + commit.adds.length);
+    this._rollback(mutation);
+
     this._index -= 1;
-
-    this._updateValue(newValue);
-    return commit.cursor + commit.removes.length;
   }
 
-  redo(): number | null {
-    const commit = this._history[this._index + 1];
-    if (!commit) return null;
+  redo(): void {
+    const mutation = this._mutations.get(this._index + 1);
+    if (!mutation) return;
 
-    const newValue = this._value.slice(0, commit.cursor) + commit.adds + this._value.slice(commit.cursor + commit.removes.length);
+    this._rollup(mutation);
+
     this._index += 1;
-
-    this._updateValue(newValue);
-
-    return commit.cursor + commit.adds.length;
   }
 
   reset(value?: string): void {
-    this._history.length = 0;
+    this._mutations.clear();
+    this._indexFirst = 0;
+    this._indexLast = -1;
     this._index = -1;
     this._value = value == null ? this._value : value;
   }

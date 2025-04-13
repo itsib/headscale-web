@@ -19,3 +19,6 @@ export * from './metrics/metric';
 export * from './metrics/measure';
 
 export * from './auth/credentials';
+
+export * from './history-control/history-mutation';
+export * from './history-control/history-config';
