@@ -34,7 +34,7 @@ export const DeviceTableRow = memo(function DeviceTableRow(props: DeviceTableRow
             </div>
           ) : (
             <div className="text-secondary text-xs font-normal">
-              <FormattedDuration timestamp={expiryDate.getTime()}/>
+              <FormattedDuration duration={expiryDate.getTime()}/>
             </div>
           )}
         </div>
@@ -60,7 +60,7 @@ export const DeviceTableRow = memo(function DeviceTableRow(props: DeviceTableRow
       </td>
       <td>
         <Marker className="mr-3 mb-[1px]" isActive={online} />
-        <FormattedDate iso={lastSeen} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
+         <FormattedDate date={lastSeen} />
       </td>
       <td>
         <ContextMenu onAction={onAction} />

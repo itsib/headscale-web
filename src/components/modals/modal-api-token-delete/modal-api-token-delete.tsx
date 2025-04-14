@@ -59,20 +59,20 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenDeleteProps, 'isOpen' | 
               <Trans i18nKey="name"/>:
             </div>
             <div>
-              <FormattedDate iso={apiToken.createdAt} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
+               <FormattedDate date={apiToken.createdAt} />
             </div>
             <div className="text-secondary text-right font-light text-base whitespace-nowrap">
               <Trans i18nKey="expired_at"/>:
             </div>
             <div>
-              <FormattedDate iso={apiToken.expiration} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
+               <FormattedDate date={apiToken.expiration} />
             </div>
             <div className="text-secondary text-right font-light text-base whitespace-nowrap">
               <Trans i18nKey="last_seen"/>:
             </div>
             <div>
               {apiToken.lastSeen ? (
-                <FormattedDate iso={apiToken.lastSeen} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
+                 <FormattedDate date={apiToken.lastSeen} />
               ) : (
                 <>-</>
               )}

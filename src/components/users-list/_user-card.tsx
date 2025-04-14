@@ -46,7 +46,7 @@ export const UserCard = memo(function UserItem(props: UserCardProps) {
       <div className="info-row">
         <div className="label">{t('joined')}:</div>
         <div className="value">
-          <FormattedDate iso={createdAt}  hourCycle="h24" dateStyle="medium" timeStyle="medium" />
+           <FormattedDate date={createdAt} />
         </div>
       </div>
     </div>

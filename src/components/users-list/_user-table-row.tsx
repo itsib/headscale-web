@@ -22,7 +22,7 @@ export const UserTableRow = memo(function UserItem(props: UserTableRowProps) {
         ) : null}
       </td>
       <td>
-        <FormattedDate iso={createdAt}  hourCycle="h24" dateStyle="medium" timeStyle="medium" />
+         <FormattedDate date={createdAt} />
       </td>
       <td className="text-right w-[52px]">
         <ContextMenu onAction={onAction} />

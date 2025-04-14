@@ -1,35 +1,28 @@
 import {  useMemo } from 'preact/hooks';
-import type { FunctionComponent } from 'preact';
+import { FunctionComponent, JSX } from 'preact';
 import { useTranslation } from 'react-i18next';
+import { formatDate, FormatDateOpts } from '@app-utils/format-date.ts';
 
-export interface IFormattedDate extends Intl.DateTimeFormatOptions {
+export interface IFormattedDate extends Omit<FormatDateOpts, 'language'> {
+  date?: string | number;
   className?: string;
-  timestamp?: number | string;
-  iso?: string;
+  style?: JSX.CSSProperties;
 }
 
-export const FormattedDate: FunctionComponent<IFormattedDate & Intl.DateTimeFormatOptions> = ({ className, timestamp, iso, ...props }) => {
+export const FormattedDate: FunctionComponent<IFormattedDate> = props => {
+  const { className, style, date, dateFormat, timeFormat, is24Hour } = props;
   const { i18n } = useTranslation();
 
-  const formatter = useMemo(() => new Intl.DateTimeFormat(i18n.language, { ...props }), [i18n.language, props]);
-
   const formatted: string | null = useMemo(() => {
-    if (!timestamp && !iso) {
-      return null;
-    }
-
-    let date: Date;
-    if (iso) {
-      date = new Date(Date.parse(iso));
-    } else if (`${timestamp}`.length < 11) {
-      date = new Date(Math.floor(+timestamp! * 1000));
-    } else {
-      date = new Date(+timestamp!);
-    }
-    return formatter.format(date);
-  }, [formatter, timestamp, iso]);
+    return formatDate(date, {
+      language: i18n.language,
+      dateFormat,
+      timeFormat,
+      is24Hour,
+    });
+  }, [i18n.language, date, dateFormat, timeFormat, is24Hour]);
 
   return (
-    <span className={className}>{formatted}</span>
+    <span className={className} style={style}>{formatted}</span>
   );
 };

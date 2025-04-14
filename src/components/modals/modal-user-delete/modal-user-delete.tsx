@@ -60,7 +60,7 @@ const ModalContent: FunctionComponent<Omit<ModalUserDeleteProps, 'isOpen' | 'use
             <div className="text-secondary text-right font-light text-base"><Trans i18nKey="email"/>:</div>
             <div>{user.email}</div>
             <div className="text-secondary text-right font-light text-base"><Trans i18nKey="joined"/>:</div>
-            <div><FormattedDate iso={user.createdAt} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
+            <div> <FormattedDate date={user.createdAt} />
             </div>
           </div>
 

@@ -111,8 +111,7 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
               <Trans
                 i18nKey="auth_key_created_about_expiry"
                 components={{
-                  date: <FormattedDate iso={newAuthKey.expiration} hourCycle="h24" dateStyle="medium"
-                                       timeStyle="medium"/>,
+                  date:  <FormattedDate date={newAuthKey.expiration} />,
                 }}
               />
             </div>

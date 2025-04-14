@@ -87,7 +87,7 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> 
               <Trans
                 i18nKey="api_token_token_created_about_expiry"
                 components={{
-                  date: <FormattedDate iso={newApiTokenExpiry} hourCycle="h24" dateStyle="medium" timeStyle="medium" />
+                  date:  <FormattedDate date={newApiTokenExpiry}  />
                 }}
               />
             </div>

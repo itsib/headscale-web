@@ -41,12 +41,12 @@ export const AuthKeyItem = memo(function AuthKeyItem(props: AuthKeyItem) {
       </td>
       <td className="text-left lg:pl-10">
         <div className="text-sm text-secondary">
-          <FormattedDate iso={createdAt} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
+           <FormattedDate date={createdAt} />
         </div>
       </td>
       <td className="text-left">
         <div className="text-sm text-secondary">
-          <FormattedDate iso={expiration} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
+           <FormattedDate date={expiration} />
         </div>
         {isExpired ? (
           <div className="text-sm text-red-500">
@@ -54,7 +54,7 @@ export const AuthKeyItem = memo(function AuthKeyItem(props: AuthKeyItem) {
           </div>
         ) : (
           <div className="text-sm text-secondary">
-            <FormattedDuration iso={expiration} format="long"/>
+            <FormattedDuration duration={expiration} />
           </div>
         )}
       </td>

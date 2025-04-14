@@ -33,7 +33,7 @@ export const DeviceCard = memo(function DeviceItem(props: DeviceCardProps) {
             {expiryDisabled ? (
               <Trans i18nKey="expiry_disabled"/>
             ) : (
-              <FormattedDuration timestamp={expiryDate.getTime()}/>
+              <FormattedDuration duration={expiryDate.getTime()}/>
             )}
           </div>
         </div>

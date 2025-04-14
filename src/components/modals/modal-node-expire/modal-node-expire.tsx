@@ -65,13 +65,13 @@ const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: D
               <Trans i18nKey="created_at"/>:
             </div>
             <div>
-              <FormattedDate iso={node.createdAt} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
+               <FormattedDate date={node.createdAt} />
             </div>
             <div className="text-secondary text-right font-light text-base whitespace-nowrap">
               <Trans i18nKey="last_seen"/>:
             </div>
             <div>
-              <FormattedDate iso={node.lastSeen} hourCycle="h24" dateStyle="medium" timeStyle="medium"/>
+               <FormattedDate date={node.lastSeen} />
             </div>
           </div>
 
