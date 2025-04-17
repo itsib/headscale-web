@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'preact';
-import { ContextMenuBase, UserAction, UserWithProvider } from '@app-types';
+import { ContextMenuBase, UserAction, User } from '@app-types';
 import { useTranslation } from 'react-i18next';
 import { UserTableRow } from './_user-table-row';
 import { UserCard } from './_user-card';
@@ -7,8 +7,8 @@ import './users-list.css';
 
 export interface UsersListProps extends ContextMenuBase<UserAction> {
   layout: 'table' | 'cards';
-  users: UserWithProvider[];
-  onChange: (device: UserWithProvider) => void;
+  users: User[];
+  onChange: (device: User) => void;
 }
 
 export const UsersList: FunctionComponent<UsersListProps> = ({ users, layout, onChange, onAction }) => {
@@ -42,7 +42,7 @@ export const UsersList: FunctionComponent<UsersListProps> = ({ users, layout, on
         </table>
       ) : (
         <div className="cards-layout">
-          {users.map((user: UserWithProvider) => (
+          {users.map((user: User) => (
             <UserCard
               key={user.id}
               onAction={action => {

@@ -4,7 +4,7 @@ import { email, Input } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchFn } from '@app-utils/query-fn';
-import { User, UserIdentity } from '@app-types';
+import { User } from '@app-types';
 import { FunctionComponent } from 'preact';
 
 export interface ModalUserCreateProps extends ModalProps {
@@ -22,7 +22,7 @@ export const ModalUserCreate: FunctionComponent<ModalUserCreateProps> = ({ isOpe
 const ModalContent: FunctionComponent<Omit<ModalUserCreateProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
   const { t } = useTranslation();
 
-  const { handleSubmit, register, formState } = useForm<UserIdentity>({
+  const { handleSubmit, register, formState } = useForm<Pick<User, 'name' | 'displayName' | 'email'>>({
     defaultValues: {
       name: '',
       displayName: '',
@@ -32,7 +32,7 @@ const ModalContent: FunctionComponent<Omit<ModalUserCreateProps, 'isOpen'>> = ({
   const { errors } = formState;
 
   const { mutate, isPending, error } = useMutation({
-    async mutationFn(values: UserIdentity) {
+    async mutationFn(values: Pick<User, 'name' | 'displayName' | 'email'>) {
       const data = await fetchFn<{ user: User }>('/api/v1/user', {
         method: 'POST',
         body: JSON.stringify(values),

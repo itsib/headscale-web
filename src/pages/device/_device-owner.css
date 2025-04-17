@@ -1,0 +1,10 @@
+.device-owner {
+
+  .title {
+    margin-bottom: 1rem;
+  }
+
+  .selector {
+    max-width: 300px;
+  }
+}

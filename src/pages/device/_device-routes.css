@@ -1,0 +1,41 @@
+.device-routes {
+
+  .title {
+    margin-bottom: .5rem;
+  }
+
+  .sub-title {
+    margin-bottom: 1rem;
+    color: rgb(var(--text-secondary));
+    font-size: .875rem;
+  }
+
+  .routes-checkboxes {
+
+    .route-checkbox {
+
+      .ui-label {
+        margin-bottom: 0;
+        font-size: 1rem;
+        color: rgb(var(--text-primary));
+      }
+
+      &.disabled {
+
+        .ui-label {
+          color: rgb(var(--text-secondary));
+        }
+      }
+    }
+  }
+
+  .no-routes {
+    margin-top: 0.5rem;
+    padding: 1.25rem .5rem;
+    color: rgb(var(--text-secondary));
+    text-align: center;
+    border: 1px solid rgb(var(--border-primary));
+    border-radius: var(--border-radius);
+    background-color: rgb(var(--bg-primary) / .7);
+  }
+}

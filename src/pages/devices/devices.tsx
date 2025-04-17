@@ -1,8 +1,7 @@
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useMemo, useState, useCallback } from 'preact/hooks';
 import { Device, DeviceAction, ListLayout } from '@app-types';
 import { ModalNodeCreate } from '@app-components/modals/modal-node-create/modal-node-create';
-import { ModalNodeRename } from '@app-components/modals/modal-node-rename/modal-node-rename';
 import { ModalNodeChown } from '@app-components/modals/modal-node-chown/modal-node-chown';
 import { ModalNodeDelete } from '@app-components/modals/modal-node-delete/modal-node-delete';
 import { ModalNodeRoutes } from '@app-components/modals/modal-node-routes/modal-node-routes';
@@ -15,8 +14,10 @@ import { useBreakPoint } from '@app-hooks/use-break-point.ts';
 import { EmptyList } from '@app-components/empty-list/empty-list';
 import { DevicesList } from '@app-components/devices-list';
 import './devices.css';
+import { ModalDevice } from '@app-components/modals/modal-device/modal-device.tsx';
+import { PageCaption } from '@app-components/page-caption/page-caption.tsx';
 
-export function Devices() {
+export function DevicesPage() {
   const { t } = useTranslation();
   const [opened, setOpened] = useState<DeviceAction | null>(null);
   const [selected, setSelected] = useState<Device | null>(null);
@@ -72,21 +73,12 @@ export function Devices() {
   }, []);
 
   return (
-    <div className="devices-page">
-      <div className="caption">
-        <div className="">
-          <h1 className="mb-2">
-            <Trans i18nKey="devices"/>
-          </h1>
-          <p className="text-secondary">
-            <Trans i18nKey="machines_page_subtitle"/>
-          </p>
-        </div>
-
-        <div className="actions">
-          <ButtonGroup buttons={buttons} onClick={onClick}/>
-        </div>
-      </div>
+    <div className="page devices-page">
+      <PageCaption
+        title="devices"
+        subtitle="machines_page_subtitle"
+        actions={<ButtonGroup buttons={buttons} onClick={onClick}/>}
+      />
 
       {isLoading ? (
         <ListLoading />
@@ -98,17 +90,19 @@ export function Devices() {
 
       <div className="h-[40px]" />
 
+      <ModalDevice isOpen={opened === 'rename'} onDismiss={() => setOpened(null)} device={selected} />
+
       <ModalNodeCreate
         isOpen={opened === 'create'}
         onDismiss={() => setOpened(null)}
         onSuccess={() => refetch()}
       />
-      <ModalNodeRename
-        node={selected}
-        isOpen={opened === 'rename'}
-        onDismiss={() => setOpened(null)}
-        onSuccess={() => refetch()}
-      />
+      {/*<ModalNodeRename*/}
+      {/*  node={selected}*/}
+      {/*  isOpen={opened === 'rename'}*/}
+      {/*  onDismiss={() => setOpened(null)}*/}
+      {/*  onSuccess={() => refetch()}*/}
+      {/*/>*/}
       <ModalNodeChown
         node={selected}
         isOpen={opened === 'chown'}

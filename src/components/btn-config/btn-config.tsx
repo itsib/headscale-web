@@ -1,8 +1,7 @@
 import { FunctionComponent } from 'preact';
 import { Trans, useTranslation } from 'react-i18next';
-import { useTheme } from '@app-hooks/use-theme.ts';
-import { useCredentials } from '@app-hooks/use-credentials.ts';
-import { Theme } from '@app-utils/theme.ts';
+import { useTheme } from '@app-hooks/use-theme';
+import { useCredentials } from '@app-hooks/use-credentials';
 import { BtnContextMenu, PopupPlacement } from '@app-components/btn-context-menu';
 import './btn-config.css';
 
@@ -20,12 +19,12 @@ export const BtnConfig: FunctionComponent = () => {
             role="menuitem"
             type="button"
             className="btn-context-menu flex items-center"
-            onClick={() => setTheme(Theme.Light)}
+            onClick={() => setTheme('light')}
           >
             <i className="icon icon-sun"/>
             <Trans i18nKey="light"/>
 
-            {theme === Theme.Light ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
+            {theme === 'light' ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
           </button>
         </div>
         <div className="context-menu-item">
@@ -34,11 +33,11 @@ export const BtnConfig: FunctionComponent = () => {
             role="menuitem"
             type="button"
             className="btn-context-menu flex items-center"
-            onClick={() => setTheme(Theme.Dark)}
+            onClick={() => setTheme('dark')}
           >
             <i className="icon icon-moon"/>
             <Trans i18nKey="dark"/>
-            {theme === Theme.Dark ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
+            {theme === 'dark' ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
           </button>
         </div>
         <div className="context-menu-item">
@@ -47,11 +46,11 @@ export const BtnConfig: FunctionComponent = () => {
             role="menuitem"
             type="button"
             className="btn-context-menu flex items-center"
-            onClick={() => setTheme(Theme.System)}
+            onClick={() => setTheme('system')}
           >
             <i className="icon icon-sun-moon"/>
             <Trans i18nKey="system"/>
-            {theme === Theme.System ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
+            {theme === 'system' ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
           </button>
         </div>
 

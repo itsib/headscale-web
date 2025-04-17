@@ -8,6 +8,7 @@ import { Redirect } from '@app-components/redirect/redirect';
 import { FormattedPage } from './formatted';
 import { RawPage } from './raw';
 import { EmptyList } from '@app-components/empty-list/empty-list';
+import { PageCaption } from '@app-components/page-caption/page-caption';
 import './index.css';
 
 export default function Metrics() {
@@ -20,13 +21,11 @@ export default function Metrics() {
   });
 
   return (
-    <div className="metrics-page">
-      <h1>
-        <Trans i18nKey="metrics" />
-      </h1>
-      <p className="sub-caption">
-        <Trans i18nKey="metrics_page_subtitle" />
-      </p>
+    <div className="page metrics-page">
+      <PageCaption
+        title="metrics"
+        subtitle="metrics_page_subtitle"
+      />
 
       <nav className="tabs-links">
         <a href="/metrics/formatted" className={cn('tab-link', { active: path.startsWith('/metrics/formatted') })}>

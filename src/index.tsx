@@ -9,6 +9,7 @@ import { defaultQueryFn } from '@app-utils/query-fn';
 
 import 'react-just-ui/theme/minimal.css';
 import './index.css';
+import { NotifyProvider } from '@app-context/notify';
 
 const VERSION = import.meta.env.VERSION;
 const NODE_ENV = import.meta.env.NODE_ENV;
@@ -54,13 +55,15 @@ async function init() {
 
   render(
     <QueryClientProvider client={queryClient}>
-      <ApplicationProvider>
-        <AuthProvider>
-          <LocationProvider>
-            <Application/>
-          </LocationProvider>
-        </AuthProvider>
-      </ApplicationProvider>
+      <NotifyProvider>
+        <ApplicationProvider>
+          <AuthProvider>
+            <LocationProvider>
+              <Application/>
+            </LocationProvider>
+          </AuthProvider>
+        </ApplicationProvider>
+      </NotifyProvider>
     </QueryClientProvider>,
     rootElement,
   );

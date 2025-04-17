@@ -1,16 +1,10 @@
-export interface UserIdentity {
-  name: string;
-  displayName: string;
-  email: string;
-}
-
-export interface User extends UserIdentity {
+export interface User {
   id: string;
+  name: string;
+  email: string;
+  displayName?: string;
   profilePicUrl?: string;
   createdAt: string;
-}
-
-export interface UserWithProvider extends User {
-  provider: 'oidc' | '';
+  provider: '' | 'oidc';
   providerId: string;
 }

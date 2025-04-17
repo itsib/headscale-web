@@ -8,7 +8,7 @@ export const Error404 = () => {
   const isMobile = useBreakPoint(600);
 
   return (
-    <main className="error-404-page">
+    <main className="page error-404-page">
       {isMobile ? (
         <div className="static">
           <img src="/images/404-static.svg" alt="404-static" />

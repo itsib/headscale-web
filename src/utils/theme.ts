@@ -1,14 +1,15 @@
-export enum Theme {
-  Dark = 1,
-  Light = 2,
-  System = 3,
-}
+export type Theme = 'dark' | 'light' | 'system';
 
-export function getActiveTheme(): Theme {
-  const stored = localStorage.getItem('headscale.theme');
-  if (stored && (stored === 'dark' || stored === 'light')) {
-    return stored === 'dark' ? Theme.Dark : Theme.Light;
+export function getActiveTheme(theme: Theme): Exclude<Theme, 'system'> {
+  if (theme !== 'system') {
+    return theme;
   }
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  return isDark ? Theme.Dark : Theme.Light;
+
+  if (typeof window !== 'undefined') {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+  }
+
+  return 'light';
 }

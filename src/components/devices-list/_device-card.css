@@ -3,6 +3,8 @@
   border: 1px solid rgb(var(--border-primary));
   border-radius: var(--border-radius);
   position: relative;
+  text-decoration: none;
+  display: block;
 
   .main-info {
     margin-bottom: 1rem;
@@ -70,5 +72,10 @@
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgb(var(--bg-primary));
   }
 }

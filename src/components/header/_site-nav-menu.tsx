@@ -15,11 +15,11 @@ export const SiteNavMenu: FunctionComponent<SiteNavMenuProps> = ({ onClick, layo
 
   return (
     <nav className={cn('site-nav-menu', layout)}>
-      <a href="/devices" className={cn('nav-link', { active: path.startsWith('/devices') })} onClick={onClick}>
+      <a href="/devices" className={cn('nav-link', { active: path.startsWith('/device') })} onClick={onClick}>
         <i className="icon icon-laptop"/>
-        <span className="label">{t('devises')}</span>
+        <span className="label">{t('devices')}</span>
       </a>
-      <a href="/users" className={cn('nav-link', { active: path.startsWith('/users') })} onClick={onClick}>
+      <a href="/users" className={cn('nav-link', { active: path.startsWith('/user') })} onClick={onClick}>
         <i className="icon icon-users"/>
         <span className="label">{t('users')}</span>
       </a>

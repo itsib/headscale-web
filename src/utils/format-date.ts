@@ -27,7 +27,7 @@ export function parseDate(input?: string | number): Date | null {
     input = /^\d+$/.test(input) ? parseInt(input) : Date.parse(input);
   }
 
-  if (isNaN(input) || !isFinite(input)) return null;
+  if (isNaN(input) || input <= 0 ||!isFinite(input)) return null;
 
   // Convert to ms
   if (input < 3000000000) {

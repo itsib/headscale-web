@@ -1,0 +1,32 @@
+.page-caption {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  flex-direction: column;
+
+  .title {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: rgb(var(--text-secondary));
+  }
+
+  .actions {
+    margin-top: 1rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .page-caption {
+    margin-bottom: 2rem;
+    align-items: center;
+    flex-direction: row;
+
+    .actions {
+      margin-top: 0;
+    }
+  }
+}

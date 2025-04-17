@@ -1,0 +1,11 @@
+.user-name {
+  text-align: start;
+  line-height: 1.2;
+
+  .display-name {
+    margin-top: 5px;
+    color: rgb(var(--text-secondary));
+    font-size: .75rem;
+    line-height: 1;
+  }
+}

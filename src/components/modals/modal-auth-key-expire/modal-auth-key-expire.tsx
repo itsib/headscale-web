@@ -57,7 +57,7 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyExpireProps, 'isOpen' | '
             <Trans i18nKey="expire_modal_message"/>
           </div>
 
-          <hr className="border-t-primary mb-3"/>
+          <hr />
 
           <div className="text-start grid grid-cols-[0.4fr,1fr] gap-y-2">
             <div className="text-secondary text-sm self-center whitespace-nowrap"><Trans i18nKey="auth_key"/>:&nbsp;

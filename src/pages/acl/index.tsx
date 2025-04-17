@@ -6,6 +6,7 @@ import { Redirect } from '@app-components/redirect/redirect';
 import { EditFile } from './edit-file';
 import { Preview } from './preview';
 import { EditorLoading } from '@app-components/skeleton/editor-loading';
+import { PageCaption } from '@app-components/page-caption/page-caption';
 import './index.css';
 
 export default function Acl() {
@@ -20,17 +21,11 @@ export default function Acl() {
   });
 
   return (
-    <div className="acl-page pt-6">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="mb-2">
-            {t('access_controls')}
-          </h1>
-          <p className="text-secondary">
-            {t('access_controls_subtitle')}
-          </p>
-        </div>
-      </div>
+    <div className="page acl-page">
+      <PageCaption
+        title="access_controls"
+        subtitle="access_controls_subtitle"
+      />
 
       {isLoading ? null : (
         <div className="tabs-links">

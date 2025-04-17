@@ -2,16 +2,16 @@ import { memo } from 'react';
 import { UserInfo } from '@app-components/user-info/user-info';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { ContextMenu } from './_context-menu';
-import { ContextMenuBase, UserAction, UserWithProvider } from '@app-types';
+import { ContextMenuBase, UserAction, User } from '@app-types';
 
-export type UserTableRowProps = UserWithProvider & ContextMenuBase<UserAction>;
+export type UserTableRowProps = User & ContextMenuBase<UserAction>;
 
 export const UserTableRow = memo(function UserItem(props: UserTableRowProps) {
   const { id, name, displayName, email, provider, profilePicUrl, createdAt, onAction } = props
   return (
     <tr className="user-table-row">
       <td>
-        <UserInfo id={id} className="font-medium text-lg" name={name} displayName={displayName} pictureUrl={profilePicUrl} size={30} />
+        <UserInfo id={id} className="font-medium text-lg" name={name} displayName={displayName} pictureUrl={profilePicUrl} size="lg" />
       </td>
       <td>
         <span className="text-secondary font-normal">{email}</span>

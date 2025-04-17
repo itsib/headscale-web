@@ -1,5 +1,5 @@
 import { Redirect } from '@app-components/redirect/redirect';
 
-export function Home() {
+export function HomePage() {
   return <Redirect to="/devices" />;
 }

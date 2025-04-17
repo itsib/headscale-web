@@ -1,12 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { QueryResult, UserWithProvider } from '../types';
+import { QueryResult, User } from '../types';
 
-export function useUsers(): QueryResult<UserWithProvider[]> & { refetch: () => void } {
-  const { data, isLoading, error, refetch: _refetch } = useQuery<{ users: UserWithProvider[] }, Error, UserWithProvider[]>({
+export function useUsers(): QueryResult<User[]> & { refetch: () => void } {
+  const { data, isLoading, error, refetch: _refetch } = useQuery<{ users: User[] }, Error, User[]>({
     queryKey: ['/api/v1/user'],
     select: (data) => data.users,
-    refetchInterval: 20_000,
   });
 
   const refetch = useCallback(async () => {

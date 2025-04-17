@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import { User, UserAction, UserWithProvider } from '@app-types';
+import { User, UserAction } from '@app-types';
 import { ListLoading } from '@app-components/skeleton/list-loading';
 import { ModalUserCreate } from '@app-components/modals/modal-user-create/modal-user-create';
 import { ModalUserRename } from '@app-components/modals/modal-user-rename/modal-user-rename';
@@ -9,10 +9,11 @@ import { ModalUserDelete } from '@app-components/modals/modal-user-delete/modal-
 import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group';
 import { useBreakPoint } from '@app-hooks/use-break-point';
 import { UsersList } from '@app-components/users-list';
-import { EmptyList } from '@app-components/empty-list/empty-list.tsx';
+import { EmptyList } from '@app-components/empty-list/empty-list';
+import { PageCaption } from '@app-components/page-caption/page-caption';
 import './users.css';
 
-export function Users() {
+export function UsersPage() {
   const { t } = useTranslation();
 
   const [opened, setOpened] = useState<UserAction | null>(null);
@@ -22,7 +23,7 @@ export function Users() {
   const [_isListLayout, setIsListLayout] = useState(true);
   const isListLayout = !isMobile && _isListLayout;
 
-  const { data: users, refetch, isLoading } = useQuery<{ users: UserWithProvider[] }, Error, UserWithProvider[]>({
+  const { data: users, refetch, isLoading } = useQuery<{ users: User[] }, Error, User[]>({
     queryKey: ['/api/v1/user', 'GET'],
     select: data => data.users,
     staleTime: 60_000 * 60,
@@ -74,21 +75,12 @@ export function Users() {
   }, [opened, selected]);
 
   return (
-    <div className="users-page">
-      <div className="caption">
-        <div className="">
-          <h1 className="mb-2">
-            <Trans i18nKey="users" />
-          </h1>
-          <p className="text-secondary">
-            <Trans i18nKey="users_page_subtitle" />
-          </p>
-        </div>
-
-        <div className="actions">
-          <ButtonGroup buttons={buttons} onClick={onClick} />
-        </div>
-      </div>
+    <div className="page users-page">
+      <PageCaption
+        title="users"
+        subtitle="users_page_subtitle"
+        actions={<ButtonGroup buttons={buttons} onClick={onClick} />}
+      />
 
       {isLoading ? (
         <ListLoading />

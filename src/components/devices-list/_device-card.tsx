@@ -11,14 +11,14 @@ import './_device-card.css';
 type DeviceCardProps = ContextMenuBase<DeviceAction> & Device;
 
 export const DeviceCard = memo(function DeviceItem(props: DeviceCardProps) {
-  const { name, givenName, expiry, ipAddresses, forcedTags, online, user, onAction } = props;
+  const { id, name, givenName, expiry, ipAddresses, forcedTags, online, user, onAction } = props;
   const { t } = useTranslation();
 
   const expiryDate = useMemo(() => new Date(expiry), [expiry]);
   const expiryDisabled = expiryDate.getFullYear() <= 1970;
 
   return (
-    <div className="device-card">
+    <a href={`/device/${id}`} className="device-card" aria-label="Open device full info">
       <div className="main-info">
         <div className="icon-wrapper">
           {online ? (
@@ -67,6 +67,6 @@ export const DeviceCard = memo(function DeviceItem(props: DeviceCardProps) {
           {forcedTags.map(tag => <AclTag key={tag} tag={tag}/>)}
         </div>
       ) : null}
-    </div>
+    </a>
   );
 });

@@ -49,7 +49,6 @@
   "device_name": "Device Name",
   "device_owner": "Device Owner",
   "devices": "Devices",
-  "devises": "Devises",
   "discard_changes": "Discard Changes",
   "disconnect": "Disconnect",
   "done": "Done",
@@ -174,5 +173,12 @@
   "user_name": "User Name",
   "user_photo": "User Photo",
   "users": "Users",
-  "users_page_subtitle": "Manage the users in your network."
+  "users_page_subtitle": "Manage the users in your network.",
+  "device_info": "Device Info",
+  "device_with_name": "Device - {{name}}",
+  "all_devices": "All Devices",
+  "back_to_devices_list": "\uD83E\uDC50 Back to devices list",
+  "device_owner_select_hint": "You can attach any other user to this device.",
+  "managed_by": "Managed By",
+  "subnets": "Subnets"
 }
