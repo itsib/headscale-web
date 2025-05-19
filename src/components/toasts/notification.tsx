@@ -16,7 +16,7 @@ export interface NotificationProps extends NotifyInstance {
 }
 
 export const Notification: FunctionComponent<NotificationProps> = props => {
-  const { id, offset, status, title, description, setHeight, closed, close } = props;
+  const { id, offset, status, title, description, setHeight, closed, close, dismissible } = props;
   const notificationRef = useRef<HTMLDivElement | null>(null);
   const iconRef = useRef<SVGSVGElement | null>(null);
   const [mounted, setMounted] = useState<boolean>(true);
@@ -114,9 +114,11 @@ export const Notification: FunctionComponent<NotificationProps> = props => {
         {description ? <div className="description">{description}</div> : null}
       </div>
 
-      <button className="close" onClick={close}>
-        <i className="icon icon-close" />
-      </button>
+      {dismissible ? (
+        <button className="close" onClick={close}>
+          <i className="icon icon-close" />
+        </button>
+      ) : null}
     </div>
   );
 }

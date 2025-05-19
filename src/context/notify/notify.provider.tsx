@@ -16,6 +16,7 @@ export const NotifyProvider: FunctionComponent = ({ children }) => {
 
   const notify = useCallback((opts: Notify): NotifyInstance => {
     const id = getId();
+    const timeout = opts.timeout || SHOW_TIMEOUT;
     let timer: ReturnType<typeof setTimeout> | undefined;
 
     const notify: NotifyInstance = {
@@ -69,8 +70,8 @@ export const NotifyProvider: FunctionComponent = ({ children }) => {
       ...opts,
     }
 
-    if (opts.timeout !== false) {
-      timer = setTimeout(() => notify.close(), opts.timeout || SHOW_TIMEOUT);
+    if (isFinite(timeout)) {
+      timer = setTimeout(() => notify.close(), timeout);
     }
 
     setNotifies(items => {

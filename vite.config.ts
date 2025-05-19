@@ -1,4 +1,4 @@
-import { defineConfig, UserConfig } from 'vite';
+  import { defineConfig, UserConfig } from 'vite';
 import preact from '@preact/preset-vite';
 import { join, resolve } from 'node:path';
 import { createHtmlPlugin } from 'vite-plugin-html';

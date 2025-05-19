@@ -8,6 +8,6 @@ export interface IApplicationContext {
 }
 
 export const ApplicationContext = createContext<IApplicationContext>({
-  theme: getActiveTheme(),
+  theme: getActiveTheme(localStorage.getItem('headscale.theme') as Theme || 'system'),
   updateTheme: () => {throw new NotImplementedError()},
 });

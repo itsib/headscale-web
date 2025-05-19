@@ -4,7 +4,8 @@ export interface Notify {
   status?: NotifyStatus;
   title?: string;
   description?: string;
-  timeout?: number | false;
+  timeout?: number;
+  dismissible?: boolean;
 }
 
 export interface NotifyInstance extends Notify {

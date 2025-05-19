@@ -9,7 +9,7 @@ export function useNotifyQuery() {
   const [instance, setInstance] = useState<NotifyInstance | undefined>();
 
   const start = useCallback(() => {
-    setInstance(notify({ status: 'loading', title: t('saving'), timeout: false }));
+    setInstance(notify({ status: 'loading', title: t('saving'), timeout: Infinity }));
   }, [t, notify]);
 
   const success = useCallback(() => {

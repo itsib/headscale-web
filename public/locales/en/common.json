@@ -180,5 +180,7 @@
   "back_to_devices_list": "\uD83E\uDC50 Back to devices list",
   "device_owner_select_hint": "You can attach any other user to this device.",
   "managed_by": "Managed By",
-  "subnets": "Subnets"
+  "subnets": "Subnets",
+  "saving": "Saving...",
+  "saved": "Saved."
 }
