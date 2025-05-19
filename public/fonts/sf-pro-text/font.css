@@ -4,10 +4,10 @@
     font-weight: 700;
     font-stretch: 98%;
     font-display: swap;
-    src: url("/fonts/sf-pro-text/SFProText-Bold.eot?hash=07711936#iefix") format("embedded-opentype"),
-         url("/fonts/sf-pro-text/SFProText-Bold.woff2?hash=07711936") format("woff2"),
-         url("/fonts/sf-pro-text/SFProText-Bold.woff?hash=07711936") format("woff"),
-         url("/fonts/sf-pro-text/SFProText-Bold.ttf?hash=07711936") format("truetype");
+    src: url("/fonts/sf-pro-text/SFProText-Bold.eot#iefix") format("embedded-opentype"),
+         url("/fonts/sf-pro-text/SFProText-Bold.woff2") format("woff2"),
+         url("/fonts/sf-pro-text/SFProText-Bold.woff") format("woff"),
+         url("/fonts/sf-pro-text/SFProText-Bold.ttf") format("truetype");
 }
 @font-face {
     font-family: "SFProText";
@@ -15,10 +15,10 @@
     font-weight: 300;
     font-stretch: 98%;
     font-display: swap;
-    src: url("/fonts/sf-pro-text/SFProText-Light.eot?hash=07711936#iefix") format("embedded-opentype"),
-         url("/fonts/sf-pro-text/SFProText-Light.woff2?hash=07711936") format("woff2"),
-         url("/fonts/sf-pro-text/SFProText-Light.woff?hash=07711936") format("woff"),
-         url("/fonts/sf-pro-text/SFProText-Light.ttf?hash=07711936") format("truetype");
+    src: url("/fonts/sf-pro-text/SFProText-Light.eot#iefix") format("embedded-opentype"),
+         url("/fonts/sf-pro-text/SFProText-Light.woff2") format("woff2"),
+         url("/fonts/sf-pro-text/SFProText-Light.woff") format("woff"),
+         url("/fonts/sf-pro-text/SFProText-Light.ttf") format("truetype");
 }
 @font-face {
     font-family: "SFProText";
@@ -26,10 +26,10 @@
     font-weight: 500;
     font-stretch: 98%;
     font-display: swap;
-    src: url("/fonts/sf-pro-text/SFProText-Medium.eot?hash=07711936#iefix") format("embedded-opentype"),
-         url("/fonts/sf-pro-text/SFProText-Medium.woff2?hash=07711936") format("woff2"),
-         url("/fonts/sf-pro-text/SFProText-Medium.woff?hash=07711936") format("woff"),
-         url("/fonts/sf-pro-text/SFProText-Medium.ttf?hash=07711936") format("truetype");
+    src: url("/fonts/sf-pro-text/SFProText-Medium.eot#iefix") format("embedded-opentype"),
+         url("/fonts/sf-pro-text/SFProText-Medium.woff2") format("woff2"),
+         url("/fonts/sf-pro-text/SFProText-Medium.woff") format("woff"),
+         url("/fonts/sf-pro-text/SFProText-Medium.ttf") format("truetype");
 }
 @font-face {
     font-family: "SFProText";
@@ -37,10 +37,10 @@
     font-weight: 400;
     font-stretch: 98%;
     font-display: swap;
-    src: url("/fonts/sf-pro-text/SFProText-Regular.eot?hash=07711936#iefix") format("embedded-opentype"),
-         url("/fonts/sf-pro-text/SFProText-Regular.woff2?hash=07711936") format("woff2"),
-         url("/fonts/sf-pro-text/SFProText-Regular.woff?hash=07711936") format("woff"),
-         url("/fonts/sf-pro-text/SFProText-Regular.ttf?hash=07711936") format("truetype");
+    src: url("/fonts/sf-pro-text/SFProText-Regular.eot#iefix") format("embedded-opentype"),
+         url("/fonts/sf-pro-text/SFProText-Regular.woff2") format("woff2"),
+         url("/fonts/sf-pro-text/SFProText-Regular.woff") format("woff"),
+         url("/fonts/sf-pro-text/SFProText-Regular.ttf") format("truetype");
 }
 @font-face {
     font-family: "SFProText";
@@ -48,8 +48,8 @@
     font-weight: 600;
     font-stretch: 98%;
     font-display: swap;
-    src: url("/fonts/sf-pro-text/SFProText-Semibold.eot?hash=07711936#iefix") format("embedded-opentype"),
-         url("/fonts/sf-pro-text/SFProText-Semibold.woff2?hash=07711936") format("woff2"),
-         url("/fonts/sf-pro-text/SFProText-Semibold.woff?hash=07711936") format("woff"),
-         url("/fonts/sf-pro-text/SFProText-Semibold.ttf?hash=07711936") format("truetype");
+    src: url("/fonts/sf-pro-text/SFProText-Semibold.eot#iefix") format("embedded-opentype"),
+         url("/fonts/sf-pro-text/SFProText-Semibold.woff2") format("woff2"),
+         url("/fonts/sf-pro-text/SFProText-Semibold.woff") format("woff"),
+         url("/fonts/sf-pro-text/SFProText-Semibold.ttf") format("truetype");
 }
