@@ -35,11 +35,12 @@
 
   .btn-remove {
     margin-left: 6px;
-    margin-right: -2px;
+    margin-right: 0;
 
     .icon {
       font-size: 8px;
       font-weight: 500;
+      display: block;
     }
 
     &:hover {

@@ -79,7 +79,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeTagsProps, 'isOpen' | 'node'
           })
           }>
           <div className="text-secondary mb-4 text-sm">
-            <Trans i18nKey="manage_tags_node_modal_summary"/>
+            <Trans i18nKey="acl_tags_summary"/>
           </div>
           <div className="mb-2">
             <Input

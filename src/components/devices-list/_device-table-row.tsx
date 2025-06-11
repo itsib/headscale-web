@@ -1,4 +1,4 @@
-import { Device, ContextMenuBase, DeviceAction } from '@app-types';
+import { Device } from '@app-types';
 import { memo } from 'preact/compat';
 import { useMemo } from 'preact/hooks';
 import { Trans } from 'react-i18next';
@@ -9,14 +9,11 @@ import { AclTag } from '@app-components/acl-tag/acl-tag';
 import { IpAddresses } from '@app-components/ip-addresses/ip-addresses';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { Marker } from '@app-components/marker/marker';
-import { ContextMenu } from './_context-menu';
-import './_device-table-row.css';
 import { DeviceIcon } from '@app-components/icons/device-icon.tsx';
+import './_device-table-row.css';
 
-type DeviceTableRowProps = ContextMenuBase<DeviceAction> & Device;
-
-export const DeviceTableRow = memo(function DeviceTableRow(props: DeviceTableRowProps) {
-  const { id, name, givenName, expiry, ipAddresses, forcedTags, lastSeen, online, user, onAction } = props;
+export const DeviceTableRow = memo(function DeviceTableRow(props: Device) {
+  const { id, name, givenName, expiry, ipAddresses, forcedTags, lastSeen, online, user } = props;
   const { route } = useLocation();
 
   const expiryDate = useMemo(() => new Date(expiry), [expiry]);
@@ -53,6 +50,7 @@ export const DeviceTableRow = memo(function DeviceTableRow(props: DeviceTableRow
         <UserInfo
           id={user.id}
           name={user.name}
+          email={user.email}
           displayName={user.displayName}
           pictureUrl={user.profilePicUrl}
         />
@@ -70,9 +68,6 @@ export const DeviceTableRow = memo(function DeviceTableRow(props: DeviceTableRow
       <td>
         <Marker className="mr-3 mb-[1px]" isActive={online}/>
         <FormattedDate date={lastSeen}/>
-      </td>
-      <td>
-        <ContextMenu onAction={onAction}/>
       </td>
     </tr>
   );

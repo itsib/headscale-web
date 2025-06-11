@@ -1,23 +1,18 @@
 .device-routes {
 
-  .title {
-    margin-bottom: .5rem;
-  }
-
-  .sub-title {
-    margin-bottom: 1rem;
-    color: rgb(var(--text-secondary));
-    font-size: .875rem;
-  }
-
   .routes-checkboxes {
 
     .route-checkbox {
 
       .ui-label {
+        order: 2;
         margin-bottom: 0;
         font-size: 1rem;
         color: rgb(var(--text-primary));
+      }
+
+      .control {
+        order: 1;
       }
 
       &.disabled {

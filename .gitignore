@@ -29,5 +29,6 @@ volumes
 *.tsbuildinfo
 headscale-web-*.tgz
 headscale-web.tgz!/dev-dist/
+.swagger
 
 .env*

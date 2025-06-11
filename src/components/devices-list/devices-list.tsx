@@ -1,17 +1,16 @@
 import { FunctionComponent } from 'preact';
-import { ContextMenuBase, Device, DeviceAction } from '@app-types';
+import { Device } from '@app-types';
 import { useTranslation } from 'react-i18next';
 import { DeviceTableRow } from './_device-table-row';
 import { DeviceCard } from './_device-card';
 import './devices-list.css'
 
-export interface DevicesProps extends ContextMenuBase<DeviceAction> {
+export interface DevicesProps {
   layout: 'table' | 'cards';
   devices: Device[];
-  onChange: (device: Device) => void;
 }
 
-export const DevicesList: FunctionComponent<DevicesProps> = ({ devices, layout, onChange, onAction }) => {
+export const DevicesList: FunctionComponent<DevicesProps> = ({ devices, layout }) => {
   const { t } = useTranslation();
 
   return (
@@ -26,17 +25,12 @@ export const DevicesList: FunctionComponent<DevicesProps> = ({ devices, layout, 
             <th scope="col">{t('tags')}</th>
             <th scope="col">{t('address')}</th>
             <th scope="col">{t('last_seen')}</th>
-            <th scope="col" />
           </tr>
           </thead>
           <tbody>
           {devices.map((device) => (
             <DeviceTableRow
               key={device.id}
-              onAction={action => {
-                onAction(action);
-                onChange(device);
-              }}
               {...device}
             />
           ))}
@@ -44,16 +38,7 @@ export const DevicesList: FunctionComponent<DevicesProps> = ({ devices, layout, 
         </table>
       ) : (
         <div className="cards-layout">
-          {devices.map((device: Device) => (
-            <DeviceCard
-              key={device.id}
-              onAction={action => {
-                onAction(action);
-                onChange(device);
-              }}
-              {...device}
-            />
-          ))}
+          {devices.map((device: Device) => <DeviceCard key={device.id} {...device} />)}
         </div>
       )}
     </div>

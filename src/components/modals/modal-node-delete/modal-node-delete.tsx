@@ -43,7 +43,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeDeleteProps, 'isOpen' | 'nod
     <div className="modal modal-confirmation w-[400px]">
       <div className="modal-header">
         <div className="title">
-          <span>{t('deleting_node_modal_title')}</span>
+          <span>{t('removing_device')}</span>
         </div>
         <button type="button" className="btn btn-close" onClick={() => onDismiss()}/>
       </div>
@@ -81,7 +81,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeDeleteProps, 'isOpen' | 'nod
           <hr className="border-t-primary mb-3"/>
 
           <div className="text-start text-secondary">
-            <Trans i18nKey="deleting_node_modal_summary" values={{ name: node.givenName || node.name }}/>
+            <Trans i18nKey="removing_device_confirmation" values={{ name: node.givenName || node.name }}/>
           </div>
         </div>
         <div>

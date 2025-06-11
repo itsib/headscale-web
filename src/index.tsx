@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry(failureCount: number, error: any) {
-        if (error.code === -1 || error.code === 401) {
+        if (error.code === -1 || error.code === 401 || error.code === 404) {
           return false;
         }
         return failureCount <= 3;

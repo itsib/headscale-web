@@ -1,17 +1,14 @@
 import { memo } from 'preact/compat';
 import { useMemo } from 'preact/hooks';
-import { ContextMenuBase, Device, DeviceAction } from '@app-types';
+import { Device } from '@app-types';
 import { Trans, useTranslation } from 'react-i18next';
 import { FormattedDuration } from '@app-components/formatters/formatted-duration';
 import { Marker } from '@app-components/marker/marker';
 import { AclTag } from '@app-components/acl-tag/acl-tag';
-import { ContextMenu } from './_context-menu';
 import './_device-card.css';
 
-type DeviceCardProps = ContextMenuBase<DeviceAction> & Device;
-
-export const DeviceCard = memo(function DeviceItem(props: DeviceCardProps) {
-  const { id, name, givenName, expiry, ipAddresses, forcedTags, online, user, onAction } = props;
+export const DeviceCard = memo(function DeviceItem(props: Device) {
+  const { id, name, givenName, expiry, ipAddresses, forcedTags, online, user } = props;
   const { t } = useTranslation();
 
   const expiryDate = useMemo(() => new Date(expiry), [expiry]);
@@ -37,8 +34,6 @@ export const DeviceCard = memo(function DeviceItem(props: DeviceCardProps) {
             )}
           </div>
         </div>
-
-        <ContextMenu onAction={onAction} />
       </div>
 
       {user.name ? (

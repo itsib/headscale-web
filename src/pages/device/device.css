@@ -1,8 +1,59 @@
 .device-page {
 
+  .page-caption {
+    position: relative;
+
+    .is-online {
+      top: -12px;
+      left: 6px;
+      position: relative;
+    }
+  }
+
   .content {
+
+    .title {
+      margin-bottom: .5rem;
+    }
+
+    .sub-title {
+      margin-bottom: 1rem;
+      color: rgb(var(--text-secondary));
+      font-size: .875rem;
+    }
+  }
+
+  .main-content {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
+
+    .ip-addresses {
+
+      .ip-address {
+        margin-right: .75rem;
+        font-size: 1.25rem;
+      }
+    }
+
+    .meta-data {
+      margin-top: 1rem;
+
+      .label {
+        margin-right: 1rem;
+        color: rgb(var(--text-secondary));
+      }
+    }
+  }
+
+  .danger-content {
+
+    .title {
+      margin-bottom: 1rem;
+    }
+
+    .space-between {
+      margin-bottom: 1rem;
+    }
   }
 }

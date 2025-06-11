@@ -110,7 +110,7 @@
   "machine": "Machine",
   "machines": "Machines",
   "machines_page_subtitle": "Manage the devices connected to your tailnet.",
-  "manage_tags_node_modal_summary": "Tags help you manage a machine based on its purpose instead of its creator (example: tag:server), and they can be used in ACLs to control access.",
+  "acl_tags_summary": "Tags help you manage a machine based on its purpose instead of its creator (example: tag:server), and they can be used in ACLs to control access.",
   "manage_tags_node_modal_title": "Edit ACL tags",
   "metric_server_url": "Metric Server URL",
   "metric_token_label": "Access token",

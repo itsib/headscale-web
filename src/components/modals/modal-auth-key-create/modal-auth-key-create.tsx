@@ -41,7 +41,7 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
       return [];
     }
     return users.map(user => ({
-      value: user.name,
+      value: user.id,
       label: user.name || user.displayName,
       icon: user.profilePicUrl || `icon icon-avatar-${parseInt(user.id) % 10}`,
     }));

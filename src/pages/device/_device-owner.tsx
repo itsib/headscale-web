@@ -7,38 +7,45 @@ import { useTranslation } from 'react-i18next';
 import { cn } from 'react-just-ui/utils/cn';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchFn } from '@app-utils/query-fn.ts';
-import { Device } from '@app-types';
+import { Device, User } from '@app-types';
 import { useNotifyQuery } from '@app-hooks/use-notify-query';
 import './_device-owner.css';
 
 export interface DeviceOwnerProps {
   deviceId: string;
-  userName: string;
+  user: User;
   className?: string;
 }
 
-export const DeviceOwner: FunctionComponent<DeviceOwnerProps> = ({ userName, className, deviceId }) => {
+export const DeviceOwner: FunctionComponent<DeviceOwnerProps> = ({ user, className, deviceId }) => {
   const { t } = useTranslation();
   const client = useQueryClient();
-  const [value, setValue] = useState(userName);
+  const [value, setValue] = useState(user.id);
   const { data: users } = useUsers();
   const { start, success, error } = useNotifyQuery();
 
   const options = useMemo(() => {
+    if (!users) {
+      return [{
+        value: user.id,
+        label: user.email || user.name || user.displayName,
+        icon: <UserPhoto id={user.id} pictureUrl={user.profilePicUrl} size="sm" />
+      }];
+    }
     return users?.map<SelectOption>(user => {
       return {
-        value: user.name,
-        label: user.name,
+        value: user.id,
+        label: user.email || user.name || user.displayName,
         icon: <UserPhoto id={user.id} pictureUrl={user.profilePicUrl} size="sm" />
       };
     })
-  }, [users]);
+  }, [users, user]);
 
   const { mutate } = useMutation({
-    async mutationFn({ id, name }: { id: string, name: string }) {
-      return await fetchFn<{ node: Device }>(`/api/v1/node/${id}/user`, {
+    async mutationFn({ deviceId, userId }: { deviceId: string, userId: string }) {
+      return await fetchFn<{ node: Device }>(`/api/v1/node/${deviceId}/user`, {
         method: 'POST',
-        body: JSON.stringify({ user: name }),
+        body: JSON.stringify({ user: userId }),
       });
     },
     onMutate: () => start(),
@@ -47,16 +54,16 @@ export const DeviceOwner: FunctionComponent<DeviceOwnerProps> = ({ userName, cla
       success();
     },
     onError: (e: any) => {
-      setValue(userName);
+      setValue(user.id);
       error(e.message);
     }
   });
 
   function onChange(event: Event) {
-    const name = (event.target as any).value;
-    setValue(name);
+    const userId = (event.target as any).value;
+    setValue(userId);
 
-    mutate({ name, id: deviceId });
+    mutate({ userId, deviceId });
   }
 
   return (

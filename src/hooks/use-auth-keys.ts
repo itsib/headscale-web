@@ -11,7 +11,7 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () =>
       return [];
     }
     return users.map(user => ({
-      queryKey: [`/api/v1/preauthkey?user=${user.name}`],
+      queryKey: [`/api/v1/preauthkey?user=${user.id}`],
       select: (data: { preAuthKeys: AuthKey[] }) => data?.preAuthKeys?.map(key => ({ ...key, user, })),
     }))
   }, [users])

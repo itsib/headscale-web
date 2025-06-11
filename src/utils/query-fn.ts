@@ -29,6 +29,8 @@ async function resolveFailureRes(res: Response): Promise<never> {
 
   if (errorMessage === 'Unauthorized') {
     throw new UnauthorizedError();
+  } else if (/acl\spolicy\snot\sfound/.test(errorMessage)) {
+    throw new HttpError('error_not_found', 404, errorMessage);
   }
   throw new HttpError(statusText, res.status, errorMessage || statusText);
 }
@@ -76,6 +78,8 @@ export async function fetchFn<T = unknown>(url: string, init: RequestInit = {}, 
   }
 
   const raw = (await res.text()) as string;
+
+
   try {
     return JSON.parse(raw) as T;
   } catch {
