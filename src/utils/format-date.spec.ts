@@ -10,5 +10,5 @@ describe('utils/format-date.ts', () => {
     expect(parseDate('2607902950000')).toStrictEqual(new Date(2607902950000));
     expect(parseDate(2607902950)).toStrictEqual(new Date(2607902950000));
     expect(parseDate(2607902950000)).toStrictEqual(new Date(2607902950000));
-  })
+  });
 });
