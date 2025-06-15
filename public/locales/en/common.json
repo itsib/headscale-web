@@ -189,5 +189,7 @@
   "acl_tags": "ACL Tags",
   "error_tag_already_exists": "Tag already assigned in to device",
   "ip_addresses_summary": "Device IP addresses in your tailnet",
-  "danger_zone": "Danger Zone"
+  "danger_zone": "Danger Zone",
+  "manage_device": "Manage Device",
+  "press_enter_to_save": "Press enter to save"
 }

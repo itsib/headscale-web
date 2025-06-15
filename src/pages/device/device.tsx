@@ -9,11 +9,11 @@ import { PageCaption } from '@app-components/page-caption/page-caption';
 import { DeviceOwner } from './_device-owner';
 import { DeviceRoutes } from './_device-routes';
 import { AclTags } from './_acl-tags.tsx';
-import './device.css';
 import { ModalNodeExpire } from '@app-components/modals/modal-node-expire/modal-node-expire.tsx';
 import { ModalNodeDelete } from '@app-components/modals/modal-node-delete/modal-node-delete.tsx';
 import { FormattedDate } from '@app-components/formatters/formatted-date.tsx';
-import { Marker } from '@app-components/marker/marker.tsx';
+import { DeviceName } from './_device-name.tsx';
+import './device.css';
 
 export const DevicePage: FunctionComponent = () => {
   const { params } = useRoute();
@@ -38,7 +38,7 @@ export const DevicePage: FunctionComponent = () => {
             title={
               <>
                 {t('device_with_name', { name: device.givenName || device.name })}
-                <Marker isActive size={12} className="is-online" />
+                {device.online ? <sup class="badge online">ONLINE</sup> : <sup class="badge offline">OFFLINE</sup>}
               </>
             }
             subtitle={<a href="/devices" className="back-url">{t('back_to_devices_list')}</a>}
@@ -48,21 +48,21 @@ export const DevicePage: FunctionComponent = () => {
 
           <div className="main-content content">
             <div className="">
+              <h3 className="title">{t('manage_device')}</h3>
+
+              <DeviceName deviceId={device.id} name={device.givenName || device.name}  />
+
               <DeviceOwner deviceId={device.id} user={device.user} />
 
               <AclTags deviceId={device.id} validTags={device.validTags} forcedTags={device.forcedTags} invalidTags={device.invalidTags} />
 
               <div className="meta-data">
-                <span className="label">{t('created_at')}</span>
-                <FormattedDate date={device.createdAt} />
-              </div>
-              <div className="meta-data">
-                <span className="label">{t('last_seen')}</span>
-                <FormattedDate date={device.lastSeen} />
-              </div>
-              <div className="meta-data">
-                <span className="label">{t('expiry')}</span>
-                <FormattedDate date={device.expiry} />
+                <span className="label">{t('created_at')}:</span>
+                <FormattedDate className="value" date={device.createdAt} />
+                <span className="label">{t('last_seen')}:</span>
+                <FormattedDate className="value" date={device.lastSeen} />
+                <span className="label">{t('expiry')}:</span>
+                <FormattedDate className="value" date={device.expiry} />
               </div>
             </div>
 
@@ -81,7 +81,7 @@ export const DevicePage: FunctionComponent = () => {
             </div>
           </div>
 
-          <hr />
+          <hr style={{ marginBottom: '4rem' }} />
 
           <div className="danger-content content">
             <h3 className="title">{t('danger_zone')}</h3>
@@ -91,6 +91,9 @@ export const DevicePage: FunctionComponent = () => {
 
               <button type="button" className="btn btn-outline-danger" onClick={() => setIsOpenExpiry(true)}>{t('expire_key')}</button>
             </div>
+
+            <hr />
+
             <div className="space-between">
               <div>{t('removing_device_summary')}</div>
 

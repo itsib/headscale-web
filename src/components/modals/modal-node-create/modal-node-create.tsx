@@ -9,6 +9,7 @@ import { useUsers } from '@app-hooks/use-users';
 import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
 import { FunctionComponent } from 'preact';
 import { Storage } from '@app-utils/storage.ts';
+import { UserPhoto } from '@app-components/user-info/user-photo.tsx';
 
 interface FormFields {
   nodekey: string;
@@ -38,8 +39,8 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
     }
     return users.map(user => ({
       value: user.id,
-      label: user.name,
-      icon: `icon icon-avatar-${parseInt(user.id) % 10}`,
+      label: user.email || user.displayName || user.name,
+      icon: <UserPhoto id={user.id} pictureUrl={user.profilePicUrl} size="sm" />
     }));
   }, [users]);
 

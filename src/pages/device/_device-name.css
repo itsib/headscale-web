@@ -1,0 +1,11 @@
+.device-name {
+  margin-bottom: 1rem;
+
+  .form-control-wrap {
+    max-width: 300px;
+
+    .control > .suffix {
+      border-left: none;
+    }
+  }
+}

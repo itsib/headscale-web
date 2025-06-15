@@ -14,6 +14,7 @@ export * from './devices/device-action';
 
 export * from './users/users';
 export * from './users/user-action';
+export * from './users/user-create-fields';
 
 export * from './acl-policy/acl-policy';
 

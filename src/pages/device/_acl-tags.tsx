@@ -87,7 +87,7 @@ export const AclTags: FunctionComponent<AclTagsProps> = props => {
       <form onSubmit={handleSubmit(submit)}>
         <div className="mb-2">
           <Input
-            id="new-user-name"
+            id="tag-name-input"
             label={t('tag_name')}
             placeholder="tag:"
             error={errors?.tag}

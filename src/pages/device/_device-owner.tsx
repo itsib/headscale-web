@@ -28,14 +28,14 @@ export const DeviceOwner: FunctionComponent<DeviceOwnerProps> = ({ user, classNa
     if (!users) {
       return [{
         value: user.id,
-        label: user.email || user.name || user.displayName,
+        label: user.email || user.displayName || user.name,
         icon: <UserPhoto id={user.id} pictureUrl={user.profilePicUrl} size="sm" />
       }];
     }
     return users?.map<SelectOption>(user => {
       return {
         value: user.id,
-        label: user.email || user.name || user.displayName,
+        label: user.email || user.displayName || user.name,
         icon: <UserPhoto id={user.id} pictureUrl={user.profilePicUrl} size="sm" />
       };
     })
@@ -68,8 +68,6 @@ export const DeviceOwner: FunctionComponent<DeviceOwnerProps> = ({ user, classNa
 
   return (
     <div className={cn('device-owner', className)}>
-      <h3 className="title">{t('managed_by')}</h3>
-
       {options ? (
         <Select
           id="sevice-owner-selector"

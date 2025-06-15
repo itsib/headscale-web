@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { email, Input } from 'react-just-ui';
+import { email, Input, url } from 'react-just-ui';
 import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchFn } from '@app-utils/query-fn';
-import { User } from '@app-types';
+import { User, UserCreateFields } from '@app-types';
 import { FunctionComponent } from 'preact';
 
 export interface ModalUserCreateProps extends ModalProps {
@@ -22,17 +22,18 @@ export const ModalUserCreate: FunctionComponent<ModalUserCreateProps> = ({ isOpe
 const ModalContent: FunctionComponent<Omit<ModalUserCreateProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
   const { t } = useTranslation();
 
-  const { handleSubmit, register, formState } = useForm<Pick<User, 'name' | 'displayName' | 'email'>>({
+  const { handleSubmit, register, formState } = useForm<UserCreateFields>({
     defaultValues: {
       name: '',
       displayName: '',
       email: '',
+      pictureUrl: '',
     }
   });
   const { errors } = formState;
 
   const { mutate, isPending, error } = useMutation({
-    async mutationFn(values: Pick<User, 'name' | 'displayName' | 'email'>) {
+    async mutationFn(values: UserCreateFields) {
       const data = await fetchFn<{ user: User }>('/api/v1/user', {
         method: 'POST',
         body: JSON.stringify(values),
@@ -86,6 +87,18 @@ const ModalContent: FunctionComponent<Omit<ModalUserCreateProps, 'isOpen'>> = ({
               {...register('email', {
                 required: t('error_required'),
                 validate: email('error_invalid_email'),
+              })}
+            />
+          </div>
+
+          <div className="mb-2">
+            <Input
+              id="new-user-avatar"
+              type="url"
+              label={t('user_photo')}
+              error={errors?.pictureUrl}
+              {...register('pictureUrl', {
+                validate: url('error_invalid_url'),
               })}
             />
           </div>
