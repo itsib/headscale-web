@@ -12,6 +12,7 @@
   }
 
   .acl-tags-container {
+    margin-bottom: 1rem;
     padding: 0.5rem 0.5rem;
     border: 1px solid rgb(var(--border-primary));
     border-radius: var(--border-radius);

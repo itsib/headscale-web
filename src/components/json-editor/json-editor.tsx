@@ -4,7 +4,6 @@ import { TokenizedCode } from './tokenized-code.ts';
 import { HistoryControl } from '@app-utils/history-control.ts';
 import './json-editor.css';
 
-
 export interface JsonEditorProps {
   value?: string
   onChange?: (value: string) => void
