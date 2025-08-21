@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'preact/hooks';
-import { Trans, useTranslation } from 'react-i18next';
-import { ApiTokenItem, ContextAction } from './-api-token-item';
+import { useTranslation } from 'react-i18next';
+import { _apiTokenItem, ContextAction } from './_api-token-item.tsx';
 import { ApiToken } from '@app-types';
 import { useApiTokens } from '@app-hooks/use-api-tokens';
 import { ModalApiTokenCreate } from '@app-components/modals/modal-api-token-create/modal-api-token-create';
@@ -9,6 +9,8 @@ import { ModalApiTokenDelete } from '@app-components/modals/modal-api-token-dele
 import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group';
 import { EmptyList } from '@app-components/empty-list/empty-list.tsx';
 import { KeysLoading } from '@app-components/skeleton';
+import { PageCaption } from '@app-components/page-caption/page-caption.tsx';
+import './_api-tokens.css';
 
 export const ApiTokens = () => {
   const { t } = useTranslation();
@@ -37,44 +39,40 @@ export const ApiTokens = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-4">
-        <div>
-          <h2 className="mb-2">
-            <Trans i18nKey="api_access_tokens"/>
-          </h2>
-          <p className="text-secondary">
-            <Trans i18nKey="api_access_tokens_subtitle"/>
-          </p>
-        </div>
-
-        <ButtonGroup buttons={buttons} onClick={onClick} />
-      </div>
+      <PageCaption
+        title="api_access_tokens"
+        class="pt-6"
+        subtitle="api_access_tokens_subtitle"
+        h={3}
+        actions={<ButtonGroup buttons={buttons} onClick={onClick} />}
+      />
 
       {isLoading ? (
         <KeysLoading />
       ) : apiTokens?.length ? (
-        <div className="overflow-x-auto lg:overflow-x-hidden">
-          <table className="w-full table-auto border-spacing-px">
+        <div className="api-tokens">
+          <table>
             <thead>
-            <tr className="border-b border-b-primary h-[30px] text-xs font-medium text-secondary uppercase">
-              <th/>
-              <th className="text-left ">{t('key_id')}</th>
-              <th className="text-left">{t('created')}</th>
-              <th className="text-left">{t('expiry')}</th>
-              <th className="text-right">{t('last_seen')}</th>
-              <th/>
-            </tr>
+              <tr className="header-row text-xs font-medium text-secondary">
+                <th />
+                <th className="text-left ">{t('key_id')}</th>
+                <th className="text-left">{t('created')}</th>
+                <th className="text-left">{t('expiry')}</th>
+                <th className="text-right">{t('last_seen')}</th>
+                <th />
+              </tr>
             </thead>
             <tbody>
-            {apiTokens?.map(apiToken => (
-              <ApiTokenItem
-                key={apiToken.id}
-                onAction={action => {
-                  setSelected(apiToken);
-                  setOpened(action);
-                }}
-                {...apiToken} />
-            ))}
+              {apiTokens?.map((apiToken) => (
+                <_apiTokenItem
+                  key={apiToken.id}
+                  onAction={(action) => {
+                    setSelected(apiToken);
+                    setOpened(action);
+                  }}
+                  {...apiToken}
+                />
+              ))}
             </tbody>
           </table>
         </div>
@@ -101,4 +99,4 @@ export const ApiTokens = () => {
       />
     </>
   );
-}
+};

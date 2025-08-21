@@ -11,7 +11,12 @@ export interface UsersListProps extends ContextMenuBase<UserAction> {
   onChange: (device: User) => void;
 }
 
-export const UsersList: FunctionComponent<UsersListProps> = ({ users, layout, onChange, onAction }) => {
+export const UsersList: FunctionComponent<UsersListProps> = ({
+  users,
+  layout,
+  onChange,
+  onAction,
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -19,25 +24,25 @@ export const UsersList: FunctionComponent<UsersListProps> = ({ users, layout, on
       {layout === 'table' ? (
         <table className="table-layout">
           <thead>
-          <tr>
-            <th scope="col">{t('user')}</th>
-            <th scope="col">{t('email')}</th>
-            <th scope="col">{t('provider')}</th>
-            <th scope="col">{t('joined')}</th>
-            <th scope="col"/>
-          </tr>
+            <tr>
+              <th scope="col">{t('user')}</th>
+              <th scope="col">{t('email')}</th>
+              <th scope="col">{t('provider')}</th>
+              <th scope="col">{t('joined')}</th>
+              <th scope="col" />
+            </tr>
           </thead>
           <tbody>
-          {users?.map((user) => (
-            <UserTableRow
-              key={user.id}
-              onAction={action => {
-                onAction(action);
-                onChange(user);
-              }}
-              {...user}
-            />
-          ))}
+            {users?.map((user) => (
+              <UserTableRow
+                key={user.id}
+                onAction={(action) => {
+                  onAction(action);
+                  onChange(user);
+                }}
+                {...user}
+              />
+            ))}
           </tbody>
         </table>
       ) : (
@@ -45,7 +50,7 @@ export const UsersList: FunctionComponent<UsersListProps> = ({ users, layout, on
           {users.map((user: User) => (
             <UserCard
               key={user.id}
-              onAction={action => {
+              onAction={(action) => {
                 onAction(action);
                 onChange(user);
               }}

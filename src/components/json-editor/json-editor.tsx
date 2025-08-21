@@ -5,9 +5,9 @@ import { HistoryControl } from '@app-utils/history-control.ts';
 import './json-editor.css';
 
 export interface JsonEditorProps {
-  value?: string
-  onChange?: (value: string) => void
-  onSave?: () => void
+  value?: string;
+  onChange?: (value: string) => void;
+  onSave?: () => void;
 }
 
 export interface JsonEditorState {
@@ -15,7 +15,6 @@ export interface JsonEditorState {
 }
 
 export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
-
   editable = createRef<HTMLDivElement>();
 
   history: HistoryControl;
@@ -31,7 +30,7 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
   constructor(props: JsonEditorProps, context?: any) {
     super(props, context);
     this.state = {
-      code: (props.value || ''),
+      code: props.value || '',
     };
 
     this.history = new HistoryControl({ value: props.value });
@@ -203,7 +202,14 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
             onKeyDown={this.onKeyDown.bind(this)}
             ref={this.editable}
           >
-            {lines.map((line, i) => <div key={i} data-line={i} className="cm-line" dangerouslySetInnerHTML={{ __html: line }}></div>)}
+            {lines.map((line, i) => (
+              <div
+                key={i}
+                data-line={i}
+                className="cm-line"
+                dangerouslySetInnerHTML={{ __html: line }}
+              ></div>
+            ))}
           </div>
         </div>
       </div>
@@ -214,8 +220,12 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
     const { startOffset, endOffset, startContainer, endContainer, collapsed } = event;
 
     const isLine = (_node?: Node | null): boolean => {
-      return !!_node && _node.nodeType === Node.ELEMENT_NODE && (_node as HTMLElement).classList.contains('cm-line');
-    }
+      return (
+        !!_node &&
+        _node.nodeType === Node.ELEMENT_NODE &&
+        (_node as HTMLElement).classList.contains('cm-line')
+      );
+    };
 
     const getPrevNode = (_node?: Node | null): Node | null => {
       if (!_node) return null;
@@ -232,7 +242,7 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
           return _node.previousSibling;
         }
       }
-    }
+    };
 
     const getNextNode = (_node?: Node | null): Node | null => {
       if (!_node) return null;
@@ -249,7 +259,7 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
           return _node.nextSibling;
         }
       }
-    }
+    };
 
     let lengthToStart = startOffset;
     let element = getPrevNode(startContainer);

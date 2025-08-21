@@ -3,7 +3,12 @@ import { ApiToken, QueryResult } from '@app-types';
 import { useCallback } from 'react';
 
 export function useApiTokens(): QueryResult<ApiToken[]> & { refetch: () => void } {
-  const { data, isLoading, error, refetch: _refetch } = useQuery<{ apiKeys: ApiToken[] }, Error, ApiToken[]>({
+  const {
+    data,
+    isLoading,
+    error,
+    refetch: _refetch,
+  } = useQuery<{ apiKeys: ApiToken[] }, Error, ApiToken[]>({
     queryKey: ['/api/v1/apikey', 'GET'],
     select: ({ apiKeys }) => apiKeys,
     staleTime: 15_000,

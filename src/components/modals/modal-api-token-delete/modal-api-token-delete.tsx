@@ -12,11 +12,11 @@ export interface ModalApiTokenDeleteProps extends ModalProps {
 }
 
 export const ModalApiTokenDelete: FunctionComponent<ModalApiTokenDeleteProps> = ({
-                                                                                   isOpen,
-                                                                                   onDismiss,
-                                                                                   apiToken,
-                                                                                   ...props
-                                                                                 }) => {
+  isOpen,
+  onDismiss,
+  apiToken,
+  ...props
+}) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {apiToken ? <ModalContent onDismiss={onDismiss} apiToken={apiToken} {...props} /> : null}
@@ -24,9 +24,11 @@ export const ModalApiTokenDelete: FunctionComponent<ModalApiTokenDeleteProps> = 
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalApiTokenDeleteProps, 'isOpen' | 'node'> & {
-  apiToken: ApiToken
-}> = ({ onDismiss, onSuccess, apiToken }) => {
+const ModalContent: FunctionComponent<
+  Omit<ModalApiTokenDeleteProps, 'isOpen' | 'node'> & {
+    apiToken: ApiToken;
+  }
+> = ({ onDismiss, onSuccess, apiToken }) => {
   const { t } = useTranslation();
 
   const { mutate, isPending, error } = useMutation({
@@ -48,7 +50,7 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenDeleteProps, 'isOpen' | 
         <div className="title">
           <span>{t('deleting_api_token_modal_title')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()}/>
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
         <div className="pt-2 pb-4">
@@ -56,33 +58,30 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenDeleteProps, 'isOpen' | 
             <div className="text-secondary text-right font-light text-base">ID:</div>
             <div>{apiToken.id}</div>
             <div className="text-secondary text-right font-light text-base whitespace-nowrap">
-              <Trans i18nKey="name"/>:
+              <Trans i18nKey="name" />:
             </div>
             <div>
-               <FormattedDate date={apiToken.createdAt} />
+              <FormattedDate date={apiToken.createdAt} />
             </div>
             <div className="text-secondary text-right font-light text-base whitespace-nowrap">
-              <Trans i18nKey="expired_at"/>:
+              <Trans i18nKey="expired_at" />:
             </div>
             <div>
-               <FormattedDate date={apiToken.expiration} />
+              <FormattedDate date={apiToken.expiration} />
             </div>
             <div className="text-secondary text-right font-light text-base whitespace-nowrap">
-              <Trans i18nKey="last_seen"/>:
+              <Trans i18nKey="last_seen" />:
             </div>
-            <div>
-              {apiToken.lastSeen ? (
-                 <FormattedDate date={apiToken.lastSeen} />
-              ) : (
-                <>-</>
-              )}
-            </div>
+            <div>{apiToken.lastSeen ? <FormattedDate date={apiToken.lastSeen} /> : <>-</>}</div>
           </div>
 
-          <hr className="border-t-primary mb-3"/>
+          <hr className="border-t-primary mb-3" />
 
           <div className="text-start text-secondary">
-            <Trans i18nKey="deleting_api_token_modal_summary" values={{ prefix: apiToken.prefix }}/>
+            <Trans
+              i18nKey="deleting_api_token_modal_summary"
+              values={{ prefix: apiToken.prefix }}
+            />
           </div>
         </div>
         <div>
@@ -96,9 +95,7 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenDeleteProps, 'isOpen' | 
           </button>
 
           {error ? (
-            <div className="text-red-500 text-[12px] leading-[14px] mt-2">
-              {t(error.message)}
-            </div>
+            <div className="text-red-500 text-[12px] leading-[14px] mt-2">{t(error.message)}</div>
           ) : null}
         </div>
       </div>

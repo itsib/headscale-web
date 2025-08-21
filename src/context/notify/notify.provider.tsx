@@ -24,8 +24,8 @@ export const NotifyProvider: FunctionComponent = ({ children }) => {
       closed: false,
       createdAt: Date.now(),
       update(fields: Partial<Notify>) {
-        setNotifies(items => {
-          const index = items.findIndex(item => item.id === id && !item.closed);
+        setNotifies((items) => {
+          const index = items.findIndex((item) => item.id === id && !item.closed);
           if (index === -1) {
             return items;
           }
@@ -48,8 +48,8 @@ export const NotifyProvider: FunctionComponent = ({ children }) => {
           clearTimeout(timer);
         }
 
-        setNotifies(items => {
-          const index = items.findIndex(item => item.id === id && !item.closed);
+        setNotifies((items) => {
+          const index = items.findIndex((item) => item.id === id && !item.closed);
           if (index === -1) {
             return items;
           }
@@ -61,20 +61,18 @@ export const NotifyProvider: FunctionComponent = ({ children }) => {
 
           return [...items];
         });
-
-
       },
       remove() {
-        setNotifies(items => items.filter(item => item.id !== id));
+        setNotifies((items) => items.filter((item) => item.id !== id));
       },
       ...opts,
-    }
+    };
 
     if (isFinite(timeout)) {
       timer = setTimeout(() => notify.close(), timeout);
     }
 
-    setNotifies(items => {
+    setNotifies((items) => {
       return [...items.reverse().slice(0, MAX_COUNT).reverse(), notify];
     });
 
@@ -83,9 +81,9 @@ export const NotifyProvider: FunctionComponent = ({ children }) => {
 
   return (
     <NotifyContext.Provider value={{ notify }}>
-      <ToastFetching isShow={!!isFetching}/>
+      <ToastFetching isShow={!!isFetching} />
       <Toaster notifies={notifies} margin={20} />
       {children}
     </NotifyContext.Provider>
-  )
-}
+  );
+};

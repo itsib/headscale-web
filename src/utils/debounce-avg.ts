@@ -1,6 +1,9 @@
 type DebounceCallback<T> = (value: T) => void;
 
-export function debounceAvg(callback: (value: number) => void, delay: number): DebounceCallback<number> {
+export function debounceAvg(
+  callback: (value: number) => void,
+  delay: number
+): DebounceCallback<number> {
   let _sumValues: number = 0;
   let _countValues: number = 0;
   let _skip = false;

@@ -20,22 +20,28 @@ export function DevicesPage() {
   const isTableLayout = !isMobile && _isTableLayout;
   const layout: ListLayout = isTableLayout ? 'table' : 'cards';
 
-  const { data: devices, isLoading, refetch } = useQuery<{ nodes: Device[] }, Error, Device[]>({
+  const {
+    data: devices,
+    isLoading,
+    refetch,
+  } = useQuery<{ nodes: Device[] }, Error, Device[]>({
     queryKey: ['/api/v1/node', 'GET'],
-    select: data => data.nodes,
+    select: (data) => data.nodes,
     staleTime: 60_000 * 60,
     refetchInterval: 30_001,
   });
 
   const buttons: ButtonConfig[] = useMemo(() => {
-    const buttons = isMobile ? [] : [
-      {
-        id: 'set-layout',
-        icon: isTableLayout ? 'icon-layout-cards' : 'icon-layout-list',
-        tooltip: t('layout_change'),
-        effect: 'icon-shake',
-      },
-    ];
+    const buttons = isMobile
+      ? []
+      : [
+          {
+            id: 'set-layout',
+            icon: isTableLayout ? 'icon-layout-cards' : 'icon-layout-list',
+            tooltip: t('layout_change'),
+            effect: 'icon-shake',
+          },
+        ];
 
     return [
       ...buttons,
@@ -61,7 +67,7 @@ export function DevicesPage() {
       case 'refresh-devices':
         return refetch({ cancelRefetch: true });
       case 'set-layout':
-        return setIsTableLayout(value => !value);
+        return setIsTableLayout((value) => !value);
     }
   }, []);
 
@@ -70,7 +76,7 @@ export function DevicesPage() {
       <PageCaption
         title="devices"
         subtitle="machines_page_subtitle"
-        actions={<ButtonGroup buttons={buttons} onClick={onClick}/>}
+        actions={<ButtonGroup buttons={buttons} onClick={onClick} />}
       />
 
       {isLoading ? (
@@ -81,7 +87,7 @@ export function DevicesPage() {
         <EmptyList />
       )}
 
-      <div className="h-[40px]" />
+      <div style="height: 40px;" />
 
       <ModalNodeCreate
         isOpen={isOpened}
@@ -91,4 +97,3 @@ export function DevicesPage() {
     </div>
   );
 }
-

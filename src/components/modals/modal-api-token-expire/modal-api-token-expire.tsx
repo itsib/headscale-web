@@ -10,7 +10,12 @@ export interface ModalApiTokenExpireProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalApiTokenExpire: FunctionComponent<ModalApiTokenExpireProps> = ({ isOpen, onDismiss, apiToken, ...props }) => {
+export const ModalApiTokenExpire: FunctionComponent<ModalApiTokenExpireProps> = ({
+  isOpen,
+  onDismiss,
+  apiToken,
+  ...props
+}) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {apiToken ? <ModalContent onDismiss={onDismiss} apiToken={apiToken} {...props} /> : null}
@@ -18,16 +23,18 @@ export const ModalApiTokenExpire: FunctionComponent<ModalApiTokenExpireProps> = 
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalApiTokenExpireProps, 'isOpen' | 'apiToken'> & { apiToken: ApiToken }> = props => {
+const ModalContent: FunctionComponent<
+  Omit<ModalApiTokenExpireProps, 'isOpen' | 'apiToken'> & { apiToken: ApiToken }
+> = (props) => {
   const { onDismiss, onSuccess, apiToken } = props;
- 
+
   const { t } = useTranslation();
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(values: { prefix: string }) {
       const data = await fetchFn<{ apiToken: ApiToken }>(`/api/v1/apikey/expire`, {
         method: 'POST',
-        body: JSON.stringify(values)
+        body: JSON.stringify(values),
       });
       return data.apiToken;
     },
@@ -51,10 +58,13 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenExpireProps, 'isOpen' | 
             <Trans i18nKey="expire_modal_message" />
           </div>
 
-          <hr className="border-t-primary mb-3"/>
+          <hr className="border-t-primary mb-3" />
 
           <div className="text-start grid grid-cols-[0.4fr,1fr] gap-y-2">
-            <div className="text-secondary text-sm self-center whitespace-nowrap"><Trans i18nKey="api_token"/>:&nbsp;</div>
+            <div className="text-secondary text-sm self-center whitespace-nowrap">
+              <Trans i18nKey="api_token" />
+              :&nbsp;
+            </div>
             <div className="truncate text-primary self-center">{apiToken.prefix}</div>
           </div>
         </div>
@@ -63,17 +73,17 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenExpireProps, 'isOpen' | 
             type="button"
             className="btn btn-accent w-full"
             data-loading={isPending}
-            onClick={() => mutate({
-              prefix: apiToken.prefix,
-            })}
+            onClick={() =>
+              mutate({
+                prefix: apiToken.prefix,
+              })
+            }
           >
             <span>{t('expiry')}</span>
           </button>
 
           {error ? (
-            <div className="text-red-500 text-[12px] leading-[14px] mt-2">
-              {t(error.message)}
-            </div>
+            <div className="text-red-500 text-[12px] leading-[14px] mt-2">{t(error.message)}</div>
           ) : null}
         </div>
       </div>

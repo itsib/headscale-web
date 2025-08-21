@@ -1,6 +1,10 @@
 import { User } from '../users/users.ts';
 
-export type DeviceRegisterMethod = 'REGISTER_METHOD_CLI' | 'REGISTER_METHOD_OIDC' | 'REGISTER_METHOD_UNSPECIFIED' | 'REGISTER_METHOD_AUTH_KEY';
+export type DeviceRegisterMethod =
+  | 'REGISTER_METHOD_CLI'
+  | 'REGISTER_METHOD_OIDC'
+  | 'REGISTER_METHOD_UNSPECIFIED'
+  | 'REGISTER_METHOD_AUTH_KEY';
 
 export interface Device {
   id: string;

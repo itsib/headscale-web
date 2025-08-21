@@ -4,8 +4,9 @@
   right: 0;
   height: var(--header-height);
   background-color: rgb(var(--bg-primary));
-  border-bottom: 1px solid color-mix(in srgb, rgb(var(--bg-primary)) 90%, rgb(var(--text-primary)) 10%);
-  box-shadow: 0 1px 0 0 rgb(var(--text-primary) / .02);
+  border-bottom: 1px solid
+    color-mix(in srgb, rgb(var(--bg-primary)) 90%, rgb(var(--text-primary)) 10%);
+  box-shadow: 0 1px 0 0 rgb(var(--text-primary) / 0.02);
   position: fixed;
   z-index: 20;
 
@@ -31,13 +32,13 @@
     top: var(--header-height);
     height: calc(100vh - var(--header-height));
     background-color: rgb(var(--bg-primary));
-    transition: left .15s ease-out;
+    transition: left 0.15s ease-out;
     position: fixed;
     z-index: 1001;
 
     &.is-open {
       left: 0;
-      transition: left .3s ease-in;
+      transition: left 0.3s ease-in;
     }
   }
 }

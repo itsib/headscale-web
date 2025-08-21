@@ -15,26 +15,29 @@ export default function Acl() {
 
   const { data: policy, isLoading } = useQuery<{ policy: string }, Error, string>({
     queryKey: ['/api/v1/policy', 'GET'],
-    select: data => data.policy,
+    select: (data) => data.policy,
     staleTime: 0,
     refetchInterval: false,
   });
 
   return (
     <div className="page acl-page">
-      <PageCaption
-        title="access_controls"
-        subtitle="access_controls_subtitle"
-      />
+      <PageCaption title="access_controls" subtitle="access_controls_subtitle" />
 
       {isLoading ? null : (
         <div className="tabs-links">
-          <a href="/acl/edit-file" className={cn('tab-link', { active: path.startsWith('/acl/edit-file') })}>
-            <i className="icon icon-edit-code"/>
+          <a
+            href="/acl/edit-file"
+            className={cn('tab-link', { active: path.startsWith('/acl/edit-file') })}
+          >
+            <i className="icon icon-edit-code" />
             {t('edit_file')}
           </a>
-          <a href="/acl/preview" className={cn('tab-link', { active: path.startsWith('/acl/preview') })}>
-            <i className="icon icon-eye"/>
+          <a
+            href="/acl/preview"
+            className={cn('tab-link', { active: path.startsWith('/acl/preview') })}
+          >
+            <i className="icon icon-eye" />
             {t('preview')}
           </a>
         </div>
@@ -47,7 +50,7 @@ export default function Acl() {
       ) : path === '/acl/preview' ? (
         <Preview policy={policy} />
       ) : (
-        <Redirect to="/acl/edit-file"/>
+        <Redirect to="/acl/edit-file" />
       )}
     </div>
   );

@@ -9,23 +9,22 @@ A web frontend for the [headscale](https://github.com/juanfont/headscale) coordi
 [![Docker Image Version (tag)](https://img.shields.io/docker/v/sergeyitsib/headscale-web/latest?style=flat&logo=docker&logoColor=%23ffffff&label=Image)](https://hub.docker.com/r/sergeyitsib/headscale-web)
 [![Release](https://github.com/itsib/headscale-web/actions/workflows/main.yaml/badge.svg)](https://github.com/itsib/headscale-web/actions/workflows/main.yaml)
 
-
 ![Screenshot Home Page](public/screenshots/devices-1280x720.webp)
 
 ---
 
 ### Supported Features
 
--  Very small size, **~30MB** docker image, with lighttpd server and files.
--  Enable/Disable routes and exit nodes
--  Add, move, rename, and remove nodes
--  Add and remove users/namespaces
--  Add and expire PreAuth keys
--  Add and remove machine tags
--  ACL access JSON file editor with syntax highlights
--  Display Go server metrics
--  Docker [image](https://hub.docker.com/r/sergeyitsib/headscale-web)
--  Healthcheck in docker container
+- Very small size, **~30MB** docker image, with lighttpd server and files.
+- Enable/Disable routes and exit nodes
+- Add, move, rename, and remove nodes
+- Add and remove users/namespaces
+- Add and expire PreAuth keys
+- Add and remove machine tags
+- ACL access JSON file editor with syntax highlights
+- Display Go server metrics
+- Docker [image](https://hub.docker.com/r/sergeyitsib/headscale-web)
+- Healthcheck in docker container
 
 ### Docker
 
@@ -43,15 +42,16 @@ services:
     image: sergeyitsib/headscale-web
     restart: unless-stopped
     ports:
-      - "8081:80"
+      - '8081:80'
     healthcheck:
-      test: [ "CMD", "healthcheck" ]
+      test: ['CMD', 'healthcheck']
       interval: 10s
       timeout: 5s
       retries: 2
 ```
 
 ### Docker compose caddy with headscale metrics
+
 ```yaml
 services:
   caddy:
@@ -62,9 +62,9 @@ services:
     cap_add:
       - NET_ADMIN
     ports:
-      - "0.0.0.0:80:80"
-      - "0.0.0.0:443:443"
-      - "0.0.0.0:443:443/udp"
+      - '0.0.0.0:80:80'
+      - '0.0.0.0:443:443'
+      - '0.0.0.0:443:443/udp'
     depends_on:
       - headscale
       - headscale-web
@@ -81,7 +81,7 @@ services:
     environment:
       - PORT=8081
     healthcheck:
-      test: [ "CMD", "healthcheck" ]
+      test: ['CMD', 'healthcheck']
       interval: 10s
       timeout: 5s
       retries: 2
@@ -95,7 +95,7 @@ services:
       - headscale-data:/var/lib/headscale
       - headscale-apikey:/usr/share/headscale
     healthcheck:
-      test: [ "CMD", "healthcheck" ]
+      test: ['CMD', 'healthcheck']
       interval: 10s
       timeout: 5s
       retries: 2

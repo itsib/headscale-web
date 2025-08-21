@@ -10,9 +10,9 @@ export const KeysLoading: FunctionComponent<{ rows?: number }> = ({ rows = 3 }) 
         <div className="skeleton-row" key={i}>
           <div className="skeleton-circle" />
           <div className="skeleton-row">
-            <div className="w-30 skeleton-block"/>
-            <div className="w-50 skeleton-block"/>
-            <div className="w-20 skeleton-block"/>
+            <div className="w-30 skeleton-block" />
+            <div className="w-50 skeleton-block" />
+            <div className="w-20 skeleton-block" />
           </div>
         </div>
       ))}

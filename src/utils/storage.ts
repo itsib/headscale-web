@@ -11,7 +11,6 @@ export interface IStorage {
 }
 
 export class Storage implements IStorage {
-
   private readonly _listeners: Map<StorageOperation, StorageCallback[]>;
 
   private constructor() {
@@ -59,14 +58,14 @@ export class Storage implements IStorage {
     localStorage.clear();
 
     keys.forEach((key: string) => this._emit('remove', key));
-  };
+  }
 
   subscribe(event: StorageOperation, callback: StorageCallback): () => void {
     const listeners = this._listeners.get(event) ?? [];
     this._listeners.set(event, [...listeners, callback]);
 
     return () => {
-      const listeners = this._listeners.get(event)!.filter(cb => (cb !== callback));
+      const listeners = this._listeners.get(event)!.filter((cb) => cb !== callback);
       this._listeners.set(event, listeners);
     };
   }

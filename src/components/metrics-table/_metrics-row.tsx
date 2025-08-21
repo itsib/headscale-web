@@ -24,7 +24,7 @@ function isBarChart(dataPoints: DataPoint[]) {
   return isEveryHaveOneAttr;
 }
 
-export const MetricsRow: FunctionComponent<Metric> = props => {
+export const MetricsRow: FunctionComponent<Metric> = (props) => {
   const { system, id, name, description, dataPoints } = props;
   return (
     <div id={`metric-${system}-${id}`} class="metrics-row">
@@ -36,7 +36,7 @@ export const MetricsRow: FunctionComponent<Metric> = props => {
         {dataPoints.length === 1 ? (
           <SingleDataPointView {...props} />
         ) : isBarChart(dataPoints) ? (
-          <BarChartDataPointView {...props}  />
+          <BarChartDataPointView {...props} />
         ) : (
           <SimpleRowsDataPointView {...props} />
         )}
@@ -62,18 +62,20 @@ const SingleDataPointView: FunctionComponent<Metric> = ({ dataPoints }) => {
       </div>
     </div>
   );
-}
+};
 
-const BarChartDataPointView: FunctionComponent<Metric> = props => {
+const BarChartDataPointView: FunctionComponent<Metric> = (props) => {
   const { dataPoints, unit } = props;
   const { t } = useTranslation();
 
   const [bars, setBars] = useState<ChartBar[] | undefined>(undefined);
   const [measure, setMeasure] = useState<string | undefined>(undefined);
-  const [totals, setTotals] = useState<{ kind: string; unit?: string; value: string | number }[]>([]);
+  const [totals, setTotals] = useState<{ kind: string; unit?: string; value: string | number }[]>(
+    []
+  );
 
   useEffect(() => {
-    const bars: { y: string, x: number }[] = [];
+    const bars: { y: string; x: number }[] = [];
     const totals: { kind: string; unit?: string; value: string | number }[] = [];
 
     let isMeasureSet = false;
@@ -110,8 +112,8 @@ const BarChartDataPointView: FunctionComponent<Metric> = props => {
 
       <div class="totals">
         {totals.map((total, index) => (
-          <Fragment  key={index}>
-            <div class="title">{index === 0 ? t('totals') + ':': null}</div>
+          <Fragment key={index}>
+            <div class="title">{index === 0 ? t('totals') + ':' : null}</div>
             <div class="total-label">{total.kind}</div>
             <div class="total-value">{total.value}</div>
           </Fragment>
@@ -122,8 +124,5 @@ const BarChartDataPointView: FunctionComponent<Metric> = props => {
 };
 
 const SimpleRowsDataPointView: FunctionComponent<Metric> = () => {
-  return (
-    <div class="simple-rows-data-point-view"></div>
-  );
+  return <div class="simple-rows-data-point-view"></div>;
 };
-

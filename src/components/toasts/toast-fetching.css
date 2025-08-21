@@ -9,17 +9,16 @@
   .vertical-transition {
     top: 66px;
     position: absolute;
-    transition: top .3s linear;
+    transition: top 0.3s linear;
     will-change: top;
 
     .spinner {
       color: rgb(var(--accent));
-      animation: toast-spin-animation .5s linear infinite;
+      animation: toast-spin-animation 0.5s linear infinite;
     }
   }
 
   &.show {
-
     .vertical-transition {
       top: 0;
     }
@@ -31,7 +30,7 @@
   top: 0;
   height: 2px;
   width: 0;
-  opacity: .8;
+  opacity: 0.8;
   background-color: rgb(var(--accent));
   will-change: width;
   position: fixed;
@@ -43,7 +42,7 @@
   }
 
   &.show-out {
-    transition: width .5s ease-in;
+    transition: width 0.5s ease-in;
     width: 100%;
   }
 }

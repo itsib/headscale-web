@@ -13,7 +13,7 @@ export function useNotifyQuery() {
   }, [t, notify]);
 
   const success = useCallback(() => {
-    if(!instance) return;
+    if (!instance) return;
 
     setTimeout(() => {
       instance.update({ status: 'success', title: t('saved'), timeout: 2_000 });
@@ -21,12 +21,15 @@ export function useNotifyQuery() {
     setInstance(undefined);
   }, [t, instance]);
 
-  const error = useCallback((message: string) => {
-    if(!instance) return;
+  const error = useCallback(
+    (message: string) => {
+      if (!instance) return;
 
-    instance.update({ status: 'error', title: t(message) });
-    setInstance(undefined);
-  }, [t, instance]);
+      instance.update({ status: 'error', title: t(message) });
+      setInstance(undefined);
+    },
+    [t, instance]
+  );
 
   return { start, success, error };
 }

@@ -11,7 +11,12 @@ export interface ModalNodeDeleteProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalNodeDelete: FunctionComponent<ModalNodeDeleteProps> = ({ isOpen, onDismiss, node, ...props }) => {
+export const ModalNodeDelete: FunctionComponent<ModalNodeDeleteProps> = ({
+  isOpen,
+  onDismiss,
+  node,
+  ...props
+}) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {node ? <ModalContent onDismiss={onDismiss} node={node} {...props} /> : null}
@@ -19,11 +24,9 @@ export const ModalNodeDelete: FunctionComponent<ModalNodeDeleteProps> = ({ isOpe
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalNodeDeleteProps, 'isOpen' | 'node'> & { node: Device }> = ({
-                                                                                                             onDismiss,
-                                                                                                             onSuccess,
-                                                                                                             node,
-                                                                                                           }) => {
+const ModalContent: FunctionComponent<
+  Omit<ModalNodeDeleteProps, 'isOpen' | 'node'> & { node: Device }
+> = ({ onDismiss, onSuccess, node }) => {
   const { t } = useTranslation();
 
   const { mutate, isPending, error } = useMutation({
@@ -45,7 +48,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeDeleteProps, 'isOpen' | 'nod
         <div className="title">
           <span>{t('removing_device')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()}/>
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
         <div className="pt-2 pb-4">
@@ -53,35 +56,38 @@ const ModalContent: FunctionComponent<Omit<ModalNodeDeleteProps, 'isOpen' | 'nod
             <div className="text-secondary text-right font-light text-base">ID:</div>
             <div>{node.id}</div>
             <div className="text-secondary text-right font-light text-base whitespace-nowrap">
-              <Trans i18nKey="name"/>:
+              <Trans i18nKey="name" />:
             </div>
             <div>{node.name}</div>
             <div className="text-secondary text-right font-light text-base whitespace-nowrap">
-              <Trans i18nKey="given_name"/>:
+              <Trans i18nKey="given_name" />:
             </div>
             <div>{node.givenName}</div>
             <div className="text-secondary text-right font-light text-base whitespace-nowrap">
-              <Trans i18nKey="ip_address"/>:
+              <Trans i18nKey="ip_address" />:
             </div>
             <div>{node.ipAddresses[0]}</div>
             <div className="text-secondary text-right font-light text-base whitespace-nowrap">
-              <Trans i18nKey="created_at"/>:
+              <Trans i18nKey="created_at" />:
             </div>
             <div>
-               <FormattedDate date={node.createdAt} />
+              <FormattedDate date={node.createdAt} />
             </div>
             <div className="text-secondary text-right font-light text-base whitespace-nowrap">
-              <Trans i18nKey="last_seen"/>:
+              <Trans i18nKey="last_seen" />:
             </div>
             <div>
-               <FormattedDate date={node.lastSeen} />
+              <FormattedDate date={node.lastSeen} />
             </div>
           </div>
 
-          <hr className="border-t-primary mb-3"/>
+          <hr className="border-t-primary mb-3" />
 
           <div className="text-start text-secondary">
-            <Trans i18nKey="removing_device_confirmation" values={{ name: node.givenName || node.name }}/>
+            <Trans
+              i18nKey="removing_device_confirmation"
+              values={{ name: node.givenName || node.name }}
+            />
           </div>
         </div>
         <div>
@@ -95,9 +101,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeDeleteProps, 'isOpen' | 'nod
           </button>
 
           {error ? (
-            <div className="text-red-500 text-[12px] leading-[14px] mt-2">
-              {t(error.message)}
-            </div>
+            <div className="text-red-500 text-[12px] leading-[14px] mt-2">{t(error.message)}</div>
           ) : null}
         </div>
       </div>

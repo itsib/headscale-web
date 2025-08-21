@@ -1,4 +1,3 @@
-
 const toggleSelection = () => {
   const selection = document.getSelection();
   if (!selection || !selection.rangeCount) {
@@ -11,7 +10,9 @@ const toggleSelection = () => {
     ranges.push(selection.getRangeAt(i));
   }
 
-  switch (active?.tagName.toUpperCase()) { // .toUpperCase handles XHTML
+  switch (
+    active?.tagName.toUpperCase() // .toUpperCase handles XHTML
+  ) {
     case 'INPUT':
     case 'TEXTAREA':
       (active as any).blur();
@@ -29,7 +30,7 @@ const toggleSelection = () => {
     }
 
     if (!selection.rangeCount) {
-      ranges.forEach(range => selection.addRange(range));
+      ranges.forEach((range) => selection.addRange(range));
     }
 
     if (active) {
@@ -44,7 +45,7 @@ const format = (message: string) => {
 };
 
 export const copyText = (text: string): Promise<boolean> => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const reselectPrevious = toggleSelection();
     let message;
     let range: Range | null = null;
@@ -113,4 +114,3 @@ export const copyText = (text: string): Promise<boolean> => {
     return resolve(success);
   });
 };
-

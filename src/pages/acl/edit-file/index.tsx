@@ -8,7 +8,7 @@ import { JsonEditor } from '@app-components/json-editor/json-editor';
 import { DEFAULT_ACL_POLICY } from '@app-config';
 import { fetchFn } from '@app-utils/query-fn.ts';
 
-export const EditFile: FunctionComponent<{ policy?: string | null }> = ({ policy })=>  {
+export const EditFile: FunctionComponent<{ policy?: string | null }> = ({ policy }) => {
   const client = useQueryClient();
   const [policyTyped, setPolicyTyped] = useState<string>(policy || DEFAULT_ACL_POLICY);
   const isChanged = policy !== policyTyped;
@@ -16,17 +16,14 @@ export const EditFile: FunctionComponent<{ policy?: string | null }> = ({ policy
   const { mutate, isPending, error, reset } = useMutation({
     mutationKey: ['/api/v1/policy', 'PUT'],
     mutationFn(policy: string) {
-      return fetchFn<AclPolicy>(
-        '/api/v1/policy',
-        {
-          method: 'PUT',
-          body: JSON.stringify({ policy }),
-        },
-      );
+      return fetchFn<AclPolicy>('/api/v1/policy', {
+        method: 'PUT',
+        body: JSON.stringify({ policy }),
+      });
     },
     onSuccess: () => {
       client.setQueryData(['/api/v1/policy', 'GET'], policyTyped);
-    }
+    },
   });
 
   return (
@@ -45,14 +42,13 @@ export const EditFile: FunctionComponent<{ policy?: string | null }> = ({ policy
         </div>
       </div>
 
-      <div className="min-h-[30px] text-sm pt-2">
-        {error ? (
-          <span className="text-red-500 px-4">{formatError(error)}</span>
-        ) : null}
+      <div style="min-height: 30px;" className="text-sm pt-2">
+        {error ? <span className="text-danger px-4">{formatError(error)}</span> : null}
       </div>
       <div className="mt-4 flex gap-4 justify-end">
         <button
-          className="btn btn-outline-secondary min-w-[180px]"
+          style="min-width: 180px;"
+          className="btn btn-outline-secondary"
           disabled={(!isChanged || isPending || policy === null) && !error}
           onClick={() => {
             setPolicyTyped(policy || DEFAULT_ACL_POLICY);
@@ -65,12 +61,13 @@ export const EditFile: FunctionComponent<{ policy?: string | null }> = ({ policy
         </button>
 
         <button
-          className="btn btn-accent min-w-[120px]"
+          style="min-width: 120px;"
+          className="btn btn-accent"
           disabled={!isChanged && policy !== null}
           data-loading={isPending}
           onClick={() => {
             if (isChanged && !isPending) {
-              mutate(policyTyped)
+              mutate(policyTyped);
             }
           }}
         >
@@ -81,4 +78,4 @@ export const EditFile: FunctionComponent<{ policy?: string | null }> = ({ policy
       </div>
     </>
   );
-}
+};

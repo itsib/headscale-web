@@ -17,7 +17,12 @@ export interface BtnContextMenuProps {
   btnClassName?: string;
 }
 
-export const BtnContextMenu: FunctionComponent<BtnContextMenuProps> = ({ btnClassName, icon, placement, children }) => {
+export const BtnContextMenu: FunctionComponent<BtnContextMenuProps> = ({
+  btnClassName,
+  icon,
+  placement,
+  children,
+}) => {
   const menuRef = useRef<HTMLMenuElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -32,7 +37,7 @@ export const BtnContextMenu: FunctionComponent<BtnContextMenuProps> = ({ btnClas
     const click = (e: MouseEvent) => {
       e.stopPropagation();
       setRect(btn.getBoundingClientRect());
-      setIsOpen(i => !i);
+      setIsOpen((i) => !i);
     };
 
     btn.addEventListener('click', click);
@@ -50,14 +55,14 @@ export const BtnContextMenu: FunctionComponent<BtnContextMenuProps> = ({ btnClas
       const menu = menuRef.current as HTMLMenuElement;
       if (!btn || !menu) return;
 
-      if (btn.contains(e.target as Node) || (menu.contains(e.target as Node))) {
+      if (btn.contains(e.target as Node) || menu.contains(e.target as Node)) {
         return;
       }
       setIsOpen(false);
     };
 
     const handleMouseup = () => {
-      setTimeout(() =>  setIsOpen(false), 10);
+      setTimeout(() => setIsOpen(false), 10);
     };
 
     const handleScroll = () => setIsOpen(false);
@@ -84,7 +89,12 @@ export const BtnContextMenu: FunctionComponent<BtnContextMenuProps> = ({ btnClas
         <i className={cn('icon', icon || 'icon-context-menu')} />
       </button>
       <BasePopup rect={rect} open={isOpen} placement={placement}>
-        <menu role="menu" className="popup context-menu" ref={menuRef} onClick={e => e.stopPropagation()}>
+        <menu
+          role="menu"
+          className="popup context-menu"
+          ref={menuRef}
+          onClick={(e) => e.stopPropagation()}
+        >
           {children}
         </menu>
       </BasePopup>

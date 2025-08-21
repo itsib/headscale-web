@@ -15,7 +15,7 @@
       "@app-components/*": ["src/components/*"],
       "@app-hooks/*": ["src/hooks/*"],
       "@app-context/*": ["src/context/*"],
-      "@app-utils/*": ["src/utils/*"],
+      "@app-utils/*": ["src/utils/*"]
     },
 
     /* Bundler mode */
@@ -32,8 +32,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "vite.config.ts",
-    "tailwind.config.ts"
-  ]
+  "include": ["vite.config.ts", "tailwind.config.ts"]
 }

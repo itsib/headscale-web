@@ -1,9 +1,6 @@
 .device-routes {
-
   .routes-checkboxes {
-
     .route-checkbox {
-
       .ui-label {
         order: 2;
         margin-bottom: 0;
@@ -16,7 +13,6 @@
       }
 
       &.disabled {
-
         .ui-label {
           color: rgb(var(--text-secondary));
         }
@@ -26,11 +22,11 @@
 
   .no-routes {
     margin-top: 0.5rem;
-    padding: 1.25rem .5rem;
+    padding: 1.25rem 0.5rem;
     color: rgb(var(--text-secondary));
     text-align: center;
     border: 1px solid rgb(var(--border-primary));
     border-radius: var(--border-radius);
-    background-color: rgb(var(--bg-primary) / .7);
+    background-color: rgb(var(--bg-primary) / 0.7);
   }
 }

@@ -8,7 +8,10 @@ export interface DeviceIconProps extends IconBaseProps {
   type?: DeviceIconType;
 }
 
-export const DeviceIcon = forwardRef(function ErrorIcon(props: DeviceIconProps, ref: ForwardedRef<SVGSVGElement>) {
+export const DeviceIcon = forwardRef(function ErrorIcon(
+  props: DeviceIconProps,
+  ref: ForwardedRef<SVGSVGElement>
+) {
   const { type = 'laptop', size = 24, style, className } = props;
 
   let iconClassName: string;
@@ -28,11 +31,25 @@ export const DeviceIcon = forwardRef(function ErrorIcon(props: DeviceIconProps, 
   }
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" style={style} className={className} ref={ref}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      style={style}
+      className={className}
+      ref={ref}
+    >
       <circle cx={12} cy={12} r={12} fill="rgb(var(--accent))" />
-      <foreignObject x={4} y={4} width={16} height={16} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+      <foreignObject
+        x={4}
+        y={4}
+        width={16}
+        height={16}
+        style={{ textAlign: 'center', verticalAlign: 'middle' }}
+      >
         <i className={cn('icon', iconClassName)} style={{ fontSize: '14px', lineHeight: '16px' }} />
       </foreignObject>
     </svg>
   );
-})
+});

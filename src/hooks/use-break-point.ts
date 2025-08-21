@@ -14,7 +14,7 @@ export function useBreakPoint(width: number): boolean {
 
     return () => {
       window.removeEventListener('resize', resize);
-    }
+    };
   }, [width]);
 
   return isLower;

@@ -33,4 +33,4 @@ export const AuthState = {
     storage.removeItem('main-token');
     storage.removeItem('main-token-type');
   },
-}
+};

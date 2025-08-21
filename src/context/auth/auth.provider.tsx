@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { AuthState } from '@app-utils/auth-state.ts';
 import { useTranslation } from 'react-i18next';
 import { ToastOfflineManager } from '@app-utils/toast-offline-manager.ts';
+import './auth.provider.css';
 
 export function AuthProvider({ children }: { children?: ComponentChildren }) {
   const { t } = useTranslation();
@@ -63,16 +64,16 @@ export function AuthProvider({ children }: { children?: ComponentChildren }) {
       unsubscribe();
       window.removeEventListener('online', hidde);
       window.removeEventListener('offline', show);
-    }
+    };
   }, [t]);
 
   return (
     <AuthContext.Provider value={{ isAuthorized: true, logout, prefix, base }}>
       {isAuthorized ? (
-        <div className="hidden"/>
+        <div className="hidden" />
       ) : (
-        <div className="w-[100vw] h-[100vh] flex items-start justify-center fixed inset-0 bg-secondary z-40">
-          <AuthForm onSuccess={onSuccess}/>
+        <div className="auth-provider-lock inset-0">
+          <AuthForm onSuccess={onSuccess} />
         </div>
       )}
 

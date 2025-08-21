@@ -21,9 +21,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.17.0
-          registry-url: "https://registry.npmjs.org"
+          registry-url: 'https://registry.npmjs.org'
       - name: Install dependency
-        run: | 
+        run: |
           npm install --no-fund --no-audit
       - name: Lint & Test
         run: |

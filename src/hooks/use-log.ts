@@ -15,7 +15,7 @@ function getCallsTrace(): string[] {
       const result = STACK_CALL_REGEX.exec(line);
       return result === null || result[1] === undefined ? '' : result[1];
     })
-    .filter(i => !!i);
+    .filter((i) => !!i);
 }
 
 function renderCallTrace(callsTrace: string[]): void {
@@ -31,7 +31,10 @@ export interface LogOpts {
   color?: boolean;
 }
 
-export function useLog(_values: { [name: string]: any }, { showTrace = false, color = true }: LogOpts = {}): void {
+export function useLog(
+  _values: { [name: string]: any },
+  { showTrace = false, color = true }: LogOpts = {}
+): void {
   const callsTrace = showTrace ? getCallsTrace() : undefined;
   const [values, setValues] = useState<{ [name: string]: any } | null>(null);
   const valuesRef = useRef({} as { [name: string]: any });
@@ -64,7 +67,7 @@ export function useLog(_values: { [name: string]: any }, { showTrace = false, co
 
   // Print logs
   useEffect(() => {
-    if (/*import.meta.env.PROD || */!values) {
+    if (/*import.meta.env.PROD || */ !values) {
       return;
     }
 
@@ -73,7 +76,9 @@ export function useLog(_values: { [name: string]: any }, { showTrace = false, co
       const name = names[i];
 
       if (color) {
-        const _color = name.toLowerCase().includes('err') ? Color.fromHex('#FF0000') : Color.fromString(name);
+        const _color = name.toLowerCase().includes('err')
+          ? Color.fromHex('#FF0000')
+          : Color.fromString(name);
         if (_color.lightness < 30) {
           _color.lightness = 50;
         }
@@ -89,7 +94,11 @@ export function useLog(_values: { [name: string]: any }, { showTrace = false, co
   }, [values, callsTrace, color]);
 }
 
-type ColorData<Alfa extends number | undefined> = Alfa extends number ? [number, number, number, number] : Alfa extends undefined ? [number, number, number] : never;
+type ColorData<Alfa extends number | undefined> = Alfa extends number
+  ? [number, number, number, number]
+  : Alfa extends undefined
+    ? [number, number, number]
+    : never;
 
 export class Color {
   /**
@@ -114,7 +123,10 @@ export class Color {
   private _a: number;
 
   static hexToRgb(hex: string): [number, number, number, number] | [number, number, number] {
-    let r = 0, g = 0, b = 0, a = 1;
+    let r = 0,
+      g = 0,
+      b = 0,
+      a = 1;
 
     // 3 digits
     if (hex.length == 4) {
@@ -127,40 +139,57 @@ export class Color {
       r = parseInt(hex.substring(1, 3), 16);
       g = parseInt(hex.substring(3, 5), 16);
       b = parseInt(hex.substring(5, 7), 16);
-    }  else if (hex.length == 9) {
+    } else if (hex.length == 9) {
       r = parseInt(hex.substring(1, 3), 16);
       g = parseInt(hex.substring(3, 5), 16);
       b = parseInt(hex.substring(5, 7), 16);
-      a = Math.floor(parseInt(hex.substring(7, 9), 16) / 255 * 1000) / 1000;
+      a = Math.floor((parseInt(hex.substring(7, 9), 16) / 255) * 1000) / 1000;
     }
 
     return hex.length == 9 ? [r, g, b, a] : [r, g, b];
   }
 
-  static hslToRgb<Alfa extends number | undefined>(h: number, s: number, l: number, a?: Alfa): ColorData<Alfa> {
+  static hslToRgb<Alfa extends number | undefined>(
+    h: number,
+    s: number,
+    l: number,
+    a?: Alfa
+  ): ColorData<Alfa> {
     // Must be fractions of 1
     s /= 100;
     l /= 100;
 
     let c = (1 - Math.abs(2 * l - 1)) * s,
-      x = c * (1 - Math.abs((h / 60) % 2 - 1)),
+      x = c * (1 - Math.abs(((h / 60) % 2) - 1)),
       m = l - c / 2,
       r = 0,
       g = 0,
       b = 0;
 
     if (0 <= h && h < 60) {
-      r = c; g = x; b = 0;
+      r = c;
+      g = x;
+      b = 0;
     } else if (60 <= h && h < 120) {
-      r = x; g = c; b = 0;
+      r = x;
+      g = c;
+      b = 0;
     } else if (120 <= h && h < 180) {
-      r = 0; g = c; b = x;
+      r = 0;
+      g = c;
+      b = x;
     } else if (180 <= h && h < 240) {
-      r = 0; g = x; b = c;
+      r = 0;
+      g = x;
+      b = c;
     } else if (240 <= h && h < 300) {
-      r = x; g = 0; b = c;
+      r = x;
+      g = 0;
+      b = c;
     } else if (300 <= h && h < 360) {
-      r = c; g = 0; b = x;
+      r = c;
+      g = 0;
+      b = x;
     }
     r = Math.round((r + m) * 255);
     g = Math.round((g + m) * 255);
@@ -176,13 +205,20 @@ export class Color {
     let aHex = '';
 
     if (a != null) {
-      aHex = Math.round((255 * a)).toString(16).padStart(2, '0');
+      aHex = Math.round(255 * a)
+        .toString(16)
+        .padStart(2, '0');
     }
 
     return '#' + rHex + gHex + bHex + aHex;
   }
 
-  static rgbToHsl<Alfa extends number | undefined>(r: number, g: number, b: number, a?: Alfa): ColorData<Alfa> {
+  static rgbToHsl<Alfa extends number | undefined>(
+    r: number,
+    g: number,
+    b: number,
+    a?: Alfa
+  ): ColorData<Alfa> {
     r /= 255;
     g /= 255;
     b /= 255;
@@ -265,7 +301,10 @@ export class Color {
   }
 
   static fromRgb(rgbStr: string): Color {
-    const result = /^rgba?\((\d+)(?:\s|,)\s?(\d+)(?:\s|,)\s?(\d+)(?:(?:\s|,|\s?\/)\s?([\d.]+%?))?\)/.exec(rgbStr);
+    const result =
+      /^rgba?\((\d+)(?:\s|,)\s?(\d+)(?:\s|,)\s?(\d+)(?:(?:\s|,|\s?\/)\s?([\d.]+%?))?\)/.exec(
+        rgbStr
+      );
     if (!result) {
       throw new Error(`RGB color parse error - "${rgbStr}"`);
     }
@@ -368,7 +407,7 @@ export class Color {
     if (value % 1) {
       throw new Error('Invalid hue. Value should be integer number');
     }
-    this._h = Math.round((value / 360) % 1 * 360);
+    this._h = Math.round(((value / 360) % 1) * 360);
   }
 
   get hue(): number {

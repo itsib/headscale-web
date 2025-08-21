@@ -1,8 +1,8 @@
-  import { defineConfig, UserConfig } from 'vite';
+import { defineConfig, UserConfig } from 'vite';
 import preact from '@preact/preset-vite';
 import { join, resolve } from 'node:path';
 import { createHtmlPlugin } from 'vite-plugin-html';
-import tailwindcss from 'tailwindcss';
+import postcssNested from 'postcss-nested';
 import autoprefixer from 'autoprefixer';
 import { VitePWA } from 'vite-plugin-pwa';
 import { readFile } from 'node:fs/promises';
@@ -10,8 +10,8 @@ import { existsSync } from 'node:fs';
 import { randomBytes } from 'crypto';
 
 /**
- * Vite
- * @see https://vitejs.dev/config/
+ * Vite Config
+ * {@link https://vitejs.dev/config|Docs}
  */
 export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
   const pkg = JSON.parse(await readFile('package.json', 'utf8'));
@@ -30,11 +30,11 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
     },
     resolve: {
       alias: {
-        react: 'preact/compat',
+        'react': 'preact/compat',
         'react-dom/test-utils': 'preact/test-utils',
         'react-dom': 'preact/compat',
         'react/jsx-runtime': 'preact/jsx-runtime',
-        $fonts: resolve(__dirname, 'public/fonts'),
+        '$fonts': resolve(__dirname, 'public/fonts'),
         '@app-types': resolve(__dirname, 'src/types/index.ts'),
         '@app-config': resolve(__dirname, 'src/config.ts'),
         '@app-components': resolve(__dirname, 'src/components'),
@@ -45,12 +45,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
     },
     css: {
       postcss: {
-        plugins: [
-          tailwindcss({
-            config: join(__dirname, 'tailwind.config.ts'),
-          }),
-          autoprefixer(),
-        ],
+        plugins: [postcssNested(), autoprefixer()],
       },
     },
     esbuild: { legalComments: 'none' },
@@ -75,8 +70,8 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
           data: {
             APP_NAME: pkg.config.name,
             APP_DESCRIPTION: pkg.description,
-          }
-        }
+          },
+        },
       }),
       preact({
         reactAliasesEnabled: true,
@@ -190,11 +185,13 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
       port: 3008,
       host: 'localhost',
       keepAlive: true,
-      https: isDevSSL ? {
-        cert: './cert/localhost.crt',
-        key: './cert/localhost.key',
-        serverName: 'localhost',
-      } : undefined,
+      https: isDevSSL
+        ? {
+            cert: './cert/localhost.crt',
+            key: './cert/localhost.key',
+            serverName: 'localhost',
+          }
+        : undefined,
     },
   } as UserConfig;
 });

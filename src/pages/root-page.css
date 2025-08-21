@@ -1,0 +1,9 @@
+.root-page {
+  min-width: 316px;
+
+  .root-content {
+    height: 100%;
+    min-height: var(--content-height);
+    margin-top: var(--header-height);
+  }
+}

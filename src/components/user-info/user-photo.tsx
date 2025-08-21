@@ -18,7 +18,7 @@ export interface UserPhotoProps {
   className?: string;
 }
 
-export const UserPhoto: FunctionComponent<UserPhotoProps> = props => {
+export const UserPhoto: FunctionComponent<UserPhotoProps> = (props) => {
   const { size = 'md', id, pictureUrl, className } = props;
 
   const [isError, setIsError] = useState(false);
@@ -44,7 +44,10 @@ export const UserPhoto: FunctionComponent<UserPhotoProps> = props => {
   return (
     <>
       {pictureUrl && !isError ? (
-        <div className={cn('user-photo', className)} style={{ width: `${diameter}px`, height: `${diameter}px` }}>
+        <div
+          className={cn('user-photo', className)}
+          style={{ width: `${diameter}px`, height: `${diameter}px` }}
+        >
           {isLoading ? <div className="loader skeleton" /> : null}
 
           <img
@@ -58,10 +61,16 @@ export const UserPhoto: FunctionComponent<UserPhotoProps> = props => {
           />
         </div>
       ) : (
-        <div className={cn('user-photo', 'generated', className)} style={{ width: `${diameter}px`, height: `${diameter}px` }}>
-          <i className={`icon icon-avatar-${Number(id) % 10}`} style={{ '--icon-size': `${fontSize}px`, lineHeight: `${diameter}px` }}/>
+        <div
+          className={cn('user-photo', 'generated', className)}
+          style={{ width: `${diameter}px`, height: `${diameter}px` }}
+        >
+          <i
+            className={`icon icon-avatar-${Number(id) % 10}`}
+            style={{ '--icon-size': `${fontSize}px`, 'lineHeight': `${diameter}px` }}
+          />
         </div>
       )}
     </>
   );
-}
+};

@@ -5,7 +5,9 @@ import { useRegisterSW } from 'virtual:pwa-register/react';
 import { getActiveTheme, Theme } from '@app-utils/theme';
 
 export const ApplicationProvider: FunctionComponent = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>(localStorage.getItem('headscale.theme') as Theme || 'system');
+  const [theme, setTheme] = useState<Theme>(
+    (localStorage.getItem('headscale.theme') as Theme) || 'system'
+  );
   const [, setNeedsRefresh] = useState<boolean>(false);
 
   const updateTheme = useCallback((theme: Theme) => {
@@ -31,19 +33,19 @@ export const ApplicationProvider: FunctionComponent = ({ children }) => {
       const serviceWorker = _registration.active;
       if (!serviceWorker) return;
 
-      serviceWorker.addEventListener('message', event => {
+      serviceWorker.addEventListener('message', (event) => {
         console.log('message', event);
       });
 
-      serviceWorker.addEventListener('upgradeneeded', event => {
+      serviceWorker.addEventListener('upgradeneeded', (event) => {
         console.log('upgradeneeded', event);
       });
 
-      serviceWorker.addEventListener('error', event => {
+      serviceWorker.addEventListener('error', (event) => {
         console.error('SW error', event);
       });
 
-      serviceWorker.addEventListener('statechange', event => {
+      serviceWorker.addEventListener('statechange', (event) => {
         console.log('statechange', serviceWorker.state, event);
       });
     },
@@ -58,7 +60,7 @@ export const ApplicationProvider: FunctionComponent = ({ children }) => {
     const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
     function onThemeChange({ matches }: MediaQueryListEvent) {
-      applyTheme(matches ? 'dark' : 'light' as Exclude<Theme, 'system'>);
+      applyTheme(matches ? 'dark' : ('light' as Exclude<Theme, 'system'>));
     }
 
     try {

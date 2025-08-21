@@ -18,8 +18,8 @@ export const ChartBars = memo(function ChartBars({ bars, xAxis, yAxis }: ChartBa
   const fontConfig = {
     size: 11,
     weight: 400,
-    family: 'SFProText'
-  }
+    family: 'SFProText',
+  };
 
   let lineHeight = 0;
   let maxX = 0;
@@ -31,13 +31,13 @@ export const ChartBars = memo(function ChartBars({ bars, xAxis, yAxis }: ChartBa
     maxX = Math.max(bar.x, maxX);
 
     const xSize = getStringSize(bar.x, fontConfig);
-    if (xSize)  {
+    if (xSize) {
       maxXWidth = Math.max(xSize.width, maxXWidth);
       lineHeight = Math.max(xSize.height, lineHeight);
     }
 
     const labelSize = bar.y ? getStringSize(bar.y, fontConfig) : { width: 0, height: 0 };
-    if (labelSize)  {
+    if (labelSize) {
       maxYWidth = Math.max(labelSize.width, maxYWidth);
     }
   }
@@ -54,11 +54,12 @@ export const ChartBars = memo(function ChartBars({ bars, xAxis, yAxis }: ChartBa
 
   const height = margin.t + maxBarsHeight + space + lineHeight + margin.b;
 
-  const textPadding = (barHeight - (space / 2) - lineHeight) / 2;
+  const textPadding = (barHeight - space / 2 - lineHeight) / 2;
 
-  const scaleY = (index: number) => margin.t + (index > 0 ? Math.round((maxBarsHeight / bars.length) * index) : 0);
+  const scaleY = (index: number) =>
+    margin.t + (index > 0 ? Math.round((maxBarsHeight / bars.length) * index) : 0);
 
-  const scaleX = (value: number) => Math.round(maxBarWidth / maxX * value);
+  const scaleX = (value: number) => Math.round((maxBarWidth / maxX) * value);
 
   return (
     <div className="chart-bars">
@@ -150,12 +151,12 @@ export const ChartBars = memo(function ChartBars({ bars, xAxis, yAxis }: ChartBa
             <text
               className="y-axis-name"
               x={labelsBaseXAxis + space + maxYWidth}
-              y={margin.t + (maxBarsHeight / 2)}
+              y={margin.t + maxBarsHeight / 2}
               text-anchor="center center"
               font-family={fontConfig.family}
               font-size={fontConfig.size}
               font-weight={fontConfig.weight}
-              transform-origin={`${labelsBaseXAxis + space + maxYWidth + space} ${margin.t + (maxBarsHeight / 2)}`}
+              transform-origin={`${labelsBaseXAxis + space + maxYWidth + space} ${margin.t + maxBarsHeight / 2}`}
               transform="rotate(-90)"
             >
               {yAxis}
@@ -182,7 +183,11 @@ export const ChartBars = memo(function ChartBars({ bars, xAxis, yAxis }: ChartBa
 }, comparator);
 
 function comparator(prev: ChartBarsProps, next: ChartBarsProps) {
-  if (prev.xAxis !== next.xAxis || prev.yAxis !== next.yAxis || prev.bars.length !== next.bars.length) {
+  if (
+    prev.xAxis !== next.xAxis ||
+    prev.yAxis !== next.yAxis ||
+    prev.bars.length !== next.bars.length
+  ) {
     return false;
   }
   if (prev.bars === next.bars) {

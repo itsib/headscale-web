@@ -17,4 +17,4 @@ export const Marker: FunctionComponent<MarkerProps> = ({ size = 8, isActive, cla
     }}
     className={className}
   />
-)
+);

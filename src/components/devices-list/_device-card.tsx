@@ -18,19 +18,17 @@ export const DeviceCard = memo(function DeviceItem(props: Device) {
     <a href={`/device/${id}`} className="device-card" aria-label="Open device full info">
       <div className="main-info">
         <div className="icon-wrapper">
-          {online ? (
-            <Marker isActive className="marker" size={16} />
-          ) : null}
-          <i className="icon icon-laptop"/>
+          {online ? <Marker isActive className="marker" size={16} /> : null}
+          <i className="icon icon-laptop" />
         </div>
 
         <div className="name-expiration">
           <div className="name">{givenName || name}</div>
           <div className="expiration">
             {expiryDisabled ? (
-              <Trans i18nKey="expiry_disabled"/>
+              <Trans i18nKey="expiry_disabled" />
             ) : (
-              <FormattedDuration duration={expiryDate.getTime()}/>
+              <FormattedDuration duration={expiryDate.getTime()} />
             )}
           </div>
         </div>
@@ -53,13 +51,17 @@ export const DeviceCard = memo(function DeviceItem(props: Device) {
       <div className="info-row">
         <div className="label">{t('ip_addresses')}:</div>
         <div className="value">
-          {ipAddresses.map(ip => (<div key={ip}>{ip}</div>))}
+          {ipAddresses.map((ip) => (
+            <div key={ip}>{ip}</div>
+          ))}
         </div>
       </div>
 
       {forcedTags.length ? (
         <div className="tags">
-          {forcedTags.map(tag => <AclTag key={tag} tag={tag}/>)}
+          {forcedTags.map((tag) => (
+            <AclTag key={tag} tag={tag} />
+          ))}
         </div>
       ) : null}
     </a>

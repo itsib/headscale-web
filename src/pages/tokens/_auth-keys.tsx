@@ -1,14 +1,16 @@
 import { useMemo, useState } from 'preact/hooks';
 import { AuthKeyWithUser } from '@app-types';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useAuthKeys } from '@app-hooks/use-auth-keys';
 import { ModalAuthKeyCreate } from '@app-components/modals/modal-auth-key-create/modal-auth-key-create';
 import { ModalAuthKeyExpire } from '@app-components/modals/modal-auth-key-expire/modal-auth-key-expire';
-import { ContextAction } from './-api-token-item';
-import { AuthKeyItem } from './-auth-key-item';
+import { ContextAction } from './_api-token-item.tsx';
+import { AuthKeyItem } from './_auth-key-item.tsx';
 import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group.tsx';
 import { EmptyList } from '@app-components/empty-list/empty-list.tsx';
 import { KeysLoading } from '@app-components/skeleton';
+import { PageCaption } from '@app-components/page-caption/page-caption.tsx';
+import './_auth-keys.css';
 
 export const AuthKeys = () => {
   const { t } = useTranslation();
@@ -19,20 +21,27 @@ export const AuthKeys = () => {
   const [isShowExpired, setIsShowExpired] = useState(false);
 
   const activeAuthKeys = useMemo(() => {
-    return authKeys?.filter(authKey => !!authKey && (new Date(authKey.expiration).getTime() - Date.now()) > 0);
+    return authKeys?.filter(
+      (authKey) => !!authKey && new Date(authKey.expiration).getTime() - Date.now() > 0
+    );
   }, [authKeys]);
 
   const list = isShowExpired ? authKeys : activeAuthKeys;
 
-  const enableIsShowExpired = authKeys && activeAuthKeys && authKeys.length !== activeAuthKeys.length;
+  const enableIsShowExpired =
+    authKeys && activeAuthKeys && authKeys.length !== activeAuthKeys.length;
 
   const buttons: ButtonConfig[] = useMemo(() => {
-    const button = enableIsShowExpired ? [{
-      id: 'toggle-show-expired',
-      icon: isShowExpired ? 'icon-timer-cross' : 'icon-timer',
-      tooltip: t('show_expired_auth_keys'),
-      effect: 'icon-shake',
-    }] : [];
+    const button = enableIsShowExpired
+      ? [
+          {
+            id: 'toggle-show-expired',
+            icon: isShowExpired ? 'icon-timer-off' : 'icon-timer',
+            tooltip: t('show_expired_auth_keys'),
+            effect: 'icon-shake',
+          },
+        ]
+      : [];
 
     return [
       ...button,
@@ -50,51 +59,47 @@ export const AuthKeys = () => {
       case 'add-auth-key':
         return setOpened('create');
       case 'toggle-show-expired':
-        return setIsShowExpired(i => !i);
+        return setIsShowExpired((i) => !i);
     }
   }
 
   return (
     <>
-      <div className="flex justify-between items-center mb-4">
-        <div>
-          <h2 className="mb-2">
-            <Trans i18nKey="auth_keys"/>
-          </h2>
-          <p className="text-secondary">
-            <Trans i18nKey="auth_keys_subtitle"/>
-          </p>
-        </div>
-
-        <ButtonGroup buttons={buttons} onClick={onClick} />
-      </div>
+      <PageCaption
+        title="auth_keys"
+        class="pt-6"
+        subtitle="auth_keys_subtitle"
+        h={3}
+        actions={<ButtonGroup buttons={buttons} onClick={onClick} />}
+      />
       {isLoading ? (
         <KeysLoading />
       ) : list?.length ? (
-        <div className="overflow-x-auto lg:overflow-x-hidden">
-          <table className="w-full min-w-[860px] table-auto border-spacing-px">
+        <div class="auth-keys">
+          <table>
             <thead>
-            <tr className="border-b border-b-primary h-[30px] text-xs font-medium text-secondary uppercase">
-              <th/>
-              <th className="text-left whitespace-nowrap">{t('auth_key')}</th>
-              <th className="text-left whitespace-nowrap">{t('user')}</th>
-              <th className="text-center whitespace-nowrap">{t('type')}</th>
-              <th className="text-left whitespace-nowrap lg:pl-10">{t('created')}</th>
-              <th className="text-left whitespace-nowrap">{t('expiry')}</th>
-              <th/>
-            </tr>
+              <tr class="header-row text-xs font-medium text-secondary">
+                <th />
+                <th className="text-left">{t('auth_key')}</th>
+                <th className="text-left">{t('user')}</th>
+                <th className="text-center">{t('type')}</th>
+                <th className="text-left lg:pl-10">{t('created')}</th>
+                <th className="text-left">{t('expiry')}</th>
+                <th />
+              </tr>
             </thead>
             <tbody>
               {list?.map(({ key, ...authKey }) => (
-              <AuthKeyItem
-                key={key}
-                authKey={key}
-                onAction={action => {
-                  setSelected({ ...authKey, key });
-                  setOpened(action);
-                }}
-                {...authKey} />
-            ))}
+                <AuthKeyItem
+                  key={key}
+                  authKey={key}
+                  onAction={(action) => {
+                    setSelected({ ...authKey, key });
+                    setOpened(action);
+                  }}
+                  {...authKey}
+                />
+              ))}
             </tbody>
           </table>
         </div>
@@ -115,4 +120,4 @@ export const AuthKeys = () => {
       />
     </>
   );
-}
+};

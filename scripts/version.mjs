@@ -1,6 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve, join, dirname } from 'node:path';
-import { URL } from 'node:url'
+import { URL } from 'node:url';
 
 const ROOT_PROJECT = resolve(dirname(new URL(import.meta.url).pathname), '..');
 

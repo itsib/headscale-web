@@ -23,10 +23,16 @@ export interface DeviceRoutesProps {
   className?: string;
 }
 
-export const DeviceRoutes: FunctionComponent<DeviceRoutesProps> = ({ id, approvedRoutes, availableRoutes, subnetRoutes, className }) => {
+export const DeviceRoutes: FunctionComponent<DeviceRoutesProps> = ({
+  id,
+  approvedRoutes,
+  availableRoutes,
+  subnetRoutes,
+  className,
+}) => {
   const { t } = useTranslation();
   const { start, success, error } = useNotifyQuery();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const [hasExitNode, setHasExitNode] = useState(false);
   const [approvedExitNode, setApprovedExitNode] = useState(false);
@@ -38,33 +44,35 @@ export const DeviceRoutes: FunctionComponent<DeviceRoutesProps> = ({ id, approve
     setHasExitNode(available.includes('::/0') || available.includes('0.0.0.0/0'));
     setApprovedExitNode(approved.includes('::/0') || approved.includes('0.0.0.0/0'));
 
-    setAvailableSubnetRoutes(available.filter(route => route !== '::/0' && route !== '0.0.0.0/0'));
-    setApprovedSubnetRoutes(approved.filter(route => route !== '::/0' && route !== '0.0.0.0/0'))
-  }, [])
+    setAvailableSubnetRoutes(
+      available.filter((route) => route !== '::/0' && route !== '0.0.0.0/0')
+    );
+    setApprovedSubnetRoutes(approved.filter((route) => route !== '::/0' && route !== '0.0.0.0/0'));
+  }, []);
 
   const { mutate } = useMutation({
     mutationFn: ({ routes, id }: RequestData) => {
       return fetchFn<{ node: Device }>(`/api/v1/node/${id}/approve_routes`, {
         method: 'POST',
-        body: JSON.stringify({ routes })
+        body: JSON.stringify({ routes }),
       });
     },
     onMutate: () => start(),
     onSuccess: (result) => {
-      success()
+      success();
 
-      queryClient.setQueryData([`/api/v1/node/${id}`], result)
+      queryClient.setQueryData([`/api/v1/node/${id}`], result);
     },
     onError: (e: any) => {
-      fillFormData(availableRoutes, approvedRoutes)
+      fillFormData(availableRoutes, approvedRoutes);
 
-      error(e.message)
+      error(e.message);
     },
-  })
+  });
 
   // Compute exit node checkbox state
   useEffect(() => {
-    fillFormData(availableRoutes, approvedRoutes)
+    fillFormData(availableRoutes, approvedRoutes);
   }, [availableRoutes, approvedRoutes, subnetRoutes]);
 
   return (
@@ -83,10 +91,12 @@ export const DeviceRoutes: FunctionComponent<DeviceRoutesProps> = ({ id, approve
               checked={approvedSubnetRoutes.includes(route)}
               size={20}
               rowReverse={true}
-              onChange={e => {
+              onChange={(e) => {
                 const checked = !!(e.target as any).checked;
 
-                const newApprovedSubnetRoutes = checked ? [...approvedSubnetRoutes, route] : approvedSubnetRoutes.filter(_route => _route !== route);
+                const newApprovedSubnetRoutes = checked
+                  ? [...approvedSubnetRoutes, route]
+                  : approvedSubnetRoutes.filter((_route) => _route !== route);
 
                 const routes: string[] = [
                   ...(approvedExitNode ? ['::/0', '0.0.0.0/0'] : []),
@@ -101,9 +111,7 @@ export const DeviceRoutes: FunctionComponent<DeviceRoutesProps> = ({ id, approve
           ))}
         </div>
       ) : (
-        <div className="no-routes">
-          {t('no_subnet_routes')}
-        </div>
+        <div className="no-routes">{t('no_subnet_routes')}</div>
       )}
 
       <hr />
@@ -119,7 +127,7 @@ export const DeviceRoutes: FunctionComponent<DeviceRoutesProps> = ({ id, approve
           checked={approvedExitNode}
           size={20}
           disabled={!hasExitNode}
-          onChange={e => {
+          onChange={(e) => {
             if (!hasExitNode) return;
 
             const checked = !!(e.target as any).checked;

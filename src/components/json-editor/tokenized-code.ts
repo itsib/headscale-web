@@ -1,4 +1,17 @@
-type Keyword = '[' | ']' | '{' | '}' | '"' | ':' | '//' | ',' | 'true' | 'false' | 'null' | 'undefined' | '\n';
+type Keyword =
+  | '['
+  | ']'
+  | '{'
+  | '}'
+  | '"'
+  | ':'
+  | '//'
+  | ','
+  | 'true'
+  | 'false'
+  | 'null'
+  | 'undefined'
+  | '\n';
 
 type Token = [string, string, string];
 
@@ -85,7 +98,7 @@ export class TokenizedCode {
         tokenized.add(word, 'cm-bad');
       }
 
-      switch(keyword) {
+      switch (keyword) {
         case '//':
           isComment = true;
           tokenized.add('//', 'cm-comment');
@@ -129,8 +142,7 @@ export class TokenizedCode {
     return tokenized;
   }
 
-  private constructor() {
-  }
+  private constructor() {}
 
   get length() {
     return this._length;
@@ -184,7 +196,10 @@ export class TokenizedCode {
   }
 
   breakLine() {
-    const alreadyIndexedLength = this._tokenLines.reduce((count, tokensLine) => count + tokensLine.length, 0);
+    const alreadyIndexedLength = this._tokenLines.reduce(
+      (count, tokensLine) => count + tokensLine.length,
+      0
+    );
 
     this._tokenLines.push(this._tokens.slice(alreadyIndexedLength));
 
@@ -192,7 +207,10 @@ export class TokenizedCode {
   }
 
   finalize() {
-    const alreadyIndexedLength = this._tokenLines.reduce((count, tokensLine) => count + tokensLine.length, 0);
+    const alreadyIndexedLength = this._tokenLines.reduce(
+      (count, tokensLine) => count + tokensLine.length,
+      0
+    );
     if (this._tokens.length > alreadyIndexedLength) {
       this.breakLine();
     }

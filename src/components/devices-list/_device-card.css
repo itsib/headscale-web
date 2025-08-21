@@ -32,7 +32,7 @@
     }
 
     .name-expiration {
-      margin-left: .75rem;
+      margin-left: 0.75rem;
       margin-right: auto;
 
       .name {
@@ -50,11 +50,11 @@
   }
 
   .info-row {
-    margin-top: .5rem;
+    margin-top: 0.5rem;
     display: flex;
     align-items: start;
     justify-content: space-between;
-    font-size: .75rem;
+    font-size: 0.75rem;
 
     .label {
       color: rgb(var(--text-secondary));

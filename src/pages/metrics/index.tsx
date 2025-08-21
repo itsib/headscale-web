@@ -14,7 +14,11 @@ import './index.css';
 export default function Metrics() {
   const { path } = useLocation();
 
-  const { data: metrics, isLoading, refetch } = useQuery<string>({
+  const {
+    data: metrics,
+    isLoading,
+    refetch,
+  } = useQuery<string>({
     queryKey: ['/metrics'],
     staleTime: REFRESH_INTERVAL,
     refetchInterval: REFRESH_INTERVAL,
@@ -22,17 +26,20 @@ export default function Metrics() {
 
   return (
     <div className="page metrics-page">
-      <PageCaption
-        title="metrics"
-        subtitle="metrics_page_subtitle"
-      />
+      <PageCaption title="metrics" subtitle="metrics_page_subtitle" />
 
       <nav className="tabs-links">
-        <a href="/metrics/formatted" className={cn('tab-link', { active: path.startsWith('/metrics/formatted') })}>
+        <a
+          href="/metrics/formatted"
+          className={cn('tab-link', { active: path.startsWith('/metrics/formatted') })}
+        >
           <Trans i18nKey="formatted" />
         </a>
 
-        <a href="/metrics/raw" className={cn('tab-link', { active: path.startsWith('/metrics/raw') })}>
+        <a
+          href="/metrics/raw"
+          className={cn('tab-link', { active: path.startsWith('/metrics/raw') })}
+        >
           <Trans i18nKey="raw_data" />
         </a>
       </nav>
@@ -46,7 +53,7 @@ export default function Metrics() {
       ) : path === '/metrics/raw' ? (
         <RawPage metrics={metrics} refetch={refetch} />
       ) : (
-        <Redirect to="/metrics/formatted"/>
+        <Redirect to="/metrics/formatted" />
       )}
     </div>
   );

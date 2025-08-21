@@ -7,7 +7,7 @@ import './btn-config.css';
 
 export const BtnConfig: FunctionComponent = () => {
   const { i18n } = useTranslation();
-  const [ theme, setTheme ] = useTheme();
+  const [theme, setTheme] = useTheme();
   const { logout } = useCredentials();
 
   return (
@@ -21,10 +21,10 @@ export const BtnConfig: FunctionComponent = () => {
             className="btn-context-menu flex items-center"
             onClick={() => setTheme('light')}
           >
-            <i className="icon icon-sun"/>
-            <Trans i18nKey="light"/>
+            <i className="icon icon-sun" />
+            <Trans i18nKey="light" />
 
-            {theme === 'light' ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
+            {theme === 'light' ? <i className="icon icon-check text-[11px] ml-auto" /> : null}
           </button>
         </div>
         <div className="context-menu-item">
@@ -35,9 +35,9 @@ export const BtnConfig: FunctionComponent = () => {
             className="btn-context-menu flex items-center"
             onClick={() => setTheme('dark')}
           >
-            <i className="icon icon-moon"/>
-            <Trans i18nKey="dark"/>
-            {theme === 'dark' ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
+            <i className="icon icon-moon" />
+            <Trans i18nKey="dark" />
+            {theme === 'dark' ? <i className="icon icon-check text-[11px] ml-auto" /> : null}
           </button>
         </div>
         <div className="context-menu-item">
@@ -48,13 +48,13 @@ export const BtnConfig: FunctionComponent = () => {
             className="btn-context-menu flex items-center"
             onClick={() => setTheme('system')}
           >
-            <i className="icon icon-sun-moon"/>
-            <Trans i18nKey="system"/>
-            {theme === 'system' ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
+            <i className="icon icon-sun-moon" />
+            <Trans i18nKey="system" />
+            {theme === 'system' ? <i className="icon icon-check text-[11px] ml-auto" /> : null}
           </button>
         </div>
 
-        <hr className="context-menu-divider"/>
+        <hr className="context-menu-divider" />
 
         <div className="context-menu-item">
           <button
@@ -64,9 +64,9 @@ export const BtnConfig: FunctionComponent = () => {
             className="btn-context-menu flex items-center"
             onClick={() => i18n.changeLanguage('en')}
           >
-            <img className="icon" src="/locales/en/_icon.svg" alt="en-EN" width={16} height={16}/>
+            <img className="icon" src="/locales/en/_icon.svg" alt="en-EN" width={16} height={16} />
             <>English</>
-            {i18n.language === 'en' ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
+            {i18n.language === 'en' ? <i className="icon icon-check text-[11px] ml-auto" /> : null}
           </button>
         </div>
 
@@ -78,13 +78,13 @@ export const BtnConfig: FunctionComponent = () => {
             className="btn-context-menu flex items-center"
             onClick={() => i18n.changeLanguage('ru')}
           >
-            <img className="icon" src="/locales/ru/_icon.svg" alt="en-EN" width={16} height={16}/>
+            <img className="icon" src="/locales/ru/_icon.svg" alt="en-EN" width={16} height={16} />
             <>Русский</>
-            {i18n.language === 'ru' ? <i className="icon icon-check text-[11px] ml-auto"/> : null}
+            {i18n.language === 'ru' ? <i className="icon icon-check text-[11px] ml-auto" /> : null}
           </button>
         </div>
 
-        <hr role="separator" className="context-menu-divider"/>
+        <hr role="separator" className="context-menu-divider" />
 
         <div className="context-menu-item">
           <button
@@ -92,12 +92,15 @@ export const BtnConfig: FunctionComponent = () => {
             role="menuitem"
             type="button"
             className="btn-context-menu flex items-center"
-            onClick={logout}>
-            <i className="icon icon-logout"/>
-            <span><Trans i18nKey="disconnect"/></span>
+            onClick={logout}
+          >
+            <i className="icon icon-logout" />
+            <span>
+              <Trans i18nKey="disconnect" />
+            </span>
           </button>
         </div>
       </BtnContextMenu>
     </div>
-  )
-}
+  );
+};

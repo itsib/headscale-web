@@ -8,7 +8,7 @@ import { fetchFn } from '@app-utils/query-fn.ts';
 import { Device } from '@app-types';
 import { cn } from 'react-just-ui/utils/cn';
 import { Input } from 'react-just-ui';
-import './_device-name.css'
+import './_device-name.css';
 
 export interface DeviceNameProps {
   deviceId: string;
@@ -23,7 +23,9 @@ export const DeviceName: FunctionComponent<DeviceNameProps> = ({ name, deviceId,
   const formRef = useRef<HTMLFormElement | null>(null);
   const skipSubmitRef = useRef(false);
 
-  const { handleSubmit, register, formState, reset, setError, getValues, watch } = useForm<{ name: string }>({
+  const { handleSubmit, register, formState, reset, setError, getValues, watch } = useForm<{
+    name: string;
+  }>({
     defaultValues: {
       name: name,
     },
@@ -33,7 +35,7 @@ export const DeviceName: FunctionComponent<DeviceNameProps> = ({ name, deviceId,
   const { errors, isValid, isSubmitting } = formState;
 
   const { mutate, isPending } = useMutation({
-    async mutationFn({ deviceId, name }: { deviceId: string, name: string }) {
+    async mutationFn({ deviceId, name }: { deviceId: string; name: string }) {
       return await fetchFn<{ node: Device }>(`/api/v1/node/${deviceId}/rename/${name}`, {
         method: 'POST',
         body: '{}',
@@ -86,11 +88,19 @@ export const DeviceName: FunctionComponent<DeviceNameProps> = ({ name, deviceId,
             label={t('device_name')}
             error={errors?.name}
             suffix={
-              <>{name !== watch('name') ? (
-                <button type="button" onClick={onReset} onMouseDown={onMouseDown} onMouseUp={onMouseUp} class="suffix">
-                  <i class="icon icon-close icon-sm" />
-                </button>
-              ) : undefined}</>
+              <>
+                {name !== watch('name') ? (
+                  <button
+                    type="button"
+                    onClick={onReset}
+                    onMouseDown={onMouseDown}
+                    onMouseUp={onMouseUp}
+                    class="suffix"
+                  >
+                    <i class="icon icon-close icon-sm" />
+                  </button>
+                ) : undefined}
+              </>
             }
             hint={t('press_enter_to_save')}
             {...register('name', {
@@ -103,4 +113,4 @@ export const DeviceName: FunctionComponent<DeviceNameProps> = ({ name, deviceId,
       </form>
     </div>
   );
-}
+};

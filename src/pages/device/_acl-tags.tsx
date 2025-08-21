@@ -20,7 +20,7 @@ export interface AclTagsProps {
   className?: string;
 }
 
-export const AclTags: FunctionComponent<AclTagsProps> = props => {
+export const AclTags: FunctionComponent<AclTagsProps> = (props) => {
   const { deviceId, validTags, invalidTags, forcedTags, className } = props;
   const { t } = useTranslation();
   const { start, success, error } = useNotifyQuery();
@@ -37,8 +37,12 @@ export const AclTags: FunctionComponent<AclTagsProps> = props => {
   });
   const { errors, isValid } = formState;
 
-  const { mutate, isPending, error: tagsError } = useMutation({
-    async mutationFn({ deviceId, tags }: { deviceId: string, tags: string[] }) {
+  const {
+    mutate,
+    isPending,
+    error: tagsError,
+  } = useMutation({
+    async mutationFn({ deviceId, tags }: { deviceId: string; tags: string[] }) {
       return await fetchFn<{ node: Device }>(`/api/v1/node/${deviceId}/tags`, {
         method: 'POST',
         body: JSON.stringify({ tags }),
@@ -67,11 +71,11 @@ export const AclTags: FunctionComponent<AclTagsProps> = props => {
 
     mutate({ deviceId: deviceId!, tags: _tags });
 
-    reset({ tag: '' })
+    reset({ tag: '' });
   }
 
   function remove(tag: string) {
-    const _tags = tags.filter(_tag => _tag !== tag);
+    const _tags = tags.filter((_tag) => _tag !== tag);
 
     setTags(_tags);
 
@@ -83,7 +87,6 @@ export const AclTags: FunctionComponent<AclTagsProps> = props => {
       <h3 className="title">{t('acl_tags')}</h3>
       <div className="sub-title">{t('acl_tags_summary')}</div>
 
-
       <form onSubmit={handleSubmit(submit)}>
         <div className="mb-2">
           <Input
@@ -93,7 +96,7 @@ export const AclTags: FunctionComponent<AclTagsProps> = props => {
             error={errors?.tag}
             suffix={
               <button type="submit" className="suffix hover:cursor-pointer">
-                <i className="icon icon-tag-add"/>
+                <i className="icon icon-tag-add" />
               </button>
             }
             {...register('tag', {
@@ -113,7 +116,7 @@ export const AclTags: FunctionComponent<AclTagsProps> = props => {
                   return t(tagsError.message);
                 }
                 return true;
-              }
+              },
             })}
           />
         </div>
@@ -121,12 +124,8 @@ export const AclTags: FunctionComponent<AclTagsProps> = props => {
 
       {tags.length ? (
         <div className="acl-tags-container">
-          {tags.map(tag => (
-            <AclTag
-              key={tag}
-              tag={tag}
-              onRemove={remove}
-            />
+          {tags.map((tag) => (
+            <AclTag key={tag} tag={tag} onRemove={remove} />
           ))}
         </div>
       ) : null}

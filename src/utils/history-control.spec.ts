@@ -2,7 +2,6 @@ import { describe, test, expect } from 'vitest';
 import { HistoryControl } from './history-control';
 
 describe('utils/history-control.ts', () => {
-
   describe('#insertText', () => {
     test('should save input', () => {
       const state = new HistoryControl({ value: '' });
@@ -55,7 +54,6 @@ describe('utils/history-control.ts', () => {
       state.deleteText(2, 4);
       expect(state.value).toBe('1289');
 
-
       expect(state.history).toStrictEqual([
         { type: 1, cursor: 2, text: '345' },
         { type: 1, cursor: 2, text: '67' },
@@ -91,7 +89,6 @@ describe('utils/history-control.ts', () => {
       state.backspaceText(2, 4);
       expect(state.value).toBe('1289');
 
-
       expect(state.history).toStrictEqual([
         { type: 2, cursor: 4, text: '567' },
         { type: 2, cursor: 2, text: '34' },
@@ -116,13 +113,13 @@ describe('utils/history-control.ts', () => {
       ]);
 
       expect(state.value).toBe('3aa');
-      state.undo()
+      state.undo();
       expect(state.value).toBe('345');
-      state.undo()
+      state.undo();
       expect(state.value).toBe('bca');
-      state.undo()
+      state.undo();
       expect(state.value).toBe('a');
-      state.undo()
+      state.undo();
       expect(state.value).toBe('');
     });
   });
@@ -141,8 +138,8 @@ describe('utils/history-control.ts', () => {
       expect(state.value).toBe('qwerty123456');
       state.undo();
       expect(state.value).toBe('qwerty');
-      state.redo()
+      state.redo();
       expect(state.value).toBe('qwerty123456');
     });
   });
-})
+});

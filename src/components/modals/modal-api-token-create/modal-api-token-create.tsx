@@ -17,7 +17,11 @@ export interface ModalApiTokenCreateProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalApiTokenCreate: FunctionComponent<ModalApiTokenCreateProps> = ({ isOpen, onDismiss, ...props }) => {
+export const ModalApiTokenCreate: FunctionComponent<ModalApiTokenCreateProps> = ({
+  isOpen,
+  onDismiss,
+  ...props
+}) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <ModalContent onDismiss={onDismiss} {...props} />
@@ -25,7 +29,10 @@ export const ModalApiTokenCreate: FunctionComponent<ModalApiTokenCreateProps> = 
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
+const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> = ({
+  onDismiss,
+  onSuccess,
+}) => {
   const { t } = useTranslation();
   const [newApiToken, setNewApiToken] = useState<string | undefined>();
   const [newApiTokenExpiry, setNewApiTokenExpiry] = useState<string | undefined>();
@@ -34,7 +41,7 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> 
     mode: 'onChange',
     defaultValues: {
       expiration: 90,
-    }
+    },
   });
   const { errors } = formState;
 
@@ -52,10 +59,10 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> 
   });
 
   function onSubmit(values: FormFields) {
-    const expiration = new Date(Date.now() + (values.expiration * 24 * 60 * 60 * 1000));
+    const expiration = new Date(Date.now() + values.expiration * 24 * 60 * 60 * 1000);
     mutate({
       expiration: expiration.toISOString(),
-    })
+    });
   }
 
   return (
@@ -74,11 +81,11 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> 
         {newApiToken ? (
           <div>
             <div className="text-secondary text-sm font-normal">
-              <Trans i18nKey="api_token_token_created_about_copy"/>
+              <Trans i18nKey="api_token_token_created_about_copy" />
             </div>
 
             <div className="border-secondary border rounded-md px-3 py-2 my-4 flex">
-              <input className="w-full outline-none" readOnly value={newApiToken}/>
+              <input className="w-full outline-none" readOnly value={newApiToken} />
 
               <BtnCopy className="p-0 ml-4" text={newApiToken} />
             </div>
@@ -87,20 +94,24 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> 
               <Trans
                 i18nKey="api_token_token_created_about_expiry"
                 components={{
-                  date:  <FormattedDate date={newApiTokenExpiry}  />
+                  date: <FormattedDate date={newApiTokenExpiry} />,
                 }}
               />
             </div>
 
-            <button type="button" className="btn btn-accent w-full mt-6" onClick={() => {
-              onDismiss?.();
-              onSuccess?.();
+            <button
+              type="button"
+              className="btn btn-accent w-full mt-6"
+              onClick={() => {
+                onDismiss?.();
+                onSuccess?.();
 
-              setTimeout(() => {
-                setNewApiToken(undefined);
-                setNewApiTokenExpiry(undefined);
-              }, 300);
-            }}>
+                setTimeout(() => {
+                  setNewApiToken(undefined);
+                  setNewApiTokenExpiry(undefined);
+                }, 300);
+              }}
+            >
               <span>{t('done')}</span>
             </button>
           </div>

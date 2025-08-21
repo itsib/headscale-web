@@ -12,7 +12,12 @@ export interface ModalUserRenameProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalUserRename: FunctionComponent<ModalUserRenameProps> = ({ isOpen, onDismiss, user, ...props }) => {
+export const ModalUserRename: FunctionComponent<ModalUserRenameProps> = ({
+  isOpen,
+  onDismiss,
+  user,
+  ...props
+}) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       {user ? <ModalContent onDismiss={onDismiss} user={user} {...props} /> : null}
@@ -20,18 +25,20 @@ export const ModalUserRename: FunctionComponent<ModalUserRenameProps> = ({ isOpe
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: User }> = ({ onDismiss, onSuccess, user }) => {
+const ModalContent: FunctionComponent<
+  Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: User }
+> = ({ onDismiss, onSuccess, user }) => {
   const { t } = useTranslation();
 
   const { handleSubmit, register, formState } = useForm<{ name: string }>({
     defaultValues: {
       name: user.name,
-    }
+    },
   });
   const { errors } = formState;
 
   const { mutate, isPending, error } = useMutation({
-    async mutationFn({ id, newName }: { id: string, newName: string }) {
+    async mutationFn({ id, newName }: { id: string; newName: string }) {
       const data = await fetchFn<{ user: User }>(`/api/v1/user/${id}/rename/${newName}`, {
         method: 'POST',
         body: '{}',
@@ -65,16 +72,14 @@ const ModalContent: FunctionComponent<Omit<ModalUserRenameProps, 'isOpen' | 'use
               error={errors?.name}
               {...register('name', {
                 required: t('error_required'),
-                validate: (value: string) => /^[a-z0-9-_:]+$/.test(value) ? true : t('error_invalid_name'),
+                validate: (value: string) =>
+                  /^[a-z0-9-_:]+$/.test(value) ? true : t('error_invalid_name'),
                 disabled: isPending,
               })}
             />
           </div>
 
-          <button
-            type="submit"
-            className="btn btn-accent w-full" data-loading={isPending}
-          >
+          <button type="submit" className="btn btn-accent w-full" data-loading={isPending}>
             <span>{t('rename')}</span>
           </button>
           {error ? (

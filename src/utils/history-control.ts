@@ -178,11 +178,15 @@ export class HistoryControl extends Emitter {
         type: HistoryMutationType.Delete,
         text: this._removeFrom(start, end),
         cursor: start,
-      }
+      };
     }
 
     const last = removeMutation || text.length !== 1 ? undefined : this._mutations.get(this._index);
-    if  (last && last.type === HistoryMutationType.Insert && last.cursor === (end - last.text.length)) {
+    if (
+      last &&
+      last.type === HistoryMutationType.Insert &&
+      last.cursor === end - last.text.length
+    ) {
       this._insertTo(end, text);
       last.text = last.text + text;
 
@@ -195,7 +199,7 @@ export class HistoryControl extends Emitter {
       type: HistoryMutationType.Insert,
       text: text,
       cursor: start,
-    }
+    };
     if (removeMutation) {
       mutation.sub = removeMutation;
     }
@@ -207,7 +211,7 @@ export class HistoryControl extends Emitter {
   deleteText(start: number, end: number): void {
     this._validateRange(start, end);
 
-    const last = (end - start) === 1 ? this._mutations.get(this._index) : undefined;
+    const last = end - start === 1 ? this._mutations.get(this._index) : undefined;
     if (last && last.type === HistoryMutationType.Delete && start === last.cursor) {
       const removes = this._removeFrom(start, end);
       last.text = last.text + removes;
@@ -220,7 +224,7 @@ export class HistoryControl extends Emitter {
       type: HistoryMutationType.Delete,
       text: removes,
       cursor: start,
-    }
+    };
     this._push(mutation);
 
     return this._emitCursor(start);
@@ -229,8 +233,8 @@ export class HistoryControl extends Emitter {
   backspaceText(start: number, end: number): void {
     this._validateRange(start, end);
 
-    const last = (end - start) === 1 ? this._mutations.get(this._index) : undefined;
-    if (last && last.type === HistoryMutationType.Backspace && start === (last.cursor - 1)) {
+    const last = end - start === 1 ? this._mutations.get(this._index) : undefined;
+    if (last && last.type === HistoryMutationType.Backspace && start === last.cursor - 1) {
       const removes = this._removeFrom(start, end);
       last.text = removes + last.text;
       last.cursor = start;
@@ -243,7 +247,7 @@ export class HistoryControl extends Emitter {
       type: HistoryMutationType.Backspace,
       text: removes,
       cursor: start,
-    }
+    };
     this._push(mutation);
 
     return this._emitCursor(start);
@@ -257,7 +261,7 @@ export class HistoryControl extends Emitter {
       type: HistoryMutationType.Drag,
       text: removes,
       cursor: start,
-    }
+    };
     this._push(mutation);
   }
 
@@ -274,7 +278,7 @@ export class HistoryControl extends Emitter {
         type: HistoryMutationType.Drop,
         text: text,
         cursor: start,
-      }
+      };
 
       return this._emitCursor(start + text.length);
     }

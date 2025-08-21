@@ -19,7 +19,7 @@ export function normalizeNumber(value: string | number) {
     significant = significant + '0'.repeat(newDotPos - significant.length);
   } else if (newDotPos <= 0) {
     significant = '0'.repeat(Math.abs(newDotPos) + 1) + significant;
-    newDotPos = 1
+    newDotPos = 1;
   }
   const integer = significant.slice(0, newDotPos);
   const fractional = significant.slice(newDotPos);
@@ -39,13 +39,13 @@ export function formatUnits(value: string | number, unit?: MetricUnit | null): s
       return `${value}%`;
     }
     case 'bytes': {
-      const { format } = Intl.NumberFormat('en-EN', { style: 'decimal', useGrouping: true,  });
+      const { format } = Intl.NumberFormat('en-EN', { style: 'decimal', useGrouping: true });
       const bytes = typeof value === 'number' ? value : parseInt(value, 10);
       if (bytes < 1024) {
-        return `${format(bytes)} b`
+        return `${format(bytes)} b`;
       }
       const kBytes = Math.floor(bytes / 102.4) / 10;
-      if (kBytes < (1024)) {
+      if (kBytes < 1024) {
         return `${format(kBytes)} Kb`;
       }
       const mBytes = Math.floor(kBytes / 102.4) / 10;

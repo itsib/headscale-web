@@ -14,7 +14,7 @@
   border-radius: 5px;
   box-sizing: border-box;
   color: rgb(var(--text-secondary));
-  border: 1px solid rgb(var(--border-secondary) / .8);
+  border: 1px solid rgb(var(--border-secondary) / 0.8);
   background-color: rgb(var(--bg-primary));
   position: relative;
 
@@ -23,13 +23,12 @@
     font-synthesis: small-caps;
     font-optical-sizing: auto;
     text-rendering: geometricPrecision;
-    font-variation-settings: "wdth" 110;
+    font-variation-settings: 'wdth' 110;
     font-size: 12px;
     line-height: 1;
 
     .name {
       color: rgb(var(--text-primary));
-
     }
   }
 
@@ -47,6 +46,4 @@
       color: rgb(var(--text-primary));
     }
   }
-
-
 }

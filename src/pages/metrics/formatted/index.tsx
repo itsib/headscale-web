@@ -12,4 +12,4 @@ export const FormattedPage: FunctionComponent<FormattedPageProps> = ({ metrics }
       <MetricsTable metrics={metrics} />
     </div>
   );
-}
+};

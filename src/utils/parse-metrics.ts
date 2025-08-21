@@ -5,11 +5,11 @@ const UNITS: MetricUnit[] = ['bytes', 'seconds', 'percent', 'requests', 'threads
 
 function formatName(name: string): string {
   return name
-    .replace(/http/ig, 'HTTP')
-    .replace(/cpu/ig, 'CPU')
-    .replace(/fds/ig, 'file descriptors')
-    .replace(/gomemlimit/ig, 'Go memory limit')
-    .replace(/alloc/ig, 'allocation')
+    .replace(/http/gi, 'HTTP')
+    .replace(/cpu/gi, 'CPU')
+    .replace(/fds/gi, 'file descriptors')
+    .replace(/gomemlimit/gi, 'Go memory limit')
+    .replace(/alloc/gi, 'allocation')
     .replace(/^(\w)/, (_match: string, first: string) => first.toUpperCase());
 }
 
@@ -37,7 +37,7 @@ function parseMetricId(id: string): Pick<Metric, 'id' | 'system' | 'unit' | 'isT
     name: formatName(parts.join(' ')),
     isTotal: isTotal,
     unit: unit,
-  }
+  };
 }
 
 function parseDataPoint(id: string, line: string, unit?: MetricUnit): DataPoint {
@@ -52,7 +52,7 @@ function parseDataPoint(id: string, line: string, unit?: MetricUnit): DataPoint 
 
     for (let i = 0; i < attributesRaw.length; i++) {
       const [name, value] = attributesRaw[i].split('=');
-      if(/^\d+(:?.\d+)?$/.test(value)) {
+      if (/^\d+(:?.\d+)?$/.test(value)) {
         attributes.push({
           name: name,
           value: parseFloat(value),
@@ -89,7 +89,7 @@ function parseDataPoint(id: string, line: string, unit?: MetricUnit): DataPoint 
     unit: unit,
     kind: kind,
     attributes: attributes,
-  }
+  };
 }
 
 function groupingMetrics(metrics: Metric[]): { [system: string]: Metric[] } {
@@ -112,7 +112,7 @@ export function parseMetrics(text: string): { [system: string]: Metric[] } {
     const block = blocks[i].trim();
     if (!block) continue;
 
-    const [,,id, type] = /(#\sTYPE)\s([a-z_-]+)\s([a-z]+)\s/.exec(block) || [];
+    const [, , id, type] = /(#\sTYPE)\s([a-z_-]+)\s([a-z]+)\s/.exec(block) || [];
 
     const metric: Metric = {
       ...parseMetricId(id),
@@ -120,7 +120,7 @@ export function parseMetrics(text: string): { [system: string]: Metric[] } {
       description: '',
       dataPoints: [],
     };
-    
+
     const lines = block.split('\n');
     for (let j = 0; j < lines.length; j++) {
       const line = lines[j];

@@ -1,0 +1,29 @@
+.auth-keys {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    min-width: 860px;
+    table-layout: auto;
+    border-spacing: 1px;
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+
+    .header-row {
+      text-transform: uppercase;
+      height: 30px;
+      border-bottom: 1px solid rgb(var(--border-primary));
+
+      th {
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .auth-keys {
+    overflow-x: hidden;
+  }
+}

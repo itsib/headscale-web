@@ -12,12 +12,12 @@ export const Header = () => {
   const isMobile = useBreakPoint(768);
 
   return isMobile ? <MobileHeader /> : <DesktopHeader />;
-}
+};
 
 function MobileHeader() {
   const [isOpen, setIsOpen] = useState(false);
 
-  useOnSwipe(dir => (dir === 'L' ? setIsOpen(false) : null));
+  useOnSwipe((dir) => (dir === 'L' ? setIsOpen(false) : null));
 
   return (
     <header className="header">
@@ -27,7 +27,9 @@ function MobileHeader() {
         <BtnConfig />
       </div>
 
-      {isOpen ? <div className="mobile-nav-menu-backdrop" onClick={() => setIsOpen(false)} /> : null}
+      {isOpen ? (
+        <div className="mobile-nav-menu-backdrop" onClick={() => setIsOpen(false)} />
+      ) : null}
 
       <div className={cn('mobile-nav-menu-wrap', { 'is-open': isOpen })}>
         <SiteNavMenu layout="mobile" onClick={() => setIsOpen(false)} />

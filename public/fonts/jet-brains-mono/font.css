@@ -1,23 +1,25 @@
 @font-face {
-    font-family: "JetBrainsMono";
-    font-style: normal;
-    font-weight: 300;
-    font-stretch: 98%;
-    font-display: swap;
-    src: url("/fonts/jet-brains-mono/jet-brains-mono-light.eot#iefix") format("embedded-opentype"),
-         url("/fonts/jet-brains-mono/jet-brains-mono-light.woff2") format("woff2"),
-         url("/fonts/jet-brains-mono/jet-brains-mono-light.woff") format("woff"),
-         url("/fonts/jet-brains-mono/jet-brains-mono-light.ttf") format("truetype");
+  font-family: 'JetBrainsMono';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: 98%;
+  font-display: swap;
+  src:
+    url('/fonts/jet-brains-mono/jet-brains-mono-light.eot#iefix') format('embedded-opentype'),
+    url('/fonts/jet-brains-mono/jet-brains-mono-light.woff2') format('woff2'),
+    url('/fonts/jet-brains-mono/jet-brains-mono-light.woff') format('woff'),
+    url('/fonts/jet-brains-mono/jet-brains-mono-light.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: "JetBrainsMono";
-    font-style: normal;
-    font-weight: 500;
-    font-stretch: 98%;
-    font-display: swap;
-    src: url("/fonts/jet-brains-mono/jet-brains-mono-medium.eot#iefix") format("embedded-opentype"),
-         url("/fonts/jet-brains-mono/jet-brains-mono-medium.woff2") format("woff2"),
-         url("/fonts/jet-brains-mono/jet-brains-mono-medium.woff") format("woff"),
-         url("/fonts/jet-brains-mono/jet-brains-mono-medium.ttf") format("truetype");
+  font-family: 'JetBrainsMono';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 98%;
+  font-display: swap;
+  src:
+    url('/fonts/jet-brains-mono/jet-brains-mono-medium.eot#iefix') format('embedded-opentype'),
+    url('/fonts/jet-brains-mono/jet-brains-mono-medium.woff2') format('woff2'),
+    url('/fonts/jet-brains-mono/jet-brains-mono-medium.woff') format('woff'),
+    url('/fonts/jet-brains-mono/jet-brains-mono-medium.ttf') format('truetype');
 }

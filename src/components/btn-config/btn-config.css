@@ -1,8 +1,7 @@
 .btn-config-wrapper {
-
   .btn-config {
     height: auto;
-    padding: .25rem;
+    padding: 0.25rem;
     color: rgb(var(--text-secondary));
     display: block;
 

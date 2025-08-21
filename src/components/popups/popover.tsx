@@ -13,7 +13,7 @@ export interface PopupProps {
   Content: AnyComponent;
 }
 
-export const Popover: FunctionComponent<PopupProps> = props => {
+export const Popover: FunctionComponent<PopupProps> = (props) => {
   const { placement = PopupPlacement.TOP, Content, children } = props;
   const contentWrapperRef = useRef<HTMLDivElement | null>(null);
   const childWrapperRef = useRef<HTMLDivElement | null>(null);
@@ -33,7 +33,7 @@ export const Popover: FunctionComponent<PopupProps> = props => {
     const click = (e: MouseEvent) => {
       e.stopPropagation();
       setRect(btn.getBoundingClientRect());
-      setIsOpen(i => !i);
+      setIsOpen((i) => !i);
     };
 
     btn.addEventListener('click', click);
@@ -49,7 +49,10 @@ export const Popover: FunctionComponent<PopupProps> = props => {
     }
 
     const handleMousedown = (e: MouseEvent) => {
-      if (openBtnElement.contains(e.target as Node) || (contentWrapperRef.current?.contains(e.target as Node) ?? false)) {
+      if (
+        openBtnElement.contains(e.target as Node) ||
+        (contentWrapperRef.current?.contains(e.target as Node) ?? false)
+      ) {
         return;
       }
       setIsOpen(false);

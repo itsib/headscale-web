@@ -8,5 +8,5 @@ describe('utils/format-numbers.ts', () => {
     expect(formatNumbers('1e3')).toStrictEqual('1000');
     expect(formatNumbers('1e-3')).toStrictEqual('0.001');
     expect(formatNumbers('1e+0')).toStrictEqual('1');
-  })
+  });
 });

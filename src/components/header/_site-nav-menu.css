@@ -6,14 +6,14 @@
     align-items: center;
     font-weight: 500;
     white-space: nowrap;
-    color: rgb(var(--text-secondary) / .9);
-    transition: color .15s ease-in;
+    color: rgb(var(--text-secondary) / 0.9);
+    transition: color 0.15s ease-in;
     user-select: none;
     position: relative;
     text-decoration: none;
 
     &:after {
-      content: " ";
+      content: ' ';
       width: 0;
       height: 3px;
       background-color: rgb(var(--accent));
@@ -39,13 +39,13 @@
       font-size: 16px;
 
       .icon {
-        margin-right: .5rem;
+        margin-right: 0.5rem;
       }
 
       &:after {
         bottom: -18px;
         left: -4px;
-        transition: width .15s ease-in;
+        transition: width 0.15s ease-in;
       }
 
       &.active:after {
@@ -66,7 +66,7 @@
 
       .icon {
         width: 20px;
-        margin-right: .75rem;
+        margin-right: 0.75rem;
         text-align: center;
         font-size: 1.2em;
       }
@@ -79,7 +79,7 @@
       }
 
       &.active {
-        background-color: rgb(var(--accent) / .1);
+        background-color: rgb(var(--accent) / 0.1);
         color: rgb(var(--text-primary));
 
         &:after {

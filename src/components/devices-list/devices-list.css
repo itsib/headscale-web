@@ -1,5 +1,4 @@
 .devices-list {
-
   .table-layout {
     width: 100%;
     table-layout: auto;
@@ -18,7 +17,6 @@
     }
 
     tbody {
-
       tr {
         height: 80px;
         border-bottom: 1px solid rgb(var(--border-primary));

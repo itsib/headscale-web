@@ -9,7 +9,12 @@ export interface IFormattedDate extends Omit<FormatDurationOpts, 'language'> {
   style?: JSX.CSSProperties;
 }
 
-export const FormattedDuration: FunctionComponent<IFormattedDate> = ({ duration, style, className, format }) => {
+export const FormattedDuration: FunctionComponent<IFormattedDate> = ({
+  duration,
+  style,
+  className,
+  format,
+}) => {
   const { i18n } = useTranslation();
 
   const formatted: string | null = useMemo(() => {
@@ -17,6 +22,8 @@ export const FormattedDuration: FunctionComponent<IFormattedDate> = ({ duration,
   }, [duration, format, i18n.language]);
 
   return (
-    <span style={style} className={className}>{formatted}</span>
+    <span style={style} className={className}>
+      {formatted}
+    </span>
   );
 };

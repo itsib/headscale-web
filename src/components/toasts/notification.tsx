@@ -15,7 +15,7 @@ export interface NotificationProps extends NotifyInstance {
   setHeight: (id: string, height: number | null) => void;
 }
 
-export const Notification: FunctionComponent<NotificationProps> = props => {
+export const Notification: FunctionComponent<NotificationProps> = (props) => {
   const { id, offset, status, title, description, setHeight, closed, close, dismissible } = props;
   const notificationRef = useRef<HTMLDivElement | null>(null);
   const iconRef = useRef<SVGSVGElement | null>(null);
@@ -43,7 +43,6 @@ export const Notification: FunctionComponent<NotificationProps> = props => {
       icon?.unpauseAnimations();
     }
 
-
     notify.addEventListener('transitionend', transitionend);
     notify.addEventListener('transitioncancel', transitionend);
 
@@ -69,7 +68,6 @@ export const Notification: FunctionComponent<NotificationProps> = props => {
     return () => {
       setHeight(id, null);
     };
-
   }, [setHeight, id]);
 
   // Update notification height in heights
@@ -121,4 +119,4 @@ export const Notification: FunctionComponent<NotificationProps> = props => {
       ) : null}
     </div>
   );
-}
+};

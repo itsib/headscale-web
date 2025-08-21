@@ -1,15 +1,13 @@
 .device-page {
-
   .content {
-
     .title {
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
     }
 
     .sub-title {
       margin-bottom: 1rem;
       color: rgb(var(--text-secondary));
-      font-size: .875rem;
+      font-size: 0.875rem;
     }
   }
 
@@ -39,9 +37,8 @@
     gap: 1rem;
 
     .ip-addresses {
-
       .ip-address {
-        margin-right: .75rem;
+        margin-right: 0.75rem;
         font-size: 1.25rem;
       }
     }
@@ -63,7 +60,6 @@
   }
 
   .danger-content {
-
     .title {
       margin-bottom: 1rem;
     }
@@ -82,7 +78,6 @@
 
 @media screen and (max-width: 768px) {
   .device-page {
-
     .main-content {
       grid-template-columns: repeat(1, 1fr);
     }
@@ -91,11 +86,8 @@
 
 @media screen and (max-width: 500px) {
   .device-page {
-
     .danger-content {
-
       .space-between {
-
       }
     }
   }

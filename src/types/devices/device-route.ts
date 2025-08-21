@@ -1,4 +1,4 @@
-import { Device } from './device.ts'
+import { Device } from './device.ts';
 
 export interface DeviceRoute {
   id: string;

@@ -2,13 +2,19 @@ import type { SelectOption } from 'react-just-ui';
 
 export const REFRESH_INTERVAL = 20_000;
 
-export const DEFAULT_ACL_POLICY = JSON.stringify({
-  acls: [{
-    action: 'accept',
-    src: ['*'],
-    dst: ['*:*'],
-  }],
-}, null, 2);
+export const DEFAULT_ACL_POLICY = JSON.stringify(
+  {
+    acls: [
+      {
+        action: 'accept',
+        src: ['*'],
+        dst: ['*:*'],
+      },
+    ],
+  },
+  null,
+  2
+);
 
 export const IDB_VERSION = 8;
 

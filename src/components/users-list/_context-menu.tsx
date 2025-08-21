@@ -7,16 +7,28 @@ export const ContextMenu = memo(function ContextMenu({ onAction }: ContextMenuBa
   return (
     <BtnContextMenu placement={PopupPlacement.BOTTOM}>
       <div className="context-menu-item">
-        <button role="menuitem" aria-label="Rename user" type="button" className="btn-context-menu" onClick={() => onAction('rename')}>
-          <Trans i18nKey="rename"/>
+        <button
+          role="menuitem"
+          aria-label="Rename user"
+          type="button"
+          className="btn-context-menu"
+          onClick={() => onAction('rename')}
+        >
+          <Trans i18nKey="rename" />
         </button>
       </div>
-      <hr className="context-menu-divider"/>
+      <hr className="context-menu-divider" />
       <div className="context-menu-item">
-        <button role="menuitem" aria-label="Delete user" type="button" className="btn-context-menu text-error" onClick={() => onAction('delete')}>
-          <Trans i18nKey="delete"/>
+        <button
+          role="menuitem"
+          aria-label="Delete user"
+          type="button"
+          className="btn-context-menu danger"
+          onClick={() => onAction('delete')}
+        >
+          <Trans i18nKey="delete" />
         </button>
       </div>
     </BtnContextMenu>
-  )
+  );
 });

@@ -1,5 +1,4 @@
 .device-table-row {
-
   &:hover {
     background: rgb(var(--bg-primary));
     cursor: pointer;

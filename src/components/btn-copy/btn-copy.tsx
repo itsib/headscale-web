@@ -10,7 +10,13 @@ export interface IBtnCopy {
   className?: string;
 }
 
-export const BtnCopy: FunctionComponent<IBtnCopy> = ({ text, tooltip = 'copy_to_clipboard', tooltipPosition = 'top', children, className }) => {
+export const BtnCopy: FunctionComponent<IBtnCopy> = ({
+  text,
+  tooltip = 'copy_to_clipboard',
+  tooltipPosition = 'top',
+  children,
+  className,
+}) => {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
@@ -18,9 +24,9 @@ export const BtnCopy: FunctionComponent<IBtnCopy> = ({ text, tooltip = 'copy_to_
     <button
       type="button"
       className={className ?? 'btn btn-icon'}
-      aria-label={tooltip == undefined ? undefined : (copied ? t('copied') : t(tooltip))}
+      aria-label={tooltip == undefined ? undefined : copied ? t('copied') : t(tooltip)}
       data-position={tooltipPosition}
-      onClick={event => {
+      onClick={(event) => {
         event.stopPropagation();
         if (text) {
           copyText(text).then(() => setCopied(true));
@@ -30,7 +36,7 @@ export const BtnCopy: FunctionComponent<IBtnCopy> = ({ text, tooltip = 'copy_to_
         setTimeout(() => setCopied(false), 120);
       }}
     >
-      {children || <i className="icon icon-copy"/>}
+      {children || <i className="icon icon-copy" />}
     </button>
   );
 };

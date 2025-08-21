@@ -12,4 +12,4 @@ export const Redirect = (props: RenderableProps<{ to: string }>) => {
   }, [path, props.to]);
 
   return null;
-}
+};

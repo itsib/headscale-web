@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { joinUrl } from '@app-utils/join-url';
 import { fetchFn } from '@app-utils/query-fn';
 import { AuthState } from '@app-utils/auth-state';
+import './auth-form.css';
 
 export interface AuthFormProps {
   onSuccess: (fields: ICredentials) => void;
@@ -34,7 +35,7 @@ export function AuthForm({ onSuccess }: AuthFormProps) {
         setError('base', { message: t('error_invalid_response') });
       }
     },
-  })
+  });
 
   const { handleSubmit, register, formState, setError } = useForm<ICredentials>({
     defaultValues: async () => {
@@ -43,7 +44,7 @@ export function AuthForm({ onSuccess }: AuthFormProps) {
         base: base || '',
         token: token || '',
         tokenType: tokenType || 'Bearer',
-      }
+      };
     },
     shouldUseNativeValidation: false,
     mode: 'onChange',
@@ -51,8 +52,8 @@ export function AuthForm({ onSuccess }: AuthFormProps) {
   const { errors } = formState;
 
   return (
-    <form className="card w-[460px] mt-[16vh] mb-[200px]" onSubmit={handleSubmit(mutate)}>
-      <h3 className="mb-4 font-bold">{t('credentials_form_header_new')}</h3>
+    <form className="card auth-form" onSubmit={handleSubmit(mutate)}>
+      <h2 className="mb-4">{t('credentials_form_header_new')}</h2>
 
       <div className="mb-4">
         <Input

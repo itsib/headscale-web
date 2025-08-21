@@ -14,12 +14,12 @@ export const Toaster: FunctionComponent<ToasterProps> = ({ notifies, margin = 20
 
   const setHeight = useCallback((id: string, height: number | null) => {
     if (height === null) {
-      setHeights(heights => {
+      setHeights((heights) => {
         Reflect.deleteProperty(heights, id);
         return { ...heights };
       });
     } else {
-      setHeights(heights => ({ ...heights, [id]: height }));
+      setHeights((heights) => ({ ...heights, [id]: height }));
     }
   }, []);
 
@@ -32,7 +32,7 @@ export const Toaster: FunctionComponent<ToasterProps> = ({ notifies, margin = 20
       const height = heights[id];
 
       if (!closed && !isNaN(height)) {
-        sum = sum + height + (sum === 0 ? margin : (margin / 2));
+        sum = sum + height + (sum === 0 ? margin : margin / 2);
       }
       offsets[id] = sum;
     }
@@ -43,7 +43,15 @@ export const Toaster: FunctionComponent<ToasterProps> = ({ notifies, margin = 20
   return (
     <div class="toaster" style={{ '--notify-margin': `${margin}px` }}>
       {notifies.map((notify, index) => {
-        return <Notification key={notify.id} offset={-offsets[notify.id]} index={index} setHeight={setHeight} {...notify} />;
+        return (
+          <Notification
+            key={notify.id}
+            offset={-offsets[notify.id]}
+            index={index}
+            setHeight={setHeight}
+            {...notify}
+          />
+        );
       })}
     </div>
   );

@@ -14,10 +14,13 @@ const SIZES = {
   md: 30,
   lg: 35,
   xl: 45,
-}
+};
 
-export const BtnHamburger: FunctionComponent<BtnHamburgerProps> = ({ size = 'md', isOpen, setIsOpen }) => {
-
+export const BtnHamburger: FunctionComponent<BtnHamburgerProps> = ({
+  size = 'md',
+  isOpen,
+  setIsOpen,
+}) => {
   return (
     <button
       aria-label="Open site navigation menu"
@@ -32,4 +35,4 @@ export const BtnHamburger: FunctionComponent<BtnHamburgerProps> = ({ size = 'md'
       <span></span>
     </button>
   );
-}
+};

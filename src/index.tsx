@@ -45,12 +45,12 @@ function showAppVersion() {
     formatRegular,
     formatAccent,
     formatRegular,
-    formatAccent,
+    formatAccent
   );
 }
 
 async function init() {
-  const { Application } = await import('./pages/application.tsx');
+  const { RootPage } = await import('./pages/root-page.tsx');
   const rootElement = document.getElementById('root')!;
 
   render(
@@ -59,13 +59,13 @@ async function init() {
         <ApplicationProvider>
           <AuthProvider>
             <LocationProvider>
-              <Application/>
+              <RootPage />
             </LocationProvider>
           </AuthProvider>
         </ApplicationProvider>
       </NotifyProvider>
     </QueryClientProvider>,
-    rootElement,
+    rootElement
   );
 }
 

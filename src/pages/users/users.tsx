@@ -23,22 +23,28 @@ export function UsersPage() {
   const [_isListLayout, setIsListLayout] = useState(true);
   const isListLayout = !isMobile && _isListLayout;
 
-  const { data: users, refetch, isLoading } = useQuery<{ users: User[] }, Error, User[]>({
+  const {
+    data: users,
+    refetch,
+    isLoading,
+  } = useQuery<{ users: User[] }, Error, User[]>({
     queryKey: ['/api/v1/user', 'GET'],
-    select: data => data.users,
+    select: (data) => data.users,
     staleTime: 60_000 * 60,
     refetchInterval: 30_000,
   });
 
   const buttons: ButtonConfig[] = useMemo(() => {
-    const buttons = isMobile ? [] : [
-      {
-        id: 'set-layout',
-        icon: isListLayout ? 'icon-layout-cards' : 'icon-layout-list',
-        tooltip: t('layout_change'),
-        effect: 'icon-shake',
-      },
-    ];
+    const buttons = isMobile
+      ? []
+      : [
+          {
+            id: 'set-layout',
+            icon: isListLayout ? 'icon-layout-cards' : 'icon-layout-list',
+            tooltip: t('layout_change'),
+            effect: 'icon-shake',
+          },
+        ];
 
     return [
       ...buttons,
@@ -64,7 +70,7 @@ export function UsersPage() {
       case 'refresh-users':
         return refetch();
       case 'set-layout':
-        return setIsListLayout(value => !value);
+        return setIsListLayout((value) => !value);
     }
   }
 
@@ -85,7 +91,12 @@ export function UsersPage() {
       {isLoading ? (
         <ListLoading />
       ) : users?.length ? (
-        <UsersList layout={isListLayout ? 'table' : 'cards'} users={users} onAction={setOpened} onChange={setSelected} />
+        <UsersList
+          layout={isListLayout ? 'table' : 'cards'}
+          users={users}
+          onAction={setOpened}
+          onChange={setSelected}
+        />
       ) : (
         <EmptyList />
       )}

@@ -1,7 +1,7 @@
 import { useEffect } from 'preact/hooks';
 import './toast-fetching.css';
 
-export function ToastFetching({ isShow }: { isShow: boolean }){
+export function ToastFetching({ isShow }: { isShow: boolean }) {
   useEffect(() => {
     if (!isShow) return;
 
@@ -34,7 +34,7 @@ export function ToastFetching({ isShow }: { isShow: boolean }){
       if (!loader) return;
 
       loader.removeEventListener('transitionend', remove);
-      loader.remove()
+      loader.remove();
     }
 
     loader.classList.remove('show-in');

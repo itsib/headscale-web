@@ -36,7 +36,7 @@ export interface BasePopupProps {
   className?: string;
 }
 
-export const BasePopup: FunctionComponent<BasePopupProps> = props => {
+export const BasePopup: FunctionComponent<BasePopupProps> = (props) => {
   const { open, rect: _rect, placement = PopupPlacement.TOP, margin = 10, className } = props;
   const [animated, setAnimated] = useState(false);
   const [rect, setRect] = useState<DOMRect | undefined>(_rect);
@@ -60,7 +60,19 @@ export const BasePopup: FunctionComponent<BasePopupProps> = props => {
 
   return (
     <>
-      {rect && (open || animated) ? createPortal(<PopupContent show={!!open} rect={rect} children={props.children} placement={placement} margin={margin} className={className} />, document.body) : null}
+      {rect && (open || animated)
+        ? createPortal(
+            <PopupContent
+              show={!!open}
+              rect={rect}
+              children={props.children}
+              placement={placement}
+              margin={margin}
+              className={className}
+            />,
+            document.body
+          )
+        : null}
     </>
   );
 };
@@ -73,7 +85,7 @@ interface PopupContentProps {
   className?: string;
 }
 
-const PopupContent: FunctionComponent<PopupContentProps> = props => {
+const PopupContent: FunctionComponent<PopupContentProps> = (props) => {
   const { show, rect, placement = PopupPlacement.TOP, margin, className, children } = props;
   const popupRef = useRef<HTMLDivElement | null>(null);
 

@@ -1,4 +1,3 @@
-
 let CANVAS_CACHE: HTMLCanvasElement | null = null;
 let CONTEXT_CACHE: CanvasRenderingContext2D | null = null;
 
@@ -31,5 +30,5 @@ export function getStringSize(value: number | string, config: FontConfig) {
   return {
     width: Math.ceil(metric.width),
     height: Math.ceil(metric.fontBoundingBoxAscent + metric.fontBoundingBoxDescent),
-  }
+  };
 }

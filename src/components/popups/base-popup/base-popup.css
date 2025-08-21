@@ -1,7 +1,9 @@
 .base-popup {
   left: -9999px;
   top: -9999px;
-  transition: opacity .2s ease-out, transform .15s ease-out;
+  transition:
+    opacity 0.2s ease-out,
+    transform 0.15s ease-out;
   position: fixed;
   z-index: 9900;
   opacity: 0;
@@ -27,4 +29,3 @@
     opacity: 1;
   }
 }
-

@@ -13,13 +13,25 @@ export const RawPage: FunctionComponent<RawPageProps> = ({ metrics }) => {
     <div className="whitespace-pre-wrap">
       {strings.map((str, i) => {
         if (str.startsWith('# HELP')) {
-          return <div key={i} className="mt-4">{str}</div>;
+          return (
+            <div key={i} className="mt-4">
+              {str}
+            </div>
+          );
         } else if (str.startsWith('# TYPE')) {
-          return <div key={i} className="mb-1">{str}</div>;
+          return (
+            <div key={i} className="mb-1">
+              {str}
+            </div>
+          );
         } else {
-          return <div key={i} className="text-secondary">{str}</div>;
+          return (
+            <div key={i} className="text-secondary">
+              {str}
+            </div>
+          );
         }
       })}
     </div>
   );
-}
+};

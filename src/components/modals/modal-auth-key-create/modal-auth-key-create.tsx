@@ -24,7 +24,11 @@ export interface ModalAuthKeyCreateProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalAuthKeyCreate: FunctionComponent<ModalAuthKeyCreateProps> = ({ isOpen, onDismiss, ...props }) => {
+export const ModalAuthKeyCreate: FunctionComponent<ModalAuthKeyCreateProps> = ({
+  isOpen,
+  onDismiss,
+  ...props
+}) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <ModalContent onDismiss={onDismiss} {...props} />
@@ -32,7 +36,10 @@ export const ModalAuthKeyCreate: FunctionComponent<ModalAuthKeyCreateProps> = ({
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
+const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> = ({
+  onDismiss,
+  onSuccess,
+}) => {
   const { t } = useTranslation();
   const { data: users } = useUsers();
   const [newAuthKey, setNewAuthKey] = useState<AuthKey | undefined>();
@@ -41,10 +48,10 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
     if (!users) {
       return [];
     }
-    return users.map(user => ({
+    return users.map((user) => ({
       value: user.id,
       label: user.email || user.displayName || user.name,
-      icon: <UserPhoto id={user.id} pictureUrl={user.profilePicUrl} size="sm" />
+      icon: <UserPhoto id={user.id} pictureUrl={user.profilePicUrl} size="sm" />,
     }));
   }, [users]);
 
@@ -73,7 +80,7 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
   });
 
   function onSubmit(values: FormFields) {
-    const expiration = new Date(Date.now() + (values.expiration * 24 * 60 * 60 * 1000));
+    const expiration = new Date(Date.now() + values.expiration * 24 * 60 * 60 * 1000);
     mutate({
       user: values.user,
       reusable: values.reusable,
@@ -93,38 +100,42 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
             <span>{t('generate_auth_key_modal')}</span>
           )}
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()}/>
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
         {newAuthKey ? (
           <div>
             <div className="text-secondary text-sm font-normal">
-              <Trans i18nKey="auth_key_created_about_copy"/>
+              <Trans i18nKey="auth_key_created_about_copy" />
             </div>
 
             <div className="border-secondary border rounded-md px-3 py-2 my-4 flex">
-              <input className="w-full outline-none" readOnly value={newAuthKey.key}/>
+              <input className="w-full outline-none" readOnly value={newAuthKey.key} />
 
-              <BtnCopy className="p-0 ml-4" text={newAuthKey.key}/>
+              <BtnCopy className="p-0 ml-4" text={newAuthKey.key} />
             </div>
 
             <div className="text-secondary text-sm font-normal">
               <Trans
                 i18nKey="auth_key_created_about_expiry"
                 components={{
-                  date:  <FormattedDate date={newAuthKey.expiration} />,
+                  date: <FormattedDate date={newAuthKey.expiration} />,
                 }}
               />
             </div>
 
-            <button type="button" className="btn btn-accent w-full mt-6" onClick={() => {
-              onSuccess?.();
-              onDismiss?.();
+            <button
+              type="button"
+              className="btn btn-accent w-full mt-6"
+              onClick={() => {
+                onSuccess?.();
+                onDismiss?.();
 
-              setTimeout(() => {
-                setNewAuthKey(undefined);
-              }, 300);
-            }}>
+                setTimeout(() => {
+                  setNewAuthKey(undefined);
+                }, 300);
+              }}
+            >
               <span>{t('done')}</span>
             </button>
           </div>
@@ -186,15 +197,16 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
                 })}
               />
             </div>
-            <hr className="border-t-secondary mb-4"/>
+            <hr className="border-t-secondary mb-4" />
             <div className="mb-2">
               <Switch
                 id="key-ephemeral"
                 label={
                   <>
                     <div className="text-base font-semibold">{t('auth_key_ephemeral_title')}</div>
-                    <div
-                      className="text-secondary text-xs break-words max-w-[300px]">{t('auth_key_ephemeral_hint')}</div>
+                    <div className="text-secondary text-xs break-words max-w-[300px]">
+                      {t('auth_key_ephemeral_hint')}
+                    </div>
                   </>
                 }
                 rowReverse
@@ -215,7 +227,6 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
             </div>
           </form>
         )}
-
       </div>
     </div>
   );

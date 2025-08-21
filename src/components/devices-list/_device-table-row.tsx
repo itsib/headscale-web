@@ -30,18 +30,18 @@ export const DeviceTableRow = memo(function DeviceTableRow(props: Device) {
       onKeyDown={() => route(`/device/${id}`)}
     >
       <td>
-        <DeviceIcon type="laptop" size={36}/>
+        <DeviceIcon type="laptop" size={36} />
       </td>
       <td>
         <div className="text-primary font-medium text-lg">{givenName || name}</div>
         <div className="flex justify-start">
           {expiryDisabled ? (
             <div className="text-secondary text-xs font-normal">
-              <Trans i18nKey="expiry_disabled"/>
+              <Trans i18nKey="expiry_disabled" />
             </div>
           ) : (
             <div className="text-secondary text-xs font-normal">
-              <FormattedDuration duration={expiryDate.getTime()}/>
+              <FormattedDuration duration={expiryDate.getTime()} />
             </div>
           )}
         </div>
@@ -58,16 +58,20 @@ export const DeviceTableRow = memo(function DeviceTableRow(props: Device) {
       <td>
         {forcedTags.length ? (
           <div className="flex justify-center flex-wrap">
-            {forcedTags.map(tag => <AclTag key={tag} tag={tag}/>)}
+            {forcedTags.map((tag) => (
+              <AclTag key={tag} tag={tag} />
+            ))}
           </div>
-        ) : <>-</>}
+        ) : (
+          <>-</>
+        )}
       </td>
       <td>
-        <IpAddresses addresses={ipAddresses}/>
+        <IpAddresses addresses={ipAddresses} />
       </td>
       <td>
-        <Marker className="mr-3 mb-[1px]" isActive={online}/>
-        <FormattedDate date={lastSeen}/>
+        <Marker className="mr-3 mb-[1px]" isActive={online} />
+        <FormattedDate date={lastSeen} />
       </td>
     </tr>
   );

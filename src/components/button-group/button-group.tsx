@@ -24,7 +24,11 @@ function comparator(prev: ButtonGroupProps, next: ButtonGroupProps): boolean {
     const prevBtn = prev.buttons[i];
     const nextBtn = next.buttons[i];
 
-    if (prevBtn.id !== nextBtn.id || prevBtn.effect !== nextBtn.effect || prevBtn.icon !== nextBtn.icon) {
+    if (
+      prevBtn.id !== nextBtn.id ||
+      prevBtn.effect !== nextBtn.effect ||
+      prevBtn.icon !== nextBtn.icon
+    ) {
       return false;
     }
   }
@@ -33,26 +37,29 @@ function comparator(prev: ButtonGroupProps, next: ButtonGroupProps): boolean {
 }
 
 export const ButtonGroup = memo(function ButtonGroup(props: ButtonGroupProps) {
-  const onClick = useCallback((event: MouseEvent) => {
-    const button = event.target as HTMLButtonElement;
-    const id = button?.id;
-    const icon = button?.firstChild as HTMLElement;
-    const effect = button?.dataset.effect;
+  const onClick = useCallback(
+    (event: MouseEvent) => {
+      const button = event.target as HTMLButtonElement;
+      const id = button?.id;
+      const icon = button?.firstChild as HTMLElement;
+      const effect = button?.dataset.effect;
 
-    if (!id || !icon || !props.onClick) return;
+      if (!id || !icon || !props.onClick) return;
 
-    if (effect) {
-      icon.classList.add(effect);
-      const [animation] = icon.getAnimations();
-      animation.play();
-    }
+      if (effect) {
+        icon.classList.add(effect);
+        const [animation] = icon.getAnimations();
+        animation.play();
+      }
 
-    props.onClick(id);
-  }, [props.onClick]);
+      props.onClick(id);
+    },
+    [props.onClick]
+  );
 
   return (
     <div className="button-group">
-      {props.buttons.map(button => (
+      {props.buttons.map((button) => (
         <button
           key={button.id}
           id={button.id}

@@ -38,10 +38,18 @@ export const DevicePage: FunctionComponent = () => {
             title={
               <>
                 {t('device_with_name', { name: device.givenName || device.name })}
-                {device.online ? <sup class="badge online">ONLINE</sup> : <sup class="badge offline">OFFLINE</sup>}
+                {device.online ? (
+                  <sup class="badge online">ONLINE</sup>
+                ) : (
+                  <sup class="badge offline">OFFLINE</sup>
+                )}
               </>
             }
-            subtitle={<a href="/devices" className="back-url">{t('back_to_devices_list')}</a>}
+            subtitle={
+              <a href="/devices" className="back-url">
+                {t('back_to_devices_list')}
+              </a>
+            }
           />
 
           <hr />
@@ -50,11 +58,16 @@ export const DevicePage: FunctionComponent = () => {
             <div className="">
               <h3 className="title">{t('manage_device')}</h3>
 
-              <DeviceName deviceId={device.id} name={device.givenName || device.name}  />
+              <DeviceName deviceId={device.id} name={device.givenName || device.name} />
 
               <DeviceOwner deviceId={device.id} user={device.user} />
 
-              <AclTags deviceId={device.id} validTags={device.validTags} forcedTags={device.forcedTags} invalidTags={device.invalidTags} />
+              <AclTags
+                deviceId={device.id}
+                validTags={device.validTags}
+                forcedTags={device.forcedTags}
+                invalidTags={device.invalidTags}
+              />
 
               <div className="meta-data">
                 <span className="label">{t('created_at')}:</span>
@@ -71,13 +84,22 @@ export const DevicePage: FunctionComponent = () => {
                 <h3 className="title">{t('ip_addresses')}</h3>
                 <div className="sub-title">{t('ip_addresses_summary')}</div>
                 <div className="ip-addresses">
-                  <div>{device.ipAddresses.map((ip) => (<span className="ip-address">{ip}</span>))}</div>
+                  <div>
+                    {device.ipAddresses.map((ip) => (
+                      <span className="ip-address">{ip}</span>
+                    ))}
+                  </div>
                 </div>
               </div>
 
               <hr />
 
-              <DeviceRoutes id={device.id} approvedRoutes={device.approvedRoutes} availableRoutes={device.availableRoutes} subnetRoutes={device.subnetRoutes} />
+              <DeviceRoutes
+                id={device.id}
+                approvedRoutes={device.approvedRoutes}
+                availableRoutes={device.availableRoutes}
+                subnetRoutes={device.subnetRoutes}
+              />
             </div>
           </div>
 
@@ -89,7 +111,13 @@ export const DevicePage: FunctionComponent = () => {
             <div className="space-between">
               <div>{t('expire_key_summary')}</div>
 
-              <button type="button" className="btn btn-outline-danger" onClick={() => setIsOpenExpiry(true)}>{t('expire_key')}</button>
+              <button
+                type="button"
+                className="btn btn-outline-danger"
+                onClick={() => setIsOpenExpiry(true)}
+              >
+                {t('expire_key')}
+              </button>
             </div>
 
             <hr />
@@ -97,7 +125,13 @@ export const DevicePage: FunctionComponent = () => {
             <div className="space-between">
               <div>{t('removing_device_summary')}</div>
 
-              <button type="button" className="btn btn-danger" onClick={() => setIsOpenRemove(true)}>{t('delete_device')}</button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={() => setIsOpenRemove(true)}
+              >
+                {t('delete_device')}
+              </button>
             </div>
           </div>
 
@@ -118,4 +152,4 @@ export const DevicePage: FunctionComponent = () => {
       ) : null}
     </>
   );
-}
+};

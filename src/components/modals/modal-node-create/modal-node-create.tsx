@@ -20,7 +20,11 @@ export interface ModalNodeRegisterProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalNodeCreate: FunctionComponent<ModalNodeRegisterProps> = ({ isOpen, onDismiss, ...props }) => {
+export const ModalNodeCreate: FunctionComponent<ModalNodeRegisterProps> = ({
+  isOpen,
+  onDismiss,
+  ...props
+}) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <ModalContent onDismiss={onDismiss} {...props} />
@@ -28,7 +32,10 @@ export const ModalNodeCreate: FunctionComponent<ModalNodeRegisterProps> = ({ isO
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
+const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({
+  onDismiss,
+  onSuccess,
+}) => {
   const { t } = useTranslation();
   const { data: users } = useUsers();
   const url = useMemo(() => Storage.get().getItem('main-url'), []);
@@ -37,10 +44,10 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
     if (!users) {
       return [];
     }
-    return users.map(user => ({
+    return users.map((user) => ({
       value: user.id,
       label: user.email || user.displayName || user.name,
-      icon: <UserPhoto id={user.id} pictureUrl={user.profilePicUrl} size="sm" />
+      icon: <UserPhoto id={user.id} pictureUrl={user.profilePicUrl} size="sm" />,
     }));
   }, [users]);
 
@@ -69,7 +76,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
         <div className="title">
           <span>{t('register_node_modal_title')}</span>
         </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()}/>
+        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
       </div>
       <div className="modal-content">
         <form onSubmit={handleSubmit(mutate as any)}>
@@ -81,7 +88,10 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
               error={errors?.nodekey}
               {...register('nodekey', {
                 required: t('error_required'),
-                validate: value => (value.startsWith('mkey:') || value.startsWith('nodekey:')) ? true : t('error_nodekey_format'),
+                validate: (value) =>
+                  value.startsWith('mkey:') || value.startsWith('nodekey:')
+                    ? true
+                    : t('error_nodekey_format'),
               })}
             />
           </div>
@@ -98,15 +108,15 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
             />
           </div>
           <div className="text-sm text-secondary mb-4">
-            <Trans i18nKey="tailscale_up_command_before"/>
+            <Trans i18nKey="tailscale_up_command_before" />
             <div className="border border-secondary rounded-md py-2 px-3 my-1 relative">
               <span>tailscale up --login-server {url}</span>
 
               <div className="absolute right-2 top-2">
-                <BtnCopy text={`tailscale up --login-server ${url}`} className=""/>
+                <BtnCopy text={`tailscale up --login-server ${url}`} className="" />
               </div>
             </div>
-            <Trans i18nKey="tailscale_up_command_after"/>
+            <Trans i18nKey="tailscale_up_command_after" />
           </div>
 
           <div>

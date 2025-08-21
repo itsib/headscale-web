@@ -10,13 +10,19 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () =>
     if (!users) {
       return [];
     }
-    return users.map(user => ({
+    return users.map((user) => ({
       queryKey: [`/api/v1/preauthkey?user=${user.id}`],
-      select: (data: { preAuthKeys: AuthKey[] }) => data?.preAuthKeys?.map(key => ({ ...key, user, })),
-    }))
-  }, [users])
+      select: (data: { preAuthKeys: AuthKey[] }) =>
+        data?.preAuthKeys?.map((key) => ({ ...key, user })),
+    }));
+  }, [users]);
 
-  const { data, isLoading: isLoading1, error: error1, refetch: _refetch } = useQueries({
+  const {
+    data,
+    isLoading: isLoading1,
+    error: error1,
+    refetch: _refetch,
+  } = useQueries({
     queries,
     combine: (results) => {
       return {
@@ -24,7 +30,9 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () =>
         isLoading: results.some((result) => result.isLoading),
         error: results.find((result) => !!result.error)?.error, // results
         refetch: async () => {
-          return await Promise.all(results.map(result => result.refetch({ cancelRefetch: true })))
+          return await Promise.all(
+            results.map((result) => result.refetch({ cancelRefetch: true }))
+          );
         },
       };
     },

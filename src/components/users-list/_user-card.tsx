@@ -10,7 +10,8 @@ import './_user-card.css';
 type UserCardProps = ContextMenuBase<UserAction> & User;
 
 export const UserCard = memo(function UserItem(props: UserCardProps) {
-  const { id, name, displayName, email, provider, providerId, profilePicUrl, createdAt, onAction } = props;
+  const { id, name, displayName, email, provider, providerId, profilePicUrl, createdAt, onAction } =
+    props;
   const { t } = useTranslation();
 
   const account = useMemo(() => {
@@ -20,13 +21,19 @@ export const UserCard = memo(function UserItem(props: UserCardProps) {
     if (providerId.includes('google')) {
       return 'Google';
     }
-    return 'Other'
+    return 'Other';
   }, [provider, providerId]);
 
   return (
     <div className="user-card">
       <div className="main-info">
-        <UserInfo id={id} className="font-medium text-lg" name={name} displayName={displayName} pictureUrl={profilePicUrl} />
+        <UserInfo
+          id={id}
+          className="font-medium text-lg"
+          name={name}
+          displayName={displayName}
+          pictureUrl={profilePicUrl}
+        />
 
         <ContextMenu onAction={onAction} />
       </div>
@@ -46,7 +53,7 @@ export const UserCard = memo(function UserItem(props: UserCardProps) {
       <div className="info-row">
         <div className="label">{t('joined')}:</div>
         <div className="value">
-           <FormattedDate date={createdAt} />
+          <FormattedDate date={createdAt} />
         </div>
       </div>
     </div>

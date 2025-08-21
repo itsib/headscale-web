@@ -11,7 +11,11 @@ export interface ModalUserCreateProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalUserCreate: FunctionComponent<ModalUserCreateProps> = ({ isOpen, onDismiss, ...props }) => {
+export const ModalUserCreate: FunctionComponent<ModalUserCreateProps> = ({
+  isOpen,
+  onDismiss,
+  ...props
+}) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <ModalContent onDismiss={onDismiss} {...props} />
@@ -19,7 +23,10 @@ export const ModalUserCreate: FunctionComponent<ModalUserCreateProps> = ({ isOpe
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalUserCreateProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
+const ModalContent: FunctionComponent<Omit<ModalUserCreateProps, 'isOpen'>> = ({
+  onDismiss,
+  onSuccess,
+}) => {
   const { t } = useTranslation();
 
   const { handleSubmit, register, formState } = useForm<UserCreateFields>({
@@ -28,7 +35,7 @@ const ModalContent: FunctionComponent<Omit<ModalUserCreateProps, 'isOpen'>> = ({
       displayName: '',
       email: '',
       pictureUrl: '',
-    }
+    },
   });
   const { errors } = formState;
 

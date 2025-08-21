@@ -19,14 +19,11 @@ export const Error404 = () => {
         </div>
       )}
 
-
-      <div className="message">
-        {t('not_found_page_text')}
-      </div>
+      <div className="message">{t('not_found_page_text')}</div>
 
       <a href="/" className="go-home">
         {t('go_home')}
       </a>
     </main>
   );
-}
+};

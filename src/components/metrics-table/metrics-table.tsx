@@ -22,7 +22,7 @@ export const MetricsTable: FunctionComponent<MetricsTableProps> = ({ metrics: ra
           <h2>{t(`metrics_system_${system}`)}</h2>
 
           <div>
-            {metrics[system].map(metric => (
+            {metrics[system].map((metric) => (
               <MetricsRow key={`metric-${system}-${metric.id}`} {...metric} />
             ))}
           </div>

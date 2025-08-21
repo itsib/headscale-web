@@ -20,21 +20,21 @@
 
     .tab-link {
       height: 37px;
-      padding: .5rem .25rem .3rem;
+      padding: 0.5rem 0.25rem 0.3rem;
       font-weight: 600;
       color: rgb(var(--text-secondary));
       position: relative;
       text-decoration: none;
 
       &:after {
-        content: " ";
+        content: ' ';
         bottom: -5px;
         left: -2px;
         width: 0;
         height: 3px;
         background-color: rgb(var(--accent));
         position: absolute;
-        transition: width .15s ease-in;
+        transition: width 0.15s ease-in;
       }
 
       &:hover {

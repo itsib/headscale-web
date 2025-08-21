@@ -26,23 +26,25 @@ export const DeviceOwner: FunctionComponent<DeviceOwnerProps> = ({ user, classNa
 
   const options = useMemo(() => {
     if (!users) {
-      return [{
-        value: user.id,
-        label: user.email || user.displayName || user.name,
-        icon: <UserPhoto id={user.id} pictureUrl={user.profilePicUrl} size="sm" />
-      }];
+      return [
+        {
+          value: user.id,
+          label: user.email || user.displayName || user.name,
+          icon: <UserPhoto id={user.id} pictureUrl={user.profilePicUrl} size="sm" />,
+        },
+      ];
     }
-    return users?.map<SelectOption>(user => {
+    return users?.map<SelectOption>((user) => {
       return {
         value: user.id,
         label: user.email || user.displayName || user.name,
-        icon: <UserPhoto id={user.id} pictureUrl={user.profilePicUrl} size="sm" />
+        icon: <UserPhoto id={user.id} pictureUrl={user.profilePicUrl} size="sm" />,
       };
-    })
+    });
   }, [users, user]);
 
   const { mutate } = useMutation({
-    async mutationFn({ deviceId, userId }: { deviceId: string, userId: string }) {
+    async mutationFn({ deviceId, userId }: { deviceId: string; userId: string }) {
       return await fetchFn<{ node: Device }>(`/api/v1/node/${deviceId}/user`, {
         method: 'POST',
         body: JSON.stringify({ user: userId }),
@@ -56,7 +58,7 @@ export const DeviceOwner: FunctionComponent<DeviceOwnerProps> = ({ user, classNa
     onError: (e: any) => {
       setValue(user.id);
       error(e.message);
-    }
+    },
   });
 
   function onChange(event: Event) {
@@ -81,4 +83,4 @@ export const DeviceOwner: FunctionComponent<DeviceOwnerProps> = ({ user, classNa
       ) : null}
     </div>
   );
-}
+};

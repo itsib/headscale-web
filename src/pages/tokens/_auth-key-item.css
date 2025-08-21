@@ -1,0 +1,62 @@
+.auth-key-item {
+  height: 60px;
+  border-bottom: 1px solid rgb(var(--border-primary));
+
+  .cell-0 {
+    width: 60px;
+
+    .logo {
+      width: 36px;
+      height: 36px;
+      text-align: center;
+      border-radius: 50%;
+      background-color: rgb(var(--green-700) / 0.7);
+
+      i {
+        font-size: 18px;
+        line-height: 36px;
+        color: white;
+      }
+    }
+  }
+
+  .cell-1 {
+    .key-wrap {
+      display: flex;
+      align-items: center;
+
+      .key {
+        max-width: 100px;
+        direction: rtl;
+        text-align: right;
+      }
+
+      .btn-copy {
+        margin: 0.75rem;
+      }
+    }
+  }
+
+  .cell-action {
+    width: 52px;
+    text-align: end;
+
+    & > * {
+      width: 34px;
+    }
+
+    .btn-expire {
+      top: 2px;
+      width: 34px;
+      height: 34px;
+      color: rgb(var(--text-secondary) / 0.8);
+      position: relative;
+      transition: all 0.2s ease;
+      font-size: 24px;
+
+      &:hover {
+        color: rgb(var(--text-primary) / 0.8);
+      }
+    }
+  }
+}

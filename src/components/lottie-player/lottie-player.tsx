@@ -1,5 +1,8 @@
 import { Component, createRef } from 'preact';
-import type { DotLottie, Config } from 'https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm';
+import type {
+  DotLottie,
+  Config,
+} from 'https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm';
 
 export type LottiePlayerMode = 'forward' | 'reverse' | 'bounce' | 'reverse-bounce';
 
@@ -31,7 +34,9 @@ export class LottiePlayer extends Component<LottiePlayerProps> {
 
   async createDotLottie(config: Config) {
     try {
-      const { DotLottieWorker } = await import('https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm');
+      const { DotLottieWorker } = await import(
+        'https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm'
+      );
       return new DotLottieWorker(config);
     } catch {
       return null;
@@ -69,7 +74,10 @@ export class LottiePlayer extends Component<LottiePlayerProps> {
         this.player.setLoop(nextProps.loop);
       }
 
-      if (nextProps.backgroundColor != null && this.player.backgroundColor !== nextProps.backgroundColor) {
+      if (
+        nextProps.backgroundColor != null &&
+        this.player.backgroundColor !== nextProps.backgroundColor
+      ) {
         this.player.setBackgroundColor(nextProps.backgroundColor);
       }
 
@@ -100,7 +108,7 @@ export class LottiePlayer extends Component<LottiePlayerProps> {
           loop: this.player.loop,
           mode: this.player.mode,
           speed: this.player.speed,
-        })
+        });
       }
     }
     return false;

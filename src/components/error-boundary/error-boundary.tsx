@@ -88,6 +88,6 @@ export class ErrorBoundary extends Component<unknown, ErrorBoundaryState> {
           Reset and try again
         </button>
       </main>
-    )
+    );
   }
 }

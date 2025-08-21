@@ -14,7 +14,15 @@ export interface UserInfoProps extends UserPhotoProps {
   className?: string;
 }
 
-export const UserInfo: FunctionComponent<UserInfoProps> = ({ id, name, email, displayName, pictureUrl, size = 'md', className }) => {
+export const UserInfo: FunctionComponent<UserInfoProps> = ({
+  id,
+  name,
+  email,
+  displayName,
+  pictureUrl,
+  size = 'md',
+  className,
+}) => {
   return (
     <div className={cn('flex gap-4 items-center', className)}>
       <UserPhoto id={id} pictureUrl={pictureUrl} size={size} />
