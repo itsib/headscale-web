@@ -12,8 +12,7 @@ COPY public/ /usr/web/public/
 COPY src/ /usr/web/src/
 COPY icons/ /usr/web/icons/
 COPY scripts/copy.mjs /usr/web/scripts/
-COPY tailwind.config.ts \
-     tsconfig.* \
+COPY tsconfig.* \
      vite.config.ts \
      icon-font.json \
      index.html \
