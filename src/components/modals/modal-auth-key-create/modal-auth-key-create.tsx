@@ -2,7 +2,7 @@ import { useMemo, useState } from 'preact/hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input, Select, SelectOption, Switch } from 'react-just-ui';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchFn } from '@app-utils/query-fn.ts';
 import { useUsers } from '@app-hooks/use-users.ts';
@@ -11,6 +11,7 @@ import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
 import { FunctionComponent } from 'preact';
 import { UserPhoto } from '@app-components/user-info/user-photo.tsx';
+import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 
 interface FormFields {
   user: string;
@@ -20,11 +21,7 @@ interface FormFields {
   aclTags: string[];
 }
 
-export interface ModalAuthKeyCreateProps extends ModalProps {
-  onSuccess: () => void;
-}
-
-export const ModalAuthKeyCreate: FunctionComponent<ModalAuthKeyCreateProps> = ({
+export const ModalAuthKeyCreate: FunctionComponent<ModalProps> = ({
   isOpen,
   onDismiss,
   ...props
@@ -36,13 +33,11 @@ export const ModalAuthKeyCreate: FunctionComponent<ModalAuthKeyCreateProps> = ({
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> = ({
-  onDismiss,
-  onSuccess,
-}) => {
+const ModalContent: FunctionComponent<Omit<ModalProps, 'isOpen'>> = ({ onDismiss }) => {
   const { t } = useTranslation();
   const { data: users } = useUsers();
   const [newAuthKey, setNewAuthKey] = useState<AuthKey | undefined>();
+  const queryClient = useQueryClient();
 
   const options: SelectOption[] = useMemo(() => {
     if (!users) {
@@ -74,8 +69,9 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
         body: JSON.stringify(values),
       });
     },
-    onSuccess: (result) => {
+    onSuccess: async (result) => {
       setNewAuthKey(result.preAuthKey);
+      await queryClient.invalidateQueries({ queryKey: ['/api/v1/preauthkey'] });
     },
   });
 
@@ -91,17 +87,8 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
   }
 
   return (
-    <div className="modal w-[400px]">
-      <div className="modal-header">
-        <div className="title">
-          {newAuthKey ? (
-            <span>{t('generated_new_auth_key')}</span>
-          ) : (
-            <span>{t('generate_auth_key_modal')}</span>
-          )}
-        </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
-      </div>
+    <div className="modal modal-md">
+      <ModalHeader caption={newAuthKey ? 'generated_new_auth_key' : 'generate_auth_key_modal'} onDismiss={onDismiss} />
       <div className="modal-content">
         {newAuthKey ? (
           <div>
@@ -109,8 +96,8 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
               <Trans i18nKey="auth_key_created_about_copy" />
             </div>
 
-            <div className="border-secondary border rounded-md px-3 py-2 my-4 flex">
-              <input className="w-full outline-none" readOnly value={newAuthKey.key} />
+            <div className="border-secondary rounded-sm px-3 py-2 my-4 flex">
+              <input className="w-full" readOnly value={newAuthKey.key} />
 
               <BtnCopy className="p-0 ml-4" text={newAuthKey.key} />
             </div>
@@ -128,7 +115,6 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
               type="button"
               className="btn btn-accent w-full mt-6"
               onClick={() => {
-                onSuccess?.();
                 onDismiss?.();
 
                 setTimeout(() => {
@@ -167,7 +153,7 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
                   </>
                 }
                 rowReverse
-                className="w-full justify-between"
+                className="w-full flex nowrap justify-between"
                 {...register('reusable')}
               />
             </div>
@@ -197,20 +183,20 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
                 })}
               />
             </div>
-            <hr className="border-t-secondary mb-4" />
+            <hr className="" />
             <div className="mb-2">
               <Switch
                 id="key-ephemeral"
                 label={
                   <>
                     <div className="text-base font-semibold">{t('auth_key_ephemeral_title')}</div>
-                    <div className="text-secondary text-xs break-words max-w-[300px]">
+                    <div className="text-secondary text-xs break-words" style="max-width: 300px;">
                       {t('auth_key_ephemeral_hint')}
                     </div>
                   </>
                 }
                 rowReverse
-                className="w-full justify-between"
+                className="w-full flex nowrap justify-between"
                 {...register('ephemeral')}
               />
             </div>
@@ -220,7 +206,7 @@ const ModalContent: FunctionComponent<Omit<ModalAuthKeyCreateProps, 'isOpen'>> =
                 <span>{t('create')}</span>
               </button>
               {error ? (
-                <div className="text-red-500 text-[12px] leading-[14px] mt-2 px-1">
+                <div className="error-message">
                   {t(error.message)}
                 </div>
               ) : null}

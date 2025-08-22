@@ -14,7 +14,7 @@ import './_api-tokens.css';
 
 export const ApiTokens = () => {
   const { t } = useTranslation();
-  const { data: apiTokens, isLoading, refetch } = useApiTokens();
+  const { data: apiTokens, isLoading } = useApiTokens();
 
   const [opened, setOpened] = useState<ContextAction | null>(null);
   const [selected, setSelected] = useState<ApiToken | null>(null);
@@ -35,6 +35,10 @@ export const ApiTokens = () => {
       case 'add-token':
         return setOpened('create');
     }
+  }
+
+  function onDismiss() {
+    setOpened(null);
   }
 
   return (
@@ -80,22 +84,9 @@ export const ApiTokens = () => {
         <EmptyList message="no_api_tokens" />
       )}
 
-      <ModalApiTokenCreate
-        isOpen={opened === 'create'}
-        onDismiss={() => setOpened(null)}
-        onSuccess={() => refetch()}
-      />
-      <ModalApiTokenExpire
-        isOpen={opened === 'expire'}
-        apiToken={selected}
-        onDismiss={() => setOpened(null)}
-        onSuccess={() => refetch()}
-      />
-      <ModalApiTokenDelete
-        isOpen={opened === 'delete'}
-        apiToken={selected}
-        onDismiss={() => setOpened(null)}
-        onSuccess={() => refetch()}
+      <ModalApiTokenCreate isOpen={opened === 'create'} onDismiss={onDismiss} />
+      <ModalApiTokenExpire isOpen={opened === 'expire'} apiToken={selected} onDismiss={onDismiss} />
+      <ModalApiTokenDelete isOpen={opened === 'delete'} apiToken={selected} onDismiss={onDismiss}
       />
     </>
   );

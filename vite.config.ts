@@ -116,7 +116,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
             '*.{png,ico,svg,html,webp}',
           ],
           modifyURLPrefix: { '': '/' },
-          navigateFallback: 'index.html',
+          navigateFallback: '/devices',
           navigateFallbackDenylist: [/^\/metrics/, /^\/api/, /^\/terminal/],
           disableDevLogs: true,
           runtimeCaching: [
@@ -133,6 +133,17 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
             },
             {
               urlPattern: /^https:\/\/lh3\.googleusercontent\.com\/.*/i,
+              handler: 'StaleWhileRevalidate',
+              options: {
+                cacheName: 'google-content',
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 24 * 60 * 60 * 30, // 1 month
+                },
+              },
+            },
+            {
+              urlPattern: /^https:\/\/i\.ibb\.co\/.*/i,
               handler: 'StaleWhileRevalidate',
               options: {
                 cacheName: 'google-content',

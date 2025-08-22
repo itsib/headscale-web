@@ -32,6 +32,7 @@ export const Popover: FunctionComponent<PopupProps> = (props) => {
 
     const click = (e: MouseEvent) => {
       e.stopPropagation();
+      e.preventDefault();
       setRect(btn.getBoundingClientRect());
       setIsOpen((i) => !i);
     };

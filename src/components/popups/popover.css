@@ -5,6 +5,7 @@
     0 2px 4px -2px rgb(0 0 0 / 0.3);
   background-color: rgb(var(--bg-popover));
   border: 1px solid rgb(var(--border-popover));
+  color: rgb(var(--text-primary));
   border-radius: 0.25rem;
 }
 

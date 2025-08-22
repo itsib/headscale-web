@@ -14,7 +14,7 @@ import './_auth-keys.css';
 
 export const AuthKeys = () => {
   const { t } = useTranslation();
-  const { data: authKeys, isLoading, refetch } = useAuthKeys();
+  const { data: authKeys, isLoading } = useAuthKeys();
 
   const [opened, setOpened] = useState<ContextAction | null>(null);
   const [selected, setSelected] = useState<AuthKeyWithUser | null>(null);
@@ -63,6 +63,10 @@ export const AuthKeys = () => {
     }
   }
 
+  function onDismiss() {
+    setOpened(null);
+  }
+
   return (
     <>
       <PageCaption
@@ -107,17 +111,8 @@ export const AuthKeys = () => {
         <EmptyList message="no_auth_keys" />
       )}
 
-      <ModalAuthKeyCreate
-        isOpen={opened === 'create'}
-        onDismiss={() => setOpened(null)}
-        onSuccess={() => refetch()}
-      />
-      <ModalAuthKeyExpire
-        isOpen={opened === 'expire'}
-        authKey={selected}
-        onDismiss={() => setOpened(null)}
-        onSuccess={() => refetch()}
-      />
+      <ModalAuthKeyCreate isOpen={opened === 'create'} onDismiss={onDismiss} />
+      <ModalAuthKeyExpire isOpen={opened === 'expire'} authKey={selected} onDismiss={onDismiss} />
     </>
   );
 };

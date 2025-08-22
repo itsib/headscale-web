@@ -10,6 +10,7 @@ import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
 import { FunctionComponent } from 'preact';
 import { Storage } from '@app-utils/storage.ts';
 import { UserPhoto } from '@app-components/user-info/user-photo.tsx';
+import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 
 interface FormFields {
   nodekey: string;
@@ -71,13 +72,8 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
   });
 
   return (
-    <div className="modal w-[400px]">
-      <div className="modal-header">
-        <div className="title">
-          <span>{t('register_node_modal_title')}</span>
-        </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
-      </div>
+    <div className="modal modal-md">
+      <ModalHeader caption="register_node_modal_title" onDismiss={onDismiss} />
       <div className="modal-content">
         <form onSubmit={handleSubmit(mutate as any)}>
           <div className="mb-2">
@@ -109,10 +105,10 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
           </div>
           <div className="text-sm text-secondary mb-4">
             <Trans i18nKey="tailscale_up_command_before" />
-            <div className="border border-secondary rounded-md py-2 px-3 my-1 relative">
+            <div className="border border-secondary rounded py-2 pl-3 pr-1 my-1 relative flex justify-between items-center">
               <span>tailscale up --login-server {url}</span>
 
-              <div className="absolute right-2 top-2">
+              <div className="" >
                 <BtnCopy text={`tailscale up --login-server ${url}`} className="" />
               </div>
             </div>
@@ -124,7 +120,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
               <span>{t('create')}</span>
             </button>
             {error ? (
-              <div className="text-red-500 text-[12px] leading-[14px] mt-2 px-1">
+              <div className="error-message">
                 {t(error.message)}
               </div>
             ) : null}

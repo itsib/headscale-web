@@ -54,6 +54,7 @@
       text-align: start;
       border-radius: 0;
       border: none;
+      color: rgb(var(--text-primary));
       transition: background-color 0.2s ease-in-out;
 
       .icon {

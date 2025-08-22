@@ -74,6 +74,10 @@ export function UsersPage() {
     }
   }
 
+  function onDismiss() {
+    setOpened(null);
+  }
+
   useEffect(() => {
     if (selected && !opened) {
       setSelected(null);
@@ -101,23 +105,9 @@ export function UsersPage() {
         <EmptyList />
       )}
 
-      <ModalUserCreate
-        isOpen={opened === 'create'}
-        onDismiss={() => setOpened(null)}
-        onSuccess={() => refetch()}
-      />
-      <ModalUserRename
-        user={selected}
-        isOpen={opened === 'rename'}
-        onDismiss={() => setOpened(null)}
-        onSuccess={() => refetch()}
-      />
-      <ModalUserDelete
-        user={selected}
-        isOpen={opened === 'delete'}
-        onDismiss={() => setOpened(null)}
-        onSuccess={() => refetch()}
-      />
+      <ModalUserCreate isOpen={opened === 'create'} onDismiss={onDismiss} />
+      <ModalUserRename user={selected} isOpen={opened === 'rename'} onDismiss={onDismiss} />
+      <ModalUserDelete user={selected} isOpen={opened === 'delete'} onDismiss={onDismiss} />
     </div>
   );
 }

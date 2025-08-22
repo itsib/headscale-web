@@ -2,22 +2,16 @@ import { useState } from 'preact/hooks';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchFn } from '@app-utils/query-fn';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { BtnCopy } from '@app-components/btn-copy/btn-copy';
 import { FunctionComponent } from 'preact';
+import { ModalHeader } from '@app-components/modals/modal-header.tsx';
+import './modal-api-token-create.css';
 
-interface FormFields {
-  expiration: number;
-}
-
-export interface ModalApiTokenCreateProps extends ModalProps {
-  onSuccess: () => void;
-}
-
-export const ModalApiTokenCreate: FunctionComponent<ModalApiTokenCreateProps> = ({
+export const ModalApiTokenCreate: FunctionComponent<ModalProps> = ({
   isOpen,
   onDismiss,
   ...props
@@ -29,15 +23,13 @@ export const ModalApiTokenCreate: FunctionComponent<ModalApiTokenCreateProps> = 
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> = ({
-  onDismiss,
-  onSuccess,
-}) => {
+const ModalContent: FunctionComponent<Omit<ModalProps, 'isOpen'>> = ({ onDismiss }) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const [newApiToken, setNewApiToken] = useState<string | undefined>();
   const [newApiTokenExpiry, setNewApiTokenExpiry] = useState<string | undefined>();
 
-  const { handleSubmit, register, formState } = useForm<FormFields>({
+  const { handleSubmit, register, formState } = useForm<{ expiration: number }>({
     mode: 'onChange',
     defaultValues: {
       expiration: 90,
@@ -52,31 +44,32 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> 
         body: JSON.stringify(values),
       });
     },
-    onSuccess: (result, values) => {
+    onSuccess: async (result, values) => {
       setNewApiToken(result.apiKey);
       setNewApiTokenExpiry(values.expiration);
+      await queryClient.invalidateQueries({ queryKey: ['/api/v1/apikey', 'GET'] });
     },
   });
 
-  function onSubmit(values: FormFields) {
+  function onSubmit(values: { expiration: number }) {
     const expiration = new Date(Date.now() + values.expiration * 24 * 60 * 60 * 1000);
     mutate({
       expiration: expiration.toISOString(),
     });
   }
 
+  function onDone() {
+    onDismiss?.();
+
+    setTimeout(() => {
+      setNewApiToken(undefined);
+      setNewApiTokenExpiry(undefined);
+    }, 300);
+  }
+
   return (
-    <div className="modal w-[400px]">
-      <div className="modal-header">
-        <div className="title">
-          {newApiToken ? (
-            <span>{t('generated_new_api_token')}</span>
-          ) : (
-            <span>{t('create_api_token_modal_title')}</span>
-          )}
-        </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
-      </div>
+    <div className="modal modal-md modal-api-token-create">
+      <ModalHeader caption={newApiToken ? 'generated_new_api_token' : 'create_api_token_modal_title'} onDismiss={onDismiss} />
       <div className="modal-content">
         {newApiToken ? (
           <div>
@@ -84,8 +77,8 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> 
               <Trans i18nKey="api_token_token_created_about_copy" />
             </div>
 
-            <div className="border-secondary border rounded-md px-3 py-2 my-4 flex">
-              <input className="w-full outline-none" readOnly value={newApiToken} />
+            <div className="new-token">
+              <input className="" readOnly value={newApiToken} />
 
               <BtnCopy className="p-0 ml-4" text={newApiToken} />
             </div>
@@ -99,19 +92,7 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> 
               />
             </div>
 
-            <button
-              type="button"
-              className="btn btn-accent w-full mt-6"
-              onClick={() => {
-                onDismiss?.();
-                onSuccess?.();
-
-                setTimeout(() => {
-                  setNewApiToken(undefined);
-                  setNewApiTokenExpiry(undefined);
-                }, 300);
-              }}
-            >
+            <button type="button" className="btn btn-accent w-full mt-6" onClick={onDone}>
               <span>{t('done')}</span>
             </button>
           </div>
@@ -148,7 +129,7 @@ const ModalContent: FunctionComponent<Omit<ModalApiTokenCreateProps, 'isOpen'>> 
                 <span>{t('create')}</span>
               </button>
               {error ? (
-                <div className="text-red-500 text-[12px] leading-[14px] mt-2 px-1">
+                <div className="error-message">
                   {t(error.message)}
                 </div>
               ) : null}

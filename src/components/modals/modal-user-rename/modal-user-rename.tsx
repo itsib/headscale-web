@@ -1,15 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchFn } from '@app-utils/query-fn';
 import { User } from '@app-types';
 import { FunctionComponent } from 'preact';
+import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 
 export interface ModalUserRenameProps extends ModalProps {
   user?: User | null;
-  onSuccess: () => void;
 }
 
 export const ModalUserRename: FunctionComponent<ModalUserRenameProps> = ({
@@ -27,8 +27,9 @@ export const ModalUserRename: FunctionComponent<ModalUserRenameProps> = ({
 
 const ModalContent: FunctionComponent<
   Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: User }
-> = ({ onDismiss, onSuccess, user }) => {
+> = ({ onDismiss, user }) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const { handleSubmit, register, formState } = useForm<{ name: string }>({
     defaultValues: {
@@ -45,8 +46,8 @@ const ModalContent: FunctionComponent<
       });
       return data.user;
     },
-    onSuccess: () => {
-      onSuccess();
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['/api/v1/user', 'GET'] });
       onDismiss();
     },
   });
@@ -56,13 +57,8 @@ const ModalContent: FunctionComponent<
   }
 
   return (
-    <div className="modal modal-confirmation w-[400px]">
-      <div className="modal-header">
-        <div className="title">
-          <span>{t('renaming_user_modal_title')}</span>
-        </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
-      </div>
+    <div className="modal modal-md">
+      <ModalHeader caption="renaming_user_modal_title" onDismiss={onDismiss} />
       <div className="modal-content">
         <form onSubmit={handleSubmit(submit)}>
           <div className="mb-4">
@@ -83,7 +79,7 @@ const ModalContent: FunctionComponent<
             <span>{t('rename')}</span>
           </button>
           {error ? (
-            <div className="text-red-500 text-[12px] leading-[14px] mt-2 px-1">
+            <div className="error-message">
               {t(error.message)}
             </div>
           ) : null}

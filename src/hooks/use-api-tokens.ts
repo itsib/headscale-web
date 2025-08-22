@@ -1,13 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { ApiToken, QueryResult } from '@app-types';
-import { useCallback } from 'react';
+import type { ApiToken, QueryResult } from '@app-types';
 
-export function useApiTokens(): QueryResult<ApiToken[]> & { refetch: () => void } {
+export function useApiTokens(): QueryResult<ApiToken[]> {
   const {
     data,
     isLoading,
     error,
-    refetch: _refetch,
   } = useQuery<{ apiKeys: ApiToken[] }, Error, ApiToken[]>({
     queryKey: ['/api/v1/apikey', 'GET'],
     select: ({ apiKeys }) => apiKeys,
@@ -15,9 +13,5 @@ export function useApiTokens(): QueryResult<ApiToken[]> & { refetch: () => void 
     refetchInterval: 20_000,
   });
 
-  const refetch = useCallback(() => {
-    _refetch({ cancelRefetch: true }).catch(console.error);
-  }, []);
-
-  return { data, isLoading, error, refetch };
+  return { data, isLoading, error };
 }

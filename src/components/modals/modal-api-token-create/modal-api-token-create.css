@@ -1,0 +1,19 @@
+.modal-api-token-create {
+
+  .modal-content {
+
+    .new-token {
+      margin: 1rem 0;
+      padding: 0.5rem 1rem;
+      border: 1px solid rgb(var(--border-secondary));
+      border-radius: var(--border-radius-md);
+      display: flex;
+
+      input {
+        width: 100%;
+        outline: none;
+        background-color: transparent;
+      }
+    }
+  }
+}

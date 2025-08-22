@@ -1,17 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { email, Input, url } from 'react-just-ui';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchFn } from '@app-utils/query-fn';
 import { User, UserCreateFields } from '@app-types';
 import { FunctionComponent } from 'preact';
+import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 
-export interface ModalUserCreateProps extends ModalProps {
-  onSuccess: () => void;
-}
-
-export const ModalUserCreate: FunctionComponent<ModalUserCreateProps> = ({
+export const ModalUserCreate: FunctionComponent<ModalProps> = ({
   isOpen,
   onDismiss,
   ...props
@@ -23,11 +20,9 @@ export const ModalUserCreate: FunctionComponent<ModalUserCreateProps> = ({
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalUserCreateProps, 'isOpen'>> = ({
-  onDismiss,
-  onSuccess,
-}) => {
+const ModalContent: FunctionComponent<Omit<ModalProps, 'isOpen'>> = ({ onDismiss }) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const { handleSubmit, register, formState } = useForm<UserCreateFields>({
     defaultValues: {
@@ -47,20 +42,15 @@ const ModalContent: FunctionComponent<Omit<ModalUserCreateProps, 'isOpen'>> = ({
       });
       return data.user;
     },
-    onSuccess: () => {
-      onSuccess();
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['/api/v1/user', 'GET'] });
       onDismiss();
     },
   });
 
   return (
-    <div className="modal w-[400px]">
-      <div className="modal-header">
-        <div className="title">
-          <span>{t('creating_user_modal_title')}</span>
-        </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
-      </div>
+    <div className="modal modal-md">
+      <ModalHeader caption="creating_user_modal_title" onDismiss={onDismiss} />
       <div className="modal-content">
         <form onSubmit={handleSubmit(mutate as any)}>
           <div className="mb-4">
@@ -114,7 +104,7 @@ const ModalContent: FunctionComponent<Omit<ModalUserCreateProps, 'isOpen'>> = ({
             <span>{t('create')}</span>
           </button>
           {error ? (
-            <div className="text-red-500 text-[12px] leading-[14px] mt-2 px-1">
+            <div className="error-message">
               {t(error.message)}
             </div>
           ) : null}

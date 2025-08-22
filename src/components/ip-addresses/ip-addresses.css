@@ -1,5 +1,6 @@
 .ip-addresses {
   white-space: nowrap;
+  color: rgb(var(--text-primary));
 }
 
 .address-row {
@@ -8,6 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  color: rgb(var(--text-primary));
 
   &:hover {
     background-color: rgb(var(--bg-secondary) / 0.7);

@@ -1,51 +1,36 @@
-import { useQueries } from '@tanstack/react-query';
-import { AuthKey, AuthKeyWithUser, QueryResult } from '@app-types';
+import { useQuery } from '@tanstack/react-query';
+import type { AuthKey, AuthKeyWithUser, QueryResult } from '@app-types';
 import { useUsers } from './use-users.ts';
-import { useCallback, useMemo } from 'react';
+import { fetchFn } from '@app-utils/query-fn.ts';
 
-export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> & { refetch: () => void } {
+export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> {
   const { data: users, isLoading: isLoading0, error: error0 } = useUsers();
 
-  const queries = useMemo(() => {
-    if (!users) {
-      return [];
-    }
-    return users.map((user) => ({
-      queryKey: [`/api/v1/preauthkey?user=${user.id}`],
-      select: (data: { preAuthKeys: AuthKey[] }) =>
-        data?.preAuthKeys?.map((key) => ({ ...key, user })),
-    }));
-  }, [users]);
-
   const {
-    data,
-    isLoading: isLoading1,
+    data: authKeys,
     error: error1,
-    refetch: _refetch,
-  } = useQueries({
-    queries,
-    combine: (results) => {
-      return {
-        data: results.flatMap((result) => result.data as any as AuthKeyWithUser[]),
-        isLoading: results.some((result) => result.isLoading),
-        error: results.find((result) => !!result.error)?.error, // results
-        refetch: async () => {
-          return await Promise.all(
-            results.map((result) => result.refetch({ cancelRefetch: true }))
-          );
-        },
-      };
+    isLoading: isLoading1,
+  } = useQuery({
+    queryKey: ['/api/v1/preauthkey'],
+    async queryFn({ signal }) {
+      const promises = new Array<Promise<AuthKeyWithUser[]>>(users!.length);
+
+      for (let i = 0; i < users!.length; i++) {
+        promises[i] = fetchFn<{ preAuthKeys: AuthKey[] }>(`/api/v1/preauthkey?user=${users![i].id}`, { signal })
+          .then(result => {
+            return result?.preAuthKeys?.map((key) => ({ ...key, user: users![i] }));
+          })
+          .catch(() => []);
+      }
+
+      return (await Promise.all(promises)).flat();
     },
+    enabled: !!users,
   });
 
-  const refetch = useCallback(() => {
-    _refetch().catch(console.error);
-  }, []);
-
   return {
-    data,
+    data: authKeys,
     isLoading: isLoading0 || isLoading1,
     error: error0 || error1,
-    refetch,
   };
 }

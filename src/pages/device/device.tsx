@@ -2,7 +2,6 @@ import type { FunctionComponent } from 'preact';
 import { useState } from 'preact/hooks';
 import { useRoute, useLocation } from 'preact-iso';
 import { useDevice } from '@app-hooks/use-device.ts';
-import { useLog } from '@app-hooks/use-log.ts';
 import { useTranslation } from 'react-i18next';
 import { DeviceLoading } from '@app-components/skeleton/device-loading';
 import { PageCaption } from '@app-components/page-caption/page-caption';
@@ -23,8 +22,6 @@ export const DevicePage: FunctionComponent = () => {
 
   const [isOpenExpiry, setIsOpenExpiry] = useState<boolean>(false);
   const [isOpenRemove, setIsOpenRemove] = useState<boolean>(false);
-
-  useLog({ device });
 
   return (
     <>

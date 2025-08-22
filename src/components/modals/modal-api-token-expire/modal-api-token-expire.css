@@ -1,0 +1,13 @@
+.modal-api-token-expire {
+  width: 400px;
+
+  .modal-content {
+
+    .token-info {
+      display: grid;
+      grid-template-columns: 0.4fr 1fr;
+      text-align: start;
+      row-gap: 0.5rem;
+    }
+  }
+}

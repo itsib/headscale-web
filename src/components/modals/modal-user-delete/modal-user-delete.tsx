@@ -1,14 +1,14 @@
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
 import { User } from '@app-types';
 import { fetchFn } from '@app-utils/query-fn.ts';
 import { FunctionComponent } from 'preact';
+import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 
 export interface ModalUserDeleteProps extends ModalProps {
   user?: User | null;
-  onSuccess: () => void;
 }
 
 export const ModalUserDelete: FunctionComponent<ModalUserDeleteProps> = ({
@@ -26,8 +26,9 @@ export const ModalUserDelete: FunctionComponent<ModalUserDeleteProps> = ({
 
 const ModalContent: FunctionComponent<
   Omit<ModalUserDeleteProps, 'isOpen' | 'user'> & { user: User }
-> = ({ onDismiss, onSuccess, user }) => {
+> = ({ onDismiss, user }) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const { mutate, isPending, error } = useMutation({
     async mutationFn(name: string) {
@@ -36,38 +37,33 @@ const ModalContent: FunctionComponent<
       });
       return data.user;
     },
-    onSuccess: () => {
-      onSuccess();
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['/api/v1/user', 'GET'] });
       onDismiss();
     },
   });
 
   return (
-    <div className="modal modal-confirmation w-[400px]">
-      <div className="modal-header">
-        <div className="title">
-          <span>{t('deleting_user_modal_title')}</span>
-        </div>
-        <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
-      </div>
+    <div className="modal modal-md">
+      <ModalHeader caption="deleting_user_modal_title" onDismiss={onDismiss} />
       <div className="modal-content">
         <div className="pt-2 pb-4">
-          <div className="grid grid-cols-[min-content_minmax(0,1fr)] mb-4 gap-y-1 gap-x-4">
-            <div className="text-secondary text-right font-light text-base">ID:</div>
+          <div className="info-rows">
+            <div className="property">ID:</div>
             <div>{user.id}</div>
-            <div className="text-secondary text-right font-light text-base">
+            <div className="property">
               <Trans i18nKey="login" />:
             </div>
             <div>{user.name}</div>
-            <div className="text-secondary text-right font-light text-base">
+            <div className="property">
               <Trans i18nKey="name" />:
             </div>
             <div>{user.displayName}</div>
-            <div className="text-secondary text-right font-light text-base">
+            <div className="property">
               <Trans i18nKey="email" />:
             </div>
             <div>{user.email}</div>
-            <div className="text-secondary text-right font-light text-base">
+            <div className="property">
               <Trans i18nKey="joined" />:
             </div>
             <div>
@@ -76,10 +72,10 @@ const ModalContent: FunctionComponent<
             </div>
           </div>
 
-          <hr className="border-t-primary mb-3" />
+          <hr />
 
-          <div className="text-start text-secondary">
-            <Trans i18nKey="deleting_user_modal_summary" values={{ name: user.name }} />
+          <div className="summary">
+            <Trans i18nKey="deleting_user_modal_summary" values={{ name: user.name || user.displayName || user.email }} />
           </div>
         </div>
         <div>
@@ -93,7 +89,7 @@ const ModalContent: FunctionComponent<
           </button>
 
           {error ? (
-            <div className="text-red-500 text-[12px] leading-[14px] mt-2">{t(error.message)}</div>
+            <div className="error-message">{t(error.message)}</div>
           ) : null}
         </div>
       </div>
