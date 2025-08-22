@@ -16,8 +16,11 @@ export function useAuthKeys(): QueryResult<AuthKeyWithUser[]> {
       const promises = new Array<Promise<AuthKeyWithUser[]>>(users!.length);
 
       for (let i = 0; i < users!.length; i++) {
-        promises[i] = fetchFn<{ preAuthKeys: AuthKey[] }>(`/api/v1/preauthkey?user=${users![i].id}`, { signal })
-          .then(result => {
+        promises[i] = fetchFn<{ preAuthKeys: AuthKey[] }>(
+          `/api/v1/preauthkey?user=${users![i].id}`,
+          { signal }
+        )
+          .then((result) => {
             return result?.preAuthKeys?.map((key) => ({ ...key, user: users![i] }));
           })
           .catch(() => []);

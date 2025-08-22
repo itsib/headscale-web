@@ -39,7 +39,7 @@ const ModalContent: FunctionComponent<
       return data.node;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['/api/v1/node', 'GET'] })
+      await queryClient.invalidateQueries({ queryKey: ['/api/v1/node', 'GET'] });
       onSuccess();
       onDismiss();
     },

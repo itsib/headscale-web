@@ -380,7 +380,6 @@ html.dark {
 
 /* Sizes */
 @layer components {
-
   .w-full {
     width: 100%;
   }
@@ -633,7 +632,6 @@ html.dark {
     overflow: visible !important;
 
     .modal-content {
-
       .info-rows {
         margin-bottom: 1rem;
         font-size: 1rem;
@@ -656,7 +654,7 @@ html.dark {
       }
 
       .error-message {
-        margin: 0.5rem 0.25rem 0 ;
+        margin: 0.5rem 0.25rem 0;
         color: rgb(var(--error));
         font-size: 12px;
         line-height: 14px;

@@ -69,7 +69,10 @@ const ModalContent: FunctionComponent<Omit<ModalProps, 'isOpen'>> = ({ onDismiss
 
   return (
     <div className="modal modal-md modal-api-token-create">
-      <ModalHeader caption={newApiToken ? 'generated_new_api_token' : 'create_api_token_modal_title'} onDismiss={onDismiss} />
+      <ModalHeader
+        caption={newApiToken ? 'generated_new_api_token' : 'create_api_token_modal_title'}
+        onDismiss={onDismiss}
+      />
       <div className="modal-content">
         {newApiToken ? (
           <div>
@@ -128,11 +131,7 @@ const ModalContent: FunctionComponent<Omit<ModalProps, 'isOpen'>> = ({ onDismiss
               <button type="submit" className="btn btn-accent w-full" data-loading={isPending}>
                 <span>{t('create')}</span>
               </button>
-              {error ? (
-                <div className="error-message">
-                  {t(error.message)}
-                </div>
-              ) : null}
+              {error ? <div className="error-message">{t(error.message)}</div> : null}
             </div>
           </form>
         )}

@@ -75,7 +75,10 @@ const ModalContent: FunctionComponent<
           <hr />
 
           <div className="summary">
-            <Trans i18nKey="deleting_user_modal_summary" values={{ name: user.name || user.displayName || user.email }} />
+            <Trans
+              i18nKey="deleting_user_modal_summary"
+              values={{ name: user.name || user.displayName || user.email }}
+            />
           </div>
         </div>
         <div>
@@ -88,9 +91,7 @@ const ModalContent: FunctionComponent<
             <span>{t('delete')}</span>
           </button>
 
-          {error ? (
-            <div className="error-message">{t(error.message)}</div>
-          ) : null}
+          {error ? <div className="error-message">{t(error.message)}</div> : null}
         </div>
       </div>
     </div>

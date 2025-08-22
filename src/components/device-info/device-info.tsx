@@ -30,4 +30,4 @@ export const DeviceInfo: FunctionComponent<DeviceInfoProps> = ({ device }) => {
       </div>
     </div>
   ) : null;
-}
+};

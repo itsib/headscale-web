@@ -78,11 +78,7 @@ const ModalContent: FunctionComponent<
           <button type="submit" className="btn btn-accent w-full" data-loading={isPending}>
             <span>{t('rename')}</span>
           </button>
-          {error ? (
-            <div className="error-message">
-              {t(error.message)}
-            </div>
-          ) : null}
+          {error ? <div className="error-message">{t(error.message)}</div> : null}
         </form>
       </div>
     </div>

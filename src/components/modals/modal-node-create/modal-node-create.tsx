@@ -108,7 +108,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
             <div className="border border-secondary rounded py-2 pl-3 pr-1 my-1 relative flex justify-between items-center">
               <span>tailscale up --login-server {url}</span>
 
-              <div className="" >
+              <div className="">
                 <BtnCopy text={`tailscale up --login-server ${url}`} className="" />
               </div>
             </div>
@@ -119,11 +119,7 @@ const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = 
             <button type="submit" className="btn btn-accent w-full" data-loading={isPending}>
               <span>{t('create')}</span>
             </button>
-            {error ? (
-              <div className="error-message">
-                {t(error.message)}
-              </div>
-            ) : null}
+            {error ? <div className="error-message">{t(error.message)}</div> : null}
           </div>
         </form>
       </div>

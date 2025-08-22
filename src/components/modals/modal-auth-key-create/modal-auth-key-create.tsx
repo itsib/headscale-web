@@ -88,7 +88,10 @@ const ModalContent: FunctionComponent<Omit<ModalProps, 'isOpen'>> = ({ onDismiss
 
   return (
     <div className="modal modal-md">
-      <ModalHeader caption={newAuthKey ? 'generated_new_auth_key' : 'generate_auth_key_modal'} onDismiss={onDismiss} />
+      <ModalHeader
+        caption={newAuthKey ? 'generated_new_auth_key' : 'generate_auth_key_modal'}
+        onDismiss={onDismiss}
+      />
       <div className="modal-content">
         {newAuthKey ? (
           <div>
@@ -205,11 +208,7 @@ const ModalContent: FunctionComponent<Omit<ModalProps, 'isOpen'>> = ({ onDismiss
               <button type="submit" className="btn btn-accent w-full" data-loading={isPending}>
                 <span>{t('create')}</span>
               </button>
-              {error ? (
-                <div className="error-message">
-                  {t(error.message)}
-                </div>
-              ) : null}
+              {error ? <div className="error-message">{t(error.message)}</div> : null}
             </div>
           </form>
         )}

@@ -67,7 +67,9 @@ const ModalContent: FunctionComponent<
               <Trans i18nKey="user_name" />
               :&nbsp;
             </div>
-            <div className="truncate text-primary self-center">{authKey.user.name || authKey.user.displayName || authKey.user.email}</div>
+            <div className="truncate text-primary self-center">
+              {authKey.user.name || authKey.user.displayName || authKey.user.email}
+            </div>
           </div>
         </div>
         <div>
@@ -85,9 +87,7 @@ const ModalContent: FunctionComponent<
             <span>{t('expiry')}</span>
           </button>
 
-          {error ? (
-            <div className="error-message">{t(error.message)}</div>
-          ) : null}
+          {error ? <div className="error-message">{t(error.message)}</div> : null}
         </div>
       </div>
     </div>

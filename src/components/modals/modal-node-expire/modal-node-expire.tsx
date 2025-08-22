@@ -40,8 +40,8 @@ const ModalContent: FunctionComponent<
       return data.node;
     },
     onSuccess: async (_, nodeId) => {
-      await queryClient.invalidateQueries({ queryKey: [`/api/v1/node/${nodeId}`] })
-      await queryClient.invalidateQueries({ queryKey: ['/api/v1/node', 'GET'] })
+      await queryClient.invalidateQueries({ queryKey: [`/api/v1/node/${nodeId}`] });
+      await queryClient.invalidateQueries({ queryKey: ['/api/v1/node', 'GET'] });
       onSuccess();
       onDismiss();
     },
@@ -71,9 +71,7 @@ const ModalContent: FunctionComponent<
             <span>{t('expiry')}</span>
           </button>
 
-          {error ? (
-            <div className="error-message">{t(error.message)}</div>
-          ) : null}
+          {error ? <div className="error-message">{t(error.message)}</div> : null}
         </div>
       </div>
     </div>

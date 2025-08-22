@@ -8,11 +8,7 @@ import { User, UserCreateFields } from '@app-types';
 import { FunctionComponent } from 'preact';
 import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 
-export const ModalUserCreate: FunctionComponent<ModalProps> = ({
-  isOpen,
-  onDismiss,
-  ...props
-}) => {
+export const ModalUserCreate: FunctionComponent<ModalProps> = ({ isOpen, onDismiss, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <ModalContent onDismiss={onDismiss} {...props} />
@@ -103,11 +99,7 @@ const ModalContent: FunctionComponent<Omit<ModalProps, 'isOpen'>> = ({ onDismiss
           <button type="submit" className="btn btn-accent w-full" data-loading={isPending}>
             <span>{t('create')}</span>
           </button>
-          {error ? (
-            <div className="error-message">
-              {t(error.message)}
-            </div>
-          ) : null}
+          {error ? <div className="error-message">{t(error.message)}</div> : null}
         </form>
       </div>
     </div>

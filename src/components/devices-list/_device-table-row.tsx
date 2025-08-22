@@ -66,7 +66,7 @@ export const DeviceTableRow = memo(function DeviceTableRow(props: Device) {
           <>-</>
         )}
       </td>
-      <td onMouseDown={e => e.stopPropagation()}>
+      <td onMouseDown={(e) => e.stopPropagation()}>
         <IpAddresses addresses={ipAddresses} />
       </td>
       <td>

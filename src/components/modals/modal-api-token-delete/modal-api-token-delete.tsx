@@ -90,9 +90,7 @@ const ModalContent: FunctionComponent<
             <span>{t('delete')}</span>
           </button>
 
-          {error ? (
-            <div class="error-message">{t(error.message)}</div>
-          ) : null}
+          {error ? <div class="error-message">{t(error.message)}</div> : null}
         </div>
       </div>
     </div>

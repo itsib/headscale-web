@@ -86,8 +86,7 @@ export const ApiTokens = () => {
 
       <ModalApiTokenCreate isOpen={opened === 'create'} onDismiss={onDismiss} />
       <ModalApiTokenExpire isOpen={opened === 'expire'} apiToken={selected} onDismiss={onDismiss} />
-      <ModalApiTokenDelete isOpen={opened === 'delete'} apiToken={selected} onDismiss={onDismiss}
-      />
+      <ModalApiTokenDelete isOpen={opened === 'delete'} apiToken={selected} onDismiss={onDismiss} />
     </>
   );
 };

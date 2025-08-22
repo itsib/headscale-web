@@ -2,7 +2,6 @@
   width: 400px;
 
   .modal-content {
-
     .token-info {
       display: grid;
       grid-template-columns: 0.4fr 1fr;

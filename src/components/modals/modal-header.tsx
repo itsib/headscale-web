@@ -17,4 +17,4 @@ export const ModalHeader: FunctionComponent<ModalHeaderProps> = ({ caption, onDi
       <button type="button" className="btn btn-close" onClick={() => onDismiss()} />
     </div>
   );
-}
+};
