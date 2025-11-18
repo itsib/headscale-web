@@ -168,9 +168,7 @@
             }
           }
         },
-        "tags": [
-          "HeadscaleService"
-        ]
+        "tags": ["HeadscaleService"]
       }
     },
     "/api/v1/node": {
