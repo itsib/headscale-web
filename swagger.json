@@ -150,6 +150,29 @@
         "tags": ["HeadscaleService"]
       }
     },
+    "/api/v1/health": {
+      "get": {
+        "summary": "--- Health start ---",
+        "operationId": "HeadscaleService_Health",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1HealthResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "HeadscaleService"
+        ]
+      }
+    },
     "/api/v1/node": {
       "get": {
         "operationId": "HeadscaleService_ListNodes",
@@ -357,6 +380,13 @@
             "required": true,
             "type": "string",
             "format": "uint64"
+          },
+          {
+            "name": "expiry",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
           }
         ],
         "tags": ["HeadscaleService"]
@@ -1001,6 +1031,14 @@
         "updatedAt": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "v1HealthResponse": {
+      "type": "object",
+      "properties": {
+        "databaseConnectivity": {
+          "type": "boolean"
         }
       }
     },
