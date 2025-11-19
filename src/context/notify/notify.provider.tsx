@@ -1,5 +1,5 @@
-import { FunctionComponent } from 'preact';
-import { useCallback, useState } from 'preact/hooks';
+import type { FC, PropsWithChildren } from 'react';
+import { useCallback, useState } from 'react';
 import { NotifyContext } from '@app-context/notify';
 import { useIsFetching } from '@tanstack/react-query';
 import { ToastFetching } from '@app-components/toasts/toast-fetching';
@@ -10,7 +10,7 @@ import { Toaster } from '@app-components/toasts/toaster.tsx';
 const SHOW_TIMEOUT = 4000;
 const MAX_COUNT = 3;
 
-export const NotifyProvider: FunctionComponent = ({ children }) => {
+export const NotifyProvider: FC<PropsWithChildren> = ({ children }) => {
   const isFetching = useIsFetching();
   const [notifies, setNotifies] = useState<NotifyInstance[]>([]);
 

@@ -4,6 +4,7 @@ export * from './common/list-layout';
 export * from './common/size';
 export * from './common/notify';
 export * from './common/icon-base-props';
+export * from './common/router-context';
 
 export * from './tokens/auth-key';
 export * from './tokens/api-token';

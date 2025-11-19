@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { ContextMenuBase, UserAction, User } from '@app-types';
 import { useTranslation } from 'react-i18next';
 import { UserTableRow } from './_user-table-row';
@@ -11,12 +11,7 @@ export interface UsersListProps extends ContextMenuBase<UserAction> {
   onChange: (device: User) => void;
 }
 
-export const UsersList: FunctionComponent<UsersListProps> = ({
-  users,
-  layout,
-  onChange,
-  onAction,
-}) => {
+export const UsersList: FC<UsersListProps> = ({ users, layout, onChange, onAction }) => {
   const { t } = useTranslation();
 
   return (

@@ -1,5 +1,5 @@
 import { Trans } from 'react-i18next';
-import { memo } from 'preact/compat';
+import { memo } from 'react';
 import { ContextMenuBase, UserAction } from '@app-types';
 import { BtnContextMenu, PopupPlacement } from '@app-components/btn-context-menu';
 

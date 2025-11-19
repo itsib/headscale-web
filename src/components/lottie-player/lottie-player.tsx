@@ -1,4 +1,4 @@
-import { Component, createRef } from 'preact';
+import { Component, createRef } from 'react';
 import type {
   DotLottie,
   Config,
@@ -121,8 +121,8 @@ export class LottiePlayer extends Component<LottiePlayerProps> {
     this.player = null;
   }
 
-  render(props: LottiePlayerProps) {
-    const { width: _width, height: _height, ..._props } = props;
+  render() {
+    const { width: _width, height: _height, ..._props } = this.props;
     return <canvas ref={this.canvas} width={this.width} height={this.height} {..._props} />;
   }
 }

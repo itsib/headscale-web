@@ -1,4 +1,10 @@
-import { Component, createRef, VNode } from 'preact';
+import {
+  Component,
+  createRef,
+  type PropsWithChildren,
+  type InputEvent,
+  type KeyboardEvent,
+} from 'react';
 import { Gutters } from './gutters';
 import { TokenizedCode } from './tokenized-code.ts';
 import { HistoryControl } from '@app-utils/history-control.ts';
@@ -14,7 +20,7 @@ export interface JsonEditorState {
   code: string;
 }
 
-export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
+export class JsonEditor extends Component<PropsWithChildren<JsonEditorProps>, JsonEditorState> {
   editable = createRef<HTMLDivElement>();
 
   history: HistoryControl;
@@ -40,7 +46,6 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
     const sub0 = this.history.sub<{ value: string }>('change', ({ value }) => {
       this.setState({ code: value });
       this.isOnChange = true;
-      this.props.value = value;
       this.props.onChange?.(value);
     });
 
@@ -70,11 +75,11 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
     if (this.isLocked) return;
     event.preventDefault();
 
-    const range = event.getTargetRanges()[0];
+    const range = (event as any).getTargetRanges()[0];
     const data = event.data;
     const { selectionStart, selectionEnd } = this._getSelection(range);
 
-    switch (event.inputType) {
+    switch ((event as any).inputType) {
       // Input text
       case 'insertText': {
         this.history.insertText(selectionStart, selectionEnd, data || '');
@@ -102,7 +107,7 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
       }
       // Ctrl + V
       case 'insertFromPaste': {
-        const text = event.dataTransfer?.getData('text');
+        const text = (event as any).dataTransfer?.getData('text');
         if (text) {
           this.history.insertText(selectionStart, selectionEnd, text);
         }
@@ -113,7 +118,7 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
         break;
       }
       case 'insertFromDrop': {
-        const text = event.dataTransfer?.getData('text');
+        const text = (event as any).dataTransfer?.getData('text');
         if (text) {
           const startCharCode = text.codePointAt(0);
           if (startCharCode === 10) {
@@ -128,7 +133,7 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
         break;
       }
       default:
-        console.log(event.inputType);
+        console.log((event as any).inputType);
     }
   }
 
@@ -178,7 +183,7 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
     queueMicrotask(() => this._setCursorPosition(position));
   }
 
-  render(): VNode {
+  render() {
     const tokenized = TokenizedCode.tokenize(this.history.value);
     this.tabSize = tokenized.getTabSize();
 
@@ -188,12 +193,11 @@ export class JsonEditor extends Component<JsonEditorProps, JsonEditorState> {
         <Gutters length={lines.length} />
         <div className="cm-scroller">
           <div
-            spellcheck={false}
-            autocorrect="off"
-            autocapitalize="off"
-            translate={false}
-            contenteditable={true}
-            class="cm-editable-area"
+            autoCorrect="off"
+            autoCapitalize="off"
+            translate="no"
+            contentEditable
+            className="cm-editable-area"
             style={{ tabSize: this.tabSize }}
             role="textbox"
             aria-multiline="true"

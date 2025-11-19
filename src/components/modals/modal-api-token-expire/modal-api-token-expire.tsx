@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ApiToken } from '@app-types';
 import { fetchFn } from '@app-utils/query-fn.ts';
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 import './modal-api-token-expire.css';
 
@@ -11,7 +11,7 @@ export interface ModalApiTokenExpireProps extends ModalProps {
   apiToken?: ApiToken | null;
 }
 
-export const ModalApiTokenExpire: FunctionComponent<ModalApiTokenExpireProps> = ({
+export const ModalApiTokenExpire: FC<ModalApiTokenExpireProps> = ({
   isOpen,
   onDismiss,
   apiToken,
@@ -24,7 +24,7 @@ export const ModalApiTokenExpire: FunctionComponent<ModalApiTokenExpireProps> = 
   );
 };
 
-const ModalContent: FunctionComponent<
+const ModalContent: FC<
   Omit<ModalApiTokenExpireProps, 'isOpen' | 'apiToken'> & { apiToken: ApiToken }
 > = (props) => {
   const { onDismiss, apiToken } = props;

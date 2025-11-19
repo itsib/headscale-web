@@ -1,4 +1,5 @@
-import { useMemo } from 'preact/hooks';
+import { useMemo } from 'react';
+import type { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input, Select, SelectOption } from 'react-just-ui';
@@ -6,11 +7,10 @@ import { useMutation } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchFn } from '@app-utils/query-fn.ts';
 import { useUsers } from '@app-hooks/use-users';
-import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
-import { FunctionComponent } from 'preact';
 import { Storage } from '@app-utils/storage.ts';
 import { UserPhoto } from '@app-components/user-info/user-photo.tsx';
 import { ModalHeader } from '@app-components/modals/modal-header.tsx';
+import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
 
 interface FormFields {
   nodekey: string;
@@ -21,11 +21,7 @@ export interface ModalNodeRegisterProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalNodeCreate: FunctionComponent<ModalNodeRegisterProps> = ({
-  isOpen,
-  onDismiss,
-  ...props
-}) => {
+export const ModalNodeCreate: FC<ModalNodeRegisterProps> = ({ isOpen, onDismiss, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <ModalContent onDismiss={onDismiss} {...props} />
@@ -33,13 +29,10 @@ export const ModalNodeCreate: FunctionComponent<ModalNodeRegisterProps> = ({
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({
-  onDismiss,
-  onSuccess,
-}) => {
+const ModalContent: FC<Omit<ModalNodeRegisterProps, 'isOpen'>> = ({ onDismiss, onSuccess }) => {
   const { t } = useTranslation();
   const { data: users } = useUsers();
-  const url = useMemo(() => Storage.get().getItem('main-url'), []);
+  const url = useMemo(() => Storage.get().getItem<string>('main-url'), []);
 
   const options: SelectOption[] = useMemo(() => {
     if (!users) {

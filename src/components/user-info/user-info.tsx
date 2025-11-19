@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { UserPhoto, UserPhotoProps } from '@app-components/user-info/user-photo.tsx';
 import { Size } from '@app-types';
 import { cn } from 'react-just-ui/utils/cn';
@@ -14,7 +14,7 @@ export interface UserInfoProps extends UserPhotoProps {
   className?: string;
 }
 
-export const UserInfo: FunctionComponent<UserInfoProps> = ({
+export const UserInfo: FC<UserInfoProps> = ({
   id,
   name,
   email,

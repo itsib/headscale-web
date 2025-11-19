@@ -1,5 +1,5 @@
-import { FunctionComponent } from 'preact';
-import { useMemo } from 'preact/hooks';
+import type { FC } from 'react';
+import { useMemo } from 'react';
 import { parseMetrics } from '@app-utils/parse-metrics';
 import { useTranslation } from 'react-i18next';
 import { MetricsRow } from '@app-components/metrics-table/_metrics-row';
@@ -9,7 +9,7 @@ export interface MetricsTableProps {
   metrics: string;
 }
 
-export const MetricsTable: FunctionComponent<MetricsTableProps> = ({ metrics: rawMetrics }) => {
+export const MetricsTable: FC<MetricsTableProps> = ({ metrics: rawMetrics }) => {
   const { t } = useTranslation();
   const metrics = useMemo(() => (rawMetrics ? parseMetrics(rawMetrics) : {}), [rawMetrics]);
 

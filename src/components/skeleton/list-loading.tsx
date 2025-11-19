@@ -1,8 +1,8 @@
-import type { FunctionComponent } from 'preact';
-import { useMemo } from 'preact/hooks';
+import type { FC } from 'react';
+import { useMemo } from 'react';
 import './list-loading.css';
 
-export const ListLoading: FunctionComponent<{ rows?: number }> = ({ rows = 4 }) => {
+export const ListLoading: FC<{ rows?: number }> = ({ rows = 4 }) => {
   const items = useMemo(() => new Array(rows).fill(0), [rows]);
 
   return (

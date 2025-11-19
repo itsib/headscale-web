@@ -1,4 +1,4 @@
-import { createContext } from 'preact';
+import { createContext } from 'react';
 import { Notify, NotifyInstance } from '@app-types';
 
 export interface INotifyContext {

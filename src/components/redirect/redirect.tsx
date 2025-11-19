@@ -1,15 +1,15 @@
-import { useLocation } from 'preact-iso/router';
-import { RenderableProps } from 'preact';
-import { useEffect } from 'preact/hooks';
+import { useNavigate } from '@tanstack/react-router';
+import type { FC } from 'react';
+import { useEffect } from 'react';
 
-export const Redirect = (props: RenderableProps<{ to: string }>) => {
-  const { path, route } = useLocation();
+export const Redirect: FC<{ to: string }> = (props) => {
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!props.to || props.to === path) return;
+    if (!props.to) return;
 
-    route(props.to);
-  }, [path, props.to]);
+    navigate({ to: props.to });
+  }, [props.to]);
 
   return null;
 };

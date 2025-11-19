@@ -1,11 +1,12 @@
-import { memo } from 'preact/compat';
-import { useMemo } from 'preact/hooks';
+import { memo } from 'react';
+import { useMemo } from 'react';
 import { Device } from '@app-types';
 import { Trans, useTranslation } from 'react-i18next';
 import { FormattedDuration } from '@app-components/formatters/formatted-duration';
 import { Marker } from '@app-components/marker/marker';
 import { AclTag } from '@app-components/acl-tag/acl-tag';
 import './_device-card.css';
+import { Link } from '@tanstack/react-router';
 
 export const DeviceCard = memo(function DeviceItem(props: Device) {
   const { id, name, givenName, expiry, ipAddresses, forcedTags, online, user } = props;
@@ -15,7 +16,12 @@ export const DeviceCard = memo(function DeviceItem(props: Device) {
   const expiryDisabled = expiryDate.getFullYear() <= 1970;
 
   return (
-    <a href={`/device/${id}`} className="device-card" aria-label="Open device full info">
+    <Link
+      to="/devices/$deviceId"
+      params={{ deviceId: id }}
+      className="device-card"
+      aria-label="Open device full info"
+    >
       <div className="main-info">
         <div className="icon-wrapper">
           {online ? <Marker isActive className="marker" size={16} /> : null}
@@ -64,6 +70,6 @@ export const DeviceCard = memo(function DeviceItem(props: Device) {
           ))}
         </div>
       ) : null}
-    </a>
+    </Link>
   );
 });

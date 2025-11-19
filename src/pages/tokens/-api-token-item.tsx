@@ -4,7 +4,7 @@ import { Trans } from 'react-i18next';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { FormattedDuration } from '@app-components/formatters/formatted-duration';
 import { BtnContextMenu, PopupPlacement } from '@app-components/btn-context-menu';
-import './_api-token-item.css';
+import './-api-token-item.css';
 
 export type ContextAction = 'expire' | 'delete' | 'create';
 
@@ -52,7 +52,7 @@ export const _apiTokenItem = memo(function ApiTokenItem(props: ApiTokenItemProps
       <td className="text-right">
         {lastSeen ? <FormattedDate date={expiration} /> : <div>-</div>}
       </td>
-      <td className="text-right" style="width: 52px;">
+      <td className="text-right" style={{ width: '52px' }}>
         <BtnContextMenu placement={PopupPlacement.BOTTOM}>
           <div className="context-menu-item">
             <button type="button" className="btn-context-menu" onClick={() => onAction('expire')}>

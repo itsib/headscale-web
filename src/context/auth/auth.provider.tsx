@@ -1,5 +1,5 @@
-import { ComponentChildren } from 'preact';
-import { useCallback, useEffect, useState } from 'preact/hooks';
+import { FC, PropsWithChildren } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AuthContext } from '@app-context/auth/auth.context';
 import { ICredentials } from '@app-types';
 import { AuthForm } from '@app-components/auth-form/auth-form';
@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { ToastOfflineManager } from '@app-utils/toast-offline-manager.ts';
 import './auth.provider.css';
 
-export function AuthProvider({ children }: { children?: ComponentChildren }) {
+export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation();
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [prefix, setPrefix] = useState<string>();
@@ -80,4 +80,4 @@ export function AuthProvider({ children }: { children?: ComponentChildren }) {
       <>{children}</>
     </AuthContext.Provider>
   );
-}
+};

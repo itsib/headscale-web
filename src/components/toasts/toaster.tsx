@@ -1,5 +1,5 @@
-import { FunctionComponent } from 'preact';
-import { useState, useCallback, useMemo } from 'preact/hooks';
+import type { FC } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { NotifyInstance } from '@app-types';
 import { Notification } from '@app-components/toasts/notification.tsx';
 import './toaster.css';
@@ -9,7 +9,7 @@ export interface ToasterProps {
   margin: number;
 }
 
-export const Toaster: FunctionComponent<ToasterProps> = ({ notifies, margin = 20 }) => {
+export const Toaster: FC<ToasterProps> = ({ notifies, margin = 20 }) => {
   const [heights, setHeights] = useState<{ [id: string]: number }>({});
 
   const setHeight = useCallback((id: string, height: number | null) => {
@@ -41,7 +41,7 @@ export const Toaster: FunctionComponent<ToasterProps> = ({ notifies, margin = 20
   }, [heights, notifies, margin]);
 
   return (
-    <div class="toaster" style={{ '--notify-margin': `${margin}px` }}>
+    <div className="toaster" style={{ '--notify-margin': `${margin}px` } as any}>
       {notifies.map((notify, index) => {
         return (
           <Notification

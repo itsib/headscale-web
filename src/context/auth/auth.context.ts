@@ -1,4 +1,4 @@
-import { createContext } from 'preact';
+import { createContext } from 'react';
 
 export interface IAuthContext {
   prefix?: string;

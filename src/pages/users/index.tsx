@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'react';
 import { User, UserAction } from '@app-types';
 import { ListLoading } from '@app-components/skeleton/list-loading';
 import { ModalUserCreate } from '@app-components/modals/modal-user-create/modal-user-create';
@@ -11,10 +11,26 @@ import { useBreakPoint } from '@app-hooks/use-break-point';
 import { UsersList } from '@app-components/users-list';
 import { EmptyList } from '@app-components/empty-list/empty-list';
 import { PageCaption } from '@app-components/page-caption/page-caption';
-import './users.css';
+import { createFileRoute } from '@tanstack/react-router';
+import './index.css';
 
-export function UsersPage() {
+const usersQueryOptions = queryOptions<{ users: User[] }, Error, User[]>({
+  queryKey: ['/api/v1/user', 'GET'],
+  select: (data) => data.users,
+  staleTime: 60_000 * 60,
+  refetchInterval: 30_000,
+});
+
+export const Route = createFileRoute('/users/')({
+  loader: ({ context }) => context.client.ensureQueryData(usersQueryOptions),
+  component: RouteComponent,
+  pendingComponent: ListLoading,
+});
+
+function RouteComponent() {
   const { t } = useTranslation();
+
+  const { data: users, refetch, isLoading } = useSuspenseQuery(usersQueryOptions);
 
   const [opened, setOpened] = useState<UserAction | null>(null);
   const [selected, setSelected] = useState<User | null>(null);
@@ -22,17 +38,6 @@ export function UsersPage() {
   const isMobile = useBreakPoint(992);
   const [_isListLayout, setIsListLayout] = useState(true);
   const isListLayout = !isMobile && _isListLayout;
-
-  const {
-    data: users,
-    refetch,
-    isLoading,
-  } = useQuery<{ users: User[] }, Error, User[]>({
-    queryKey: ['/api/v1/user', 'GET'],
-    select: (data) => data.users,
-    staleTime: 60_000 * 60,
-    refetchInterval: 30_000,
-  });
 
   const buttons: ButtonConfig[] = useMemo(() => {
     const buttons = isMobile

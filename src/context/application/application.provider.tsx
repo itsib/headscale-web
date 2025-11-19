@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from 'preact/hooks';
-import { FunctionComponent } from 'preact';
+import { type PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import type { FC } from 'react';
 import { ApplicationContext } from './application.context';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { getActiveTheme, Theme } from '@app-utils/theme';
 
-export const ApplicationProvider: FunctionComponent = ({ children }) => {
+export const ApplicationProvider: FC<PropsWithChildren> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(
     (localStorage.getItem('headscale.theme') as Theme) || 'system'
   );

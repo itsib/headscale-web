@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
+import type { FC } from 'react';
 import './empty-list.css';
-import { FunctionComponent } from 'preact';
 
-export const EmptyList: FunctionComponent<{ message?: string }> = ({ message }) => {
+export const EmptyList: FC<{ message?: string }> = ({ message }) => {
   const { t } = useTranslation();
 
   return (

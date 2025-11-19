@@ -51,8 +51,12 @@ export function AuthForm({ onSuccess }: AuthFormProps) {
   });
   const { errors } = formState;
 
+  function onSubmit(fields: ICredentials) {
+    mutate(fields);
+  }
+
   return (
-    <form className="card auth-form" onSubmit={handleSubmit(mutate)}>
+    <form className="card auth-form" onSubmit={handleSubmit(onSubmit)}>
       <h2 className="mb-4">{t('credentials_form_header_new')}</h2>
 
       <div className="mb-4">

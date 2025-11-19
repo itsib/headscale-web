@@ -1,7 +1,7 @@
-import { FunctionComponent } from 'preact';
+import type { FC, PropsWithChildren } from 'react';
 import { cn } from 'react-just-ui/utils/cn';
 import { BasePopup, PopupPlacement } from '@app-components/popups/base-popup/base-popup.tsx';
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'react';
 import './btn-context-menu.css';
 
 export { PopupPlacement };
@@ -17,7 +17,7 @@ export interface BtnContextMenuProps {
   btnClassName?: string;
 }
 
-export const BtnContextMenu: FunctionComponent<BtnContextMenuProps> = ({
+export const BtnContextMenu: FC<PropsWithChildren<BtnContextMenuProps>> = ({
   btnClassName,
   icon,
   placement,

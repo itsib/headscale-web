@@ -4,14 +4,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
 import { User } from '@app-types';
 import { fetchFn } from '@app-utils/query-fn.ts';
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 
 export interface ModalUserDeleteProps extends ModalProps {
   user?: User | null;
 }
 
-export const ModalUserDelete: FunctionComponent<ModalUserDeleteProps> = ({
+export const ModalUserDelete: FC<ModalUserDeleteProps> = ({
   isOpen,
   onDismiss,
   user,
@@ -24,9 +24,10 @@ export const ModalUserDelete: FunctionComponent<ModalUserDeleteProps> = ({
   );
 };
 
-const ModalContent: FunctionComponent<
-  Omit<ModalUserDeleteProps, 'isOpen' | 'user'> & { user: User }
-> = ({ onDismiss, user }) => {
+const ModalContent: FC<Omit<ModalUserDeleteProps, 'isOpen' | 'user'> & { user: User }> = ({
+  onDismiss,
+  user,
+}) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 

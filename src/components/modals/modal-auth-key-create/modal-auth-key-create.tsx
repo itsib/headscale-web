@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'preact/hooks';
+import { useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input, Select, SelectOption, Switch } from 'react-just-ui';
@@ -9,7 +9,7 @@ import { useUsers } from '@app-hooks/use-users.ts';
 import { AuthKey } from '@app-types';
 import { BtnCopy } from '../../btn-copy/btn-copy.tsx';
 import { FormattedDate } from '../../formatters/formatted-date.tsx';
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { UserPhoto } from '@app-components/user-info/user-photo.tsx';
 import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 
@@ -21,11 +21,7 @@ interface FormFields {
   aclTags: string[];
 }
 
-export const ModalAuthKeyCreate: FunctionComponent<ModalProps> = ({
-  isOpen,
-  onDismiss,
-  ...props
-}) => {
+export const ModalAuthKeyCreate: FC<ModalProps> = ({ isOpen, onDismiss, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <ModalContent onDismiss={onDismiss} {...props} />
@@ -33,7 +29,7 @@ export const ModalAuthKeyCreate: FunctionComponent<ModalProps> = ({
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalProps, 'isOpen'>> = ({ onDismiss }) => {
+const ModalContent: FC<Omit<ModalProps, 'isOpen'>> = ({ onDismiss }) => {
   const { t } = useTranslation();
   const { data: users } = useUsers();
   const [newAuthKey, setNewAuthKey] = useState<AuthKey | undefined>();
@@ -193,7 +189,10 @@ const ModalContent: FunctionComponent<Omit<ModalProps, 'isOpen'>> = ({ onDismiss
                 label={
                   <>
                     <div className="text-base font-semibold">{t('auth_key_ephemeral_title')}</div>
-                    <div className="text-secondary text-xs break-words" style="max-width: 300px;">
+                    <div
+                      className="text-secondary text-xs break-words"
+                      style={{ maxWidth: '300px' }}
+                    >
                       {t('auth_key_ephemeral_hint')}
                     </div>
                   </>

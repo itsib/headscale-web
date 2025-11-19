@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 
 export interface MarkerProps {
   isActive?: boolean;
@@ -6,7 +6,7 @@ export interface MarkerProps {
   className?: string;
 }
 
-export const Marker: FunctionComponent<MarkerProps> = ({ size = 8, isActive, className }) => (
+export const Marker: FC<MarkerProps> = ({ size = 8, isActive, className }) => (
   <span
     style={{
       width: `${size}px`,

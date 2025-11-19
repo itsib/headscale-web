@@ -29,7 +29,7 @@ export const UserTableRow = memo(function UserItem(props: UserTableRowProps) {
           <img
             src="/images/google-account.svg"
             alt="google"
-            style="height: 32px;"
+            style={{ height: '32px' }}
             className=" inline-block"
           />
         ) : null}
@@ -37,7 +37,7 @@ export const UserTableRow = memo(function UserItem(props: UserTableRowProps) {
       <td>
         <FormattedDate date={createdAt} />
       </td>
-      <td className="text-right" style="width: 52px;">
+      <td className="text-right" style={{ width: '52px' }}>
         <ContextMenu onAction={onAction} />
       </td>
     </tr>

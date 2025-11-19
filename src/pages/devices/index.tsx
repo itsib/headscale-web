@@ -1,17 +1,31 @@
 import { useTranslation } from 'react-i18next';
-import { useMemo, useState, useCallback } from 'preact/hooks';
+import { useCallback, useMemo, useState } from 'react';
 import { Device, ListLayout } from '@app-types';
 import { ModalNodeCreate } from '@app-components/modals/modal-node-create/modal-node-create';
-import { useQuery } from '@tanstack/react-query';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group';
 import { ListLoading } from '@app-components/skeleton/list-loading';
 import { useBreakPoint } from '@app-hooks/use-break-point.ts';
 import { EmptyList } from '@app-components/empty-list/empty-list';
 import { DevicesList } from '@app-components/devices-list';
 import { PageCaption } from '@app-components/page-caption/page-caption.tsx';
-import './devices.css';
+import { createFileRoute } from '@tanstack/react-router';
+import './index.css';
 
-export function DevicesPage() {
+const devicesQueryOptions = queryOptions<{ nodes: Device[] }, Error, Device[]>({
+  queryKey: ['/api/v1/node', 'GET'],
+  select: (data) => data.nodes,
+  staleTime: 60_000 * 60,
+  refetchInterval: 30_000,
+});
+
+export const Route = createFileRoute('/devices/')({
+  loader: ({ context }) => context.client.ensureQueryData(devicesQueryOptions),
+  component: RouteComponent,
+  pendingComponent: ListLoading,
+});
+
+function RouteComponent() {
   const { t } = useTranslation();
   const [isOpened, setIsOpened] = useState(false);
 
@@ -20,16 +34,7 @@ export function DevicesPage() {
   const isTableLayout = !isMobile && _isTableLayout;
   const layout: ListLayout = isTableLayout ? 'table' : 'cards';
 
-  const {
-    data: devices,
-    isLoading,
-    refetch,
-  } = useQuery<{ nodes: Device[] }, Error, Device[]>({
-    queryKey: ['/api/v1/node', 'GET'],
-    select: (data) => data.nodes,
-    staleTime: 60_000 * 60,
-    refetchInterval: 30_001,
-  });
+  const { data: devices, refetch, isLoading } = useSuspenseQuery(devicesQueryOptions);
 
   const buttons: ButtonConfig[] = useMemo(() => {
     const buttons = isMobile
@@ -87,7 +92,7 @@ export function DevicesPage() {
         <EmptyList />
       )}
 
-      <div style="height: 40px;" />
+      <div style={{ height: '40px' }} />
 
       <ModalNodeCreate
         isOpen={isOpened}

@@ -1,6 +1,5 @@
 import { IconBaseProps } from '@app-types';
-import { forwardRef } from 'preact/compat';
-import { ForwardedRef } from 'react';
+import { forwardRef, type ForwardedRef } from 'react';
 
 export const WarningIcon = forwardRef(function WarningIcon(
   props: IconBaseProps,

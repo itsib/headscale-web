@@ -5,10 +5,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchFn } from '@app-utils/query-fn';
 import { User, UserCreateFields } from '@app-types';
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 
-export const ModalUserCreate: FunctionComponent<ModalProps> = ({ isOpen, onDismiss, ...props }) => {
+export const ModalUserCreate: FC<ModalProps> = ({ isOpen, onDismiss, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <ModalContent onDismiss={onDismiss} {...props} />
@@ -16,7 +16,7 @@ export const ModalUserCreate: FunctionComponent<ModalProps> = ({ isOpen, onDismi
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalProps, 'isOpen'>> = ({ onDismiss }) => {
+const ModalContent: FC<Omit<ModalProps, 'isOpen'>> = ({ onDismiss }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 

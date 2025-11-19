@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
-import { FunctionComponent } from 'preact';
-import { createPortal } from 'preact/compat';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import type { FC } from 'react';
+import { createPortal } from 'react-dom';
 import { cn } from 'react-just-ui/utils/cn';
 import './base-popup.css';
 
@@ -36,7 +36,7 @@ export interface BasePopupProps {
   className?: string;
 }
 
-export const BasePopup: FunctionComponent<BasePopupProps> = (props) => {
+export const BasePopup: FC<PropsWithChildren<BasePopupProps>> = (props) => {
   const { open, rect: _rect, placement = PopupPlacement.TOP, margin = 10, className } = props;
   const [animated, setAnimated] = useState(false);
   const [rect, setRect] = useState<DOMRect | undefined>(_rect);
@@ -85,7 +85,7 @@ interface PopupContentProps {
   className?: string;
 }
 
-const PopupContent: FunctionComponent<PopupContentProps> = (props) => {
+const PopupContent: FC<PropsWithChildren<PopupContentProps>> = (props) => {
   const { show, rect, placement = PopupPlacement.TOP, margin, className, children } = props;
   const popupRef = useRef<HTMLDivElement | null>(null);
 

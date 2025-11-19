@@ -1,5 +1,5 @@
-import { FunctionComponent } from 'preact';
-import { useState } from 'preact/hooks';
+import type { FC } from 'react';
+import { useState } from 'react';
 import { cn } from 'react-just-ui/utils/cn';
 import { Size } from '@app-types';
 import './user-photo.css';
@@ -18,7 +18,7 @@ export interface UserPhotoProps {
   className?: string;
 }
 
-export const UserPhoto: FunctionComponent<UserPhotoProps> = (props) => {
+export const UserPhoto: FC<UserPhotoProps> = (props) => {
   const { size = 'md', id, pictureUrl, className } = props;
 
   const [isError, setIsError] = useState(false);
@@ -67,7 +67,7 @@ export const UserPhoto: FunctionComponent<UserPhotoProps> = (props) => {
         >
           <i
             className={`icon icon-avatar-${Number(id) % 10}`}
-            style={{ '--icon-size': `${fontSize}px`, 'lineHeight': `${diameter}px` }}
+            style={{ '--icon-size': `${fontSize}px`, 'lineHeight': `${diameter}px` } as any}
           />
         </div>
       )}

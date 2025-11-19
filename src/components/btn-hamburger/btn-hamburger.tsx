@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { cn } from 'react-just-ui/utils/cn';
 import './btn-hamburger.css';
 
@@ -16,18 +16,14 @@ const SIZES = {
   xl: 45,
 };
 
-export const BtnHamburger: FunctionComponent<BtnHamburgerProps> = ({
-  size = 'md',
-  isOpen,
-  setIsOpen,
-}) => {
+export const BtnHamburger: FC<BtnHamburgerProps> = ({ size = 'md', isOpen, setIsOpen }) => {
   return (
     <button
       aria-label="Open site navigation menu"
       role="button"
       className={cn('btn btn-hamburger', { active: isOpen })}
       onClick={() => setIsOpen(!isOpen)}
-      style={{ '--hamburger-height': SIZES[size] + 'px' }}
+      style={{ '--hamburger-height': SIZES[size] + 'px' } as any}
     >
       <span></span>
       <span></span>

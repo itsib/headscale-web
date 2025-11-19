@@ -1,4 +1,4 @@
-import { memo } from 'preact/compat';
+import { memo } from 'react';
 import { ContextMenuBase, DeviceAction } from '@app-types';
 import { Trans } from 'react-i18next';
 import { BtnContextMenu, PopupPlacement } from '@app-components/btn-context-menu';

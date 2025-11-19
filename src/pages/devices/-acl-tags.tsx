@@ -1,16 +1,16 @@
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { cn } from 'react-just-ui/utils/cn';
 import { useTranslation } from 'react-i18next';
-import { AclTag } from '@app-components/acl-tag/acl-tag';
-import { useState } from 'preact/hooks';
-import { useNotifyQuery } from '@app-hooks/use-notify-query';
+import { AclTag } from '@app-components/acl-tag/acl-tag.tsx';
+import { useState } from 'react';
+import { useNotifyQuery } from '@app-hooks/use-notify-query.ts';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchFn } from '@app-utils/query-fn';
+import { fetchFn } from '@app-utils/query-fn.ts';
 import { Device } from '@app-types';
-import { concatAclTags } from '@app-utils/concat-acl-tags';
+import { concatAclTags } from '@app-utils/concat-acl-tags.ts';
 import { Input } from 'react-just-ui';
 import { useForm } from 'react-hook-form';
-import './_acl-tags.css';
+import './-acl-tags.css';
 
 export interface AclTagsProps {
   deviceId?: string;
@@ -20,7 +20,7 @@ export interface AclTagsProps {
   className?: string;
 }
 
-export const AclTags: FunctionComponent<AclTagsProps> = (props) => {
+export const AclTags: FC<AclTagsProps> = (props) => {
   const { deviceId, validTags, invalidTags, forcedTags, className } = props;
   const { t } = useTranslation();
   const { start, success, error } = useNotifyQuery();

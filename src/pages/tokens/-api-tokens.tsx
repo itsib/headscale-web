@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'preact/hooks';
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { _apiTokenItem, ContextAction } from './_api-token-item.tsx';
+import { _apiTokenItem, ContextAction } from './-api-token-item.tsx';
 import { ApiToken } from '@app-types';
 import { useApiTokens } from '@app-hooks/use-api-tokens';
 import { ModalApiTokenCreate } from '@app-components/modals/modal-api-token-create/modal-api-token-create';
@@ -10,7 +10,7 @@ import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-g
 import { EmptyList } from '@app-components/empty-list/empty-list.tsx';
 import { KeysLoading } from '@app-components/skeleton';
 import { PageCaption } from '@app-components/page-caption/page-caption.tsx';
-import './_api-tokens.css';
+import './-api-tokens.css';
 
 export const ApiTokens = () => {
   const { t } = useTranslation();
@@ -45,7 +45,7 @@ export const ApiTokens = () => {
     <>
       <PageCaption
         title="api_access_tokens"
-        class="pt-6"
+        className="pt-6"
         subtitle="api_access_tokens_subtitle"
         h={3}
         actions={<ButtonGroup buttons={buttons} onClick={onClick} />}

@@ -1,7 +1,7 @@
-import { FunctionComponent } from 'preact';
-import { useMemo } from 'preact/hooks';
+import type { FC } from 'react';
+import { useMemo } from 'react';
 
-export const Gutters: FunctionComponent<{ length: number }> = ({ length }) => {
+export const Gutters: FC<{ length: number }> = ({ length }) => {
   const elements = useMemo(() => {
     return new Array(Math.max(14, length)).fill(false);
   }, []);
@@ -9,7 +9,7 @@ export const Gutters: FunctionComponent<{ length: number }> = ({ length }) => {
   return (
     <div className="cm-gutters">
       {elements.map((_, i) => (
-        <div key={i} class="gutter-element" style="height: 22px;">
+        <div key={i} className="gutter-element" style={{ height: '22px' }}>
           {i + 1}
         </div>
       ))}

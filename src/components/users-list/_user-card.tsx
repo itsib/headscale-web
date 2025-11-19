@@ -1,5 +1,5 @@
-import { memo } from 'preact/compat';
-import { useMemo } from 'preact/hooks';
+import { memo } from 'react';
+import { useMemo } from 'react';
 import { ContextMenuBase, User, UserAction } from '@app-types';
 import { useTranslation } from 'react-i18next';
 import { ContextMenu } from './_context-menu';

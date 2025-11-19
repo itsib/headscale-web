@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useCallback, useState } from 'preact/hooks';
+import { useCallback, useState } from 'react';
 import { NotifyInstance } from '@app-types';
 import { useNotify } from '@app-hooks/use-notify.ts';
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'preact/hooks';
+import { useEffect, useRef } from 'react';
 
 export function useOnSwipe(callback: (side: 'L' | 'R') => void, threshold = 100) {
   const callbackRef = useRef(callback);

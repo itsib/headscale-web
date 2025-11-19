@@ -1,8 +1,8 @@
 import { Device } from '@app-types';
-import { memo } from 'preact/compat';
-import { useMemo } from 'preact/hooks';
+import { memo } from 'react';
+import { useMemo } from 'react';
 import { Trans } from 'react-i18next';
-import { useLocation } from 'preact-iso';
+import { useNavigate } from '@tanstack/react-router';
 import { FormattedDuration } from '@app-components/formatters/formatted-duration';
 import { UserInfo } from '@app-components/user-info/user-info';
 import { AclTag } from '@app-components/acl-tag/acl-tag';
@@ -14,7 +14,7 @@ import './_device-table-row.css';
 
 export const DeviceTableRow = memo(function DeviceTableRow(props: Device) {
   const { id, name, givenName, expiry, ipAddresses, forcedTags, lastSeen, online, user } = props;
-  const { route } = useLocation();
+  const navigate = useNavigate();
 
   const expiryDate = useMemo(() => new Date(expiry), [expiry]);
   const expiryDisabled = expiryDate.getFullYear() <= 1970;
@@ -24,10 +24,9 @@ export const DeviceTableRow = memo(function DeviceTableRow(props: Device) {
       className="device-table-row"
       data-href={`/device/${id}`}
       role="link"
-      tabindex={0}
+      tabIndex={0}
       aria-label="Open device full info"
-      onClick={() => route(`/device/${id}`)}
-      onKeyDown={() => route(`/device/${id}`)}
+      onClick={() => navigate({ to: `/devices/$deviceId`, params: { deviceId: id } })}
     >
       <td>
         <DeviceIcon type="laptop" size={36} />

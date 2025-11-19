@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks';
+import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Input } from 'react-just-ui';
@@ -7,15 +7,11 @@ import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchFn } from '@app-utils/query-fn';
 import { FormattedDate } from '@app-components/formatters/formatted-date';
 import { BtnCopy } from '@app-components/btn-copy/btn-copy';
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 import './modal-api-token-create.css';
 
-export const ModalApiTokenCreate: FunctionComponent<ModalProps> = ({
-  isOpen,
-  onDismiss,
-  ...props
-}) => {
+export const ModalApiTokenCreate: FC<ModalProps> = ({ isOpen, onDismiss, ...props }) => {
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <ModalContent onDismiss={onDismiss} {...props} />
@@ -23,7 +19,7 @@ export const ModalApiTokenCreate: FunctionComponent<ModalProps> = ({
   );
 };
 
-const ModalContent: FunctionComponent<Omit<ModalProps, 'isOpen'>> = ({ onDismiss }) => {
+const ModalContent: FC<Omit<ModalProps, 'isOpen'>> = ({ onDismiss }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [newApiToken, setNewApiToken] = useState<string | undefined>();

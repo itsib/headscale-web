@@ -1,11 +1,11 @@
-import { Component } from 'preact';
+import { Component, PropsWithChildren } from 'react';
 import './error-boundary.css';
 
 export interface ErrorBoundaryState {
   error: Error | string | null | any;
 }
 
-export class ErrorBoundary extends Component<unknown, ErrorBoundaryState> {
+export class ErrorBoundary extends Component<PropsWithChildren, ErrorBoundaryState> {
   state: ErrorBoundaryState = { error: null };
 
   static getDerivedStateFromError(error: any) {

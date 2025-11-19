@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { cn } from 'react-just-ui/utils/cn';
 import './user-name.css';
 
@@ -9,12 +9,7 @@ export interface UserNameProps {
   className?: string;
 }
 
-export const UserName: FunctionComponent<UserNameProps> = ({
-  name,
-  email,
-  displayName,
-  className,
-}) => {
+export const UserName: FC<UserNameProps> = ({ name, email, displayName, className }) => {
   return email ? (
     <div className={cn('user-name', className)}>
       <div>{email}</div>

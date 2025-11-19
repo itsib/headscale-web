@@ -2,8 +2,6 @@
 /// <reference types="vite-plugin-pwa/react" />
 /// <reference types="vite-plugin-pwa/info" />
 /// <reference types="react-just-ui" />
-/// <reference types="preact" />
-/// <reference types="preact-iso" />
 /// <reference lib="webworker" />
 
 interface ImportMetaEnv {

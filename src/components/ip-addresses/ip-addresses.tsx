@@ -1,5 +1,5 @@
-import { useRef, useState } from 'preact/hooks';
-import { FunctionComponent } from 'preact';
+import { useRef, useState } from 'react';
+import type { FC } from 'react';
 import { Popover } from '@app-components/popups/popover';
 import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
 import { copyText } from '@app-utils/copy-text';
@@ -9,7 +9,7 @@ export interface IPAddressesProps {
   addresses: string[];
 }
 
-export const IpAddresses: FunctionComponent<IPAddressesProps> = ({ addresses }) => {
+export const IpAddresses: FC<IPAddressesProps> = ({ addresses }) => {
   return (
     <Popover
       placement={PopupPlacement.BOTTOM}
@@ -34,7 +34,7 @@ export const IpAddresses: FunctionComponent<IPAddressesProps> = ({ addresses }) 
   );
 };
 
-const AddressRow: FunctionComponent<{ address: string }> = ({ address }) => {
+const AddressRow: FC<{ address: string }> = ({ address }) => {
   const ref = useRef<ReturnType<typeof setTimeout>>(null);
   const [copied, setCopied] = useState(false);
 

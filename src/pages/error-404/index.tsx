@@ -2,8 +2,13 @@ import { useTranslation } from 'react-i18next';
 import { LottiePlayer } from '@app-components/lottie-player/lottie-player';
 import './index.css';
 import { useBreakPoint } from '@app-hooks/use-break-point.ts';
+import { createFileRoute } from '@tanstack/react-router';
 
-export const Error404 = () => {
+export const Route = createFileRoute('/error-404/')({
+  component: Component,
+});
+
+export function Component() {
   const { t } = useTranslation();
   const isMobile = useBreakPoint(600);
 
@@ -26,4 +31,4 @@ export const Error404 = () => {
       </a>
     </main>
   );
-};
+}

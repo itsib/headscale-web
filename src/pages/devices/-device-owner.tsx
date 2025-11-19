@@ -1,15 +1,15 @@
-import { FunctionComponent } from 'preact';
-import { useMemo, useState } from 'preact/hooks';
+import type { ChangeEvent, FC } from 'react';
+import { useMemo, useState } from 'react';
 import { Select, SelectOption } from 'react-just-ui';
-import { UserPhoto } from '@app-components/user-info/user-photo';
+import { UserPhoto } from '@app-components/user-info/user-photo.tsx';
 import { useUsers } from '@app-hooks/use-users.ts';
 import { useTranslation } from 'react-i18next';
 import { cn } from 'react-just-ui/utils/cn';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchFn } from '@app-utils/query-fn.ts';
 import { Device, User } from '@app-types';
-import { useNotifyQuery } from '@app-hooks/use-notify-query';
-import './_device-owner.css';
+import { useNotifyQuery } from '@app-hooks/use-notify-query.ts';
+import './-device-owner.css';
 
 export interface DeviceOwnerProps {
   deviceId: string;
@@ -17,7 +17,7 @@ export interface DeviceOwnerProps {
   className?: string;
 }
 
-export const DeviceOwner: FunctionComponent<DeviceOwnerProps> = ({ user, className, deviceId }) => {
+export const DeviceOwner: FC<DeviceOwnerProps> = ({ user, className, deviceId }) => {
   const { t } = useTranslation();
   const client = useQueryClient();
   const [value, setValue] = useState(user.id);
@@ -61,7 +61,7 @@ export const DeviceOwner: FunctionComponent<DeviceOwnerProps> = ({ user, classNa
     },
   });
 
-  function onChange(event: Event) {
+  function onChange(event: ChangeEvent<HTMLInputElement>) {
     const userId = (event.target as any).value;
     setValue(userId);
 

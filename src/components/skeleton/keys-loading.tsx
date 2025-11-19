@@ -1,8 +1,8 @@
-import type { FunctionComponent } from 'preact';
-import { useMemo } from 'preact/hooks';
+import type { FC } from 'react';
+import { useMemo } from 'react';
 import './keys-loading.css';
 
-export const KeysLoading: FunctionComponent<{ rows?: number }> = ({ rows = 3 }) => {
+export const KeysLoading: FC<{ rows?: number }> = ({ rows = 3 }) => {
   const items = useMemo(() => new Array(rows).fill(0), [rows]);
   return (
     <div className="keys-loading">

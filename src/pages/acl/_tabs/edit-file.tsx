@@ -1,14 +1,20 @@
-import { useState } from 'preact/hooks';
+import { createFileRoute } from '@tanstack/react-router';
+import { useContext, useState } from 'react';
 import { Trans } from 'react-i18next';
 import { formatError } from '@app-utils/errors';
-import { FunctionComponent } from 'preact';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AclPolicy } from '@app-types';
 import { JsonEditor } from '@app-components/json-editor/json-editor';
 import { DEFAULT_ACL_POLICY } from '@app-config';
 import { fetchFn } from '@app-utils/query-fn.ts';
+import { PolicyPageContext } from '../_tabs.tsx';
 
-export const EditFile: FunctionComponent<{ policy?: string | null }> = ({ policy }) => {
+export const Route = createFileRoute('/acl/_tabs/edit-file')({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
+  const policy = useContext(PolicyPageContext);
   const client = useQueryClient();
   const [policyTyped, setPolicyTyped] = useState<string>(policy || DEFAULT_ACL_POLICY);
   const isChanged = policy !== policyTyped;
@@ -42,14 +48,14 @@ export const EditFile: FunctionComponent<{ policy?: string | null }> = ({ policy
         </div>
       </div>
 
-      <div style="min-height: 30px;" className="text-sm pt-2">
+      <div style={{ minHeight: '30px' }} className="text-sm pt-2">
         {error ? <span className="text-danger px-4">{formatError(error)}</span> : null}
       </div>
       <div className="mt-4 flex gap-4 justify-end">
         <button
-          style="min-width: 180px;"
+          style={{ minWidth: '180px' }}
           className="btn btn-outline-secondary"
-          disabled={(!isChanged || isPending || policy === null) && !error}
+          disabled={(!isChanged || isPending || policy == null) && !error}
           onClick={() => {
             setPolicyTyped(policy || DEFAULT_ACL_POLICY);
             reset();
@@ -61,9 +67,9 @@ export const EditFile: FunctionComponent<{ policy?: string | null }> = ({ policy
         </button>
 
         <button
-          style="min-width: 120px;"
+          style={{ minWidth: '120px' }}
           className="btn btn-accent"
-          disabled={!isChanged && policy !== null}
+          disabled={!isChanged && policy != null}
           data-loading={isPending}
           onClick={() => {
             if (isChanged && !isPending) {
@@ -78,4 +84,4 @@ export const EditFile: FunctionComponent<{ policy?: string | null }> = ({ policy
       </div>
     </>
   );
-};
+}

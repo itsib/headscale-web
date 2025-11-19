@@ -1,27 +1,28 @@
-import { ComponentChild, FunctionComponent, createElement } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { ReactNode, FC, createElement } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cn } from 'react-just-ui/utils/cn';
 import './page-caption.css';
 
 export interface PageCaptionProps {
-  title: string | ComponentChild;
-  subtitle?: string | ComponentChild;
-  actions?: ComponentChild;
-  class?: string;
+  title: string | ReactNode;
+  subtitle?: string | ReactNode;
+  actions?: ReactNode;
+  className?: string;
   h?: 1 | 2 | 3 | 4;
 }
 
-export const PageCaption: FunctionComponent<PageCaptionProps> = ({
+export const PageCaption: FC<PageCaptionProps> = ({
   title,
   subtitle,
   actions,
-  class: className,
+  className,
   h = 1,
 }) => {
   const { t } = useTranslation();
   const CustomTag = useMemo(
-    () => createElement(`h${h}`, { class: 'title' }, typeof title === 'string' ? t(title) : title),
+    () =>
+      createElement(`h${h}`, { className: 'title' }, typeof title === 'string' ? t(title) : title),
     [h]
   );
 

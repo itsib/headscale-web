@@ -9,8 +9,10 @@ export function useUsers(): QueryResult<User[]> & { refetch: () => void } {
     error,
     refetch: _refetch,
   } = useQuery<{ users: User[] }, Error, User[]>({
-    queryKey: ['/api/v1/user'],
+    queryKey: ['/api/v1/user', 'GET'],
     select: (data) => data.users,
+    staleTime: 20_000,
+    gcTime: 60_000,
   });
 
   const refetch = useCallback(async () => {

@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Device } from '@app-types';
 import { fetchFn } from '@app-utils/query-fn';
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 import { DeviceInfo } from '@app-components/device-info/device-info.tsx';
 
@@ -12,7 +12,7 @@ export interface ModalNodeDeleteProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalNodeDelete: FunctionComponent<ModalNodeDeleteProps> = ({
+export const ModalNodeDelete: FC<ModalNodeDeleteProps> = ({
   isOpen,
   onDismiss,
   node,
@@ -25,9 +25,11 @@ export const ModalNodeDelete: FunctionComponent<ModalNodeDeleteProps> = ({
   );
 };
 
-const ModalContent: FunctionComponent<
-  Omit<ModalNodeDeleteProps, 'isOpen' | 'node'> & { node: Device }
-> = ({ onDismiss, onSuccess, node }) => {
+const ModalContent: FC<Omit<ModalNodeDeleteProps, 'isOpen' | 'node'> & { node: Device }> = ({
+  onDismiss,
+  onSuccess,
+  node,
+}) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 

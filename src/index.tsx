@@ -1,20 +1,23 @@
 import './i18n';
 
-import { LocationProvider } from 'preact-iso';
-import { render } from 'preact';
+import { StrictMode } from 'react';
+import ReactDOM from 'react-dom/client';
+import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from '@tanstack/react-query';
 import { ApplicationProvider } from '@app-context/application';
 import { AuthProvider } from '@app-context/auth';
+import { NotifyProvider } from '@app-context/notify';
 import { defaultQueryFn } from '@app-utils/query-fn';
+import { showAppVersion } from '@app-utils/logging.ts';
+import { routeTree } from './route-tree.gen';
 
 import 'react-just-ui/theme/minimal.css';
 import './index.css';
-import { NotifyProvider } from '@app-context/notify';
 
 const VERSION = import.meta.env.VERSION;
 const NODE_ENV = import.meta.env.NODE_ENV;
 
-const queryClient = new QueryClient({
+const client = new QueryClient({
   queryCache: new QueryCache(),
   mutationCache: new MutationCache(),
   defaultOptions: {
@@ -36,39 +39,38 @@ const queryClient = new QueryClient({
   },
 });
 
-function showAppVersion() {
-  const formatRegular = 'color: #ffffff; font-size: 11px;';
-  const formatAccent = 'color: #dfb519; font-weight: bold; font-size: 11px;';
+const router = createRouter({
+  routeTree,
+  context: {
+    client,
+  },
+});
 
-  console.log(
-    `%cApp running in %c${NODE_ENV.toUpperCase()} %cmode. Version %cv${VERSION}`,
-    formatRegular,
-    formatAccent,
-    formatRegular,
-    formatAccent
-  );
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router;
+  }
 }
 
-async function init() {
-  const { RootPage } = await import('./pages/root-page.tsx');
-  const rootElement = document.getElementById('root')!;
+const rootElement = document.getElementById('root')!;
+const root = ReactDOM.createRoot(rootElement, {
+  onUncaughtError(error: any, errorInfo: { componentStack?: string | undefined }) {
+    console.error(error, errorInfo);
+  },
+});
 
-  render(
-    <QueryClientProvider client={queryClient}>
+root.render(
+  <StrictMode>
+    <QueryClientProvider client={client}>
       <NotifyProvider>
         <ApplicationProvider>
           <AuthProvider>
-            <LocationProvider>
-              <RootPage />
-            </LocationProvider>
+            <RouterProvider router={router} />
           </AuthProvider>
         </ApplicationProvider>
       </NotifyProvider>
-    </QueryClientProvider>,
-    rootElement
-  );
-}
+    </QueryClientProvider>
+  </StrictMode>
+);
 
-showAppVersion();
-
-init();
+showAppVersion(NODE_ENV, VERSION);

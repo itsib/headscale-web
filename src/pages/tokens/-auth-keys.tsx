@@ -1,16 +1,16 @@
-import { useMemo, useState } from 'preact/hooks';
+import { useMemo, useState } from 'react';
 import { AuthKeyWithUser } from '@app-types';
 import { useTranslation } from 'react-i18next';
 import { useAuthKeys } from '@app-hooks/use-auth-keys';
 import { ModalAuthKeyCreate } from '@app-components/modals/modal-auth-key-create/modal-auth-key-create';
 import { ModalAuthKeyExpire } from '@app-components/modals/modal-auth-key-expire/modal-auth-key-expire';
-import { ContextAction } from './_api-token-item.tsx';
-import { AuthKeyItem } from './_auth-key-item.tsx';
+import { ContextAction } from './-api-token-item.tsx';
+import { AuthKeyItem } from './-auth-key-item.tsx';
 import { ButtonConfig, ButtonGroup } from '@app-components/button-group/button-group.tsx';
 import { EmptyList } from '@app-components/empty-list/empty-list.tsx';
 import { KeysLoading } from '@app-components/skeleton';
 import { PageCaption } from '@app-components/page-caption/page-caption.tsx';
-import './_auth-keys.css';
+import './-auth-keys.css';
 
 export const AuthKeys = () => {
   const { t } = useTranslation();
@@ -71,7 +71,7 @@ export const AuthKeys = () => {
     <>
       <PageCaption
         title="auth_keys"
-        class="pt-6"
+        className="pt-6"
         subtitle="auth_keys_subtitle"
         h={3}
         actions={<ButtonGroup buttons={buttons} onClick={onClick} />}
@@ -79,10 +79,10 @@ export const AuthKeys = () => {
       {isLoading ? (
         <KeysLoading />
       ) : list?.length ? (
-        <div class="auth-keys">
+        <div className="auth-keys">
           <table>
             <thead>
-              <tr class="header-row text-xs font-medium text-secondary">
+              <tr className="header-row text-xs font-medium text-secondary">
                 <th />
                 <th className="text-left">{t('auth_key')}</th>
                 <th className="text-left">{t('user')}</th>

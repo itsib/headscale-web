@@ -1,4 +1,4 @@
-import { memo } from 'preact/compat';
+import { memo } from 'react';
 import { cn } from 'react-just-ui/utils/cn';
 import './acl-tag.css';
 

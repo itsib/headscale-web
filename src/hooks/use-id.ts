@@ -1,7 +1,7 @@
-import { useMemo, useRef } from 'preact/hooks';
+import { useMemo, useRef } from 'react';
 
 export function useId(): string {
-  const ref = useRef<string>();
+  const ref = useRef<string>(null);
 
   return useMemo(() => {
     if (!ref.current) {

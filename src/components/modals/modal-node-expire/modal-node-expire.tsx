@@ -1,4 +1,4 @@
-import type { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { Trans, useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -12,7 +12,7 @@ export interface ModalNodeExpireProps extends ModalProps {
   onSuccess: () => void;
 }
 
-export const ModalNodeExpire: FunctionComponent<ModalNodeExpireProps> = ({
+export const ModalNodeExpire: FC<ModalNodeExpireProps> = ({
   isOpen,
   onDismiss,
   node,
@@ -25,9 +25,11 @@ export const ModalNodeExpire: FunctionComponent<ModalNodeExpireProps> = ({
   );
 };
 
-const ModalContent: FunctionComponent<
-  Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: Device }
-> = ({ onDismiss, onSuccess, node }) => {
+const ModalContent: FC<Omit<ModalNodeExpireProps, 'isOpen' | 'node'> & { node: Device }> = ({
+  onDismiss,
+  onSuccess,
+  node,
+}) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 

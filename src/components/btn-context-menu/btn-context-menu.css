@@ -26,6 +26,10 @@
       0 0 4px rgb(var(--bg-primary) / 0.8),
       0 0 3px rgb(var(--text-primary) / 0.8);
   }
+
+  .icon {
+    font-size: var(--context-btn-icon-size) !important;
+  }
 }
 
 .context-menu {

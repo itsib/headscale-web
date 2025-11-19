@@ -1,4 +1,4 @@
-import type { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { Device } from '@app-types';
 import { useTranslation } from 'react-i18next';
 import { FormattedDate } from '@app-components/formatters/formatted-date.tsx';
@@ -7,7 +7,7 @@ export interface DeviceInfoProps {
   device?: Device | null;
 }
 
-export const DeviceInfo: FunctionComponent<DeviceInfoProps> = ({ device }) => {
+export const DeviceInfo: FC<DeviceInfoProps> = ({ device }) => {
   const { t } = useTranslation();
 
   return device ? (

@@ -1,4 +1,4 @@
-import { memo } from 'preact/compat';
+import { memo } from 'react';
 import { useId } from '@app-hooks/use-id';
 import { getStringSize } from '@app-utils/get-string-size';
 
@@ -77,7 +77,7 @@ export const ChartBars = memo(function ChartBars({ bars, xAxis, yAxis }: ChartBa
           const _width = Math.max(scaleX(bar.x || 0), 1);
 
           return (
-            <g class="data-segment" key={index}>
+            <g className="data-segment" key={index}>
               <g opacity="0" className="value">
                 <text
                   className="bar-value"
@@ -104,7 +104,7 @@ export const ChartBars = memo(function ChartBars({ bars, xAxis, yAxis }: ChartBa
               </g>
 
               <rect
-                class="bar"
+                className="bar"
                 x={_x}
                 y={_y}
                 width={_width}

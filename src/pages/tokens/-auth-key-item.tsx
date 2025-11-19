@@ -5,7 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { BtnCopy } from '@app-components/btn-copy/btn-copy.tsx';
 import { UserInfo } from '@app-components/user-info/user-info.tsx';
 import { FormattedDuration } from '@app-components/formatters/formatted-duration.tsx';
-import './_auth-key-item.css';
+import './-auth-key-item.css';
 
 export type ContextAction = 'expire' | 'delete';
 
@@ -21,22 +21,22 @@ export const AuthKeyItem = memo(function AuthKeyItem(props: AuthKeyItem) {
   const isExpired = useMemo(() => new Date(expiration).getTime() - Date.now() < 0, [expiration]);
 
   return (
-    <tr class="auth-key-item" style={{ opacity: isExpired ? '0.3' : null }}>
-      <td class="cell-0">
-        <div class="logo">
-          <i class="icon icon-keys" />
+    <tr className="auth-key-item" style={{ opacity: isExpired ? 0.3 : 1 }}>
+      <td className="cell-0">
+        <div className="logo">
+          <i className="icon icon-keys" />
         </div>
       </td>
-      <td class="cell-1">
-        <div class="key-wrap">
-          <div class="truncate key">{authKey}</div>
+      <td className="cell-1">
+        <div className="key-wrap">
+          <div className="truncate key">{authKey}</div>
           <BtnCopy text={authKey} className="btn-copy" />
         </div>
       </td>
-      <td class="text-center">
+      <td className="text-center">
         <UserInfo {...user} />
       </td>
-      <td class="text-center">
+      <td className="text-center">
         <span>{reusable ? <Trans i18nKey="reusable" /> : <Trans i18nKey="single_use" />}</span>
         {ephemeral ? (
           <span>
@@ -45,34 +45,34 @@ export const AuthKeyItem = memo(function AuthKeyItem(props: AuthKeyItem) {
           </span>
         ) : null}
       </td>
-      <td class="text-left lg:pl-10">
-        <div class="text-sm text-secondary">
+      <td className="text-left lg:pl-10">
+        <div className="text-sm text-secondary">
           <FormattedDate date={createdAt} />
         </div>
       </td>
-      <td class="text-left">
-        <div class="text-sm text-secondary">
+      <td className="text-left">
+        <div className="text-sm text-secondary">
           <FormattedDate date={expiration} />
         </div>
         {isExpired ? (
-          <div class="text-sm text-danger">
+          <div className="text-sm text-danger">
             <Trans i18nKey="expired" />
           </div>
         ) : (
-          <div class="text-sm text-secondary">
+          <div className="text-sm text-secondary">
             <FormattedDuration duration={expiration} />
           </div>
         )}
       </td>
-      <td class="cell-action">
+      <td className="cell-action">
         {!isExpired ? (
           <span
             aria-label={t('expire_auth_key')}
             data-position="left"
-            class="w-[26px] inline-block text-right"
+            className="w-[26px] inline-block text-right"
           >
-            <button type="button" class="btn-expire" onClick={() => onAction('expire')}>
-              <i class="icon icon-timer-stop" />
+            <button type="button" className="btn-expire" onClick={() => onAction('expire')}>
+              <i className="icon icon-timer-stop" />
             </button>
           </span>
         ) : null}

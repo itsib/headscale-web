@@ -1,11 +1,11 @@
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useTheme } from '@app-hooks/use-theme';
 import { useCredentials } from '@app-hooks/use-credentials';
 import { BtnContextMenu, PopupPlacement } from '@app-components/btn-context-menu';
 import './btn-config.css';
 
-export const BtnConfig: FunctionComponent = () => {
+export const BtnConfig: FC = () => {
   const { i18n } = useTranslation();
   const [theme, setTheme] = useTheme();
   const { logout } = useCredentials();

@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { Device } from '@app-types';
 import { useTranslation } from 'react-i18next';
 import { DeviceTableRow } from './_device-table-row';
@@ -10,7 +10,7 @@ export interface DevicesProps {
   devices: Device[];
 }
 
-export const DevicesList: FunctionComponent<DevicesProps> = ({ devices, layout }) => {
+export const DevicesList: FC<DevicesProps> = ({ devices, layout }) => {
   const { t } = useTranslation();
 
   return (

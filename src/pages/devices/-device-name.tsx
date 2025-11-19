@@ -1,5 +1,5 @@
-import type { FunctionComponent } from 'preact';
-import { useRef } from 'preact/hooks';
+import type { FC, FocusEvent } from 'react';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNotifyQuery } from '@app-hooks/use-notify-query.ts';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -8,7 +8,7 @@ import { fetchFn } from '@app-utils/query-fn.ts';
 import { Device } from '@app-types';
 import { cn } from 'react-just-ui/utils/cn';
 import { Input } from 'react-just-ui';
-import './_device-name.css';
+import './-device-name.css';
 
 export interface DeviceNameProps {
   deviceId: string;
@@ -16,7 +16,7 @@ export interface DeviceNameProps {
   className?: string;
 }
 
-export const DeviceName: FunctionComponent<DeviceNameProps> = ({ name, deviceId, className }) => {
+export const DeviceName: FC<DeviceNameProps> = ({ name, deviceId, className }) => {
   const { t } = useTranslation();
   const { start, success, error } = useNotifyQuery();
   const queryClient = useQueryClient();
@@ -60,7 +60,7 @@ export const DeviceName: FunctionComponent<DeviceNameProps> = ({ name, deviceId,
     mutate({ deviceId: deviceId!, name: _name });
   }
 
-  function onBlur(event: Event) {
+  function onBlur(event: FocusEvent) {
     event.stopPropagation();
     if (skipSubmitRef.current || isSubmitting) return;
 
@@ -95,9 +95,9 @@ export const DeviceName: FunctionComponent<DeviceNameProps> = ({ name, deviceId,
                     onClick={onReset}
                     onMouseDown={onMouseDown}
                     onMouseUp={onMouseUp}
-                    class="suffix"
+                    className="suffix"
                   >
-                    <i class="icon icon-close icon-sm" />
+                    <i className="icon icon-close icon-sm" />
                   </button>
                 ) : undefined}
               </>

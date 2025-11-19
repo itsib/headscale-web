@@ -1,5 +1,5 @@
-import { useState } from 'preact/hooks';
-import { FunctionComponent } from 'preact';
+import { useState } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { copyText } from '../../utils/copy-text';
 
@@ -10,7 +10,7 @@ export interface IBtnCopy {
   className?: string;
 }
 
-export const BtnCopy: FunctionComponent<IBtnCopy> = ({
+export const BtnCopy: FC<PropsWithChildren<IBtnCopy>> = ({
   text,
   tooltip = 'copy_to_clipboard',
   tooltipPosition = 'top',

@@ -1,4 +1,4 @@
-import { useEffect } from 'preact/hooks';
+import { useEffect } from 'react';
 import './toast-fetching.css';
 
 export function ToastFetching({ isShow }: { isShow: boolean }) {

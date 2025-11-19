@@ -1,5 +1,5 @@
 import { defineConfig, UserConfig } from 'vite';
-import preact from '@preact/preset-vite';
+import react from '@vitejs/plugin-react-swc';
 import { join, resolve } from 'node:path';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import postcssNested from 'postcss-nested';
@@ -8,6 +8,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { randomBytes } from 'crypto';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 
 /**
  * Vite Config
@@ -30,10 +31,6 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
     },
     resolve: {
       alias: {
-        'react': 'preact/compat',
-        'react-dom/test-utils': 'preact/test-utils',
-        'react-dom': 'preact/compat',
-        'react/jsx-runtime': 'preact/jsx-runtime',
         '$fonts': resolve(__dirname, 'public/fonts'),
         '@app-types': resolve(__dirname, 'src/types/index.ts'),
         '@app-config': resolve(__dirname, 'src/config.ts'),
@@ -59,8 +56,26 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
       emptyOutDir: true,
       cssCodeSplit: false,
       modulePreload: false,
-      chunkSizeWarningLimit: 200,
+      chunkSizeWarningLimit: 250,
       assetsInlineLimit: 0,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            '@vendor': [
+              'react',
+              'react-dom',
+              'react-hook-form',
+              'react-i18next',
+              'react-just-ui',
+              '@tanstack/react-query',
+              '@tanstack/react-router',
+              '@tanstack/react-router-devtools',
+              'i18next',
+              'i18next-http-backend',
+            ],
+          },
+        },
+      },
     },
     plugins: [
       createHtmlPlugin({
@@ -73,22 +88,14 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
           },
         },
       }),
-      preact({
-        reactAliasesEnabled: true,
-        devToolsEnabled: mode !== 'production',
-        prefreshEnabled: command === 'serve',
-        babel: {
-          plugins: [
-            [
-              '@babel/plugin-transform-react-jsx-source',
-              {
-                pragma: 'h',
-                pragmaFrag: 'Fragment',
-              },
-            ],
-          ],
-        },
+      tanstackRouter({
+        target: 'react',
+        autoCodeSplitting: true,
+        routesDirectory: './src/pages',
+        generatedRouteTree: './src/route-tree.gen.ts',
+        quoteStyle: 'single',
       }),
+      react(),
       VitePWA({
         base: '/',
         registerType: 'autoUpdate',
@@ -116,7 +123,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
             '*.{png,ico,svg,html,webp}',
           ],
           modifyURLPrefix: { '': '/' },
-          navigateFallback: '/devices',
+          navigateFallback: '/',
           navigateFallbackDenylist: [/^\/metrics/, /^\/api/, /^\/terminal/],
           disableDevLogs: true,
           runtimeCaching: [

@@ -1,5 +1,5 @@
-import { FunctionComponent } from 'preact';
-import { useEffect, useRef, useState, useLayoutEffect } from 'preact/hooks';
+import type { FC } from 'react';
+import { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { NotifyInstance } from '@app-types';
 import { cn } from 'react-just-ui/utils/cn';
 import { ErrorIcon } from '@app-components/icons/error-icon.tsx';
@@ -15,7 +15,7 @@ export interface NotificationProps extends NotifyInstance {
   setHeight: (id: string, height: number | null) => void;
 }
 
-export const Notification: FunctionComponent<NotificationProps> = (props) => {
+export const Notification: FC<NotificationProps> = (props) => {
   const { id, offset, status, title, description, setHeight, closed, close, dismissible } = props;
   const notificationRef = useRef<HTMLDivElement | null>(null);
   const iconRef = useRef<SVGSVGElement | null>(null);
@@ -85,11 +85,13 @@ export const Notification: FunctionComponent<NotificationProps> = (props) => {
 
   return (
     <div
-      class={cn('notification', { mounted, closed })}
+      className={cn('notification', { mounted, closed })}
       ref={notificationRef}
-      style={{
-        '--notify-offset': `${closed ? offsetPrev : offset}px`,
-      }}
+      style={
+        {
+          '--notify-offset': `${closed ? offsetPrev : offset}px`,
+        } as any
+      }
     >
       {status ? (
         <div className="status-icon">

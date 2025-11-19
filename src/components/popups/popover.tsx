@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
-import { AnyComponent, FunctionComponent } from 'preact';
+import { useEffect, useRef, useState } from 'react';
+import type { PropsWithChildren, FC, JSX } from 'react';
 import { PopupPlacement } from '@app-components/popups/base-popup/base-popup';
 import { BasePopup } from '@app-components/popups/base-popup/base-popup.tsx';
 import './popover.css';
@@ -10,10 +10,10 @@ export interface PopupProps {
    */
   placement?: PopupPlacement;
 
-  Content: AnyComponent;
+  Content: () => JSX.Element;
 }
 
-export const Popover: FunctionComponent<PopupProps> = (props) => {
+export const Popover: FC<PropsWithChildren<PopupProps>> = (props) => {
   const { placement = PopupPlacement.TOP, Content, children } = props;
   const contentWrapperRef = useRef<HTMLDivElement | null>(null);
   const childWrapperRef = useRef<HTMLDivElement | null>(null);

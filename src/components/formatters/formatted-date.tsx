@@ -1,15 +1,15 @@
-import { useMemo } from 'preact/hooks';
-import { FunctionComponent, JSX } from 'preact';
+import { useMemo } from 'react';
+import type { FC, CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatDate, FormatDateOpts } from '@app-utils/format-date.ts';
 
 export interface IFormattedDate extends Omit<FormatDateOpts, 'language'> {
   date?: string | number;
   className?: string;
-  style?: JSX.CSSProperties;
+  style?: CSSProperties;
 }
 
-export const FormattedDate: FunctionComponent<IFormattedDate> = (props) => {
+export const FormattedDate: FC<IFormattedDate> = (props) => {
   const { className, style, date, dateFormat, timeFormat, is24Hour } = props;
   const { i18n } = useTranslation();
 

@@ -1,7 +1,7 @@
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import './editor-loading.css';
 
-export const EditorLoading: FunctionComponent = () => {
+export const EditorLoading: FC = () => {
   return (
     <div className="editor-loading">
       <div className="skeleton-row">

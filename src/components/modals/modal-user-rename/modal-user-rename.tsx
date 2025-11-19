@@ -5,14 +5,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Modal, ModalProps } from 'react-just-ui/modal';
 import { fetchFn } from '@app-utils/query-fn';
 import { User } from '@app-types';
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 
 export interface ModalUserRenameProps extends ModalProps {
   user?: User | null;
 }
 
-export const ModalUserRename: FunctionComponent<ModalUserRenameProps> = ({
+export const ModalUserRename: FC<ModalUserRenameProps> = ({
   isOpen,
   onDismiss,
   user,
@@ -25,9 +25,10 @@ export const ModalUserRename: FunctionComponent<ModalUserRenameProps> = ({
   );
 };
 
-const ModalContent: FunctionComponent<
-  Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: User }
-> = ({ onDismiss, user }) => {
+const ModalContent: FC<Omit<ModalUserRenameProps, 'isOpen' | 'user'> & { user: User }> = ({
+  onDismiss,
+  user,
+}) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 

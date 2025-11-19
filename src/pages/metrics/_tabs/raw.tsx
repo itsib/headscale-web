@@ -1,12 +1,13 @@
-import { useMemo } from 'preact/hooks';
-import { FunctionComponent } from 'preact';
+import { createFileRoute } from '@tanstack/react-router';
+import { useContext, useMemo } from 'react';
+import { MetricsPageContext } from '../_tabs.tsx';
 
-export interface RawPageProps {
-  metrics: string;
-  refetch?: () => void;
-}
+export const Route = createFileRoute('/metrics/_tabs/raw')({
+  component: RouteComponent,
+});
 
-export const RawPage: FunctionComponent<RawPageProps> = ({ metrics }) => {
+function RouteComponent() {
+  const metrics = useContext(MetricsPageContext);
   const strings = useMemo(() => metrics.split('\n'), [metrics]);
 
   return (
@@ -34,4 +35,4 @@ export const RawPage: FunctionComponent<RawPageProps> = ({ metrics }) => {
       })}
     </div>
   );
-};
+}

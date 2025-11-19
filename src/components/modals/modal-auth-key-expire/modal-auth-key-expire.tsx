@@ -3,14 +3,14 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AuthKeyWithUser, User } from '@app-types';
 import { fetchFn } from '@app-utils/query-fn.ts';
-import { FunctionComponent } from 'preact';
+import { FC } from 'react';
 import { ModalHeader } from '@app-components/modals/modal-header.tsx';
 
 export interface ModalAuthKeyExpireProps extends ModalProps {
   authKey?: AuthKeyWithUser | null;
 }
 
-export const ModalAuthKeyExpire: FunctionComponent<ModalAuthKeyExpireProps> = ({
+export const ModalAuthKeyExpire: FC<ModalAuthKeyExpireProps> = ({
   isOpen,
   onDismiss,
   authKey,
@@ -23,7 +23,7 @@ export const ModalAuthKeyExpire: FunctionComponent<ModalAuthKeyExpireProps> = ({
   );
 };
 
-const ModalContent: FunctionComponent<
+const ModalContent: FC<
   Omit<ModalAuthKeyExpireProps, 'isOpen' | 'authKey'> & {
     authKey: AuthKeyWithUser;
   }

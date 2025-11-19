@@ -1,6 +1,6 @@
-import { memo } from 'preact/compat';
+import { memo, MouseEvent } from 'react';
 import { cn } from 'react-just-ui/utils/cn';
-import { useCallback } from 'preact/hooks';
+import { useCallback } from 'react';
 import './button-group.css';
 
 export interface ButtonConfig {
@@ -38,7 +38,7 @@ function comparator(prev: ButtonGroupProps, next: ButtonGroupProps): boolean {
 
 export const ButtonGroup = memo(function ButtonGroup(props: ButtonGroupProps) {
   const onClick = useCallback(
-    (event: MouseEvent) => {
+    (event: MouseEvent<HTMLButtonElement>) => {
       const button = event.target as HTMLButtonElement;
       const id = button?.id;
       const icon = button?.firstChild as HTMLElement;

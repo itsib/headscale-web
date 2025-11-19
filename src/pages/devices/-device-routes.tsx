@@ -1,14 +1,14 @@
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 import { Device } from '@app-types';
 import { cn } from 'react-just-ui/utils/cn';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Checkbox } from 'react-just-ui/checkbox';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchFn } from '@app-utils/query-fn';
-import { useNotifyQuery } from '@app-hooks/use-notify-query';
+import { fetchFn } from '@app-utils/query-fn.ts';
+import { useNotifyQuery } from '@app-hooks/use-notify-query.ts';
 import { useCallback } from 'react';
-import './_device-routes.css';
+import './-device-routes.css';
 
 interface RequestData {
   routes: string[];
@@ -23,7 +23,7 @@ export interface DeviceRoutesProps {
   className?: string;
 }
 
-export const DeviceRoutes: FunctionComponent<DeviceRoutesProps> = ({
+export const DeviceRoutes: FC<DeviceRoutesProps> = ({
   id,
   approvedRoutes,
   availableRoutes,

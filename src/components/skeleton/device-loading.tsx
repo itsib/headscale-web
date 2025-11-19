@@ -1,6 +1,6 @@
-import { FunctionComponent } from 'preact';
+import type { FC } from 'react';
 
-export const DeviceLoading: FunctionComponent = () => {
+export const DeviceLoading: FC = () => {
   return (
     <div className="device-loading">
       <div className="skeleton-col">
