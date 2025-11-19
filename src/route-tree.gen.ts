@@ -8,157 +8,157 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router'
 
-import { Route as rootRouteImport } from './pages/__root';
-import { Route as IndexRouteImport } from './pages/index';
-import { Route as UsersIndexRouteImport } from './pages/users/index';
-import { Route as TokensIndexRouteImport } from './pages/tokens/index';
-import { Route as Error404IndexRouteImport } from './pages/error-404/index';
-import { Route as DevicesIndexRouteImport } from './pages/devices/index';
-import { Route as MetricsTabsRouteImport } from './pages/metrics/_tabs';
-import { Route as DevicesDeviceIdRouteImport } from './pages/devices/$deviceId';
-import { Route as AclTabsRouteImport } from './pages/acl/_tabs';
-import { Route as MetricsTabsIndexRouteImport } from './pages/metrics/_tabs/index';
-import { Route as AclTabsIndexRouteImport } from './pages/acl/_tabs/index';
-import { Route as MetricsTabsRawRouteImport } from './pages/metrics/_tabs/raw';
-import { Route as MetricsTabsFormattedRouteImport } from './pages/metrics/_tabs/formatted';
-import { Route as AclTabsPreviewRouteImport } from './pages/acl/_tabs/preview';
-import { Route as AclTabsEditFileRouteImport } from './pages/acl/_tabs/edit-file';
+import { Route as rootRouteImport } from './pages/__root'
+import { Route as IndexRouteImport } from './pages/index'
+import { Route as UsersIndexRouteImport } from './pages/users/index'
+import { Route as TokensIndexRouteImport } from './pages/tokens/index'
+import { Route as Error404IndexRouteImport } from './pages/error-404/index'
+import { Route as DevicesIndexRouteImport } from './pages/devices/index'
+import { Route as MetricsTabsRouteImport } from './pages/metrics/_tabs'
+import { Route as DevicesDeviceIdRouteImport } from './pages/devices/$deviceId'
+import { Route as AclTabsRouteImport } from './pages/acl/_tabs'
+import { Route as MetricsTabsIndexRouteImport } from './pages/metrics/_tabs/index'
+import { Route as AclTabsIndexRouteImport } from './pages/acl/_tabs/index'
+import { Route as MetricsTabsRawRouteImport } from './pages/metrics/_tabs/raw'
+import { Route as MetricsTabsFormattedRouteImport } from './pages/metrics/_tabs/formatted'
+import { Route as AclTabsPreviewRouteImport } from './pages/acl/_tabs/preview'
+import { Route as AclTabsEditFileRouteImport } from './pages/acl/_tabs/edit-file'
 
-const MetricsRouteImport = createFileRoute('/metrics')();
-const AclRouteImport = createFileRoute('/acl')();
+const MetricsRouteImport = createFileRoute('/metrics')()
+const AclRouteImport = createFileRoute('/acl')()
 
 const MetricsRoute = MetricsRouteImport.update({
   id: '/metrics',
   path: '/metrics',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AclRoute = AclRouteImport.update({
   id: '/acl',
   path: '/acl',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const UsersIndexRoute = UsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const TokensIndexRoute = TokensIndexRouteImport.update({
   id: '/tokens/',
   path: '/tokens/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const Error404IndexRoute = Error404IndexRouteImport.update({
   id: '/error-404/',
   path: '/error-404/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const DevicesIndexRoute = DevicesIndexRouteImport.update({
   id: '/devices/',
   path: '/devices/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const MetricsTabsRoute = MetricsTabsRouteImport.update({
   id: '/_tabs',
   getParentRoute: () => MetricsRoute,
-} as any);
+} as any)
 const DevicesDeviceIdRoute = DevicesDeviceIdRouteImport.update({
   id: '/devices/$deviceId',
   path: '/devices/$deviceId',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AclTabsRoute = AclTabsRouteImport.update({
   id: '/_tabs',
   getParentRoute: () => AclRoute,
-} as any);
+} as any)
 const MetricsTabsIndexRoute = MetricsTabsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => MetricsTabsRoute,
-} as any);
+} as any)
 const AclTabsIndexRoute = AclTabsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AclTabsRoute,
-} as any);
+} as any)
 const MetricsTabsRawRoute = MetricsTabsRawRouteImport.update({
   id: '/raw',
   path: '/raw',
   getParentRoute: () => MetricsTabsRoute,
-} as any);
+} as any)
 const MetricsTabsFormattedRoute = MetricsTabsFormattedRouteImport.update({
   id: '/formatted',
   path: '/formatted',
   getParentRoute: () => MetricsTabsRoute,
-} as any);
+} as any)
 const AclTabsPreviewRoute = AclTabsPreviewRouteImport.update({
   id: '/preview',
   path: '/preview',
   getParentRoute: () => AclTabsRoute,
-} as any);
+} as any)
 const AclTabsEditFileRoute = AclTabsEditFileRouteImport.update({
   id: '/edit-file',
   path: '/edit-file',
   getParentRoute: () => AclTabsRoute,
-} as any);
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute;
-  '/acl': typeof AclTabsRouteWithChildren;
-  '/devices/$deviceId': typeof DevicesDeviceIdRoute;
-  '/metrics': typeof MetricsTabsRouteWithChildren;
-  '/devices': typeof DevicesIndexRoute;
-  '/error-404': typeof Error404IndexRoute;
-  '/tokens': typeof TokensIndexRoute;
-  '/users': typeof UsersIndexRoute;
-  '/acl/edit-file': typeof AclTabsEditFileRoute;
-  '/acl/preview': typeof AclTabsPreviewRoute;
-  '/metrics/formatted': typeof MetricsTabsFormattedRoute;
-  '/metrics/raw': typeof MetricsTabsRawRoute;
-  '/acl/': typeof AclTabsIndexRoute;
-  '/metrics/': typeof MetricsTabsIndexRoute;
+  '/': typeof IndexRoute
+  '/acl': typeof AclTabsRouteWithChildren
+  '/devices/$deviceId': typeof DevicesDeviceIdRoute
+  '/metrics': typeof MetricsTabsRouteWithChildren
+  '/devices': typeof DevicesIndexRoute
+  '/error-404': typeof Error404IndexRoute
+  '/tokens': typeof TokensIndexRoute
+  '/users': typeof UsersIndexRoute
+  '/acl/edit-file': typeof AclTabsEditFileRoute
+  '/acl/preview': typeof AclTabsPreviewRoute
+  '/metrics/formatted': typeof MetricsTabsFormattedRoute
+  '/metrics/raw': typeof MetricsTabsRawRoute
+  '/acl/': typeof AclTabsIndexRoute
+  '/metrics/': typeof MetricsTabsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute;
-  '/acl': typeof AclTabsIndexRoute;
-  '/devices/$deviceId': typeof DevicesDeviceIdRoute;
-  '/metrics': typeof MetricsTabsIndexRoute;
-  '/devices': typeof DevicesIndexRoute;
-  '/error-404': typeof Error404IndexRoute;
-  '/tokens': typeof TokensIndexRoute;
-  '/users': typeof UsersIndexRoute;
-  '/acl/edit-file': typeof AclTabsEditFileRoute;
-  '/acl/preview': typeof AclTabsPreviewRoute;
-  '/metrics/formatted': typeof MetricsTabsFormattedRoute;
-  '/metrics/raw': typeof MetricsTabsRawRoute;
+  '/': typeof IndexRoute
+  '/acl': typeof AclTabsIndexRoute
+  '/devices/$deviceId': typeof DevicesDeviceIdRoute
+  '/metrics': typeof MetricsTabsIndexRoute
+  '/devices': typeof DevicesIndexRoute
+  '/error-404': typeof Error404IndexRoute
+  '/tokens': typeof TokensIndexRoute
+  '/users': typeof UsersIndexRoute
+  '/acl/edit-file': typeof AclTabsEditFileRoute
+  '/acl/preview': typeof AclTabsPreviewRoute
+  '/metrics/formatted': typeof MetricsTabsFormattedRoute
+  '/metrics/raw': typeof MetricsTabsRawRoute
 }
 export interface FileRoutesById {
-  '__root__': typeof rootRouteImport;
-  '/': typeof IndexRoute;
-  '/acl': typeof AclRouteWithChildren;
-  '/acl/_tabs': typeof AclTabsRouteWithChildren;
-  '/devices/$deviceId': typeof DevicesDeviceIdRoute;
-  '/metrics': typeof MetricsRouteWithChildren;
-  '/metrics/_tabs': typeof MetricsTabsRouteWithChildren;
-  '/devices/': typeof DevicesIndexRoute;
-  '/error-404/': typeof Error404IndexRoute;
-  '/tokens/': typeof TokensIndexRoute;
-  '/users/': typeof UsersIndexRoute;
-  '/acl/_tabs/edit-file': typeof AclTabsEditFileRoute;
-  '/acl/_tabs/preview': typeof AclTabsPreviewRoute;
-  '/metrics/_tabs/formatted': typeof MetricsTabsFormattedRoute;
-  '/metrics/_tabs/raw': typeof MetricsTabsRawRoute;
-  '/acl/_tabs/': typeof AclTabsIndexRoute;
-  '/metrics/_tabs/': typeof MetricsTabsIndexRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/acl': typeof AclRouteWithChildren
+  '/acl/_tabs': typeof AclTabsRouteWithChildren
+  '/devices/$deviceId': typeof DevicesDeviceIdRoute
+  '/metrics': typeof MetricsRouteWithChildren
+  '/metrics/_tabs': typeof MetricsTabsRouteWithChildren
+  '/devices/': typeof DevicesIndexRoute
+  '/error-404/': typeof Error404IndexRoute
+  '/tokens/': typeof TokensIndexRoute
+  '/users/': typeof UsersIndexRoute
+  '/acl/_tabs/edit-file': typeof AclTabsEditFileRoute
+  '/acl/_tabs/preview': typeof AclTabsPreviewRoute
+  '/metrics/_tabs/formatted': typeof MetricsTabsFormattedRoute
+  '/metrics/_tabs/raw': typeof MetricsTabsRawRoute
+  '/acl/_tabs/': typeof AclTabsIndexRoute
+  '/metrics/_tabs/': typeof MetricsTabsIndexRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/acl'
@@ -173,8 +173,8 @@ export interface FileRouteTypes {
     | '/metrics/formatted'
     | '/metrics/raw'
     | '/acl/'
-    | '/metrics/';
-  fileRoutesByTo: FileRoutesByTo;
+    | '/metrics/'
+  fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/acl'
@@ -187,7 +187,7 @@ export interface FileRouteTypes {
     | '/acl/edit-file'
     | '/acl/preview'
     | '/metrics/formatted'
-    | '/metrics/raw';
+    | '/metrics/raw'
   id:
     | '__root__'
     | '/'
@@ -205,184 +205,188 @@ export interface FileRouteTypes {
     | '/metrics/_tabs/formatted'
     | '/metrics/_tabs/raw'
     | '/acl/_tabs/'
-    | '/metrics/_tabs/';
-  fileRoutesById: FileRoutesById;
+    | '/metrics/_tabs/'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  AclRoute: typeof AclRouteWithChildren;
-  DevicesDeviceIdRoute: typeof DevicesDeviceIdRoute;
-  MetricsRoute: typeof MetricsRouteWithChildren;
-  DevicesIndexRoute: typeof DevicesIndexRoute;
-  Error404IndexRoute: typeof Error404IndexRoute;
-  TokensIndexRoute: typeof TokensIndexRoute;
-  UsersIndexRoute: typeof UsersIndexRoute;
+  IndexRoute: typeof IndexRoute
+  AclRoute: typeof AclRouteWithChildren
+  DevicesDeviceIdRoute: typeof DevicesDeviceIdRoute
+  MetricsRoute: typeof MetricsRouteWithChildren
+  DevicesIndexRoute: typeof DevicesIndexRoute
+  Error404IndexRoute: typeof Error404IndexRoute
+  TokensIndexRoute: typeof TokensIndexRoute
+  UsersIndexRoute: typeof UsersIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/metrics': {
-      id: '/metrics';
-      path: '/metrics';
-      fullPath: '/metrics';
-      preLoaderRoute: typeof MetricsRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/metrics'
+      path: '/metrics'
+      fullPath: '/metrics'
+      preLoaderRoute: typeof MetricsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/acl': {
-      id: '/acl';
-      path: '/acl';
-      fullPath: '/acl';
-      preLoaderRoute: typeof AclRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/acl'
+      path: '/acl'
+      fullPath: '/acl'
+      preLoaderRoute: typeof AclRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
-      id: '/';
-      path: '/';
-      fullPath: '/';
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/users/': {
-      id: '/users/';
-      path: '/users';
-      fullPath: '/users';
-      preLoaderRoute: typeof UsersIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/users/'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof UsersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tokens/': {
-      id: '/tokens/';
-      path: '/tokens';
-      fullPath: '/tokens';
-      preLoaderRoute: typeof TokensIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/tokens/'
+      path: '/tokens'
+      fullPath: '/tokens'
+      preLoaderRoute: typeof TokensIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/error-404/': {
-      id: '/error-404/';
-      path: '/error-404';
-      fullPath: '/error-404';
-      preLoaderRoute: typeof Error404IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/error-404/'
+      path: '/error-404'
+      fullPath: '/error-404'
+      preLoaderRoute: typeof Error404IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/devices/': {
-      id: '/devices/';
-      path: '/devices';
-      fullPath: '/devices';
-      preLoaderRoute: typeof DevicesIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/devices/'
+      path: '/devices'
+      fullPath: '/devices'
+      preLoaderRoute: typeof DevicesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/metrics/_tabs': {
-      id: '/metrics/_tabs';
-      path: '/metrics';
-      fullPath: '/metrics';
-      preLoaderRoute: typeof MetricsTabsRouteImport;
-      parentRoute: typeof MetricsRoute;
-    };
+      id: '/metrics/_tabs'
+      path: '/metrics'
+      fullPath: '/metrics'
+      preLoaderRoute: typeof MetricsTabsRouteImport
+      parentRoute: typeof MetricsRoute
+    }
     '/devices/$deviceId': {
-      id: '/devices/$deviceId';
-      path: '/devices/$deviceId';
-      fullPath: '/devices/$deviceId';
-      preLoaderRoute: typeof DevicesDeviceIdRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/devices/$deviceId'
+      path: '/devices/$deviceId'
+      fullPath: '/devices/$deviceId'
+      preLoaderRoute: typeof DevicesDeviceIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/acl/_tabs': {
-      id: '/acl/_tabs';
-      path: '/acl';
-      fullPath: '/acl';
-      preLoaderRoute: typeof AclTabsRouteImport;
-      parentRoute: typeof AclRoute;
-    };
+      id: '/acl/_tabs'
+      path: '/acl'
+      fullPath: '/acl'
+      preLoaderRoute: typeof AclTabsRouteImport
+      parentRoute: typeof AclRoute
+    }
     '/metrics/_tabs/': {
-      id: '/metrics/_tabs/';
-      path: '/';
-      fullPath: '/metrics/';
-      preLoaderRoute: typeof MetricsTabsIndexRouteImport;
-      parentRoute: typeof MetricsTabsRoute;
-    };
+      id: '/metrics/_tabs/'
+      path: '/'
+      fullPath: '/metrics/'
+      preLoaderRoute: typeof MetricsTabsIndexRouteImport
+      parentRoute: typeof MetricsTabsRoute
+    }
     '/acl/_tabs/': {
-      id: '/acl/_tabs/';
-      path: '/';
-      fullPath: '/acl/';
-      preLoaderRoute: typeof AclTabsIndexRouteImport;
-      parentRoute: typeof AclTabsRoute;
-    };
+      id: '/acl/_tabs/'
+      path: '/'
+      fullPath: '/acl/'
+      preLoaderRoute: typeof AclTabsIndexRouteImport
+      parentRoute: typeof AclTabsRoute
+    }
     '/metrics/_tabs/raw': {
-      id: '/metrics/_tabs/raw';
-      path: '/raw';
-      fullPath: '/metrics/raw';
-      preLoaderRoute: typeof MetricsTabsRawRouteImport;
-      parentRoute: typeof MetricsTabsRoute;
-    };
+      id: '/metrics/_tabs/raw'
+      path: '/raw'
+      fullPath: '/metrics/raw'
+      preLoaderRoute: typeof MetricsTabsRawRouteImport
+      parentRoute: typeof MetricsTabsRoute
+    }
     '/metrics/_tabs/formatted': {
-      id: '/metrics/_tabs/formatted';
-      path: '/formatted';
-      fullPath: '/metrics/formatted';
-      preLoaderRoute: typeof MetricsTabsFormattedRouteImport;
-      parentRoute: typeof MetricsTabsRoute;
-    };
+      id: '/metrics/_tabs/formatted'
+      path: '/formatted'
+      fullPath: '/metrics/formatted'
+      preLoaderRoute: typeof MetricsTabsFormattedRouteImport
+      parentRoute: typeof MetricsTabsRoute
+    }
     '/acl/_tabs/preview': {
-      id: '/acl/_tabs/preview';
-      path: '/preview';
-      fullPath: '/acl/preview';
-      preLoaderRoute: typeof AclTabsPreviewRouteImport;
-      parentRoute: typeof AclTabsRoute;
-    };
+      id: '/acl/_tabs/preview'
+      path: '/preview'
+      fullPath: '/acl/preview'
+      preLoaderRoute: typeof AclTabsPreviewRouteImport
+      parentRoute: typeof AclTabsRoute
+    }
     '/acl/_tabs/edit-file': {
-      id: '/acl/_tabs/edit-file';
-      path: '/edit-file';
-      fullPath: '/acl/edit-file';
-      preLoaderRoute: typeof AclTabsEditFileRouteImport;
-      parentRoute: typeof AclTabsRoute;
-    };
+      id: '/acl/_tabs/edit-file'
+      path: '/edit-file'
+      fullPath: '/acl/edit-file'
+      preLoaderRoute: typeof AclTabsEditFileRouteImport
+      parentRoute: typeof AclTabsRoute
+    }
   }
 }
 
 interface AclTabsRouteChildren {
-  AclTabsEditFileRoute: typeof AclTabsEditFileRoute;
-  AclTabsPreviewRoute: typeof AclTabsPreviewRoute;
-  AclTabsIndexRoute: typeof AclTabsIndexRoute;
+  AclTabsEditFileRoute: typeof AclTabsEditFileRoute
+  AclTabsPreviewRoute: typeof AclTabsPreviewRoute
+  AclTabsIndexRoute: typeof AclTabsIndexRoute
 }
 
 const AclTabsRouteChildren: AclTabsRouteChildren = {
   AclTabsEditFileRoute: AclTabsEditFileRoute,
   AclTabsPreviewRoute: AclTabsPreviewRoute,
   AclTabsIndexRoute: AclTabsIndexRoute,
-};
+}
 
-const AclTabsRouteWithChildren = AclTabsRoute._addFileChildren(AclTabsRouteChildren);
+const AclTabsRouteWithChildren =
+  AclTabsRoute._addFileChildren(AclTabsRouteChildren)
 
 interface AclRouteChildren {
-  AclTabsRoute: typeof AclTabsRouteWithChildren;
+  AclTabsRoute: typeof AclTabsRouteWithChildren
 }
 
 const AclRouteChildren: AclRouteChildren = {
   AclTabsRoute: AclTabsRouteWithChildren,
-};
+}
 
-const AclRouteWithChildren = AclRoute._addFileChildren(AclRouteChildren);
+const AclRouteWithChildren = AclRoute._addFileChildren(AclRouteChildren)
 
 interface MetricsTabsRouteChildren {
-  MetricsTabsFormattedRoute: typeof MetricsTabsFormattedRoute;
-  MetricsTabsRawRoute: typeof MetricsTabsRawRoute;
-  MetricsTabsIndexRoute: typeof MetricsTabsIndexRoute;
+  MetricsTabsFormattedRoute: typeof MetricsTabsFormattedRoute
+  MetricsTabsRawRoute: typeof MetricsTabsRawRoute
+  MetricsTabsIndexRoute: typeof MetricsTabsIndexRoute
 }
 
 const MetricsTabsRouteChildren: MetricsTabsRouteChildren = {
   MetricsTabsFormattedRoute: MetricsTabsFormattedRoute,
   MetricsTabsRawRoute: MetricsTabsRawRoute,
   MetricsTabsIndexRoute: MetricsTabsIndexRoute,
-};
+}
 
-const MetricsTabsRouteWithChildren = MetricsTabsRoute._addFileChildren(MetricsTabsRouteChildren);
+const MetricsTabsRouteWithChildren = MetricsTabsRoute._addFileChildren(
+  MetricsTabsRouteChildren,
+)
 
 interface MetricsRouteChildren {
-  MetricsTabsRoute: typeof MetricsTabsRouteWithChildren;
+  MetricsTabsRoute: typeof MetricsTabsRouteWithChildren
 }
 
 const MetricsRouteChildren: MetricsRouteChildren = {
   MetricsTabsRoute: MetricsTabsRouteWithChildren,
-};
+}
 
-const MetricsRouteWithChildren = MetricsRoute._addFileChildren(MetricsRouteChildren);
+const MetricsRouteWithChildren =
+  MetricsRoute._addFileChildren(MetricsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -393,7 +397,7 @@ const rootRouteChildren: RootRouteChildren = {
   Error404IndexRoute: Error404IndexRoute,
   TokensIndexRoute: TokensIndexRoute,
   UsersIndexRoute: UsersIndexRoute,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
