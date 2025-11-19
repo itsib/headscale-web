@@ -27,8 +27,8 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
     `img-src 'self' blob: data: https:`,
     `style-src 'self' 'unsafe-inline'`,
     `font-src 'self'`,
-    `connect-src 'self' https:`
-  ]
+    `connect-src 'self' https:`,
+  ];
 
   return {
     clearScreen: false,

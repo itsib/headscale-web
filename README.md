@@ -26,7 +26,7 @@ A web frontend for the [headscale](https://github.com/juanfont/headscale) coordi
 - Display Go server metrics
 - Docker [image](https://hub.docker.com/r/sergeyitsib/headscale-web)
 - Healthcheck in docker container
-- 
+-
 
 ### Docker
 
