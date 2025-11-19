@@ -1,5 +1,5 @@
 ARG VERSION=0.11.3
-FROM node:20.17-slim AS builder
+FROM node:22.18-slim AS builder
 
 COPY package.json \
      package-lock.json \

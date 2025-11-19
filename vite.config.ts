@@ -135,7 +135,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
             '*.{png,ico,svg,html,webp}',
           ],
           modifyURLPrefix: { '': '/' },
-          navigateFallback: '/',
+          navigateFallback: '/index.html',
           navigateFallbackDenylist: [/^\/metrics/, /^\/api/, /^\/terminal/],
           disableDevLogs: true,
           runtimeCaching: [
