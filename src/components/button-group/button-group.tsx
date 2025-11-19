@@ -66,7 +66,6 @@ export const ButtonGroup = memo(function ButtonGroup(props: ButtonGroupProps) {
           type="button"
           className="btn btn-icon"
           aria-label={button.tooltip}
-          role="command"
           data-effect={button.effect}
           onClick={onClick}
         >

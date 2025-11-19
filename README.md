@@ -15,7 +15,8 @@ A web frontend for the [headscale](https://github.com/juanfont/headscale) coordi
 
 ### Supported Features
 
-- Very small size, **~30MB** docker image, with lighttpd server and files.
+- Very light. All code with css less than **1MB**
+- Docker image, with lighttpd server and files **~35MB**.
 - Enable/Disable routes and exit nodes
 - Add, move, rename, and remove nodes
 - Add and remove users/namespaces
@@ -25,6 +26,7 @@ A web frontend for the [headscale](https://github.com/juanfont/headscale) coordi
 - Display Go server metrics
 - Docker [image](https://hub.docker.com/r/sergeyitsib/headscale-web)
 - Healthcheck in docker container
+- 
 
 ### Docker
 

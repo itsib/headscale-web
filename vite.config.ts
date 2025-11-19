@@ -19,6 +19,17 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
   const webmanifest = JSON.parse(await readFile('manifest.webmanifest', 'utf8'));
   const isDevSSL = command === 'serve' && existsSync('cert');
 
+  const allowedContent = [
+    `default-src 'self'`,
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval'`,
+    `script-src-elem 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm`,
+    `worker-src 'self' 'unsafe-eval' blob:`,
+    `img-src 'self' blob: data: https:`,
+    `style-src 'self' 'unsafe-inline'`,
+    `font-src 'self'`,
+    `connect-src 'self' https:`
+  ]
+
   return {
     clearScreen: false,
     logLevel: 'info',
@@ -85,6 +96,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
           data: {
             APP_NAME: pkg.config.name,
             APP_DESCRIPTION: pkg.description,
+            ALLOWED_CONTENT: allowedContent.join('; '),
           },
         },
       }),
