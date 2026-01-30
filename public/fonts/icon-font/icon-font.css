@@ -9,16 +9,18 @@
      url("/fonts/icon-font/icon-font.eot#iefix") format("embedded-opentype");
 }
 
-.icon {
-  font-family: "IconFont";
-  font-weight: 400;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  display: var(--icon-display, inline-block);
-  font-style: normal;
-  font-variant: normal;
-  line-height: var(--icon-line-height, 1);
-  text-rendering: auto;
+@layer base {
+  .icon {
+    font-family: "IconFont";
+    font-weight: 400;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: var(--icon-display, inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: var(--icon-line-height, 1);
+    text-rendering: auto;
+  }
 }
 
 .icon-1x {

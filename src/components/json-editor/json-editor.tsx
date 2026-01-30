@@ -1,14 +1,15 @@
-import {
-  Component,
-  createRef,
-  type PropsWithChildren,
-  type InputEvent,
-  type KeyboardEvent,
-} from 'react';
+import { Component, createRef, type PropsWithChildren } from 'react';
 import { Gutters } from './gutters';
-import { TokenizedCode } from './tokenized-code.ts';
-import { HistoryControl } from '@app-utils/history-control.ts';
 import './json-editor.css';
+
+enum RangeType {
+  Error = 'error',
+  Punctuation = 'punctuation',
+  Comment = 'comment',
+  Brace = 'brace',
+  String = 'string',
+  Property = 'property',
+}
 
 export interface JsonEditorProps {
   value?: string;
@@ -17,147 +18,72 @@ export interface JsonEditorProps {
 }
 
 export interface JsonEditorState {
-  code: string;
+  lines: number;
 }
 
 export class JsonEditor extends Component<PropsWithChildren<JsonEditorProps>, JsonEditorState> {
-  editable = createRef<HTMLDivElement>();
-
-  history: HistoryControl;
+  textarea = createRef<HTMLDivElement>();
 
   tabSize: number = 0;
 
-  isLocked: boolean = false;
-
-  isOnChange: boolean = false;
-
-  private _unsubscribe?: () => void;
+  private _observer?: MutationObserver;
 
   constructor(props: JsonEditorProps, context?: any) {
     super(props, context);
-    this.state = {
-      code: props.value || '',
-    };
 
-    this.history = new HistoryControl({ value: props.value });
+    let lines = 16;
+    if (props.value != null) {
+      lines = Math.max(lines, props.value.split('\n').length + 4);
+    }
+    this.state = {
+      lines: lines,
+    };
   }
 
   componentDidMount() {
-    const sub0 = this.history.sub<{ value: string }>('change', ({ value }) => {
-      this.setState({ code: value });
-      this.isOnChange = true;
-      this.props.onChange?.(value);
+    const textarea = this.textarea.current!;
+    textarea.innerHTML = this.props.value || '';
+
+    textarea.addEventListener('input', this.onInput);
+    textarea.addEventListener('keydown', this.onKeyDown);
+
+    this._observer = new MutationObserver(this.onMutate);
+    this._observer.observe(textarea, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributeOldValue: true,
     });
 
-    const sub1 = this.history.sub<{ position: number }>('cursor', ({ position }) => {
-      this.updateCursor(position);
-    });
-
-    this._unsubscribe = () => {
-      sub0();
-      sub1();
-    };
+    this._highlight();
   }
 
   componentWillUnmount() {
-    this._unsubscribe?.();
+    const textarea = this.textarea.current!;
+    textarea.removeEventListener('input', this.onInput);
+    textarea.removeEventListener('keydown', this.onKeyDown);
+
+    this._observer?.disconnect();
   }
 
-  componentWillReceiveProps(nextProps: Readonly<JsonEditorProps>) {
-    if (this.isOnChange) {
-      this.isOnChange = false;
-      return;
-    }
-    this.history.reset(nextProps.value || '');
-  }
+  onInput = () => {
+    const textarea = this.textarea.current!;
+    this.props.onChange?.(textarea.innerText);
+  };
 
-  onBeforeInput(event: InputEvent) {
-    if (this.isLocked) return;
-    event.preventDefault();
+  onMutate = (_mutations: MutationRecord[]) => {
+    this._highlight();
+  };
 
-    const range = (event as any).getTargetRanges()[0];
-    const data = event.data;
-    const { selectionStart, selectionEnd } = this._getSelection(range);
-
-    switch ((event as any).inputType) {
-      // Input text
-      case 'insertText': {
-        this.history.insertText(selectionStart, selectionEnd, data || '');
-        break;
-      }
-      // Backspace key
-      case 'deleteContentBackward': {
-        this.history.backspaceText(selectionStart, selectionEnd);
-        break;
-      }
-      // Delete key
-      case 'deleteContentForward': {
-        this.history.deleteText(selectionStart, selectionEnd);
-        break;
-      }
-      // Enter key
-      case 'insertParagraph': {
-        this.history.insertText(selectionStart, selectionEnd, '\n');
-        break;
-      }
-      // Ctrl + X
-      case 'deleteByCut': {
-        this.history.deleteText(selectionStart, selectionEnd);
-        break;
-      }
-      // Ctrl + V
-      case 'insertFromPaste': {
-        const text = (event as any).dataTransfer?.getData('text');
-        if (text) {
-          this.history.insertText(selectionStart, selectionEnd, text);
-        }
-        break;
-      }
-      case 'deleteByDrag': {
-        this.history.dragText(selectionStart, selectionEnd);
-        break;
-      }
-      case 'insertFromDrop': {
-        const text = (event as any).dataTransfer?.getData('text');
-        if (text) {
-          const startCharCode = text.codePointAt(0);
-          if (startCharCode === 10) {
-            const begin = this.state.code.slice(0, selectionStart);
-            if (begin.codePointAt(begin.length - 1) === 10) {
-              this.history.dropText(selectionStart - 1, selectionEnd - 1, text);
-              break;
-            }
-          }
-          this.history.dropText(selectionStart, selectionEnd, text);
-        }
-        break;
-      }
-      default:
-        console.log((event as any).inputType);
-    }
-  }
-
-  onKeyDown(event: KeyboardEvent) {
+  onKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Tab' && !event.altKey && !event.shiftKey && !event.ctrlKey) {
       return this.onTabKeyDown(event);
-    }
-
-    if (event.code === 'KeyZ' && event.ctrlKey && !event.altKey && !event.shiftKey) {
-      event.preventDefault();
-      this.history.undo();
-      return;
-    }
-
-    if (event.code === 'KeyZ' && event.ctrlKey && !event.altKey && event.shiftKey) {
-      event.preventDefault();
-      this.history.redo();
-      return;
     }
 
     if (event.code === 'KeyS' && event.ctrlKey && !event.altKey && !event.shiftKey) {
       return this.onSave(event);
     }
-  }
+  };
 
   onSave(event: KeyboardEvent): void {
     event.preventDefault();
@@ -166,214 +92,152 @@ export class JsonEditor extends Component<PropsWithChildren<JsonEditorProps>, Js
 
   onTabKeyDown(event: KeyboardEvent): void {
     event.preventDefault();
-    const selection: Selection | null = document.getSelection();
-    const range = selection?.getRangeAt(0);
-    if (!range) return;
-    const { selectionStart, selectionEnd } = this._getSelection(range);
-
-    const lastLine = this.state.code.slice(0, selectionStart).split('\n').pop() || '';
-    const spaces = lastLine.length % this.tabSize || this.tabSize;
-
-    this.history.insertText(selectionStart, selectionEnd, ' '.repeat(spaces));
-  }
-
-  updateCursor(position: number) {
-    this.isLocked = true;
-
-    queueMicrotask(() => this._setCursorPosition(position));
   }
 
   render() {
-    const tokenized = TokenizedCode.tokenize(this.history.value);
-    this.tabSize = tokenized.getTabSize();
-
-    const lines = tokenized.toLines();
     return (
       <div className="json-editor">
-        <Gutters length={lines.length} />
-        <div className="cm-scroller">
-          <div
-            autoCorrect="off"
-            autoCapitalize="off"
-            translate="no"
-            contentEditable
-            className="cm-editable-area"
-            style={{ tabSize: this.tabSize }}
-            role="textbox"
-            aria-multiline="true"
-            data-language="json"
-            onBeforeInput={this.onBeforeInput.bind(this)}
-            onKeyDown={this.onKeyDown.bind(this)}
-            ref={this.editable}
-          >
-            {lines.map((line, i) => (
-              <div
-                key={i}
-                data-line={i}
-                className="cm-line"
-                dangerouslySetInnerHTML={{ __html: line }}
-              ></div>
-            ))}
-          </div>
-        </div>
+        <Gutters length={this.state.lines} />
+        <code
+          ref={this.textarea}
+          contentEditable
+          className="cm-text-field"
+          style={{ height: this.state.lines * 22 + 8 + 'px' }}
+        />
       </div>
     );
   }
 
-  private _getSelection(event: AbstractRange) {
-    const { startOffset, endOffset, startContainer, endContainer, collapsed } = event;
+  private _setRange(type: RangeType, startNode: Node, start: number, endNode: Node, end: number) {
+    const textarea = this.textarea.current;
+    if (!textarea) return;
 
-    const isLine = (_node?: Node | null): boolean => {
-      return (
-        !!_node &&
-        _node.nodeType === Node.ELEMENT_NODE &&
-        (_node as HTMLElement).classList.contains('cm-line')
-      );
-    };
+    const range = new Range();
+    range.setStart(startNode, start);
+    range.setEnd(endNode, end);
 
-    const getPrevNode = (_node?: Node | null): Node | null => {
-      if (!_node) return null;
+    const key = `json-code-${type}`;
 
-      if (_node.previousSibling) {
-        return _node.previousSibling;
-      }
-
-      while (true) {
-        _node = _node?.parentNode;
-        if (!_node || _node === this.editable.current) return null;
-
-        if (_node.previousSibling) {
-          return _node.previousSibling;
-        }
-      }
-    };
-
-    const getNextNode = (_node?: Node | null): Node | null => {
-      if (!_node) return null;
-
-      if (_node.nextSibling) {
-        return _node.nextSibling;
-      }
-
-      while (true) {
-        _node = _node?.parentNode;
-        if (!_node || _node === this.editable.current) return null;
-
-        if (_node.nextSibling) {
-          return _node.nextSibling;
-        }
-      }
-    };
-
-    let lengthToStart = startOffset;
-    let element = getPrevNode(startContainer);
-
-    // Compute start of selection (string index)
-    while (element && element !== this.editable.current) {
-      lengthToStart += element.textContent?.length || 0;
-      if (isLine(element)) {
-        lengthToStart += 1;
-      }
-      element = getPrevNode(element);
+    if (CSS.highlights.has(key)) {
+      CSS.highlights.get(key)?.add(range);
+    } else {
+      const highlight = new Highlight(range);
+      CSS.highlights.set(key, highlight);
     }
-
-    // If not selected (selectionStart === selectionEnd)
-    if (collapsed) {
-      return {
-        selectionStart: lengthToStart,
-        selectionEnd: lengthToStart,
-      };
-    }
-
-    // Selection inside one container
-    if (startContainer === endContainer) {
-      return {
-        selectionStart: lengthToStart,
-        selectionEnd: lengthToStart + (endOffset - startOffset),
-      };
-    }
-
-    // Compute selection length
-    let selectionLength = (startContainer.textContent?.length || 0) - startOffset;
-    element = getNextNode(startContainer);
-
-    while (element && !element.contains(endContainer) && element !== this.editable.current) {
-      selectionLength += element.textContent?.length || 0;
-      if (isLine(element)) {
-        selectionLength += 1;
-      }
-      element = getNextNode(element);
-    }
-
-    if (isLine(element)) {
-      selectionLength += 1;
-    }
-
-    element = element?.firstChild || null;
-    while (element && element !== endContainer) {
-      selectionLength += element.textContent?.length || 0;
-
-      element = element.nextSibling;
-      if (element && element.contains(endContainer)) {
-        element = element.firstChild;
-      }
-    }
-
-    if (element && element.textContent) {
-      selectionLength += endOffset;
-    }
-
-    return {
-      selectionStart: lengthToStart,
-      selectionEnd: lengthToStart + selectionLength,
-    };
   }
 
-  private _setCursorPosition(position: number): void {
-    const editable = this.editable.current!;
-    const lines = this.state.code.slice(0, position).split('\n');
+  private _highlight() {
+    CSS.highlights.clear();
 
-    const lineIndex = lines.length - 1;
-    const offset = lines[lines.length - 1].length;
+    const textarea = this.textarea.current!;
+    const value = textarea.innerText;
+    const length = value.length;
 
-    const lineElement = editable.children.item(lineIndex)!;
+    let _line = 1;
+    let _lineStart = 0;
+    let _position = 0;
+    let _nodeOffset = 0;
+    let _node = textarea.firstChild as Text;
 
-    // ---------------------------
-    let nodeOffset = 0;
-    let nodesOffset = 0;
-    let nodeToSelect = lineElement.childNodes.item(0)!;
+    const getNode = (pos: number): [Text, number] => {
+      if (pos < _nodeOffset + _node.length || !_node.nextSibling) {
+        return [_node, pos - _nodeOffset];
+      } else {
+        _nodeOffset = _nodeOffset + _node.length;
+        _node = _node.nextSibling as Text;
+        return getNode(pos);
+      }
+    };
 
-    // Not empty line
-    if (lineElement.childNodes.length > 0) {
-      for (const node of lineElement.childNodes) {
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          nodeToSelect = node.childNodes[0];
-        } else {
-          nodeToSelect = node;
+    const readComment = (pos: number) => {
+      const lineBreakIndex =
+        textarea.innerText.indexOf('\n', pos + 1) || textarea.innerText.length - 1;
+      this._setRange(RangeType.Comment, ...getNode(pos), ...getNode(lineBreakIndex + 1));
+      _position = lineBreakIndex + 1;
+    };
+
+    const readStringOrProp = (pos: number) => {
+      const endIndex = value.indexOf('"', pos + 1);
+      const lineBreakIndex = value.indexOf('\n', pos + 1);
+      if (endIndex === -1 || (lineBreakIndex !== -1 && lineBreakIndex < endIndex)) {
+        this._setRange(RangeType.Error, ...getNode(pos), ...getNode(lineBreakIndex));
+        _position = lineBreakIndex;
+        return;
+      }
+
+      const start = pos;
+      const end = endIndex + 1;
+
+      for (let i = 0; i <= lineBreakIndex - end; i++) {
+        const charCode = value.charCodeAt(end + i);
+        if (charCode === 0x003a) {
+          this._setRange(RangeType.Property, ...getNode(start), ...getNode(end));
+          _position = endIndex + 1;
+          return;
         }
-        nodeOffset = offset - nodesOffset;
-
-        nodesOffset = nodesOffset + (node.textContent?.length || 0);
-        if (nodesOffset > offset) {
+        if (charCode !== 0x0020) {
           break;
         }
       }
+      this._setRange(RangeType.String, ...getNode(start), ...getNode(end));
+      _position = endIndex + 1;
+    };
+
+    while (_position < length) {
+      const code = textarea.innerText.charCodeAt(_position);
+
+      switch (code) {
+        case 0xfeff: // <BOM>
+        case 0x0009: // \t
+        case 0x0020: // <space>
+          ++_position;
+          continue;
+        case 0x000a: // \n
+          ++_position;
+          ++_line;
+          _lineStart = _position;
+          continue;
+        case 0x000d: // \r
+          if (value.charCodeAt(_position + 1) === 0x000a) {
+            _position += 2;
+          } else {
+            ++_position;
+          }
+
+          ++_line;
+          _lineStart = _position;
+          continue;
+        case 0x0022: // "
+          readStringOrProp(_position);
+          continue;
+        case 0x0023: // #
+          readComment(_position);
+          continue;
+        case 0x002f: // /
+          if (value.charCodeAt(_position + 1) === 0x002f) {
+            readComment(_position);
+            continue;
+          }
+
+          ++_position;
+          continue;
+        case 0x003a: // :
+        case 0x002c: // ,
+          this._setRange(RangeType.Punctuation, ...getNode(_position), ...getNode(_position + 1));
+          ++_position;
+          continue;
+        case 0x007d:
+        case 0x007b:
+        case 0x005d:
+        case 0x005b: // [
+          this._setRange(RangeType.Brace, ...getNode(_position), ...getNode(_position + 1));
+          ++_position;
+          continue;
+        default:
+          ++_position;
+      }
+
+      console.debug(_lineStart);
     }
-    // New empty line
-    else {
-      nodeToSelect = lineElement;
-      nodeOffset = 0;
-    }
-
-    const selection = window.getSelection()!;
-    const range = document.createRange();
-
-    range.setStart(nodeToSelect!, nodeOffset);
-    range.collapse(true);
-
-    selection.removeAllRanges();
-    selection.addRange(range);
-
-    this.isLocked = false;
   }
 }

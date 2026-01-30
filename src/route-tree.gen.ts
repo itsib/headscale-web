@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './pages/__root'
 import { Route as IndexRouteImport } from './pages/index'
 import { Route as UsersIndexRouteImport } from './pages/users/index'
@@ -26,19 +24,6 @@ import { Route as MetricsTabsFormattedRouteImport } from './pages/metrics/_tabs/
 import { Route as AclTabsPreviewRouteImport } from './pages/acl/_tabs/preview'
 import { Route as AclTabsEditFileRouteImport } from './pages/acl/_tabs/edit-file'
 
-const MetricsRouteImport = createFileRoute('/metrics')()
-const AclRouteImport = createFileRoute('/acl')()
-
-const MetricsRoute = MetricsRouteImport.update({
-  id: '/metrics',
-  path: '/metrics',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AclRoute = AclRouteImport.update({
-  id: '/acl',
-  path: '/acl',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -65,8 +50,9 @@ const DevicesIndexRoute = DevicesIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const MetricsTabsRoute = MetricsTabsRouteImport.update({
-  id: '/_tabs',
-  getParentRoute: () => MetricsRoute,
+  id: '/metrics/_tabs',
+  path: '/metrics',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DevicesDeviceIdRoute = DevicesDeviceIdRouteImport.update({
   id: '/devices/$deviceId',
@@ -74,8 +60,9 @@ const DevicesDeviceIdRoute = DevicesDeviceIdRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AclTabsRoute = AclTabsRouteImport.update({
-  id: '/_tabs',
-  getParentRoute: () => AclRoute,
+  id: '/acl/_tabs',
+  path: '/acl',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const MetricsTabsIndexRoute = MetricsTabsIndexRouteImport.update({
   id: '/',
@@ -113,10 +100,10 @@ export interface FileRoutesByFullPath {
   '/acl': typeof AclTabsRouteWithChildren
   '/devices/$deviceId': typeof DevicesDeviceIdRoute
   '/metrics': typeof MetricsTabsRouteWithChildren
-  '/devices': typeof DevicesIndexRoute
-  '/error-404': typeof Error404IndexRoute
-  '/tokens': typeof TokensIndexRoute
-  '/users': typeof UsersIndexRoute
+  '/devices/': typeof DevicesIndexRoute
+  '/error-404/': typeof Error404IndexRoute
+  '/tokens/': typeof TokensIndexRoute
+  '/users/': typeof UsersIndexRoute
   '/acl/edit-file': typeof AclTabsEditFileRoute
   '/acl/preview': typeof AclTabsPreviewRoute
   '/metrics/formatted': typeof MetricsTabsFormattedRoute
@@ -126,9 +113,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/acl': typeof AclTabsIndexRoute
   '/devices/$deviceId': typeof DevicesDeviceIdRoute
-  '/metrics': typeof MetricsTabsIndexRoute
   '/devices': typeof DevicesIndexRoute
   '/error-404': typeof Error404IndexRoute
   '/tokens': typeof TokensIndexRoute
@@ -137,14 +122,14 @@ export interface FileRoutesByTo {
   '/acl/preview': typeof AclTabsPreviewRoute
   '/metrics/formatted': typeof MetricsTabsFormattedRoute
   '/metrics/raw': typeof MetricsTabsRawRoute
+  '/acl': typeof AclTabsIndexRoute
+  '/metrics': typeof MetricsTabsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/acl': typeof AclRouteWithChildren
   '/acl/_tabs': typeof AclTabsRouteWithChildren
   '/devices/$deviceId': typeof DevicesDeviceIdRoute
-  '/metrics': typeof MetricsRouteWithChildren
   '/metrics/_tabs': typeof MetricsTabsRouteWithChildren
   '/devices/': typeof DevicesIndexRoute
   '/error-404/': typeof Error404IndexRoute
@@ -164,10 +149,10 @@ export interface FileRouteTypes {
     | '/acl'
     | '/devices/$deviceId'
     | '/metrics'
-    | '/devices'
-    | '/error-404'
-    | '/tokens'
-    | '/users'
+    | '/devices/'
+    | '/error-404/'
+    | '/tokens/'
+    | '/users/'
     | '/acl/edit-file'
     | '/acl/preview'
     | '/metrics/formatted'
@@ -177,9 +162,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/acl'
     | '/devices/$deviceId'
-    | '/metrics'
     | '/devices'
     | '/error-404'
     | '/tokens'
@@ -188,13 +171,13 @@ export interface FileRouteTypes {
     | '/acl/preview'
     | '/metrics/formatted'
     | '/metrics/raw'
+    | '/acl'
+    | '/metrics'
   id:
     | '__root__'
     | '/'
-    | '/acl'
     | '/acl/_tabs'
     | '/devices/$deviceId'
-    | '/metrics'
     | '/metrics/_tabs'
     | '/devices/'
     | '/error-404/'
@@ -210,9 +193,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AclRoute: typeof AclRouteWithChildren
+  AclTabsRoute: typeof AclTabsRouteWithChildren
   DevicesDeviceIdRoute: typeof DevicesDeviceIdRoute
-  MetricsRoute: typeof MetricsRouteWithChildren
+  MetricsTabsRoute: typeof MetricsTabsRouteWithChildren
   DevicesIndexRoute: typeof DevicesIndexRoute
   Error404IndexRoute: typeof Error404IndexRoute
   TokensIndexRoute: typeof TokensIndexRoute
@@ -221,20 +204,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/metrics': {
-      id: '/metrics'
-      path: '/metrics'
-      fullPath: '/metrics'
-      preLoaderRoute: typeof MetricsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/acl': {
-      id: '/acl'
-      path: '/acl'
-      fullPath: '/acl'
-      preLoaderRoute: typeof AclRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -245,28 +214,28 @@ declare module '@tanstack/react-router' {
     '/users/': {
       id: '/users/'
       path: '/users'
-      fullPath: '/users'
+      fullPath: '/users/'
       preLoaderRoute: typeof UsersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tokens/': {
       id: '/tokens/'
       path: '/tokens'
-      fullPath: '/tokens'
+      fullPath: '/tokens/'
       preLoaderRoute: typeof TokensIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/error-404/': {
       id: '/error-404/'
       path: '/error-404'
-      fullPath: '/error-404'
+      fullPath: '/error-404/'
       preLoaderRoute: typeof Error404IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/devices/': {
       id: '/devices/'
       path: '/devices'
-      fullPath: '/devices'
+      fullPath: '/devices/'
       preLoaderRoute: typeof DevicesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -275,7 +244,7 @@ declare module '@tanstack/react-router' {
       path: '/metrics'
       fullPath: '/metrics'
       preLoaderRoute: typeof MetricsTabsRouteImport
-      parentRoute: typeof MetricsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/devices/$deviceId': {
       id: '/devices/$deviceId'
@@ -289,7 +258,7 @@ declare module '@tanstack/react-router' {
       path: '/acl'
       fullPath: '/acl'
       preLoaderRoute: typeof AclTabsRouteImport
-      parentRoute: typeof AclRoute
+      parentRoute: typeof rootRouteImport
     }
     '/metrics/_tabs/': {
       id: '/metrics/_tabs/'
@@ -351,16 +320,6 @@ const AclTabsRouteChildren: AclTabsRouteChildren = {
 const AclTabsRouteWithChildren =
   AclTabsRoute._addFileChildren(AclTabsRouteChildren)
 
-interface AclRouteChildren {
-  AclTabsRoute: typeof AclTabsRouteWithChildren
-}
-
-const AclRouteChildren: AclRouteChildren = {
-  AclTabsRoute: AclTabsRouteWithChildren,
-}
-
-const AclRouteWithChildren = AclRoute._addFileChildren(AclRouteChildren)
-
 interface MetricsTabsRouteChildren {
   MetricsTabsFormattedRoute: typeof MetricsTabsFormattedRoute
   MetricsTabsRawRoute: typeof MetricsTabsRawRoute
@@ -377,22 +336,11 @@ const MetricsTabsRouteWithChildren = MetricsTabsRoute._addFileChildren(
   MetricsTabsRouteChildren,
 )
 
-interface MetricsRouteChildren {
-  MetricsTabsRoute: typeof MetricsTabsRouteWithChildren
-}
-
-const MetricsRouteChildren: MetricsRouteChildren = {
-  MetricsTabsRoute: MetricsTabsRouteWithChildren,
-}
-
-const MetricsRouteWithChildren =
-  MetricsRoute._addFileChildren(MetricsRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AclRoute: AclRouteWithChildren,
+  AclTabsRoute: AclTabsRouteWithChildren,
   DevicesDeviceIdRoute: DevicesDeviceIdRoute,
-  MetricsRoute: MetricsRouteWithChildren,
+  MetricsTabsRoute: MetricsTabsRouteWithChildren,
   DevicesIndexRoute: DevicesIndexRoute,
   Error404IndexRoute: Error404IndexRoute,
   TokensIndexRoute: TokensIndexRoute,

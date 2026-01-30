@@ -3,7 +3,6 @@
   font-weight: 300;
   font-size: 14px;
   line-height: 22px;
-  color: rgb(var(--text-secondary));
   display: flex;
 
   .cm-gutters {
@@ -21,6 +20,57 @@
       box-sizing: border-box;
       color: rgb(108 108 108);
     }
+  }
+
+  .cm-text-field {
+    width: calc(100% - 50px);
+    min-height: 300px;
+    padding: 4px 0 4px 6px;
+    flex-grow: 2;
+    flex-shrink: 0;
+    display: block;
+    box-sizing: border-box;
+    background-color: transparent;
+    tab-size: 4;
+    line-height: 22px;
+    outline: none;
+    white-space: pre-wrap;
+
+    &::highlight(json-code-error) {
+      color: var(--code-trailing-bad);
+    }
+
+    &::highlight(json-code-punctuation) {
+      color: var(--code-highlight-punctuation);
+    }
+
+    &::highlight(json-code-comment) {
+      color: var(--code-highlight-comments);
+    }
+
+    &::highlight(json-code-brace) {
+      color: var(--code-highlight-brace);
+    }
+
+    &::highlight(json-code-string) {
+      color: var(--code-highlight-string);
+    }
+
+    &::highlight(json-code-property) {
+      color: var(--code-highlight-property);
+    }
+
+    &::highlight(json-code-keyword) {
+      color: var(--code-highlight-keyword);
+    }
+
+    &::highlight(json-code-number) {
+      color: var(--code-highlight-number);
+    }
+  }
+
+  ::-webkit-resizer {
+    display: none;
   }
 
   .cm-scroller {

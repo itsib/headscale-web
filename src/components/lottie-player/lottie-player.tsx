@@ -34,9 +34,8 @@ export class LottiePlayer extends Component<LottiePlayerProps> {
 
   async createDotLottie(config: Config) {
     try {
-      const { DotLottieWorker } = await import(
-        'https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm'
-      );
+      const { DotLottieWorker } =
+        await import('https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm');
       return new DotLottieWorker(config);
     } catch {
       return null;

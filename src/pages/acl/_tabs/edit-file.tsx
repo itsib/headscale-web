@@ -53,6 +53,7 @@ function RouteComponent() {
       </div>
       <div className="mt-4 flex gap-4 justify-end">
         <button
+          type="button"
           style={{ minWidth: '180px' }}
           className="btn btn-outline-secondary"
           disabled={(!isChanged || isPending || policy == null) && !error}
@@ -67,6 +68,7 @@ function RouteComponent() {
         </button>
 
         <button
+          type="button"
           style={{ minWidth: '120px' }}
           className="btn btn-accent"
           disabled={!isChanged && policy != null}
