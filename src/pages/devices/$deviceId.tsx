@@ -69,10 +69,7 @@ function RouteComponent() {
 
           <DeviceOwner deviceId={device.id} user={device.user} />
 
-          <AclTags
-            deviceId={device.id}
-            tags={device.tags}
-          />
+          <AclTags deviceId={device.id} tags={device.tags} />
 
           <div className="meta-data">
             <span className="label">{t('created_at')}:</span>
