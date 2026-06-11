@@ -9,7 +9,7 @@ import './_device-card.css';
 import { Link } from '@tanstack/react-router';
 
 export const DeviceCard = memo(function DeviceItem(props: Device) {
-  const { id, name, givenName, expiry, ipAddresses, forcedTags, online, user } = props;
+  const { id, name, givenName, expiry, ipAddresses, tags, online, user } = props;
   const { t } = useTranslation();
 
   const expiryDate = useMemo(() => new Date(expiry), [expiry]);
@@ -63,9 +63,9 @@ export const DeviceCard = memo(function DeviceItem(props: Device) {
         </div>
       </div>
 
-      {forcedTags.length ? (
+      {tags?.length ? (
         <div className="tags">
-          {forcedTags.map((tag) => (
+          {tags.map((tag) => (
             <AclTag key={tag} tag={tag} />
           ))}
         </div>

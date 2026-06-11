@@ -13,7 +13,7 @@ import { DeviceIcon } from '@app-components/icons/device-icon.tsx';
 import './_device-table-row.css';
 
 export const DeviceTableRow = memo(function DeviceTableRow(props: Device) {
-  const { id, name, givenName, expiry, ipAddresses, forcedTags, lastSeen, online, user } = props;
+  const { id, name, givenName, expiry, ipAddresses, tags, lastSeen, online, user } = props;
   const navigate = useNavigate();
 
   const expiryDate = useMemo(() => new Date(expiry), [expiry]);
@@ -55,9 +55,9 @@ export const DeviceTableRow = memo(function DeviceTableRow(props: Device) {
         />
       </td>
       <td>
-        {forcedTags.length ? (
+        {tags?.length ? (
           <div className="flex justify-center flex-wrap">
-            {forcedTags.map((tag) => (
+            {tags.map((tag) => (
               <AclTag key={tag} tag={tag} />
             ))}
           </div>

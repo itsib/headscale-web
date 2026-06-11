@@ -1,7 +1,7 @@
 {
   "name": "headscale-web",
   "version": "0.11.5",
-  "description": "Web interface for headscale 0.23.0",
+  "description": "Web interface for headscale 0.28.0",
   "homepage": "https://itsib.su",
   "license": "MIT",
   "author": {

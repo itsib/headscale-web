@@ -71,9 +71,7 @@ function RouteComponent() {
 
           <AclTags
             deviceId={device.id}
-            validTags={device.validTags}
-            forcedTags={device.forcedTags}
-            invalidTags={device.invalidTags}
+            tags={device.tags}
           />
 
           <div className="meta-data">

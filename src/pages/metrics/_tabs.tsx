@@ -21,7 +21,7 @@ export const Route = createFileRoute('/metrics/_tabs')({
   pendingComponent: ListLoading,
 });
 
-export function RouteComponent() {
+function RouteComponent() {
   const { data } = useSuspenseQuery(metricsQueryOptions);
 
   return (

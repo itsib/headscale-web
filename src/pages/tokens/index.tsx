@@ -7,7 +7,7 @@ export const Route = createFileRoute('/tokens/')({
   component: RouteComponent,
 });
 
-export function RouteComponent() {
+function RouteComponent() {
   return (
     <div className="page">
       <PageCaption title="keys_and_tokens" subtitle="api_key_subtitle" />

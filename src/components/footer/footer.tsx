@@ -21,7 +21,7 @@ export function Footer() {
       </div>
       <div>
         <span>
-          <Trans i18nKey="api_key_prefix" />:{' '}
+          <Trans i18nKey="auth_key" />:{' '}
         </span>
         <wbr />
         <span className="text-primary">{prefix}</span>

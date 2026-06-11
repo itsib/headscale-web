@@ -27,7 +27,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const onSuccess = useCallback((values: ICredentials) => {
     AuthState.set(values);
 
-    setPrefix(values.token.split('.')[0]);
+    setPrefix(values.token.slice(-8));
     setBase(values.base);
     setIsAuthorized(true);
   }, []);
@@ -37,7 +37,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     const credentials = AuthState.get();
     if (!credentials) return;
 
-    setPrefix(credentials.token.split('.')[0]);
+    setPrefix(credentials.token.slice(-8));
     setBase(credentials.base);
     setIsAuthorized(true);
   }, []);

@@ -8,7 +8,7 @@ export const Route = createFileRoute('/error-404/')({
   component: Component,
 });
 
-export function Component() {
+function Component() {
   const { t } = useTranslation();
   const isMobile = useBreakPoint(600);
 

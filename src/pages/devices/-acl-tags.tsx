@@ -7,26 +7,23 @@ import { useNotifyQuery } from '@app-hooks/use-notify-query.ts';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchFn } from '@app-utils/query-fn.ts';
 import { Device } from '@app-types';
-import { concatAclTags } from '@app-utils/concat-acl-tags.ts';
 import { Input } from 'react-just-ui';
 import { useForm } from 'react-hook-form';
 import './-acl-tags.css';
 
 export interface AclTagsProps {
   deviceId?: string;
-  validTags?: string[];
-  invalidTags?: string[];
-  forcedTags?: string[];
+  tags?: string[];
   className?: string;
 }
 
 export const AclTags: FC<AclTagsProps> = (props) => {
-  const { deviceId, validTags, invalidTags, forcedTags, className } = props;
+  const { deviceId, tags: existedTags, className } = props;
   const { t } = useTranslation();
   const { start, success, error } = useNotifyQuery();
   const queryClient = useQueryClient();
 
-  const [tags, setTags] = useState<string[]>(forcedTags ?? []);
+  const [tags, setTags] = useState<string[]>(existedTags ?? []);
 
   const { handleSubmit, register, formState, reset, setError } = useForm<{ tag: string }>({
     defaultValues: {
@@ -56,7 +53,7 @@ export const AclTags: FC<AclTagsProps> = (props) => {
       success();
     },
     onError: (e: any) => {
-      setTags(concatAclTags(validTags, invalidTags, forcedTags));
+      setTags(existedTags || []);
       error(e.message);
       setError('tag', { message: e.message });
     },

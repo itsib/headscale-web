@@ -4,12 +4,16 @@ import { PageCaption } from '@app-components/page-caption/page-caption.tsx';
 import { EditorLoading } from '@app-components/skeleton';
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { createContext } from 'react';
+import { defaultQueryFn } from '@app-utils/query-fn.ts';
 import './_tabs.css';
 
 export const PolicyPageContext = createContext<string | null>(null);
 
 const policyQueryOptions = queryOptions<{ policy: string }, Error, string>({
   queryKey: ['/api/v1/policy', 'GET'],
+  queryFn(context) {
+    return defaultQueryFn(context as any).catch(() => ({ policy: null })) as any;
+  },
   select: (data) => data.policy,
   staleTime: 0,
   refetchInterval: false,
