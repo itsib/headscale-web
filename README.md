@@ -7,7 +7,6 @@ A web frontend for the [headscale](https://github.com/juanfont/headscale) coordi
 
 ![Version](https://img.shields.io/badge/version-0.11.7-blue.svg?cacheSeconds=2592000&label=Version)
 [![Docker Image Version (tag)](https://img.shields.io/docker/v/sergeyitsib/headscale-web/latest?style=flat&logo=docker&logoColor=%23ffffff&label=Image)](https://hub.docker.com/r/sergeyitsib/headscale-web)
-[![Release](https://github.com/itsib/headscale-web/actions/workflows/main.yaml/badge.svg)](https://github.com/itsib/headscale-web/actions/workflows/main.yaml)
 
 ![Screenshot Home Page](public/screenshots/devices-1280x720.webp)
 

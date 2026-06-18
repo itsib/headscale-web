@@ -1,5 +1,5 @@
 ARG VERSION=0.11.7
-FROM node:22.18-slim AS builder
+FROM node:lts-alpine3.24 AS builder
 
 COPY package.json \
      package-lock.json \
@@ -24,7 +24,7 @@ COPY tsconfig.* \
 
 RUN npm run build
 
-FROM rtsp/lighttpd AS production
+FROM rtsp/lighttpd:1.4.82 AS production
 ARG VERSION
 
 WORKDIR /var/www/html

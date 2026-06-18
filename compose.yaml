@@ -1,8 +1,10 @@
-name: 'tailscale'
+name: 'headscale'
 
 services:
   caddy:
-    image: caddy
+    build:
+      context: ./docker/caddy
+      target: production
     cap_add:
       - NET_ADMIN
     ports:
@@ -24,6 +26,7 @@ services:
   headscale:
     build:
       context: ./docker/headscale
+      target: production
     volumes:
       - ./docker/headscale/config.yaml:/etc/headscale/config.yaml
       - headscale-data:/var/lib/headscale
