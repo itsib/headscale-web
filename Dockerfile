@@ -1,4 +1,4 @@
-ARG VERSION=0.11.7
+ARG VERSION=0.11.8
 FROM node:lts-alpine3.24 AS builder
 
 COPY package.json \
