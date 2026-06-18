@@ -1,4 +1,4 @@
-name: Release
+name: Push to DockerHub
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     permissions:
       packages: write
