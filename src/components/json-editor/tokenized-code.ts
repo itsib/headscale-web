@@ -1,17 +1,5 @@
 type Keyword =
-  | '['
-  | ']'
-  | '{'
-  | '}'
-  | '"'
-  | ':'
-  | '//'
-  | ','
-  | 'true'
-  | 'false'
-  | 'null'
-  | 'undefined'
-  | '\n';
+  '[' | ']' | '{' | '}' | '"' | ':' | '//' | ',' | 'true' | 'false' | 'null' | 'undefined' | '\n';
 
 type Token = [string, string, string];
 

@@ -17,6 +17,7 @@ export default tseslint.config(
       'react-refresh/only-export-components': ['off'],
       'no-async-promise-executor': ['off'],
       'no-useless-escape': ['off'],
+      'no-useless-assignment': ['off'],
       '@typescript-eslint/no-empty-object-type': ['warn', { allowInterfaces: 'always' }],
       '@typescript-eslint/no-unused-vars': [
         'error',

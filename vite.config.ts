@@ -1,5 +1,5 @@
 import { defineConfig, UserConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import { join, resolve } from 'node:path';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import postcssNested from 'postcss-nested';
@@ -31,7 +31,6 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
   ];
 
   return {
-    clearScreen: false,
     logLevel: 'info',
     appType: 'spa',
     publicDir: 'public',
@@ -42,13 +41,13 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
     },
     resolve: {
       alias: {
-        '$fonts': resolve(__dirname, 'public/fonts'),
-        '@app-types': resolve(__dirname, 'src/types/index.ts'),
-        '@app-config': resolve(__dirname, 'src/config.ts'),
-        '@app-components': resolve(__dirname, 'src/components'),
-        '@app-hooks': resolve(__dirname, 'src/hooks'),
-        '@app-context': resolve(__dirname, 'src/context'),
-        '@app-utils': resolve(__dirname, 'src/utils'),
+        '$fonts': resolve(import.meta.dirname, 'public/fonts'),
+        '@app-types': resolve(import.meta.dirname, 'src/types/index.ts'),
+        '@app-config': resolve(import.meta.dirname, 'src/config.ts'),
+        '@app-components': resolve(import.meta.dirname, 'src/components'),
+        '@app-hooks': resolve(import.meta.dirname, 'src/hooks'),
+        '@app-context': resolve(import.meta.dirname, 'src/context'),
+        '@app-utils': resolve(import.meta.dirname, 'src/utils'),
       },
     },
     css: {
@@ -56,37 +55,8 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
         plugins: [postcssNested(), autoprefixer()],
       },
     },
-    esbuild: { legalComments: 'none' },
     optimizeDeps: {
       include: [...Object.keys(pkg.dependencies)],
-    },
-    build: {
-      target: 'esnext',
-      minify: mode === 'production' ? 'esbuild' : false,
-      copyPublicDir: true,
-      emptyOutDir: true,
-      cssCodeSplit: false,
-      modulePreload: false,
-      chunkSizeWarningLimit: 250,
-      assetsInlineLimit: 0,
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            '@vendor': [
-              'react',
-              'react-dom',
-              'react-hook-form',
-              'react-i18next',
-              'react-just-ui',
-              '@tanstack/react-query',
-              '@tanstack/react-router',
-              '@tanstack/react-router-devtools',
-              'i18next',
-              'i18next-http-backend',
-            ],
-          },
-        },
-      },
     },
     plugins: [
       createHtmlPlugin({
@@ -125,7 +95,7 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
           background_color: pkg.config['background-color'],
         },
         workbox: {
-          globDirectory: join(process.cwd(), 'dist'),
+          globDirectory: join(import.meta.dirname, 'dist'),
           globPatterns: [
             'animations/*.json',
             'assets/*.{css,js}',
@@ -210,6 +180,15 @@ export default defineConfig(async ({ mode, command }): Promise<UserConfig> => {
     },
     preview: {
       port: 4005,
+      host: 'localhost',
+      keepAlive: true,
+      https: isDevSSL
+        ? {
+            cert: './cert/localhost.crt',
+            key: './cert/localhost.key',
+            serverName: 'localhost',
+          }
+        : undefined,
     },
     server: {
       port: 3008,

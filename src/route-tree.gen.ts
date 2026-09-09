@@ -10,53 +10,23 @@
 
 import { Route as rootRouteImport } from './pages/__root'
 import { Route as IndexRouteImport } from './pages/index'
-import { Route as UsersIndexRouteImport } from './pages/users/index'
-import { Route as TokensIndexRouteImport } from './pages/tokens/index'
-import { Route as Error404IndexRouteImport } from './pages/error-404/index'
-import { Route as DevicesIndexRouteImport } from './pages/devices/index'
-import { Route as MetricsTabsRouteImport } from './pages/metrics/_tabs'
-import { Route as DevicesDeviceIdRouteImport } from './pages/devices/$deviceId'
 import { Route as AclTabsRouteImport } from './pages/acl/_tabs'
-import { Route as MetricsTabsIndexRouteImport } from './pages/metrics/_tabs/index'
+import { Route as DevicesIndexRouteImport } from './pages/devices/index'
+import { Route as DevicesDeviceIdRouteImport } from './pages/devices/$deviceId'
+import { Route as Error404IndexRouteImport } from './pages/error-404/index'
+import { Route as MetricsTabsRouteImport } from './pages/metrics/_tabs'
+import { Route as TokensIndexRouteImport } from './pages/tokens/index'
+import { Route as UsersIndexRouteImport } from './pages/users/index'
 import { Route as AclTabsIndexRouteImport } from './pages/acl/_tabs/index'
-import { Route as MetricsTabsRawRouteImport } from './pages/metrics/_tabs/raw'
-import { Route as MetricsTabsFormattedRouteImport } from './pages/metrics/_tabs/formatted'
-import { Route as AclTabsPreviewRouteImport } from './pages/acl/_tabs/preview'
 import { Route as AclTabsEditFileRouteImport } from './pages/acl/_tabs/edit-file'
+import { Route as AclTabsPreviewRouteImport } from './pages/acl/_tabs/preview'
+import { Route as MetricsTabsIndexRouteImport } from './pages/metrics/_tabs/index'
+import { Route as MetricsTabsFormattedRouteImport } from './pages/metrics/_tabs/formatted'
+import { Route as MetricsTabsRawRouteImport } from './pages/metrics/_tabs/raw'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UsersIndexRoute = UsersIndexRouteImport.update({
-  id: '/users/',
-  path: '/users/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TokensIndexRoute = TokensIndexRouteImport.update({
-  id: '/tokens/',
-  path: '/tokens/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Error404IndexRoute = Error404IndexRouteImport.update({
-  id: '/error-404/',
-  path: '/error-404/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DevicesIndexRoute = DevicesIndexRouteImport.update({
-  id: '/devices/',
-  path: '/devices/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MetricsTabsRoute = MetricsTabsRouteImport.update({
-  id: '/metrics/_tabs',
-  path: '/metrics',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DevicesDeviceIdRoute = DevicesDeviceIdRouteImport.update({
-  id: '/devices/$deviceId',
-  path: '/devices/$deviceId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AclTabsRoute = AclTabsRouteImport.update({
@@ -64,19 +34,54 @@ const AclTabsRoute = AclTabsRouteImport.update({
   path: '/acl',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MetricsTabsIndexRoute = MetricsTabsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => MetricsTabsRoute,
+const DevicesIndexRoute = DevicesIndexRouteImport.update({
+  id: '/devices/',
+  path: '/devices/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevicesDeviceIdRoute = DevicesDeviceIdRouteImport.update({
+  id: '/devices/$deviceId',
+  path: '/devices/$deviceId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Error404IndexRoute = Error404IndexRouteImport.update({
+  id: '/error-404/',
+  path: '/error-404/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetricsTabsRoute = MetricsTabsRouteImport.update({
+  id: '/metrics/_tabs',
+  path: '/metrics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TokensIndexRoute = TokensIndexRouteImport.update({
+  id: '/tokens/',
+  path: '/tokens/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UsersIndexRoute = UsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AclTabsIndexRoute = AclTabsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AclTabsRoute,
 } as any)
-const MetricsTabsRawRoute = MetricsTabsRawRouteImport.update({
-  id: '/raw',
-  path: '/raw',
+const AclTabsEditFileRoute = AclTabsEditFileRouteImport.update({
+  id: '/edit-file',
+  path: '/edit-file',
+  getParentRoute: () => AclTabsRoute,
+} as any)
+const AclTabsPreviewRoute = AclTabsPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => AclTabsRoute,
+} as any)
+const MetricsTabsIndexRoute = MetricsTabsIndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => MetricsTabsRoute,
 } as any)
 const MetricsTabsFormattedRoute = MetricsTabsFormattedRouteImport.update({
@@ -84,15 +89,10 @@ const MetricsTabsFormattedRoute = MetricsTabsFormattedRouteImport.update({
   path: '/formatted',
   getParentRoute: () => MetricsTabsRoute,
 } as any)
-const AclTabsPreviewRoute = AclTabsPreviewRouteImport.update({
-  id: '/preview',
-  path: '/preview',
-  getParentRoute: () => AclTabsRoute,
-} as any)
-const AclTabsEditFileRoute = AclTabsEditFileRouteImport.update({
-  id: '/edit-file',
-  path: '/edit-file',
-  getParentRoute: () => AclTabsRoute,
+const MetricsTabsRawRoute = MetricsTabsRawRouteImport.update({
+  id: '/raw',
+  path: '/raw',
+  getParentRoute: () => MetricsTabsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -211,25 +211,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/users/': {
-      id: '/users/'
-      path: '/users'
-      fullPath: '/users/'
-      preLoaderRoute: typeof UsersIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tokens/': {
-      id: '/tokens/'
-      path: '/tokens'
-      fullPath: '/tokens/'
-      preLoaderRoute: typeof TokensIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/error-404/': {
-      id: '/error-404/'
-      path: '/error-404'
-      fullPath: '/error-404/'
-      preLoaderRoute: typeof Error404IndexRouteImport
+    '/acl/_tabs': {
+      id: '/acl/_tabs'
+      path: '/acl'
+      fullPath: '/acl'
+      preLoaderRoute: typeof AclTabsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/devices/': {
@@ -239,13 +225,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevicesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/metrics/_tabs': {
-      id: '/metrics/_tabs'
-      path: '/metrics'
-      fullPath: '/metrics'
-      preLoaderRoute: typeof MetricsTabsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/devices/$deviceId': {
       id: '/devices/$deviceId'
       path: '/devices/$deviceId'
@@ -253,19 +232,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevicesDeviceIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/acl/_tabs': {
-      id: '/acl/_tabs'
-      path: '/acl'
-      fullPath: '/acl'
-      preLoaderRoute: typeof AclTabsRouteImport
+    '/error-404/': {
+      id: '/error-404/'
+      path: '/error-404'
+      fullPath: '/error-404/'
+      preLoaderRoute: typeof Error404IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/metrics/_tabs/': {
-      id: '/metrics/_tabs/'
-      path: '/'
-      fullPath: '/metrics/'
-      preLoaderRoute: typeof MetricsTabsIndexRouteImport
-      parentRoute: typeof MetricsTabsRoute
+    '/metrics/_tabs': {
+      id: '/metrics/_tabs'
+      path: '/metrics'
+      fullPath: '/metrics'
+      preLoaderRoute: typeof MetricsTabsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tokens/': {
+      id: '/tokens/'
+      path: '/tokens'
+      fullPath: '/tokens/'
+      preLoaderRoute: typeof TokensIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/users/': {
+      id: '/users/'
+      path: '/users'
+      fullPath: '/users/'
+      preLoaderRoute: typeof UsersIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/acl/_tabs/': {
       id: '/acl/_tabs/'
@@ -274,11 +267,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AclTabsIndexRouteImport
       parentRoute: typeof AclTabsRoute
     }
-    '/metrics/_tabs/raw': {
-      id: '/metrics/_tabs/raw'
-      path: '/raw'
-      fullPath: '/metrics/raw'
-      preLoaderRoute: typeof MetricsTabsRawRouteImport
+    '/acl/_tabs/edit-file': {
+      id: '/acl/_tabs/edit-file'
+      path: '/edit-file'
+      fullPath: '/acl/edit-file'
+      preLoaderRoute: typeof AclTabsEditFileRouteImport
+      parentRoute: typeof AclTabsRoute
+    }
+    '/acl/_tabs/preview': {
+      id: '/acl/_tabs/preview'
+      path: '/preview'
+      fullPath: '/acl/preview'
+      preLoaderRoute: typeof AclTabsPreviewRouteImport
+      parentRoute: typeof AclTabsRoute
+    }
+    '/metrics/_tabs/': {
+      id: '/metrics/_tabs/'
+      path: '/'
+      fullPath: '/metrics/'
+      preLoaderRoute: typeof MetricsTabsIndexRouteImport
       parentRoute: typeof MetricsTabsRoute
     }
     '/metrics/_tabs/formatted': {
@@ -288,19 +295,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MetricsTabsFormattedRouteImport
       parentRoute: typeof MetricsTabsRoute
     }
-    '/acl/_tabs/preview': {
-      id: '/acl/_tabs/preview'
-      path: '/preview'
-      fullPath: '/acl/preview'
-      preLoaderRoute: typeof AclTabsPreviewRouteImport
-      parentRoute: typeof AclTabsRoute
-    }
-    '/acl/_tabs/edit-file': {
-      id: '/acl/_tabs/edit-file'
-      path: '/edit-file'
-      fullPath: '/acl/edit-file'
-      preLoaderRoute: typeof AclTabsEditFileRouteImport
-      parentRoute: typeof AclTabsRoute
+    '/metrics/_tabs/raw': {
+      id: '/metrics/_tabs/raw'
+      path: '/raw'
+      fullPath: '/metrics/raw'
+      preLoaderRoute: typeof MetricsTabsRawRouteImport
+      parentRoute: typeof MetricsTabsRoute
     }
   }
 }
